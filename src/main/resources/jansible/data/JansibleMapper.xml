@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jansible.data.JansibleMapper">
+	
+	<insert id="insertModule" parameterType="DbModule">
+		INSERT IGNORE INTO module
+			(module_name, description)
+		VALUES
+			(#{moduleName}, #{description})
+	</insert>
+	
+	<insert id="insertParameter" parameterType="DbParameter">
+		INSERT IGNORE INTO parameter
+			(
+			module_name,
+			parameter_name,
+			added_version,
+			required,
+			defautl_value,
+			description,
+			is_free_form
+			)
+		VALUES
+			(
+			#{moduleName},
+			#{parameterName},
+			#{addedVersion},
+			#{required},
+			#{defautlValue},
+			#{description},
+			#{isFreeForm}
+			)
+	</insert>
+	
+	<insert id="insertChoice" parameterType="DbChoice">
+		INSERT IGNORE INTO choice
+			(
+			module_name,
+			parameter_name,
+			choice_value
+			)
+		VALUES
+			(
+			#{moduleName},
+			#{parameterName},
+			#{choiceValue}
+			)
+	</insert>
+	
+</mapper>

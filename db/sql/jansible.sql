@@ -2,7 +2,7 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 
 /* Drop Tables */
 
-DROP TABLE IF EXISTS choices;
+DROP TABLE IF EXISTS choice;
 DROP TABLE IF EXISTS parameter;
 DROP TABLE IF EXISTS module;
 
@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS module;
 
 /* Create Tables */
 
-CREATE TABLE choices
+CREATE TABLE choice
 (
 	module_name varchar(80) NOT NULL,
 	parameter_name varchar(80) NOT NULL,
@@ -33,6 +33,7 @@ CREATE TABLE parameter
 	module_name varchar(80) NOT NULL,
 	parameter_name varchar(80) NOT NULL,
 	added_version varchar(30),
+	required enum('yes','no'),
 	defautl_value varchar(80),
 	description varchar(512),
 	is_free_form enum('true','false'),
