@@ -4,10 +4,12 @@ import java.util.List;
 
 public class Parameter {
 	private String name;
+	private String addedVersion;
 	private boolean required;
 	private String defaultValue;
 	private List<String> choices;
-	private String version;
+	private String description;
+	private boolean isFreeForm;
 	
 	public String getName() {
 		return name;
@@ -33,10 +35,29 @@ public class Parameter {
 	public void setChoices(List<String> choices) {
 		this.choices = choices;
 	}
-	public String getVersion() {
-		return version;
+	public String getAddedVersion() {
+		return addedVersion;
 	}
-	public void setVersion(String version) {
-		this.version = version;
+	public void setAddedVersion(String addedVersion) {
+		this.addedVersion = addedVersion;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public boolean isFreeForm() {
+		return isFreeForm;
+	}
+	public void setFreeForm(boolean isFreeForm) {
+		this.isFreeForm = isFreeForm;
+	}
+	@Override
+	public String toString() {
+		return "Parameter [name=" + name + ", addedVersion=" + addedVersion
+				+ ", required=" + required + ", defaultValue=" + defaultValue
+				+ ", choices=" + choices + ", description=" + description
+				+ ", isFreeForm=" + isFreeForm + "]";
 	}
 }
