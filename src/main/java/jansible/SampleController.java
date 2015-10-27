@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class SampleController {
 	
 	@Autowired
-	private jansibleService jansibleService;
+	private JansibleService jansibleService;
 
     @RequestMapping("/")
     @ResponseBody
