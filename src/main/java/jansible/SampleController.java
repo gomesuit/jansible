@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import jansible.model2.Module;
+import jansible.model2.Parameter;
 import jansible.webget.ModuleGetter;
 import jansible.webget.ModuleUrlGetter;
 
@@ -28,7 +29,12 @@ public class SampleController {
     	List<String> UrlList = ModuleUrlGetter.getUrlList();
     	
     	for(String url : UrlList){
+    		System.out.println(url);
     		Module module = ModuleGetter.getModule(url);
+    		System.out.println(module);
+    		for(Parameter parameter : module.getParameterList()){
+        		System.out.println(parameter);
+    		}
     		jansibleService.insertModule(module);
     	}
     	
