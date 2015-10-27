@@ -4,6 +4,12 @@
 	<groupId>jansible</groupId>
 	<artifactId>jansible</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<start-class>jansible.ApplicationStarter</start-class>
+		<java.version>1.7</java.version>
+	</properties>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
