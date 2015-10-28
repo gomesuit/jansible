@@ -159,7 +159,7 @@
 			</connections>
 			<display>false</display>
 			<creation_date>2015-10-26 23:11:31</creation_date>
-			<updated_date>2015-10-28 19:39:18</updated_date>
+			<updated_date>2015-10-28 19:42:29</updated_date>
 			<model_property>
 				<name>プロジェクト名</name>
 				<value></value>
@@ -1113,7 +1113,7 @@
 			<connections>
 				<relation>
 					<id>3</id>
-					<source>6</source>
+					<source>3</source>
 					<target>5</target>
 						<source_xp>-1</source_xp>
 						<source_yp>-1</source_yp>
@@ -1135,7 +1135,7 @@
 				</relation>
 				<relation>
 					<id>4</id>
-					<source>3</source>
+					<source>6</source>
 					<target>5</target>
 						<source_xp>-1</source_xp>
 						<source_yp>-1</source_yp>
@@ -1199,7 +1199,7 @@
 				<normal_column>
 					<id>12</id>
 					<referenced_column>15</referenced_column>
-					<relation>3</relation>
+					<relation>4</relation>
 					<description></description>
 					<unique_key_name></unique_key_name>
 					<logical_name></logical_name>
@@ -1233,7 +1233,7 @@
 				<normal_column>
 					<id>13</id>
 					<referenced_column>16</referenced_column>
-					<relation>3</relation>
+					<relation>4</relation>
 					<description></description>
 					<unique_key_name></unique_key_name>
 					<logical_name></logical_name>
@@ -1267,7 +1267,7 @@
 				<normal_column>
 					<id>14</id>
 					<referenced_column>7</referenced_column>
-					<relation>4</relation>
+					<relation>3</relation>
 					<description></description>
 					<unique_key_name></unique_key_name>
 					<logical_name></logical_name>
