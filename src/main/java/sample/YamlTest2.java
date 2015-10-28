@@ -1,8 +1,8 @@
 package sample;
 
-import jansible.model.YamlModule;
-import jansible.model.YamlParameter;
-import jansible.model.YamlParameters;
+import jansible.model.yamldump.YamlModule;
+import jansible.model.yamldump.YamlParameter;
+import jansible.model.yamldump.YamlParameters;
 import jansible.util.YamlDumper;
 
 public class YamlTest2 {

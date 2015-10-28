@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jansible.data.JansibleMapper;
-import jansible.datamodel.DbChoice;
-import jansible.datamodel.DbModule;
-import jansible.datamodel.DbParameter;
-import jansible.model2.Module;
-import jansible.model2.Parameter;
-import jansible.model2.Required;
+import jansible.model.database.DbChoice;
+import jansible.model.database.DbModule;
+import jansible.model.database.DbParameter;
+import jansible.model.gethtml.Module;
+import jansible.model.gethtml.Parameter;
+import jansible.model.gethtml.Required;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

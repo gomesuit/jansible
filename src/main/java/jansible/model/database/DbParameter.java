@@ -1,6 +1,6 @@
-package jansible.datamodel;
+package jansible.model.database;
 
-import jansible.model2.Required;
+import jansible.model.gethtml.Required;
 
 public class DbParameter {
 	private String moduleName;

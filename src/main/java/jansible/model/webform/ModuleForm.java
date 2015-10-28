@@ -1,4 +1,4 @@
-package jansible.form;
+package jansible.model.webform;
 
 import java.util.List;
 

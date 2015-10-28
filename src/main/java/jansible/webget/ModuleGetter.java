@@ -1,7 +1,7 @@
 package jansible.webget;
 
-import jansible.model2.Module;
-import jansible.model2.Parameter;
+import jansible.model.gethtml.Module;
+import jansible.model.gethtml.Parameter;
 
 import java.io.IOException;
 import java.util.ArrayList;

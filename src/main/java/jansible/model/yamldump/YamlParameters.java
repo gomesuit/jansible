@@ -1,4 +1,4 @@
-package jansible.model;
+package jansible.model.yamldump;
 
 import java.util.ArrayList;
 import java.util.List;

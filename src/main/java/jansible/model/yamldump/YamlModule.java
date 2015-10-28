@@ -1,4 +1,4 @@
-package jansible.model;
+package jansible.model.yamldump;
 
 public class YamlModule {
 	private String name;

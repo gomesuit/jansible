@@ -1,4 +1,4 @@
-package jansible.model2;
+package jansible.model.gethtml;
 
 import java.util.List;
 

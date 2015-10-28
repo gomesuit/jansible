@@ -1,4 +1,4 @@
-package jansible.datamodel;
+package jansible.model.database;
 
 public class DbChoice {
 	private String moduleName;

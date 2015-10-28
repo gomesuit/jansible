@@ -2,9 +2,9 @@ package jansible.data;
 
 import java.util.List;
 
-import jansible.datamodel.DbChoice;
-import jansible.datamodel.DbModule;
-import jansible.datamodel.DbParameter;
+import jansible.model.database.DbChoice;
+import jansible.model.database.DbModule;
+import jansible.model.database.DbParameter;
 
 public interface JansibleMapper {
 	void insertModule(DbModule dbModule);

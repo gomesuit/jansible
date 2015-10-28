@@ -16,7 +16,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 @MapperScan("jansible.data")
 public class ApplicationStarter {
-	private static final String TYPE_ALIASES_PACKAGE = "jansible.datamodel";
+	private static final String TYPE_ALIASES_PACKAGE = "jansible.model";
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(ApplicationStarter.class, args);
