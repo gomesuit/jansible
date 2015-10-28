@@ -86,4 +86,13 @@
 			parameter_name = #{parameterName}
 	</select>
 	
+	<select id="selectModuleNameList" resultType="java.lang.String">
+		SELECT
+			module_name
+		FROM
+			module
+		ORDER BY
+			module_name
+	</select>
+	
 </mapper>

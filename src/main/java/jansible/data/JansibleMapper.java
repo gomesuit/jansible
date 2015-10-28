@@ -14,4 +14,5 @@ public interface JansibleMapper {
 	DbModule selectModule(String moduleName);
 	List<DbParameter> selectParameterList(String moduleName);
 	List<DbChoice> selectChoiceList(DbParameter dbParameter);
+	List<String> selectModuleNameList();
 }

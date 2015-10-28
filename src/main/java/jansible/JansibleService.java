@@ -74,6 +74,11 @@ public class JansibleService {
 		module.setParameterList(getParameterList(moduleName));
 		return module;
 	}
+	
+	public List<String> getModuleNameList(){
+		List<String> moduleNameList = jansibleMapper.selectModuleNameList();
+		return moduleNameList;
+	}
 
 	private List<Parameter> getParameterList(String moduleName) {
 		List<DbParameter> dbParameterList = jansibleMapper.selectParameterList(moduleName);

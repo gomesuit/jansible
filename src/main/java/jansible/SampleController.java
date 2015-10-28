@@ -11,6 +11,7 @@ import jansible.webget.ModuleUrlGetter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -44,10 +45,20 @@ public class SampleController {
     }
 
     @RequestMapping("/module/{moduleName}")
-    @ResponseBody
-    String module(@PathVariable String moduleName) {
+    String module(@PathVariable String moduleName, Model model) {
     	Module module = jansibleService.getModule(moduleName);
     	
-        return module.toString();
+    	model.addAttribute("module", module);
+    	
+        return "sample";
+    }
+
+    @RequestMapping("/module")
+    String module(Model model) {
+    	List<String> moduleNameList = jansibleService.getModuleNameList();
+    	
+    	model.addAttribute("moduleNameList", moduleNameList);
+    	
+        return "moduleList";
     }
 }
