@@ -1,4 +1,4 @@
-package jansible.model.gethtml;
+package jansible.model.common;
 
 public enum Required {
 	yes(true), no(false);
