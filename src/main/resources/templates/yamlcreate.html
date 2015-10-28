@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta content="ja" http-equiv="Content-Language" />
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<title>sample page</title>
+</head>
+<body>
+	<form action="#" th:action="@{/create/view}" th:object="${form}" method="post">
+		<div th:text="*{moduleName}"/>
+		<input th:field="*{moduleName}" type="hidden" />
+		<table border="1" rules="all">
+			<tr>
+				<td>parameter</td>
+				<td>content</td>
+			</tr>
+			<tr th:each="parameter,stat : *{parameterList}">
+				<td>
+					<div th:text="${parameter.key}"/>
+					<input type="hidden" th:field="*{parameterList[__${stat.index}__].key}" />
+				</td>
+				<td><input type="text" th:field="*{parameterList[__${stat.index}__].value}" /></td>
+			</tr>
+		</table>
+		<input type="submit" value="Submit" />
+	</form>
+</body>
+</html>

@@ -1,6 +1,7 @@
 package jansible;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import jansible.form.FormParameter;
@@ -61,6 +62,24 @@ public class SampleController {
         return "sample";
     }
 
+    @RequestMapping("/module/{moduleName}/create")
+    String yamlmodule(@PathVariable String moduleName, Model model) {
+    	Module module = jansibleService.getModule(moduleName);
+    	
+    	List<FormParameter> formParameterList = new ArrayList<>();
+    	for(Parameter parameter : module.getParameterList()){
+    		FormParameter formParameter = new FormParameter();
+    		formParameter.setKey(parameter.getName());
+    		formParameterList.add(formParameter);
+    	}
+    	ModuleForm form = new ModuleForm();
+    	form.setModuleName(moduleName);
+    	form.setParameterList(formParameterList);
+    	model.addAttribute("form", form);
+    	
+        return "yamlcreate";
+    }
+
     @RequestMapping("/module")
     String module(Model model) {
     	List<String> moduleNameList = jansibleService.getModuleNameList();
@@ -91,7 +110,7 @@ public class SampleController {
 	private YamlParameters createParameter(ModuleForm form) {
 		YamlParameters parameters = new YamlParameters();
 		parameters.setFreeForm(form.getFreeForm());
-		for(FormParameter formParameter : form.getParameter()){
+		for(FormParameter formParameter : form.getParameterList()){
 			parameters.addParameter(new YamlParameter(formParameter.getKey(), formParameter.getValue()));
 		}
 		return parameters;
