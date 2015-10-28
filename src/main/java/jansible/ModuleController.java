@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import jansible.model.gethtml.Module;
-import jansible.model.gethtml.Parameter;
+import jansible.model.gethtml.HtmlModule;
+import jansible.model.gethtml.HtmlParameter;
 import jansible.model.webform.FormParameter;
 import jansible.model.webform.ModuleForm;
 import jansible.model.yamldump.YamlModule;
@@ -40,9 +40,9 @@ public class ModuleController {
     	
     	for(String url : UrlList){
     		System.out.println(url);
-    		Module module = ModuleGetter.getModule(url);
+    		HtmlModule module = ModuleGetter.getModule(url);
     		System.out.println(module);
-    		for(Parameter parameter : module.getParameterList()){
+    		for(HtmlParameter parameter : module.getParameterList()){
         		System.out.println(parameter);
     		}
     		jansibleService.insertModule(module);
@@ -55,7 +55,7 @@ public class ModuleController {
 
     @RequestMapping("/module/{moduleName}")
     String module(@PathVariable String moduleName, Model model) {
-    	Module module = jansibleService.getModule(moduleName);
+    	HtmlModule module = jansibleService.getModule(moduleName);
     	
     	model.addAttribute("module", module);
     	
@@ -64,10 +64,10 @@ public class ModuleController {
 
     @RequestMapping("/module/{moduleName}/create")
     String yamlmodule(@PathVariable String moduleName, Model model) {
-    	Module module = jansibleService.getModule(moduleName);
+    	HtmlModule module = jansibleService.getModule(moduleName);
     	
     	List<FormParameter> formParameterList = new ArrayList<>();
-    	for(Parameter parameter : module.getParameterList()){
+    	for(HtmlParameter parameter : module.getParameterList()){
     		FormParameter formParameter = new FormParameter();
     		formParameter.setKey(parameter.getName());
     		formParameterList.add(formParameter);

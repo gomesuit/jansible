@@ -1,7 +1,7 @@
 package jansible.webget;
 
-import jansible.model.gethtml.Module;
-import jansible.model.gethtml.Parameter;
+import jansible.model.gethtml.HtmlModule;
+import jansible.model.gethtml.HtmlParameter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,12 +17,12 @@ import org.jsoup.select.Elements;
 
 public class ModuleGetter {
 
-	public static Module getModule(String url) throws IOException{
+	public static HtmlModule getModule(String url) throws IOException{
 		Document document = Jsoup.connect(url).get();
         Elements elements = document.select("#options tr");
-        List<Parameter> parameterList = getParameterList(elements);
+        List<HtmlParameter> parameterList = getParameterList(elements);
         Elements titleElements = document.select("title");
-        Module module = new Module();
+        HtmlModule module = new HtmlModule();
         module.setParameterList(parameterList);
         module.setName(getModuleName(titleElements.text()));
         module.setDescription(getDescription(titleElements.text()));
@@ -45,12 +45,12 @@ public class ModuleGetter {
 		}
 	}
 	
-	private static List<Parameter> getParameterList(Elements elements){
-		List<Parameter> ParameterList = new ArrayList<>();
+	private static List<HtmlParameter> getParameterList(Elements elements){
+		List<HtmlParameter> ParameterList = new ArrayList<>();
 		
         for (Element element : elements) {
             Elements elements2 = element.select("td");
-            Parameter parameter = getParameter(elements2);
+            HtmlParameter parameter = getParameter(elements2);
             if(parameter != null){
             	ParameterList.add(parameter);
             }
@@ -59,18 +59,18 @@ public class ModuleGetter {
 		return ParameterList;
 	}
 
-	private static Parameter getParameter(Elements elements){
+	private static HtmlParameter getParameter(Elements elements){
 		List<String> stringList = elementsToStringList(elements);
 		if(!stringList.isEmpty()){
-			Parameter parameter = createParameter(stringList);
+			HtmlParameter parameter = createParameter(stringList);
 			return parameter;
 		}else{
 			return null;
 		}
 	}
 	
-	private static Parameter createParameter(List<String> stringList){
-		Parameter parameter = new Parameter();
+	private static HtmlParameter createParameter(List<String> stringList){
+		HtmlParameter parameter = new HtmlParameter();
 		parameter.setName(getName(stringList.get(0)));
 		parameter.setAddedVersion(getAddedVersion(stringList.get(0)));
 		parameter.setRequired(isRequired(stringList.get(1)));

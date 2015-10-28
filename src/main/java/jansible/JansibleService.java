@@ -7,8 +7,8 @@ import jansible.data.JansibleMapper;
 import jansible.model.database.DbChoice;
 import jansible.model.database.DbModule;
 import jansible.model.database.DbParameter;
-import jansible.model.gethtml.Module;
-import jansible.model.gethtml.Parameter;
+import jansible.model.gethtml.HtmlModule;
+import jansible.model.gethtml.HtmlParameter;
 import jansible.model.gethtml.Required;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class JansibleService {
 		jansibleMapper.insertModule(dbModule);
 	}
 	
-	public void insertModule(Module module){
+	public void insertModule(HtmlModule module){
 		DbModule dbModule = new DbModule();
 		dbModule.setModuleName(module.getName());
 		dbModule.setDescription(module.getDescription());
@@ -31,9 +31,9 @@ public class JansibleService {
 		insertParameterList(module);
 	}
 	
-	private void insertParameterList(Module module){
-		List<Parameter> parameterList = module.getParameterList();
-		for(Parameter parameter : parameterList){
+	private void insertParameterList(HtmlModule module){
+		List<HtmlParameter> parameterList = module.getParameterList();
+		for(HtmlParameter parameter : parameterList){
 			DbParameter dbParameter = new DbParameter();
 			dbParameter.setModuleName(module.getName());
 			dbParameter.setParameterName(parameter.getName());
@@ -48,7 +48,7 @@ public class JansibleService {
 		}
 	}
 	
-	private void insertChoices(Module module, Parameter parameter){
+	private void insertChoices(HtmlModule module, HtmlParameter parameter){
 		for(String choice : parameter.getChoices()){
 			DbChoice dbChoice = new DbChoice();
 			dbChoice.setModuleName(module.getName());
@@ -66,9 +66,9 @@ public class JansibleService {
 		jansibleMapper.insertChoice(dbChoice);
 	}
 	
-	public Module getModule(String moduleName){
+	public HtmlModule getModule(String moduleName){
 		DbModule dbModule = jansibleMapper.selectModule(moduleName);
-		Module module = new Module();
+		HtmlModule module = new HtmlModule();
 		module.setName(dbModule.getModuleName());
 		module.setDescription(dbModule.getDescription());
 		module.setParameterList(getParameterList(moduleName));
@@ -80,11 +80,11 @@ public class JansibleService {
 		return moduleNameList;
 	}
 
-	private List<Parameter> getParameterList(String moduleName) {
+	private List<HtmlParameter> getParameterList(String moduleName) {
 		List<DbParameter> dbParameterList = jansibleMapper.selectParameterList(moduleName);
-		List<Parameter> parameterList = new ArrayList<>();
+		List<HtmlParameter> parameterList = new ArrayList<>();
 		for(DbParameter dbParameter : dbParameterList){
-			Parameter parameter = new Parameter();
+			HtmlParameter parameter = new HtmlParameter();
 			parameter.setName(dbParameter.getParameterName());
 			parameter.setAddedVersion(dbParameter.getAddedVersion());
 			parameter.setRequired(dbParameter.getRequired().isRequired());

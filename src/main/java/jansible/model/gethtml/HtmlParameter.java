@@ -2,7 +2,7 @@ package jansible.model.gethtml;
 
 import java.util.List;
 
-public class Parameter {
+public class HtmlParameter {
 	private String name;
 	private String addedVersion;
 	private boolean required;

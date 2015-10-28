@@ -2,10 +2,10 @@ package jansible.model.gethtml;
 
 import java.util.List;
 
-public class Module {
+public class HtmlModule {
 	private String name;
 	private String description;
-	private List<Parameter> parameterList;
+	private List<HtmlParameter> parameterList;
 
 	public String getName() {
 		return name;
@@ -19,10 +19,10 @@ public class Module {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public List<Parameter> getParameterList() {
+	public List<HtmlParameter> getParameterList() {
 		return parameterList;
 	}
-	public void setParameterList(List<Parameter> parameterList) {
+	public void setParameterList(List<HtmlParameter> parameterList) {
 		this.parameterList = parameterList;
 	}
 	@Override
