@@ -1,4 +1,4 @@
-package jansible.data;
+package jansible.mapper;
 
 import java.util.List;
 

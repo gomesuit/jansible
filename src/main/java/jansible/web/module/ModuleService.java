@@ -1,9 +1,9 @@
-package jansible;
+package jansible.web.module;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import jansible.data.JansibleMapper;
+import jansible.mapper.JansibleMapper;
 import jansible.model.database.DbChoice;
 import jansible.model.database.DbModule;
 import jansible.model.database.DbParameter;
@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class JansibleService {
+public class ModuleService {
 	@Autowired
 	private JansibleMapper jansibleMapper;
 	

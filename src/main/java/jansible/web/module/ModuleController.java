@@ -1,4 +1,4 @@
-package jansible;
+package jansible.web.module;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ModuleController {
 	
 	@Autowired
-	private JansibleService jansibleService;
+	private ModuleService jansibleService;
 
     @RequestMapping("/save")
     @ResponseBody
