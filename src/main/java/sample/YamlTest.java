@@ -1,4 +1,4 @@
-package jansible;
+package sample;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;

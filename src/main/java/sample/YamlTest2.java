@@ -1,4 +1,4 @@
-package jansible;
+package sample;
 
 import jansible.model.YamlModule;
 import jansible.model.YamlParameter;
