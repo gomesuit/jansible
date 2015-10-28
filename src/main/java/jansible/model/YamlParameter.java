@@ -1,10 +1,10 @@
 package jansible.model;
 
-public class Parameter {
+public class YamlParameter {
 	private String key;
 	private String value;
 	
-	public Parameter(String key, String value){
+	public YamlParameter(String key, String value){
 		this.key = key;
 		this.value = value;
 	}

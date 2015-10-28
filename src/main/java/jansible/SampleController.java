@@ -3,8 +3,14 @@ package jansible;
 import java.io.IOException;
 import java.util.List;
 
+import jansible.form.FormParameter;
+import jansible.form.ModuleForm;
+import jansible.model.YamlModule;
+import jansible.model.YamlParameter;
+import jansible.model.YamlParameters;
 import jansible.model2.Module;
 import jansible.model2.Parameter;
+import jansible.util.YamlDumper;
 import jansible.webget.ModuleGetter;
 import jansible.webget.ModuleUrlGetter;
 
@@ -12,8 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -56,9 +64,36 @@ public class SampleController {
     @RequestMapping("/module")
     String module(Model model) {
     	List<String> moduleNameList = jansibleService.getModuleNameList();
-    	
     	model.addAttribute("moduleNameList", moduleNameList);
     	
         return "moduleList";
     }
+    
+    @RequestMapping("/create")
+    String create(Model model) {
+    	model.addAttribute("form", new ModuleForm());
+        return "create";
+    }
+    
+    @RequestMapping(value="/create/view", method=RequestMethod.POST)
+    @ResponseBody
+    String view(@ModelAttribute ModuleForm form) {
+		YamlDumper yamlDumper = new YamlDumper();
+		YamlModule module = createMolule(form);
+        return yamlDumper.dump(module);
+    }
+
+	private YamlModule createMolule(ModuleForm form) {
+		YamlModule yamlModule = new YamlModule(form.getModuleName(), createParameter(form));
+		return yamlModule;
+	}
+
+	private YamlParameters createParameter(ModuleForm form) {
+		YamlParameters parameters = new YamlParameters();
+		parameters.setFreeForm(form.getFreeForm());
+		for(FormParameter formParameter : form.getParameter()){
+			parameters.addParameter(new YamlParameter(formParameter.getKey(), formParameter.getValue()));
+		}
+		return parameters;
+	}
 }

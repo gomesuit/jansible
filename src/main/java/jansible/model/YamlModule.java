@@ -1,10 +1,10 @@
 package jansible.model;
 
-public class Module {
+public class YamlModule {
 	private String name;
-	private Parameters parameters;
+	private YamlParameters parameters;
 	
-	public Module(String name, Parameters parameters){
+	public YamlModule(String name, YamlParameters parameters){
 		this.name = name;
 		this.parameters = parameters;
 	}
@@ -15,10 +15,10 @@ public class Module {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Parameters getParameters() {
+	public YamlParameters getParameters() {
 		return parameters;
 	}
-	public void setParameters(Parameters parameters) {
+	public void setParameters(YamlParameters parameters) {
 		this.parameters = parameters;
 	}
 }

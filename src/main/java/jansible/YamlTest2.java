@@ -1,8 +1,8 @@
 package jansible;
 
-import jansible.model.Module;
-import jansible.model.Parameter;
-import jansible.model.Parameters;
+import jansible.model.YamlModule;
+import jansible.model.YamlParameter;
+import jansible.model.YamlParameters;
 import jansible.util.YamlDumper;
 
 public class YamlTest2 {
@@ -12,15 +12,15 @@ public class YamlTest2 {
 		System.out.println(yamlDumper.dump(createModule()));
 	}
 
-	private static Module createModule() {
-		Module module = new Module("yum", createParameter());
+	private static YamlModule createModule() {
+		YamlModule module = new YamlModule("yum", createParameter());
 		return module;
 	}
 
-	private static Parameters createParameter() {
-		Parameters parameters = new Parameters();
-		parameters.addParameter(new Parameter("name","mysql"));
-		parameters.addParameter(new Parameter("state","installed"));
+	private static YamlParameters createParameter() {
+		YamlParameters parameters = new YamlParameters();
+		parameters.addParameter(new YamlParameter("name","mysql"));
+		parameters.addParameter(new YamlParameter("state","installed"));
 		return parameters;
 	}
 }

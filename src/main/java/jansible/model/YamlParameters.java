@@ -3,11 +3,11 @@ package jansible.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Parameters {
-	private List<Parameter> pList = new ArrayList<>();
+public class YamlParameters {
+	private List<YamlParameter> pList = new ArrayList<>();
 	private String freeForm;
 
-	public void addParameter(Parameter param){
+	public void addParameter(YamlParameter param){
 		pList.add(param);
 	}
 
@@ -24,7 +24,7 @@ public class Parameters {
 			result.append(" ");
 		}
 		
-		for(Parameter param : pList){
+		for(YamlParameter param : pList){
 			result.append(param);
 			result.append(" ");
 		}

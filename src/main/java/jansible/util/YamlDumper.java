@@ -6,7 +6,7 @@ import java.util.Map;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
-import jansible.model.Module;
+import jansible.model.YamlModule;
 
 public class YamlDumper {
 	private DumperOptions options;
@@ -18,7 +18,7 @@ public class YamlDumper {
 	    yaml = new Yaml(options);
     }
 	
-	public String dump(Module module){
+	public String dump(YamlModule module){
 		Map<String, String> data = new LinkedHashMap<>();
 		data.put(module.getName(), module.getParameters().toString());
 	    String result = yaml.dump(data);
