@@ -11,6 +11,7 @@ import jansible.webget.ModuleUrlGetter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -23,7 +24,7 @@ public class SampleController {
 
     @RequestMapping("/save")
     @ResponseBody
-    String home() throws IOException, InterruptedException {
+    String save() throws IOException, InterruptedException {
     	
     	List<String> UrlList = ModuleUrlGetter.getUrlList();
     	
@@ -36,9 +37,17 @@ public class SampleController {
     		}
     		jansibleService.insertModule(module);
     		
-    		Thread.sleep(1000);
+    		Thread.sleep(3000);
     	}
     	
         return "Hello World!";
+    }
+
+    @RequestMapping("/module/{moduleName}")
+    @ResponseBody
+    String module(@PathVariable String moduleName) {
+    	Module module = jansibleService.getModule(moduleName);
+    	
+        return module.toString();
     }
 }

@@ -1,5 +1,7 @@
 package jansible.datamodel;
 
+import jansible.model2.Required;
+
 public class DbParameter {
 	private String moduleName;
 	private String parameterName;
@@ -7,10 +9,7 @@ public class DbParameter {
 	private String addedVersion;
 	private String defautlValue;
 	private String description;
-	private IsFreeForm isFreeForm;
-
-	public static enum Required {yes, no};
-	public static enum IsFreeForm {True, False}
+	private boolean freeForm;
 	
 	public String getModuleName() {
 		return moduleName;
@@ -48,10 +47,10 @@ public class DbParameter {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public IsFreeForm getIsFreeForm() {
-		return isFreeForm;
+	public boolean isFreeForm() {
+		return freeForm;
 	}
-	public void setIsFreeForm(IsFreeForm isFreeForm) {
-		this.isFreeForm = isFreeForm;
+	public void setFreeForm(boolean freeForm) {
+		this.freeForm = freeForm;
 	}
 }

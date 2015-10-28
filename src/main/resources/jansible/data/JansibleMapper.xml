@@ -30,7 +30,7 @@
 			#{required},
 			#{defautlValue},
 			#{description},
-			#{isFreeForm}
+			#{freeForm}
 			)
 	</insert>
 	
@@ -48,5 +48,42 @@
 			#{choiceValue}
 			)
 	</insert>
+	
+	<select id="selectModule" resultType="DbModule">
+		SELECT
+			module_name as moduleName,
+			description as description
+		FROM
+			module
+		WHERE
+			module_name = #{moduleName}
+	</select>
+	
+	<select id="selectParameterList" resultType="DbParameter">
+		SELECT
+			module_name as moduleName,
+			parameter_name as parameterName,
+			added_version as addedVersion,
+			required as required,
+			defautl_value as defautlValue,
+			description as description,
+			is_free_form as freeForm
+		FROM
+			parameter
+		WHERE
+			module_name = #{moduleName}
+	</select>
+	
+	<select id="selectChoiceList" resultType="DbChoice">
+		SELECT
+			module_name as moduleName,
+			parameter_name as parameterName,
+			choice_value as choiceValue
+		FROM
+			choice
+		WHERE
+			module_name = #{moduleName} AND
+			parameter_name = #{parameterName}
+	</select>
 	
 </mapper>
