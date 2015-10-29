@@ -1,4 +1,4 @@
-package jansible.model.webform;
+package jansible.web.module.form;
 
 public class FormParameter {
 	private String key;
