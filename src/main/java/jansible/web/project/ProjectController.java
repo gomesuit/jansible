@@ -10,24 +10,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class ProjectController {
 	@Autowired
 	private ProjectService projectService;
-
-    @RequestMapping("/project/test")
-    @ResponseBody
-    private String test(){
-        return "Hello World!";
-    }
     
-    @RequestMapping("/project/create")
-    private String registProject(Model model){
+    @RequestMapping("/project/top")
+    private String top(Model model){
     	model.addAttribute("form", new ProjectForm());
     	model.addAttribute("projectList", projectService.getProjectList());
-        return "project/sample";
+        return "project/top";
     }
 
     @RequestMapping(value="/project/regist", method=RequestMethod.POST)
@@ -36,5 +29,11 @@ public class ProjectController {
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
+    }
+
+    @RequestMapping("/project/view/{moduleName}")
+    private String viewProject(Model model){
+    	model.addAttribute("projectList", projectService.getProjectList());
+        return "project/view";
     }
 }
