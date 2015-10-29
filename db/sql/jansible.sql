@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS module;
 DROP TABLE IF EXISTS role_relation;
 DROP TABLE IF EXISTS role;
 DROP TABLE IF EXISTS server;
-DROP TABLE IF EXISTS server_group;
+DROP TABLE IF EXISTS service_group;
 DROP TABLE IF EXISTS variable;
 DROP TABLE IF EXISTS project;
 
@@ -81,7 +81,7 @@ CREATE TABLE server
 );
 
 
-CREATE TABLE server_group
+CREATE TABLE service_group
 (
 	project_name varchar(80) NOT NULL,
 	group_name varchar(80) NOT NULL,
