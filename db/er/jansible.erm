@@ -11,7 +11,7 @@
 	</page_setting>
 	<category_index>0</category_index>
 	<zoom>1.0</zoom>
-	<x>126</x>
+	<x>112</x>
 	<y>0</y>
 	<default_color>
 		<r>128</r>
@@ -159,7 +159,7 @@
 			</connections>
 			<display>false</display>
 			<creation_date>2015-10-26 23:11:31</creation_date>
-			<updated_date>2015-10-30 00:42:52</updated_date>
+			<updated_date>2015-10-30 00:44:14</updated_date>
 			<model_property>
 				<name>プロジェクト名</name>
 				<value></value>
@@ -1997,7 +1997,7 @@
 			<connections>
 				<relation>
 					<id>6</id>
-					<source>6</source>
+					<source>12</source>
 					<target>8</target>
 						<source_xp>-1</source_xp>
 						<source_yp>-1</source_yp>
@@ -2019,7 +2019,7 @@
 				</relation>
 				<relation>
 					<id>7</id>
-					<source>12</source>
+					<source>6</source>
 					<target>8</target>
 						<source_xp>-1</source_xp>
 						<source_yp>-1</source_yp>
@@ -2051,8 +2051,8 @@
 					<id>28</id>
 					<referenced_column>21</referenced_column>
 					<referenced_column>47</referenced_column>
-					<relation>6</relation>
 					<relation>7</relation>
+					<relation>6</relation>
 					<description></description>
 					<unique_key_name></unique_key_name>
 					<logical_name></logical_name>
@@ -2086,7 +2086,7 @@
 				<normal_column>
 					<id>29</id>
 					<referenced_column>22</referenced_column>
-					<relation>6</relation>
+					<relation>7</relation>
 					<description></description>
 					<unique_key_name></unique_key_name>
 					<logical_name></logical_name>
@@ -2120,7 +2120,7 @@
 				<normal_column>
 					<id>30</id>
 					<referenced_column>23</referenced_column>
-					<relation>6</relation>
+					<relation>7</relation>
 					<description></description>
 					<unique_key_name></unique_key_name>
 					<logical_name></logical_name>
@@ -2154,7 +2154,7 @@
 				<normal_column>
 					<id>31</id>
 					<referenced_column>48</referenced_column>
-					<relation>7</relation>
+					<relation>6</relation>
 					<description></description>
 					<unique_key_name></unique_key_name>
 					<logical_name></logical_name>
