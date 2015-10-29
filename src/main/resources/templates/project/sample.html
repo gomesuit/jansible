@@ -6,12 +6,25 @@
 	<title>sample page</title>
 </head>
 <body>
+	<form action="#" th:action="@{/project/regist}" th:object="${form}" method="post">
+		<table border="1" rules="all">
+			<tr>
+				<td>project</td>
+			</tr>
+			<tr>
+				<td><input type="text" th:field="*{projectName}" /></td>
+			</tr>
+		</table>
+		<input type="submit" value="Submit" />
+	</form>
+	
+	<div>プロジェクト一覧</div>
 	<table border="1" rules="all">
 		<tr>
-			<td>parameter</td>
+			<td>project</td>
 		</tr>
-		<tr th:each="parameter : ${module.parameterList}">
-			<td th:text="${parameter.name}" />
+		<tr th:each="project : ${projectList}">
+			<td th:text="${project.projectName}"/>
 		</tr>
 	</table>
 </body>
