@@ -7,6 +7,7 @@ import jansible.web.project.form.ProjectForm;
 import jansible.web.project.form.RoleForm;
 import jansible.web.project.form.ServerForm;
 import jansible.web.project.form.ServiceGroupForm;
+import jansible.web.project.form.TaskForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,11 +39,15 @@ public class ProjectController {
 
     @RequestMapping("/project/view/{projectName}")
     private String viewProject(@PathVariable String projectName, Model model){
-    	EnvironmentForm form = new EnvironmentForm();
-    	form.setProjectName(projectName);
-    	
-    	model.addAttribute("form", form);
+    	EnvironmentForm environmentForm = new EnvironmentForm();
+    	environmentForm.setProjectName(projectName);
+    	model.addAttribute("environmentForm", environmentForm);
     	model.addAttribute("environmentList", projectService.getEnvironmentList(projectName));
+    	
+    	RoleForm roleForm = new RoleForm();
+    	roleForm.setProjectName(projectName);
+    	model.addAttribute("roleForm", roleForm);
+    	model.addAttribute("roleList", projectService.getRoleList(projectName));
         return "project/project/top";
     }
 
@@ -54,6 +59,17 @@ public class ProjectController {
     	
     	model.addAttribute("form", serviceGroupForm);
     	model.addAttribute("serviceGroupList", projectService.getServiceGroupList(projectName, environmentName));
+        return "project/environment/top";
+    }
+
+    @RequestMapping("/project/view/role/{projectName}/{roleName}")
+    private String viewRole(@PathVariable String projectName, @PathVariable String roleName, Model model){
+    	TaskForm form = new TaskForm();
+    	form.setProjectName(projectName);
+    	form.setRoleName(roleName);
+    	
+    	model.addAttribute("form", form);
+    	model.addAttribute("taskList", projectService.getTaskList(projectName, roleName));
         return "project/environment/top";
     }
 

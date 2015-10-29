@@ -5,17 +5,20 @@ import java.util.List;
 import jansible.mapper.ProjectMapper;
 import jansible.model.common.EnvironmentKey;
 import jansible.model.common.ProjectKey;
+import jansible.model.common.RoleKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.database.DbEnvironment;
 import jansible.model.database.DbProject;
 import jansible.model.database.DbRole;
 import jansible.model.database.DbServer;
 import jansible.model.database.DbServiceGroup;
+import jansible.model.database.DbTask;
 import jansible.web.project.form.EnvironmentForm;
 import jansible.web.project.form.ProjectForm;
 import jansible.web.project.form.RoleForm;
 import jansible.web.project.form.ServerForm;
 import jansible.web.project.form.ServiceGroupForm;
+import jansible.web.project.form.TaskForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +51,11 @@ public class ProjectService {
 		DbProject dbProject = new DbProject(projectName);
 		return projectMapper.selectRoleList(dbProject);
 	}
+	
+	public List<DbTask> getTaskList(String projectName, String roleName){
+		RoleKey roleKey = new RoleKey(projectName, roleName);
+		return projectMapper.selectTaskList(roleKey);
+	}
 
 	public void registProject(ProjectForm form) {
 		DbProject dbProject = new DbProject(form.getProjectName());
@@ -74,6 +82,22 @@ public class ProjectService {
 		projectMapper.insertRole(dbRole);
 	}
 	
+	public void registRole(TaskForm form) {
+		DbTask dbTask = createDbTask(form);
+		projectMapper.insertTask(dbTask);
+	}
+	
+	private DbTask createDbTask(TaskForm form) {
+		DbTask dbTask = new DbTask();
+		dbTask.setProjectName(form.getProjectName());
+		dbTask.setRoleName(form.getRoleName());
+		dbTask.setModuleName(form.getModuleName());
+		dbTask.setDescription(form.getDescription());
+		dbTask.setFreeForm(form.getFreeForm());
+		dbTask.setSort(form.getSort());
+		return dbTask;
+	}
+
 	private DbServer createDbServer(ServerForm form){
 		return new DbServer(form.getProjectName(), form.getEnvironmentName(), form.getGroupName(), form.getServerName());
 	}

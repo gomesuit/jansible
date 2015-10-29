@@ -1,18 +1,14 @@
-package jansible.model.database;
+package jansible.web.project.form;
 
 import jansible.model.common.TaskKey;
 
-public class DbTask extends TaskKey{
+public class TaskForm extends TaskKey{
 	private String moduleName;
 	private String description;
 	private String freeForm;
 	private int sort;
 	
-	public DbTask(){}
-
-	public DbTask(String projectName, String roleName, Integer taskId) {
-		super(projectName, roleName, taskId);
-	}
+	public TaskForm(){}
 
 	public String getModuleName() {
 		return moduleName;

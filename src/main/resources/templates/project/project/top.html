@@ -8,7 +8,7 @@
 <body>
 
 	<div>環境登録</div>
-	<form action="#" th:action="@{/project/environment/regist}" th:object="${form}" method="post">
+	<form action="#" th:action="@{/project/environment/regist}" th:object="${environmentForm}" method="post">
 		<input type="hidden" th:field="*{projectName}" />
 		<table border="1" rules="all">
 			<tr>
@@ -28,6 +28,30 @@
 		</tr>
 		<tr th:each="environment : ${environmentList}">
 			<td><a th:href="*{projectName} + '/' + ${environment.environmentName}" th:text="${environment.environmentName}" /></td>
+		</tr>
+	</table>
+	
+	<div>ロール登録</div>
+	<form action="#" th:action="@{/project/role/regist}" th:object="${roleForm}" method="post">
+		<input type="hidden" th:field="*{projectName}" />
+		<table border="1" rules="all">
+			<tr>
+				<td>role</td>
+			</tr>
+			<tr>
+				<td><input type="text" th:field="*{roleName}" /></td>
+			</tr>
+		</table>
+		<input type="submit" value="Submit" />
+	</form>
+	
+	<div>ロール一覧</div>
+	<table border="1" rules="all">
+		<tr>
+			<td>role</td>
+		</tr>
+		<tr th:each="role : ${roleList}">
+			<td><a th:href="'role/' + *{projectName} + '/' + ${role.roleName}" th:text="${role.roleName}" /></td>
 		</tr>
 	</table>
 </body>
