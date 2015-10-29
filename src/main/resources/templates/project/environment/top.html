@@ -7,29 +7,28 @@
 </head>
 <body>
 
-	<div>サーバ登録</div>
-	<form action="#" th:action="@{/project/server/regist}" th:object="${form}" method="post">
+	<div>グループ登録</div>
+	<form action="#" th:action="@{/project/group/regist}" th:object="${form}" method="post">
 		<input type="hidden" th:field="*{projectName}" />
 		<input type="hidden" th:field="*{environmentName}" />
-		<input type="hidden" th:field="*{groupName}" />
 		<table border="1" rules="all">
 			<tr>
-				<td>server</td>
+				<td>group</td>
 			</tr>
 			<tr>
-				<td><input type="text" th:field="*{serverName}" /></td>
+				<td><input type="text" th:field="*{groupName}" /></td>
 			</tr>
 		</table>
 		<input type="submit" value="Submit" />
 	</form>
 	
-	<div>サーバ一覧</div>
+	<div>グループ一覧</div>
 	<table border="1" rules="all">
 		<tr>
-			<td>server</td>
+			<td>group</td>
 		</tr>
-		<tr th:each="server : ${serverList}">
-			<td><a th:href="*{groupName} + '/' + ${server.serverName}" th:text="${server.serverName}" /></td>
+		<tr th:each="serviceGroup : ${serviceGroupList}">
+			<td><a th:href="*{environmentName} + '/' + ${serviceGroup.groupName}" th:text="${serviceGroup.groupName}" /></td>
 		</tr>
 	</table>
 </body>

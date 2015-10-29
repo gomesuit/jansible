@@ -7,27 +7,27 @@
 </head>
 <body>
 
-	<div>グループ登録</div>
-	<form action="#" th:action="@{/project/group/regist}" th:object="${form}" method="post">
+	<div>環境登録</div>
+	<form action="#" th:action="@{/project/environment/regist}" th:object="${form}" method="post">
 		<input type="hidden" th:field="*{projectName}" />
 		<table border="1" rules="all">
 			<tr>
-				<td>group</td>
+				<td>environment</td>
 			</tr>
 			<tr>
-				<td><input type="text" th:field="*{groupName}" /></td>
+				<td><input type="text" th:field="*{environmentName}" /></td>
 			</tr>
 		</table>
 		<input type="submit" value="Submit" />
 	</form>
 	
-	<div>グループ一覧</div>
+	<div>環境一覧</div>
 	<table border="1" rules="all">
 		<tr>
-			<td>group</td>
+			<td>environment</td>
 		</tr>
-		<tr th:each="serviceGroup : ${serviceGroupList}">
-			<td><a th:href="*{projectName} + '/' + ${serviceGroup.groupName}" th:text="${serviceGroup.groupName}" /></td>
+		<tr th:each="environment : ${environmentList}">
+			<td><a th:href="*{projectName} + '/' + ${environment.environmentName}" th:text="${environment.environmentName}" /></td>
 		</tr>
 	</table>
 </body>

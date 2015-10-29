@@ -2,6 +2,7 @@ package jansible.web.project;
 
 import javax.servlet.http.HttpServletRequest;
 
+import jansible.web.project.form.EnvironmentForm;
 import jansible.web.project.form.ProjectForm;
 import jansible.web.project.form.RoleForm;
 import jansible.web.project.form.ServerForm;
@@ -37,31 +38,45 @@ public class ProjectController {
 
     @RequestMapping("/project/view/{projectName}")
     private String viewProject(@PathVariable String projectName, Model model){
-    	ServiceGroupForm serviceGroupForm = new ServiceGroupForm();
-    	serviceGroupForm.setProjectName(projectName);
+    	EnvironmentForm form = new EnvironmentForm();
+    	form.setProjectName(projectName);
     	
-    	model.addAttribute("form", serviceGroupForm);
-    	model.addAttribute("serviceGroupList", projectService.getServiceGroupList(projectName, null));
+    	model.addAttribute("form", form);
+    	model.addAttribute("environmentList", projectService.getEnvironmentList(projectName));
         return "project/project/top";
     }
 
-    @RequestMapping("/project/view/{projectName}/{groupName}")
-    private String viewProject(@PathVariable String projectName, @PathVariable String groupName, Model model){
+    @RequestMapping("/project/view/{projectName}/{environmentName}")
+    private String viewEnvironment(@PathVariable String projectName, @PathVariable String environmentName, Model model){
+    	ServiceGroupForm serviceGroupForm = new ServiceGroupForm();
+    	serviceGroupForm.setProjectName(projectName);
+    	serviceGroupForm.setEnvironmentName(environmentName);
+    	
+    	model.addAttribute("form", serviceGroupForm);
+    	model.addAttribute("serviceGroupList", projectService.getServiceGroupList(projectName, environmentName));
+        return "project/environment/top";
+    }
+
+    @RequestMapping("/project/view/{projectName}/{environmentName}/{groupName}")
+    private String viewProject(@PathVariable String projectName, @PathVariable String environmentName, @PathVariable String groupName, Model model){
     	ServerForm serverForm = new ServerForm();
     	serverForm.setProjectName(projectName);
+    	serverForm.setEnvironmentName(environmentName);
     	serverForm.setGroupName(groupName);
     	
     	model.addAttribute("form", serverForm);
-    	model.addAttribute("serverList", projectService.getServerList(projectName, null, groupName));
+    	model.addAttribute("serverList", projectService.getServerList(projectName, environmentName, groupName));
         return "project/service_group/top";
     }
     
+    @RequestMapping(value="/project/environment/regist", method=RequestMethod.POST)
+    private String registEnvironment(@ModelAttribute EnvironmentForm form, HttpServletRequest request){
+    	projectService.registEnvironment(form);
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+    }
     
-    
-    
-    
-    
-
     @RequestMapping(value="/project/group/regist", method=RequestMethod.POST)
     private String registServiceGroup(@ModelAttribute ServiceGroupForm form, HttpServletRequest request){
     	projectService.registServiceGroup(form);

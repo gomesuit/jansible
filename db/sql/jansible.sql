@@ -86,11 +86,12 @@ CREATE TABLE role
 
 CREATE TABLE role_relation
 (
-	project_name varchar(80),
-	environment_name varchar(80),
-	group_name varchar(80),
-	role_name varchar(80),
-	sort int
+	project_name varchar(80) NOT NULL,
+	environment_name varchar(80) NOT NULL,
+	group_name varchar(80) NOT NULL,
+	role_name varchar(80) NOT NULL,
+	sort int,
+	PRIMARY KEY (project_name, environment_name, group_name, role_name)
 );
 
 

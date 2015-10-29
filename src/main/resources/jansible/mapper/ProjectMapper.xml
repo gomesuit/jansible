@@ -22,49 +22,57 @@
 		INSERT INTO service_group
 			(
 				project_name,
+				environment_name,
 				group_name
 			)
 		VALUES
 			(
 				#{projectName},
+				#{environmentName},
 				#{groupName}
 			)
 	</insert>
 	
-	<select id="selectServiceGroupList" resultType="ServiceGroupKey">
+	<select id="selectServiceGroupList" resultType="DbServiceGroup">
 		SELECT
 			project_name as projectName,
+			environment_name as environmentName,
 			group_name as groupName
 		FROM
 			service_group
 		WHERE
-			project_name = #{projectName}
+			project_name = #{projectName} AND
+			environment_name = #{environmentName}
 	</select>
 	
 	<insert id="insertServer" parameterType="DbServer">
 		INSERT INTO server
 			(
 				project_name,
+				environment_name,
 				group_name,
 				server_name
 			)
 		VALUES
 			(
 				#{projectName},
+				#{environmentName},
 				#{groupName},
 				#{serverName}
 			)
 	</insert>
 	
-	<select id="selectServerList" resultType="ServerKey">
+	<select id="selectServerList" resultType="DbServer">
 		SELECT
 			project_name as projectName,
+			environment_name as environmentName,
 			group_name as groupName,
 			server_name as serverName
 		FROM
 			server
 		WHERE
 			project_name = #{projectName} AND
+			environment_name = #{environmentName} AND
 			group_name = #{groupName}
 	</select>
 	
@@ -81,12 +89,35 @@
 			)
 	</insert>
 	
-	<select id="selectRoleList" resultType="RoleKey">
+	<select id="selectRoleList" resultType="DbRole">
 		SELECT
 			project_name as projectName,
 			role_name as roleName
 		FROM
 			role
+		WHERE
+			project_name = #{projectName}
+	</select>
+	
+	<insert id="insertEnvironment" parameterType="DbEnvironment">
+		INSERT INTO environment
+			(
+				project_name,
+				environment_name
+			)
+		VALUES
+			(
+				#{projectName},
+				#{environmentName}
+			)
+	</insert>
+	
+	<select id="selectEnvironmentList" resultType="DbEnvironment">
+		SELECT
+			project_name as projectName,
+			environment_name as environmentName
+		FROM
+			environment
 		WHERE
 			project_name = #{projectName}
 	</select>
