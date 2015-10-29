@@ -33,7 +33,7 @@ CREATE TABLE choice
 
 CREATE TABLE environment
 (
-	project_name varchar(80) NOT NULL,
+	project_name varchar(50) NOT NULL,
 	environment_name varchar(80) NOT NULL,
 	PRIMARY KEY (project_name, environment_name)
 );
@@ -41,9 +41,9 @@ CREATE TABLE environment
 
 CREATE TABLE file
 (
-	project_name varchar(80) NOT NULL,
-	role_name varchar(80) NOT NULL,
-	file_name varchar(256) NOT NULL,
+	project_name varchar(50) NOT NULL,
+	role_name varchar(30) NOT NULL,
+	file_name varchar(128) NOT NULL,
 	PRIMARY KEY (project_name, role_name, file_name)
 );
 
@@ -71,25 +71,25 @@ CREATE TABLE parameter
 
 CREATE TABLE project
 (
-	project_name varchar(80) NOT NULL,
+	project_name varchar(50) NOT NULL,
 	PRIMARY KEY (project_name)
 );
 
 
 CREATE TABLE role
 (
-	project_name varchar(80) NOT NULL,
-	role_name varchar(80) NOT NULL,
+	project_name varchar(50) NOT NULL,
+	role_name varchar(30) NOT NULL,
 	PRIMARY KEY (project_name, role_name)
 );
 
 
 CREATE TABLE role_relation
 (
-	project_name varchar(80) NOT NULL,
+	project_name varchar(50) NOT NULL,
 	environment_name varchar(80) NOT NULL,
 	group_name varchar(80) NOT NULL,
-	role_name varchar(80) NOT NULL,
+	role_name varchar(30) NOT NULL,
 	sort int,
 	PRIMARY KEY (project_name, environment_name, group_name, role_name)
 );
@@ -97,7 +97,7 @@ CREATE TABLE role_relation
 
 CREATE TABLE server
 (
-	project_name varchar(80) NOT NULL,
+	project_name varchar(50) NOT NULL,
 	environment_name varchar(80) NOT NULL,
 	group_name varchar(80) NOT NULL,
 	server_name varchar(80) NOT NULL,
@@ -107,7 +107,7 @@ CREATE TABLE server
 
 CREATE TABLE service_group
 (
-	project_name varchar(80) NOT NULL,
+	project_name varchar(50) NOT NULL,
 	environment_name varchar(80) NOT NULL,
 	group_name varchar(80) NOT NULL,
 	PRIMARY KEY (project_name, environment_name, group_name)
@@ -117,8 +117,8 @@ CREATE TABLE service_group
 CREATE TABLE task
 (
 	task_id int NOT NULL AUTO_INCREMENT,
-	project_name varchar(80) NOT NULL,
-	role_name varchar(80) NOT NULL,
+	project_name varchar(50) NOT NULL,
+	role_name varchar(30) NOT NULL,
 	module_name varchar(80) NOT NULL,
 	description varchar(512),
 	free_form varchar(512),
@@ -130,8 +130,8 @@ CREATE TABLE task
 CREATE TABLE task_detail
 (
 	task_id int NOT NULL,
-	project_name varchar(80) NOT NULL,
-	role_name varchar(80) NOT NULL,
+	project_name varchar(50) NOT NULL,
+	role_name varchar(30) NOT NULL,
 	parameter_name varchar(80) NOT NULL,
 	parameter_value varchar(256),
 	PRIMARY KEY (task_id, project_name, role_name, parameter_name)
@@ -140,16 +140,16 @@ CREATE TABLE task_detail
 
 CREATE TABLE template
 (
-	project_name varchar(80) NOT NULL,
-	role_name varchar(80) NOT NULL,
-	template_name varchar(256) NOT NULL,
+	project_name varchar(50) NOT NULL,
+	role_name varchar(30) NOT NULL,
+	template_name varchar(128) NOT NULL,
 	PRIMARY KEY (project_name, role_name, template_name)
 );
 
 
 CREATE TABLE variable
 (
-	project_name varchar(80) NOT NULL,
+	project_name varchar(50) NOT NULL,
 	target enum('project','environment','server_group','server','role') NOT NULL,
 	target_name varchar(80) NOT NULL,
 	variable_name varchar(80) NOT NULL,
