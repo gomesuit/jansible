@@ -18,4 +18,77 @@
 			project
 	</select>
 	
+	<insert id="insertServiceGroup" parameterType="DbServiceGroup">
+		INSERT INTO service_group
+			(
+				project_name,
+				group_name
+			)
+		VALUES
+			(
+				#{projectName},
+				#{groupName}
+			)
+	</insert>
+	
+	<select id="selectServiceGroupList" resultType="DbServiceGroup">
+		SELECT
+			project_name as projectName,
+			group_name as groupName
+		FROM
+			service_group
+		WHERE
+			project_name = #{projectName}
+	</select>
+	
+	<insert id="insertServer" parameterType="DbServer">
+		INSERT INTO server
+			(
+				project_name,
+				group_name,
+				server_name
+			)
+		VALUES
+			(
+				#{projectName},
+				#{groupName},
+				#{serverName}
+			)
+	</insert>
+	
+	<select id="selectServerList" resultType="DbServer">
+		SELECT
+			project_name as projectName,
+			group_name as groupName,
+			server_name as serverName
+		FROM
+			server
+		WHERE
+			project_name = #{projectName} AND
+			group_name = #{groupName}
+	</select>
+	
+	<insert id="insertRole" parameterType="DbRole">
+		INSERT INTO role
+			(
+				project_name,
+				role_name
+			)
+		VALUES
+			(
+				#{projectName},
+				#{roleName}
+			)
+	</insert>
+	
+	<select id="selectRoleList" resultType="DbRole">
+		SELECT
+			project_name as projectName,
+			role_name as roleName
+		FROM
+			role
+		WHERE
+			project_name = #{projectName}
+	</select>
+	
 </mapper>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta content="ja" http-equiv="Content-Language" />
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<title>sample page</title>
+</head>
+<body>
+
+	<div>グループ登録</div>
+	<form action="#" th:action="@{/project/group/regist}" th:object="${form}" method="post">
+		<input type="hidden" th:field="*{projectName}" />
+		<table border="1" rules="all">
+			<tr>
+				<td>group</td>
+			</tr>
+			<tr>
+				<td><input type="text" th:field="*{groupName}" /></td>
+			</tr>
+		</table>
+		<input type="submit" value="Submit" />
+	</form>
+	
+	<div>グループ一覧</div>
+	<table border="1" rules="all">
+		<tr>
+			<td>group</td>
+		</tr>
+		<tr th:each="serviceGroup : ${serviceGroupList}">
+			<td><a th:href="*{projectName} + '/' + ${serviceGroup.groupName}" th:text="${serviceGroup.groupName}" /></td>
+		</tr>
+	</table>
+</body>
+</html>
