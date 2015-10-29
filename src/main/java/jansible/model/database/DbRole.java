@@ -1,30 +1,16 @@
 package jansible.model.database;
 
-public class DbRole {
-	private String projectName;
-	private String roleName;
+import jansible.model.common.RoleKey;
+
+public class DbRole extends RoleKey{
 	
 	public DbRole(){}
 	
-	public DbRole(DbProject dbProject, String roleName){
-		this(dbProject.getProjectName(), roleName);
-	}
-	
 	public DbRole(String projectName, String roleName) {
-		super();
-		this.projectName = projectName;
-		this.roleName = roleName;
+		super(projectName, roleName);
 	}
-	public String getProjectName() {
-		return projectName;
-	}
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
-	public String getRoleName() {
-		return roleName;
-	}
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
+
+	public DbRole(DbProject dbProject, String roleName) {
+		this(dbProject.getProjectName(), roleName);
 	}
 }

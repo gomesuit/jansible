@@ -1,21 +1,15 @@
 package jansible.model.database;
 
-public class DbRoleRelation {
-	private String projectName;
-	private String GroupName;
+import jansible.model.common.ServiceGroupKey;
+
+public class DbRoleRelation extends ServiceGroupKey{
 	private String roleName;
 	
-	public String getProjectName() {
-		return projectName;
-	}
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
-	public String getGroupName() {
-		return GroupName;
-	}
-	public void setGroupName(String groupName) {
-		GroupName = groupName;
+	public DbRoleRelation(){}
+	
+	public DbRoleRelation(String roleName) {
+		super();
+		this.roleName = roleName;
 	}
 	public String getRoleName() {
 		return roleName;

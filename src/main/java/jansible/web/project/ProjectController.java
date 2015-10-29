@@ -41,7 +41,7 @@ public class ProjectController {
     	serviceGroupForm.setProjectName(projectName);
     	
     	model.addAttribute("form", serviceGroupForm);
-    	model.addAttribute("serviceGroupList", projectService.getServiceGroupList(projectName));
+    	model.addAttribute("serviceGroupList", projectService.getServiceGroupList(projectName, null));
         return "project/project/top";
     }
 
@@ -52,7 +52,7 @@ public class ProjectController {
     	serverForm.setGroupName(groupName);
     	
     	model.addAttribute("form", serverForm);
-    	model.addAttribute("serverList", projectService.getServerList(projectName, groupName));
+    	model.addAttribute("serverList", projectService.getServerList(projectName, null, groupName));
         return "project/service_group/top";
     }
     

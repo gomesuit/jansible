@@ -1,13 +1,7 @@
 package jansible.web.project.form;
 
-public class ProjectForm {
-	private String projectName;
+import jansible.model.common.ProjectKey;
 
-	public String getProjectName() {
-		return projectName;
-	}
-
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
+public class ProjectForm extends ProjectKey{
+	public ProjectForm(){}
 }

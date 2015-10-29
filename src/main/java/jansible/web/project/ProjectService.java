@@ -3,6 +3,8 @@ package jansible.web.project;
 import java.util.List;
 
 import jansible.mapper.ProjectMapper;
+import jansible.model.common.EnvironmentKey;
+import jansible.model.common.ServiceGroupKey;
 import jansible.model.database.DbProject;
 import jansible.model.database.DbRole;
 import jansible.model.database.DbServer;
@@ -24,14 +26,14 @@ public class ProjectService {
 		return projectMapper.selectProjectList();
 	}
 
-	public List<DbServiceGroup> getServiceGroupList(String projectName){
-		DbProject dbProject = new DbProject(projectName);
-		return projectMapper.selectServiceGroupList(dbProject);
+	public List<DbServiceGroup> getServiceGroupList(String projectName, String environmentName){
+		EnvironmentKey environmentKey = new EnvironmentKey(projectName, environmentName);
+		return projectMapper.selectServiceGroupList(environmentKey);
 	}
 
-	public List<DbServer> getServerList(String projectName, String groupName){
-		DbServiceGroup dbServiceGroup = new DbServiceGroup(projectName, groupName);
-		return projectMapper.selectServerList(dbServiceGroup);
+	public List<DbServer> getServerList(String projectName, String environmentName, String groupName){
+		ServiceGroupKey serviceGroupKey = new ServiceGroupKey(projectName, environmentName, groupName);
+		return projectMapper.selectServerList(serviceGroupKey);
 	}
 
 	public List<DbRole> getRoleList(String projectName){
@@ -40,7 +42,7 @@ public class ProjectService {
 	}
 
 	public void registProject(ProjectForm form) {
-		DbProject dbProject = createDbProject(form);
+		DbProject dbProject = new DbProject(form.getProjectName());
 		projectMapper.insertProject(dbProject);
 	}
 	
@@ -59,21 +61,17 @@ public class ProjectService {
 		projectMapper.insertRole(dbRole);
 	}
 
-	private DbProject createDbProject(ProjectForm form){
-		return new DbProject(form.getProjectName());
-	}
-
 	private DbServiceGroup createDbProject(ServiceGroupForm form){
-		return new DbServiceGroup(form.getProjectName(), form.getGroupName());
+		return new DbServiceGroup(form.getProjectName(), form.getEnvironmentName(), form.getGroupName());
 	}
 	
 	private DbServer createDbServer(ServerForm form){
-		DbServiceGroup dbServiceGroup = new DbServiceGroup(form.getProjectName(), form.getGroupName());
+		DbServiceGroup dbServiceGroup = new DbServiceGroup(form.getProjectName(), form.getEnvironmentName(), form.getGroupName());
 		return new DbServer(dbServiceGroup, form.getServerName());
 	}
 	
 	private DbRole createDbRole(RoleForm form){	
-		DbProject dbProject = createDbProject(form.getProjectForm());
+		DbProject dbProject = new DbProject(form.getProjectName());
 		return new DbRole(dbProject, form.getRoleName());
 	}
 }

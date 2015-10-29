@@ -11,7 +11,7 @@
 			(#{projectName})
 	</insert>
 	
-	<select id="selectProjectList" resultType="DbProject">
+	<select id="selectProjectList" resultType="ProjectKey">
 		SELECT
 			project_name as projectName
 		FROM
@@ -31,7 +31,7 @@
 			)
 	</insert>
 	
-	<select id="selectServiceGroupList" resultType="DbServiceGroup">
+	<select id="selectServiceGroupList" resultType="ServiceGroupKey">
 		SELECT
 			project_name as projectName,
 			group_name as groupName
@@ -56,7 +56,7 @@
 			)
 	</insert>
 	
-	<select id="selectServerList" resultType="DbServer">
+	<select id="selectServerList" resultType="ServerKey">
 		SELECT
 			project_name as projectName,
 			group_name as groupName,
@@ -81,7 +81,7 @@
 			)
 	</insert>
 	
-	<select id="selectRoleList" resultType="DbRole">
+	<select id="selectRoleList" resultType="RoleKey">
 		SELECT
 			project_name as projectName,
 			role_name as roleName

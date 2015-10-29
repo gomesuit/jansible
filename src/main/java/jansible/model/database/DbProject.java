@@ -1,19 +1,11 @@
 package jansible.model.database;
 
-public class DbProject {
-	private String projectName;
-	
+import jansible.model.common.ProjectKey;
+
+public class DbProject extends ProjectKey{
 	public DbProject(){}
-	
-	public DbProject(String projectName){
-		this.projectName = projectName;
-	}
 
-	public String getProjectName() {
-		return projectName;
-	}
-
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
+	public DbProject(String projectName) {
+		super(projectName);
 	}
 }

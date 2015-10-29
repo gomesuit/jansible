@@ -2,6 +2,9 @@ package jansible.mapper;
 
 import java.util.List;
 
+import jansible.model.common.EnvironmentKey;
+import jansible.model.common.ProjectKey;
+import jansible.model.common.ServiceGroupKey;
 import jansible.model.database.DbProject;
 import jansible.model.database.DbRole;
 import jansible.model.database.DbServer;
@@ -12,11 +15,11 @@ public interface ProjectMapper {
 	List<DbProject> selectProjectList();
 	
 	void insertServiceGroup(DbServiceGroup dbServiceGroup);
-	List<DbServiceGroup> selectServiceGroupList(DbProject dbProject);
+	List<DbServiceGroup> selectServiceGroupList(EnvironmentKey environmentKey);
 	
 	void insertServer(DbServer dbServer);
-	List<DbServer> selectServerList(DbServiceGroup dbServiceGroup);
+	List<DbServer> selectServerList(ServiceGroupKey serviceGroupKey);
 
 	void insertRole(DbRole dbRole);
-	List<DbRole> selectRoleList(DbProject dbProject);
+	List<DbRole> selectRoleList(ProjectKey projectKey);
 }
