@@ -70,7 +70,12 @@ public class ProjectController {
     	
     	model.addAttribute("form", form);
     	model.addAttribute("taskList", projectService.getTaskList(projectName, roleName));
-        return "project/environment/top";
+        return "project/role/top";
+    }
+    
+    @RequestMapping("/project/view/role/{projectName}/{roleName}/{taskId}")
+    private String viewTask(@PathVariable String projectName, @PathVariable String roleName, @PathVariable int taskId, Model model){
+        return "project/task/top";
     }
 
     @RequestMapping("/project/view/{projectName}/{environmentName}/{groupName}")
@@ -83,6 +88,14 @@ public class ProjectController {
     	model.addAttribute("form", serverForm);
     	model.addAttribute("serverList", projectService.getServerList(projectName, environmentName, groupName));
         return "project/service_group/top";
+    }
+    
+    @RequestMapping(value="/project/task/regist", method=RequestMethod.POST)
+    private String registTask(@ModelAttribute TaskForm form, HttpServletRequest request){
+    	projectService.registTask(form);
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
     }
     
     @RequestMapping(value="/project/environment/regist", method=RequestMethod.POST)

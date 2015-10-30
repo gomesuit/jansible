@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta content="ja" http-equiv="Content-Language" />
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<title>sample page</title>
+</head>
+<body>
+	<div>ロールの画面です</div>
+	
+	<div>タスク登録</div>
+	<form action="#" th:action="@{/project/task/regist}" th:object="${form}" method="post">
+		<input type="hidden" th:field="*{projectName}" />
+		<input type="hidden" th:field="*{roleName}" />
+		<table border="1" rules="all">
+			<tr>
+				<td>task</td>
+			</tr>
+			<tr>
+				<td><input type="text" th:field="*{moduleName}" /></td>
+				<td><input type="text" th:field="*{description}" /></td>
+				<td><input type="text" th:field="*{freeForm}" /></td>
+				<td><input type="text" th:field="*{sort}" /></td>
+			</tr>
+		</table>
+		<input type="submit" value="Submit" />
+	</form>
+	
+	<div>タスク一覧</div>
+	<table border="1" rules="all">
+		<tr>
+			<td>task</td>
+		</tr>
+		<tr th:each="task : ${taskList}">
+			<td><a th:href="*{roleName} + '/' + ${task.taskId}" th:text="${task.moduleName}" /></td>
+		</tr>
+	</table>
+</body>
+</html>

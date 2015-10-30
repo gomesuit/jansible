@@ -82,7 +82,7 @@ public class ProjectService {
 		projectMapper.insertRole(dbRole);
 	}
 	
-	public void registRole(TaskForm form) {
+	public void registTask(TaskForm form) {
 		DbTask dbTask = createDbTask(form);
 		projectMapper.insertTask(dbTask);
 	}

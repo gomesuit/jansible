@@ -145,17 +145,18 @@
 	
 	<select id="selectTaskList" resultType="DbTask">
 		SELECT
+			task_id as taskId,
 			project_name as projectName,
 			role_name as roleName,
 			module_name as moduleName,
 			description as description,
 			free_form as freeForm,
-			sort as sort,
+			sort as sort
 		FROM
 			task
 		WHERE
 			project_name = #{projectName} AND
-			role_name = roleName
+			role_name = #{roleName}
 	</select>
 	
 </mapper>
