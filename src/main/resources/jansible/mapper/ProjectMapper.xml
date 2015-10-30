@@ -157,6 +157,8 @@
 		WHERE
 			project_name = #{projectName} AND
 			role_name = #{roleName}
+		ORDER BY
+			sort
 	</select>
 	
 </mapper>
