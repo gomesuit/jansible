@@ -20,7 +20,12 @@
 				<td>sort</td>
 			</tr>
 			<tr>
-				<td><input type="text" th:field="*{moduleName}" /></td>
+				<td>
+					<select size="1" th:field="*{moduleName}">
+						<option th:each="moduleName : ${moduleNameList}" th:value="${moduleName}" th:label="${moduleName}" />
+					</select>
+				</td>
+<!-- 				<td><input type="text" th:field="*{moduleName}" /></td> -->
 				<td><input type="text" th:field="*{description}" /></td>
 				<td><input type="text" th:field="*{freeForm}" /></td>
 				<td><input type="text" th:field="*{sort}" /></td>

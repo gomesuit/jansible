@@ -70,6 +70,9 @@ public class ProjectController {
     	
     	model.addAttribute("form", form);
     	model.addAttribute("taskList", projectService.getTaskList(projectName, roleName));
+    	
+    	// module名リスト
+    	model.addAttribute("moduleNameList", projectService.getModuleNameList());
         return "project/role/top";
     }
     

@@ -2,6 +2,7 @@ package jansible.web.project;
 
 import java.util.List;
 
+import jansible.mapper.JansibleMapper;
 import jansible.mapper.ProjectMapper;
 import jansible.model.common.EnvironmentKey;
 import jansible.model.common.ProjectKey;
@@ -27,6 +28,8 @@ import org.springframework.stereotype.Service;
 public class ProjectService {
 	@Autowired
 	private ProjectMapper projectMapper;
+	@Autowired
+	private JansibleMapper jansibleMapper;
 
 	public List<DbProject> getProjectList(){
 		return projectMapper.selectProjectList();
@@ -104,5 +107,9 @@ public class ProjectService {
 	
 	private DbRole createDbRole(RoleForm form){	
 		return new DbRole(form.getProjectName(), form.getRoleName());
+	}
+
+	public List<String> getModuleNameList() {
+		return jansibleMapper.selectModuleNameList();
 	}
 }
