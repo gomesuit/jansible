@@ -1,20 +1,21 @@
 package jansible.model.database;
 
-import jansible.model.common.ServiceGroupKey;
+import jansible.model.common.RoleRelationKey;
 
-public class DbRoleRelation extends ServiceGroupKey{
-	private String roleName;
+public class DbRoleRelation extends RoleRelationKey{
+	private int sort;
 	
 	public DbRoleRelation(){}
 	
-	public DbRoleRelation(String roleName) {
-		super();
-		this.roleName = roleName;
+	public DbRoleRelation(String projectName, String environmentName, String groupName, String roleName) {
+		super(projectName, environmentName, groupName, roleName);
 	}
-	public String getRoleName() {
-		return roleName;
+
+	public int getSort() {
+		return sort;
 	}
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
+
+	public void setSort(int sort) {
+		this.sort = sort;
 	}
 }

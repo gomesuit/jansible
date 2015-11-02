@@ -7,11 +7,13 @@ import jansible.mapper.ProjectMapper;
 import jansible.model.common.EnvironmentKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
+import jansible.model.common.RoleRelationKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.TaskKey;
 import jansible.model.database.DbEnvironment;
 import jansible.model.database.DbProject;
 import jansible.model.database.DbRole;
+import jansible.model.database.DbRoleRelation;
 import jansible.model.database.DbServer;
 import jansible.model.database.DbServiceGroup;
 import jansible.model.database.DbTask;
@@ -19,6 +21,7 @@ import jansible.model.database.DbTaskDetail;
 import jansible.web.project.form.EnvironmentForm;
 import jansible.web.project.form.ProjectForm;
 import jansible.web.project.form.RoleForm;
+import jansible.web.project.form.RoleRelationForm;
 import jansible.web.project.form.ServerForm;
 import jansible.web.project.form.ServiceGroupForm;
 import jansible.web.project.form.TaskDetailForm;
@@ -72,6 +75,12 @@ public class ProjectService {
 		TaskKey taskKey = new TaskKey(projectName, roleName, taskId);
 		return projectMapper.selectTaskDetailList(taskKey);
 	}
+	
+	public List<DbRoleRelation> getRoleRelationList(String projectName, String environmentName, String groupName){
+		ServiceGroupKey serviceGroupKey = new ServiceGroupKey(projectName, environmentName, groupName);
+		return projectMapper.selectDbRoleRelationList(serviceGroupKey);
+	}
+
 
 	public void registProject(ProjectForm form) {
 		DbProject dbProject = new DbProject(form.getProjectName());
@@ -110,6 +119,21 @@ public class ProjectService {
 		}
 	}
 	
+	public void registRoleRelationDetail(RoleRelationForm form) {
+		DbRoleRelation dbRoleRelation = createDbRoleRelation(form);
+		projectMapper.insertDbRoleRelation(dbRoleRelation);
+	}
+	
+	private DbRoleRelation createDbRoleRelation(RoleRelationForm form) {
+		DbRoleRelation dbRoleRelation = new DbRoleRelation();
+		dbRoleRelation.setProjectName(form.getProjectName());
+		dbRoleRelation.setEnvironmentName(form.getEnvironmentName());
+		dbRoleRelation.setGroupName(form.getGroupName());
+		dbRoleRelation.setRoleName(form.getRoleName());
+		dbRoleRelation.setSort(form.getSort());
+		return dbRoleRelation;
+	}
+
 	private List<DbTaskDetail> createDbTaskDetailList(TaskDetailForm form) {
 		List<DbTaskDetail> dbTaskDetailList = new ArrayList<>();
 		List<TaskParameter> taskParameterList = form.getTaskParameterList();

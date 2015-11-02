@@ -13,6 +13,7 @@ import jansible.web.module.ModuleService;
 import jansible.web.project.form.EnvironmentForm;
 import jansible.web.project.form.ProjectForm;
 import jansible.web.project.form.RoleForm;
+import jansible.web.project.form.RoleRelationForm;
 import jansible.web.project.form.ServerForm;
 import jansible.web.project.form.ServiceGroupForm;
 import jansible.web.project.form.TaskDetailForm;
@@ -41,15 +42,26 @@ public class ProjectController {
         return "project/top";
     }
 
-    @RequestMapping(value="/project/regist", method=RequestMethod.POST)
-    private String registProject(@ModelAttribute ProjectForm form, HttpServletRequest request){
-    	projectService.registProject(form);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
+    @RequestMapping("/project/view/{projectName}/{environmentName}/{groupName}")
+	private String viewServiceGroup(@PathVariable String projectName, @PathVariable String environmentName, @PathVariable String groupName, Model model){
+		ServerForm serverForm = new ServerForm();
+		serverForm.setProjectName(projectName);
+		serverForm.setEnvironmentName(environmentName);
+		serverForm.setGroupName(groupName);
+		model.addAttribute("serverForm", serverForm);
+		model.addAttribute("serverList", projectService.getServerList(projectName, environmentName, groupName));
+		
+		RoleRelationForm roleRelationForm = new RoleRelationForm();
+		roleRelationForm.setProjectName(projectName);
+		roleRelationForm.setEnvironmentName(environmentName);
+		roleRelationForm.setGroupName(groupName);
+		model.addAttribute("roleRelationForm", roleRelationForm);
+    	model.addAttribute("roleList", projectService.getRoleList(projectName));
+		model.addAttribute("roleRelationList", projectService.getRoleRelationList(projectName, environmentName, groupName));
+	    return "project/service_group/top";
+	}
 
-    @RequestMapping("/project/view/{projectName}")
+	@RequestMapping("/project/view/{projectName}")
     private String viewProject(@PathVariable String projectName, Model model){
     	EnvironmentForm environmentForm = new EnvironmentForm();
     	environmentForm.setProjectName(projectName);
@@ -131,19 +143,15 @@ public class ProjectController {
 		return taskParameterList;
 	}
 
-	@RequestMapping("/project/view/{projectName}/{environmentName}/{groupName}")
-    private String viewProject(@PathVariable String projectName, @PathVariable String environmentName, @PathVariable String groupName, Model model){
-    	ServerForm serverForm = new ServerForm();
-    	serverForm.setProjectName(projectName);
-    	serverForm.setEnvironmentName(environmentName);
-    	serverForm.setGroupName(groupName);
-    	
-    	model.addAttribute("form", serverForm);
-    	model.addAttribute("serverList", projectService.getServerList(projectName, environmentName, groupName));
-        return "project/service_group/top";
-    }
-    
-    @RequestMapping(value="/project/task/regist", method=RequestMethod.POST)
+	@RequestMapping(value="/project/regist", method=RequestMethod.POST)
+	private String registProject(@ModelAttribute ProjectForm form, HttpServletRequest request){
+		projectService.registProject(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/task/regist", method=RequestMethod.POST)
     private String registTask(@ModelAttribute TaskForm form, HttpServletRequest request){
     	projectService.registTask(form);
     	
@@ -178,6 +186,14 @@ public class ProjectController {
     @RequestMapping(value="/project/server/regist", method=RequestMethod.POST)
     private String registServer(@ModelAttribute ServerForm form, HttpServletRequest request){
     	projectService.registServer(form);
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+    }
+
+    @RequestMapping(value="/project/roleRelation/regist", method=RequestMethod.POST)
+    private String registRoleRelation(@ModelAttribute RoleRelationForm form, HttpServletRequest request){
+    	projectService.registRoleRelationDetail(form);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

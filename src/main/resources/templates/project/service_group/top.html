@@ -8,7 +8,7 @@
 <body>
 
 	<div>サーバ登録</div>
-	<form action="#" th:action="@{/project/server/regist}" th:object="${form}" method="post">
+	<form action="#" th:action="@{/project/server/regist}" th:object="${serverForm}" method="post">
 		<input type="hidden" th:field="*{projectName}" />
 		<input type="hidden" th:field="*{environmentName}" />
 		<input type="hidden" th:field="*{groupName}" />
@@ -30,6 +30,39 @@
 		</tr>
 		<tr th:each="server : ${serverList}">
 			<td><a th:href="*{groupName} + '/' + ${server.serverName}" th:text="${server.serverName}" /></td>
+		</tr>
+	</table>
+	
+	<br />
+	<br />
+	<br />
+	<div>ロール関連登録</div>
+	<form action="#" th:action="@{/project/roleRelation/regist}" th:object="${roleRelationForm}" method="post">
+		<input type="hidden" th:field="*{projectName}" />
+		<input type="hidden" th:field="*{environmentName}" />
+		<input type="hidden" th:field="*{groupName}" />
+		<table border="1" rules="all">
+			<tr>
+				<td>roleRelation</td>
+			</tr>
+			<tr>
+				<td>
+					<select size="1" th:field="*{roleName}">
+						<option th:each="role : ${roleList}" th:value="${role.roleName}" th:label="${role.roleName}" />
+					</select>
+				</td>
+			</tr>
+
+		</table>
+		<input type="submit" value="Submit" />
+	</form>
+	<div>ロール関連一覧</div>
+	<table border="1" rules="all">
+		<tr>
+			<td>role</td>
+		</tr>
+		<tr th:each="roleRelation : ${roleRelationList}">
+			<td th:text="${roleRelation.roleName}" />
 		</tr>
 	</table>
 </body>

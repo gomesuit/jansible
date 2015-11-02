@@ -214,4 +214,38 @@
 			role_name = #{roleName}
 	</select>
 	
+	<insert id="insertDbRoleRelation" parameterType="DbRoleRelation">
+		INSERT INTO role_relation
+			(
+				project_name,
+				environment_name,
+				group_name,
+				role_name,
+				sort
+			)
+		VALUES
+			(
+				#{projectName},
+				#{environmentName},
+				#{groupName},
+				#{roleName},
+				#{sort}
+			)
+	</insert>
+	
+	<select id="selectDbRoleRelationList" resultType="DbRoleRelation">
+		SELECT
+			project_name as projectName,
+			environment_name as environmentName,
+			group_name as groupName,
+			role_name as roleName,
+			sort as sort
+		FROM
+			role_relation
+		WHERE
+			project_name = #{projectName} AND
+			environment_name = #{environmentName} AND
+			group_name = #{groupName}
+	</select>
+	
 </mapper>
