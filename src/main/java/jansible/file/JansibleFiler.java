@@ -16,10 +16,19 @@ public class JansibleFiler {
 	private final String DEFAULT_YAML_NAME = "main.yml";
 	
 	public void writeRoleYaml(RoleKey roleKey){
+		writeRoleYaml(roleKey, "Hello");
+	}
+	
+	public void writeRoleYaml(RoleKey roleKey, String yaml){
 		String dirName = getDirName(roleKey);
-		File file = new File(ROOT_PATH + dirName + PATH_SEPARATOR + "tasks" + PATH_SEPARATOR + DEFAULT_YAML_NAME);
+		String filePath = ROOT_PATH + dirName + PATH_SEPARATOR + "tasks" + PATH_SEPARATOR + DEFAULT_YAML_NAME;
+		writeFile(filePath, yaml);
+	}
+	
+	private void writeFile(String filePath, String content){
+		File file = new File(filePath);
 		try(FileWriter filewriter = new FileWriter(file)){
-			filewriter.write("Hello");
+			filewriter.write(content);
 		}catch(IOException e){
 			System.out.println(e);
 		}

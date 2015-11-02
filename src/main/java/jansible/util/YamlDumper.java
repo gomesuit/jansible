@@ -1,6 +1,7 @@
 package jansible.util;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.yaml.snakeyaml.DumperOptions;
@@ -21,6 +22,15 @@ public class YamlDumper {
 	public String dump(YamlModule module){
 		Map<String, String> data = new LinkedHashMap<>();
 		data.put(module.getName(), module.getParameters().toString());
+	    String result = yaml.dump(data);
+	    return result;
+	}
+	
+	public String dump(List<YamlModule> modules){
+		Map<String, String> data = new LinkedHashMap<>();
+		for(YamlModule module : modules){
+			data.put(module.getName(), module.getParameters().toString());
+		}
 	    String result = yaml.dump(data);
 	    return result;
 	}
