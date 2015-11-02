@@ -3,11 +3,11 @@ package jansible.web.project;
 import java.util.ArrayList;
 import java.util.List;
 
+import jansible.file.JansibleFiler;
 import jansible.mapper.ProjectMapper;
 import jansible.model.common.EnvironmentKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
-import jansible.model.common.RoleRelationKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.TaskKey;
 import jansible.model.database.DbEnvironment;
@@ -28,7 +28,6 @@ import jansible.web.project.form.TaskDetailForm;
 import jansible.web.project.form.TaskForm;
 import jansible.web.project.form.TaskParameter;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +35,8 @@ import org.springframework.stereotype.Service;
 public class ProjectService {
 	@Autowired
 	private ProjectMapper projectMapper;
+	@Autowired
+	private JansibleFiler jansibleFiler;
 
 	public List<DbProject> getProjectList(){
 		return projectMapper.selectProjectList();
@@ -85,6 +86,7 @@ public class ProjectService {
 	public void registProject(ProjectForm form) {
 		DbProject dbProject = new DbProject(form.getProjectName());
 		projectMapper.insertProject(dbProject);
+		jansibleFiler.mkProjectDir(dbProject);
 	}
 	
 	public void registEnvironment(EnvironmentForm form) {
@@ -105,6 +107,8 @@ public class ProjectService {
 	public void registRole(RoleForm form) {
 		DbRole dbRole = createDbRole(form);
 		projectMapper.insertRole(dbRole);
+		jansibleFiler.mkRoleDir(dbRole);
+		jansibleFiler.mkRoleTaskDir(dbRole);
 	}
 	
 	public void registTask(TaskForm form) {
@@ -175,10 +179,5 @@ public class ProjectService {
 	
 	private DbRole createDbRole(RoleForm form){	
 		return new DbRole(form.getProjectName(), form.getRoleName());
-	}
-
-	public List<TaskParameter> getTaskParameterList(String projectName, String roleName, String moduleName) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
