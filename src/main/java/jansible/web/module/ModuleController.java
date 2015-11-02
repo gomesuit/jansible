@@ -29,6 +29,8 @@ public class ModuleController {
 	
 	@Autowired
 	private ModuleService jansibleService;
+	@Autowired
+	private YamlDumper yamlDumper;
 
     @RequestMapping("/save")
     @ResponseBody
@@ -95,7 +97,6 @@ public class ModuleController {
     @RequestMapping(value="/create/view", method=RequestMethod.POST)
     @ResponseBody
     String view(@ModelAttribute ModuleForm form) {
-		YamlDumper yamlDumper = new YamlDumper();
 		YamlModule module = createMolule(form);
         return yamlDumper.dump(module);
     }
