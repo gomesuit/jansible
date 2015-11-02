@@ -161,4 +161,57 @@
 			sort
 	</select>
 	
+	<select id="selectTask" resultType="DbTask">
+		SELECT
+			task_id as taskId,
+			project_name as projectName,
+			role_name as roleName,
+			module_name as moduleName,
+			description as description,
+			free_form as freeForm,
+			sort as sort
+		FROM
+			task
+		WHERE
+			project_name = #{projectName} AND
+			role_name = #{roleName} AND
+			task_id = #{taskId}
+	</select>
+	
+	<insert id="insertTaskDetail" parameterType="DbTaskDetail">
+		INSERT INTO task_detail
+			(
+				task_id,
+				project_name,
+				role_name,
+				parameter_name,
+				parameter_value
+			)
+		VALUES
+			(
+				#{taskId},
+				#{projectName},
+				#{roleName},
+				#{parameterName},
+				#{parameterValue}
+			)
+		ON DUPLICATE KEY UPDATE
+			parameter_value = #{parameterValue}
+	</insert>
+	
+	<select id="selectTaskDetailList" resultType="DbTaskDetail">
+		SELECT
+			task_id as taskId,
+			project_name as projectName,
+			role_name as roleName,
+			parameter_name as parameterName,
+			parameter_value as parameterValue
+		FROM
+			task_detail
+		WHERE
+			task_id = #{taskId} AND
+			project_name = #{projectName} AND
+			role_name = #{roleName}
+	</select>
+	
 </mapper>

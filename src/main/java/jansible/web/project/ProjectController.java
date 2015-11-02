@@ -1,13 +1,23 @@
 package jansible.web.project;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
+import jansible.model.database.DbTask;
+import jansible.model.database.DbTaskDetail;
+import jansible.model.gethtml.HtmlModule;
+import jansible.model.gethtml.HtmlParameter;
+import jansible.web.module.ModuleService;
 import jansible.web.project.form.EnvironmentForm;
 import jansible.web.project.form.ProjectForm;
 import jansible.web.project.form.RoleForm;
 import jansible.web.project.form.ServerForm;
 import jansible.web.project.form.ServiceGroupForm;
+import jansible.web.project.form.TaskDetailForm;
 import jansible.web.project.form.TaskForm;
+import jansible.web.project.form.TaskParameter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +31,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class ProjectController {
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	private ModuleService moduleService;
     
     @RequestMapping("/project/top")
     private String top(Model model){
@@ -72,16 +84,54 @@ public class ProjectController {
     	model.addAttribute("taskList", projectService.getTaskList(projectName, roleName));
     	
     	// module名リスト
-    	model.addAttribute("moduleNameList", projectService.getModuleNameList());
+    	model.addAttribute("moduleNameList", moduleService.getModuleNameList());
         return "project/role/top";
     }
     
     @RequestMapping("/project/view/role/{projectName}/{roleName}/{taskId}")
     private String viewTask(@PathVariable String projectName, @PathVariable String roleName, @PathVariable int taskId, Model model){
+    	DbTask dbTask = projectService.getTask(projectName, roleName, taskId);
+    	String moduleName = dbTask.getModuleName();
+    	
+    	HtmlModule module = moduleService.getModule(moduleName);
+    	model.addAttribute("module", module);
+
+    	TaskDetailForm form = new TaskDetailForm();
+    	form.setProjectName(projectName);
+    	form.setRoleName(roleName);
+    	form.setTaskId(taskId);
+    	List<TaskParameter> taskParameterList = createBlankTaskParameterList(module);
+    	List<DbTaskDetail> dbTaskDetailList = projectService.getTaskDetailList(projectName, roleName, taskId);
+    	mergeParameterList(taskParameterList, dbTaskDetailList);
+    	form.setTaskParameterList(taskParameterList);
+    	model.addAttribute("form", form);
+    	
         return "project/task/top";
     }
 
-    @RequestMapping("/project/view/{projectName}/{environmentName}/{groupName}")
+    private void mergeParameterList(List<TaskParameter> taskParameterList, List<DbTaskDetail> dbTaskDetailList) {
+		for(TaskParameter taskParameter : taskParameterList){
+			String formParameterName = taskParameter.getParameterName();
+			for(DbTaskDetail dbTaskDetail : dbTaskDetailList){
+				String dbParameterName = dbTaskDetail.getParameterName();
+				if(formParameterName.equals(dbParameterName)){
+					taskParameter.setParameterValue(dbTaskDetail.getParameterValue());
+				}
+			}
+		}
+	}
+
+	private List<TaskParameter> createBlankTaskParameterList(HtmlModule module) {
+    	List<TaskParameter> taskParameterList = new ArrayList<>();
+    	for(HtmlParameter htmlParameter : module.getParameterList()){
+    		TaskParameter taskParameter = new TaskParameter();
+    		taskParameter.setParameterName(htmlParameter.getName());
+    		taskParameterList.add(taskParameter);
+    	}
+		return taskParameterList;
+	}
+
+	@RequestMapping("/project/view/{projectName}/{environmentName}/{groupName}")
     private String viewProject(@PathVariable String projectName, @PathVariable String environmentName, @PathVariable String groupName, Model model){
     	ServerForm serverForm = new ServerForm();
     	serverForm.setProjectName(projectName);
@@ -96,6 +146,14 @@ public class ProjectController {
     @RequestMapping(value="/project/task/regist", method=RequestMethod.POST)
     private String registTask(@ModelAttribute TaskForm form, HttpServletRequest request){
     	projectService.registTask(form);
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+    }
+    
+    @RequestMapping(value="/project/taskdetail/regist", method=RequestMethod.POST)
+    private String registTaskDetail(@ModelAttribute TaskDetailForm form, HttpServletRequest request){
+    	projectService.registTaskDetail(form);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

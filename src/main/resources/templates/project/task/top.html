@@ -7,5 +7,48 @@
 </head>
 <body>
 	<div>タスクの画面です</div>
+	<div th:text="${module.name}" />
+	
+	
+	
+	<form action="#" th:action="@{/project/taskdetail/regist}" th:object="${form}" method="post">
+		<input type="hidden" th:field="*{taskId}" />
+		<input type="hidden" th:field="*{projectName}" />
+		<input type="hidden" th:field="*{roleName}" />
+		<table border="1" rules="all">
+			<tr>
+				<td>parameterName</td>
+				<td>parameterValue</td>
+			</tr>
+			<tr th:each="taskParameter,stat : *{taskParameterList}">
+				<td>
+					<div th:text="${taskParameter.parameterName}"/>
+					<input type="hidden" th:field="*{taskParameterList[__${stat.index}__].parameterName}" />
+				</td>
+				<td><input type="text" th:field="*{taskParameterList[__${stat.index}__].parameterValue}" /></td>
+			</tr>
+		</table>
+		<input type="submit" value="Submit" />
+	</form>
+	
+	
+	<table border="1" rules="all">
+		<tr>
+			<td>parameter</td>
+			<td>addedVersion</td>
+			<td>required</td>
+			<td>defaultValue</td>
+			<td>choices</td>
+			<td>description</td>
+		</tr>
+		<tr th:each="parameter : ${module.parameterList}">
+			<td th:text="${parameter.name}" />
+			<td th:text="${parameter.addedVersion}" />
+			<td th:text="${parameter.required}" />
+			<td th:text="${parameter.defaultValue}" />
+			<td th:text="${parameter.choices}" />
+			<td th:text="${parameter.description}" />
+		</tr>
+	</table>
 </body>
 </html>

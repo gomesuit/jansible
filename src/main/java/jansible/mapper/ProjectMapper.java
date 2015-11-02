@@ -6,12 +6,14 @@ import jansible.model.common.EnvironmentKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
 import jansible.model.common.ServiceGroupKey;
+import jansible.model.common.TaskKey;
 import jansible.model.database.DbEnvironment;
 import jansible.model.database.DbProject;
 import jansible.model.database.DbRole;
 import jansible.model.database.DbServer;
 import jansible.model.database.DbServiceGroup;
 import jansible.model.database.DbTask;
+import jansible.model.database.DbTaskDetail;
 
 public interface ProjectMapper {
 	void insertProject(DbProject dbProject);
@@ -31,4 +33,8 @@ public interface ProjectMapper {
 	
 	void insertTask(DbTask dbTask);
 	List<DbTask> selectTaskList(RoleKey roleKey);
+	DbTask selectTask(TaskKey taskKey);
+
+	void insertTaskDetail(DbTaskDetail dbTaskDetail);
+	List<DbTaskDetail> selectTaskDetailList(TaskKey taskKey);
 }
