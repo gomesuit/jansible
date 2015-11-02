@@ -4,6 +4,8 @@ import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,17 @@ import org.springframework.stereotype.Service;
 public class JansibleFiler {
 	private final String ROOT_PATH = "D:/temp/";
 	private final String PATH_SEPARATOR = "/";
+	private final String DEFAULT_YAML_NAME = "main.yml";
+	
+	public void writeRoleYaml(RoleKey roleKey){
+		String dirName = getDirName(roleKey);
+		File file = new File(ROOT_PATH + dirName + PATH_SEPARATOR + "tasks" + PATH_SEPARATOR + DEFAULT_YAML_NAME);
+		try(FileWriter filewriter = new FileWriter(file)){
+			filewriter.write("Hello");
+		}catch(IOException e){
+			System.out.println(e);
+		}
+	}
 	
 	private void mkDir(String dirName){
 		File newfile = new File(ROOT_PATH + dirName);
