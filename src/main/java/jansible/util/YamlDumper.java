@@ -1,5 +1,6 @@
 package jansible.util;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,11 +30,13 @@ public class YamlDumper {
 	}
 	
 	public String dump(List<YamlModule> modules){
-		Map<String, String> data = new LinkedHashMap<>();
+		List<Map<String, String>> dataList = new ArrayList<>();
 		for(YamlModule module : modules){
+			Map<String, String> data = new LinkedHashMap<>();
 			data.put(module.getName(), module.getParameters().toString());
+			dataList.add(data);
 		}
-	    String result = yaml.dump(data);
+	    String result = yaml.dump(dataList);
 	    return result;
 	}
 }

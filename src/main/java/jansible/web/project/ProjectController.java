@@ -5,10 +5,15 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import jansible.file.JansibleFiler;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.gethtml.HtmlModule;
 import jansible.model.gethtml.HtmlParameter;
+import jansible.model.yamldump.YamlModule;
+import jansible.model.yamldump.YamlParameter;
+import jansible.model.yamldump.YamlParameters;
+import jansible.util.YamlDumper;
 import jansible.web.module.ModuleService;
 import jansible.web.project.form.EnvironmentForm;
 import jansible.web.project.form.ProjectForm;
@@ -20,6 +25,7 @@ import jansible.web.project.form.TaskDetailForm;
 import jansible.web.project.form.TaskForm;
 import jansible.web.project.form.TaskParameter;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,6 +40,10 @@ public class ProjectController {
 	private ProjectService projectService;
 	@Autowired
 	private ModuleService moduleService;
+	@Autowired
+	private YamlDumper yamlDumper;
+	@Autowired
+	private JansibleFiler jansibleFiler;
     
     @RequestMapping("/project/top")
     private String top(Model model){
@@ -163,11 +173,32 @@ public class ProjectController {
     private String registTaskDetail(@ModelAttribute TaskDetailForm form, HttpServletRequest request){
     	projectService.registTaskDetail(form);
     	
+    	List<DbTask> dbTaskList = projectService.getTaskList(form.getProjectName(), form.getRoleName());
+    	List<YamlModule> modules = new ArrayList<>();
+    	for(DbTask dbTask : dbTaskList){
+    		List<DbTaskDetail> dbTaskDetailList = projectService.getTaskDetailList(dbTask.getProjectName(), dbTask.getRoleName(), dbTask.getTaskId());
+    		YamlModule yamlModule = new YamlModule(dbTask.getModuleName(), createParameters(dbTaskDetailList));
+    		modules.add(yamlModule);
+    	}
+    	jansibleFiler.writeRoleYaml(form, yamlDumper.dump(modules));
+    	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
     }
     
-    @RequestMapping(value="/project/environment/regist", method=RequestMethod.POST)
+    private YamlParameters createParameters(List<DbTaskDetail> dbTaskDetailList) {
+    	YamlParameters yamlParameters = new YamlParameters();
+    	for(DbTaskDetail dbTaskDetail : dbTaskDetailList){
+    		if(StringUtils.isBlank(dbTaskDetail.getParameterValue())){
+    			continue;
+    		}
+    		YamlParameter YamlParameter = new YamlParameter(dbTaskDetail.getParameterName(), dbTaskDetail.getParameterValue());
+    		yamlParameters.addParameter(YamlParameter);
+    	}
+		return yamlParameters;
+	}
+
+	@RequestMapping(value="/project/environment/regist", method=RequestMethod.POST)
     private String registEnvironment(@ModelAttribute EnvironmentForm form, HttpServletRequest request){
     	projectService.registEnvironment(form);
     	
