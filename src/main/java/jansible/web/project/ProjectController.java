@@ -148,6 +148,11 @@ public class ProjectController {
     	for(HtmlParameter htmlParameter : module.getParameterList()){
     		TaskParameter taskParameter = new TaskParameter();
     		taskParameter.setParameterName(htmlParameter.getName());
+    		taskParameter.setAddedVersion(htmlParameter.getAddedVersion());
+    		taskParameter.setRequired(htmlParameter.isRequired());
+    		taskParameter.setDefaultValue(htmlParameter.getDefaultValue());
+    		taskParameter.setChoices(htmlParameter.getChoices());
+    		taskParameter.setDescription(htmlParameter.getDescription());
     		taskParameterList.add(taskParameter);
     	}
 		return taskParameterList;

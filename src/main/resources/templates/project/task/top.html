@@ -19,6 +19,11 @@
 			<tr>
 				<td>parameterName</td>
 				<td>parameterValue</td>
+				<td>addedVersion</td>
+				<td>required</td>
+				<td>defaultValue</td>
+				<td>choices</td>
+				<td>description</td>
 			</tr>
 			<tr th:each="taskParameter,stat : *{taskParameterList}">
 				<td>
@@ -26,29 +31,14 @@
 					<input type="hidden" th:field="*{taskParameterList[__${stat.index}__].parameterName}" />
 				</td>
 				<td><input type="text" th:field="*{taskParameterList[__${stat.index}__].parameterValue}" /></td>
+				<td th:text="${taskParameter.addedVersion}" />
+				<td th:text="${taskParameter.required}" />
+				<td th:text="${taskParameter.defaultValue}" />
+				<td th:text="${taskParameter.choices}" />
+				<td th:text="${taskParameter.description}" />
 			</tr>
 		</table>
 		<input type="submit" value="Submit" />
 	</form>
-	
-	
-	<table border="1" rules="all">
-		<tr>
-			<td>parameter</td>
-			<td>addedVersion</td>
-			<td>required</td>
-			<td>defaultValue</td>
-			<td>choices</td>
-			<td>description</td>
-		</tr>
-		<tr th:each="parameter : ${module.parameterList}">
-			<td th:text="${parameter.name}" />
-			<td th:text="${parameter.addedVersion}" />
-			<td th:text="${parameter.required}" />
-			<td th:text="${parameter.defaultValue}" />
-			<td th:text="${parameter.choices}" />
-			<td th:text="${parameter.description}" />
-		</tr>
-	</table>
 </body>
 </html>
