@@ -109,6 +109,8 @@ public class ProjectService {
 		projectMapper.insertRole(dbRole);
 		jansibleFiler.mkRoleDir(dbRole);
 		jansibleFiler.mkRoleTaskDir(dbRole);
+		jansibleFiler.mkRoleTemplateDir(dbRole);
+		jansibleFiler.mkRoleFileDir(dbRole);
 		jansibleFiler.writeRoleYaml(dbRole);
 	}
 	

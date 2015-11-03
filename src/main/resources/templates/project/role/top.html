@@ -8,6 +8,7 @@
 <body>
 	<div>ロールの画面です</div>
 	
+	<br />
 	<div>タスク登録</div>
 	<form action="#" th:action="@{/project/task/regist}" th:object="${form}" method="post">
 		<input type="hidden" th:field="*{projectName}" />
@@ -33,6 +34,7 @@
 		<input type="submit" value="Submit" />
 	</form>
 	
+	<br />
 	<div>タスク一覧</div>
 	<table border="1" rules="all">
 		<tr>
@@ -45,5 +47,19 @@
 			<td th:text="${task.parametersValue}" />
 		</tr>
 	</table>
+	
+	<br />
+	<div>テンプレートアップロード</div>
+	<form method="POST" enctype="multipart/form-data" th:action="@{/project/template/upload}" th:object="${templateUploadForm}">
+		<input type="hidden" th:field="*{projectName}" />
+		<input type="hidden" th:field="*{roleName}" />
+		File to upload: 
+		<input type="file" th:field="*{file}" />
+		<br /> Name: 
+		<input type="text" th:field="*{name}" />
+		<br />
+		<br />
+		<input type="submit" value="Upload" /> Press here to upload the file!
+	</form>
 </body>
 </html>

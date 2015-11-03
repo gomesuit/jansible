@@ -20,8 +20,8 @@ public class JansibleFiler {
 	}
 	
 	public void writeRoleYaml(RoleKey roleKey, String yaml){
-		String dirName = getDirName(roleKey);
-		String filePath = ROOT_PATH + dirName + PATH_SEPARATOR + "tasks" + PATH_SEPARATOR + DEFAULT_YAML_NAME;
+		String taskDirName = getTaskDirName(roleKey);
+		String filePath = taskDirName + PATH_SEPARATOR + DEFAULT_YAML_NAME;
 		writeFile(filePath, yaml);
 	}
 	
@@ -35,47 +35,64 @@ public class JansibleFiler {
 	}
 	
 	private void mkDir(String dirName){
-		File newfile = new File(ROOT_PATH + dirName);
+		File newfile = new File(dirName);
 		newfile.mkdirs();
 	}
 
 	public void mkProjectDir(ProjectKey projectKey){
-		mkDir(getDirName(projectKey));
+		mkDir(getProjectDirName(projectKey));
 	}
 
 	public void mkRoleDir(RoleKey roleKey){
-		mkDir(getDirName(roleKey));
+		mkDir(getRoleDirName(roleKey));
 	}
 
 	public void mkRoleFileDir(RoleKey roleKey){
-		String dirName = getDirName(roleKey);
-		dirName += PATH_SEPARATOR;
-		dirName += "file";
+		String dirName = getFileDirName(roleKey);
 		mkDir(dirName);
 	}
 
 	public void mkRoleTemplateDir(RoleKey roleKey){
-		String dirName = getDirName(roleKey);
-		dirName += PATH_SEPARATOR;
-		dirName += "template";
+		String dirName = getTemplateDirName(roleKey);
 		mkDir(dirName);
 	}
 
 	public void mkRoleTaskDir(RoleKey roleKey){
-		String dirName = getDirName(roleKey);
-		dirName += PATH_SEPARATOR;
-		dirName += "tasks";
+		String dirName = getTaskDirName(roleKey);
 		mkDir(dirName);
 	}
 
-	private String getDirName(ProjectKey projectKey) {
-		return projectKey.getProjectName();
+	private String getProjectDirName(ProjectKey projectKey) {
+		return ROOT_PATH + projectKey.getProjectName();
 	}
-
-	private String getDirName(RoleKey roleKey) {
-		String dirName = getDirName((ProjectKey)roleKey);
+	
+	private String getRoleDirName(RoleKey roleKey) {
+		String dirName = getProjectDirName(roleKey);
+		dirName += PATH_SEPARATOR;
+		dirName += "roles";
 		dirName += PATH_SEPARATOR;
 		dirName += roleKey.getRoleName();
 		return dirName;
+	}
+	
+	private String getTaskDirName(RoleKey roleKey) {
+		String roleDirName = getRoleDirName(roleKey);
+		roleDirName += PATH_SEPARATOR;
+		roleDirName += "tasks";
+		return roleDirName;
+	}
+	
+	public String getTemplateDirName(RoleKey roleKey) {
+		String roleDirName = getRoleDirName(roleKey);
+		roleDirName += PATH_SEPARATOR;
+		roleDirName += "templates";
+		return roleDirName;
+	}
+	
+	public String getFileDirName(RoleKey roleKey) {
+		String roleDirName = getRoleDirName(roleKey);
+		roleDirName += PATH_SEPARATOR;
+		roleDirName += "files";
+		return roleDirName;
 	}
 }

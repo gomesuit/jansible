@@ -1,8 +1,10 @@
 package jansible.web.project.form;
 
+import jansible.model.common.RoleKey;
+
 import org.springframework.web.multipart.MultipartFile;
 
-public class TemplateUploadForm {
+public class TemplateUploadForm extends RoleKey{
 	private String name;
 	private MultipartFile file;
 	
