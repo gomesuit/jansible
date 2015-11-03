@@ -1,6 +1,6 @@
 package jansible.web.project;
 
-import jansible.web.project.form.TemplateUploadForm;
+import jansible.web.project.form.UploadForm;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,10 +14,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class UploadController {
 	@Autowired
 	private UploadService uploadService;
-
+	
 	@RequestMapping(value="/project/template/upload", method=RequestMethod.POST)
-    private String registTask(@ModelAttribute TemplateUploadForm form, HttpServletRequest request){
+    private String uploadTemplate(@ModelAttribute UploadForm form, HttpServletRequest request){
 		uploadService.templateUpload(form);
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+    }
+	
+	@RequestMapping(value="/project/file/upload", method=RequestMethod.POST)
+    private String uploadFile(@ModelAttribute UploadForm form, HttpServletRequest request){
+		uploadService.fileUpload(form);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

@@ -25,7 +25,7 @@ import jansible.web.project.form.TaskDetailForm;
 import jansible.web.project.form.TaskForm;
 import jansible.web.project.form.TaskParameter;
 import jansible.web.project.form.TaskView;
-import jansible.web.project.form.TemplateUploadForm;
+import jansible.web.project.form.UploadForm;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,10 +112,10 @@ public class ProjectController {
     	// module名リスト
     	model.addAttribute("moduleNameList", moduleService.getModuleNameList());
     	
-		TemplateUploadForm templateUploadForm = new TemplateUploadForm();
-		templateUploadForm.setProjectName(projectName);
-		templateUploadForm.setRoleName(roleName);
-		model.addAttribute("templateUploadForm", templateUploadForm);
+		UploadForm uploadForm = new UploadForm();
+		uploadForm.setProjectName(projectName);
+		uploadForm.setRoleName(roleName);
+		model.addAttribute("uploadForm", uploadForm);
 		
         return "project/role/top";
     }

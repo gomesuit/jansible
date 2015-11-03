@@ -1,7 +1,7 @@
 package jansible.web.project;
 
 import jansible.file.JansibleFiler;
-import jansible.web.project.form.TemplateUploadForm;
+import jansible.web.project.form.UploadForm;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -27,11 +27,20 @@ public class UploadService {
 		}
 	}
 	
-	public void templateUpload(TemplateUploadForm form){
+	private void upload(UploadForm form, String dirName){
 		MultipartFile file = form.getFile();
 		String name = form.getName();
-		String templateDir = jansibleFiler.getTemplateDirName(form);
-		String filePath = templateDir + "/" + name;
+		String filePath = dirName + "/" + name;
 		fileUpload(file, filePath);
+	}
+	
+	public void templateUpload(UploadForm form){
+		String templateDir = jansibleFiler.getTemplateDirName(form);
+		upload(form, templateDir);
+	}
+	
+	public void fileUpload(UploadForm form){
+		String fileDir = jansibleFiler.getFileDirName(form);
+		upload(form, fileDir);
 	}
 }
