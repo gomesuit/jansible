@@ -19,6 +19,7 @@ public class YamlDumper {
     public YamlDumper(){
     	options = new DumperOptions();
         options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+	    options.setExplicitStart(true);
 	    yaml = new Yaml(options);
     }
 	
