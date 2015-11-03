@@ -25,8 +25,9 @@ public class YamlDumper {
     }
 	
 	public String dump(YamlModule module){
-		Map<String, String> data = createDataMap(module);
-	    return yaml.dump(data);
+		List<YamlModule> modules = new ArrayList<>();
+		modules.add(module);
+	    return dump(modules);
 	}
 	
 	public String dump(List<YamlModule> modules){
