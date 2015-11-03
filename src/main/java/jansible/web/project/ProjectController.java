@@ -178,6 +178,7 @@ public class ProjectController {
     	for(DbTask dbTask : dbTaskList){
     		List<DbTaskDetail> dbTaskDetailList = projectService.getTaskDetailList(dbTask.getProjectName(), dbTask.getRoleName(), dbTask.getTaskId());
     		YamlModule yamlModule = new YamlModule(dbTask.getModuleName(), createParameters(dbTaskDetailList));
+    		yamlModule.setDescription(dbTask.getDescription());
     		modules.add(yamlModule);
     	}
     	jansibleFiler.writeRoleYaml(form, yamlDumper.dump(modules));

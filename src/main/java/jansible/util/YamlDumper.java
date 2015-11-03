@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -24,20 +25,25 @@ public class YamlDumper {
     }
 	
 	public String dump(YamlModule module){
-		Map<String, String> data = new LinkedHashMap<>();
-		data.put(module.getName(), module.getParameters().toString());
-	    String result = yaml.dump(data);
-	    return result;
+		Map<String, String> data = createDataMap(module);
+	    return yaml.dump(data);
 	}
 	
 	public String dump(List<YamlModule> modules){
 		List<Map<String, String>> dataList = new ArrayList<>();
 		for(YamlModule module : modules){
-			Map<String, String> data = new LinkedHashMap<>();
-			data.put(module.getName(), module.getParameters().toString());
+			Map<String, String> data = createDataMap(module);
 			dataList.add(data);
 		}
-	    String result = yaml.dump(dataList);
-	    return result;
+	    return yaml.dump(dataList);
+	}
+	
+	private Map<String, String> createDataMap(YamlModule module){
+		Map<String, String> data = new LinkedHashMap<>();
+		if(!StringUtils.isBlank(module.getDescription())){
+			data.put("name", module.getDescription());
+		}
+		data.put(module.getName(), module.getParameters().toString());
+		return data;
 	}
 }

@@ -3,6 +3,7 @@ package jansible.model.yamldump;
 public class YamlModule {
 	private String name;
 	private YamlParameters parameters;
+	private String description;
 	
 	public YamlModule(String name, YamlParameters parameters){
 		this.name = name;
@@ -20,5 +21,11 @@ public class YamlModule {
 	}
 	public void setParameters(YamlParameters parameters) {
 		this.parameters = parameters;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }
