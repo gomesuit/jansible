@@ -174,6 +174,14 @@ public class ProjectController {
     	projectService.registTaskDetail(form);
     	
     	List<DbTask> dbTaskList = projectService.getTaskList(form.getProjectName(), form.getRoleName());
+    	List<YamlModule> modules = createYamlModuleList(dbTaskList);
+    	jansibleFiler.writeRoleYaml(form, yamlDumper.dump(modules));
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+    }
+    
+    private List<YamlModule> createYamlModuleList(List<DbTask> dbTaskList){
     	List<YamlModule> modules = new ArrayList<>();
     	for(DbTask dbTask : dbTaskList){
     		List<DbTaskDetail> dbTaskDetailList = projectService.getTaskDetailList(dbTask.getProjectName(), dbTask.getRoleName(), dbTask.getTaskId());
@@ -181,10 +189,7 @@ public class ProjectController {
     		yamlModule.setDescription(dbTask.getDescription());
     		modules.add(yamlModule);
     	}
-    	jansibleFiler.writeRoleYaml(form, yamlDumper.dump(modules));
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
+    	return modules;
     }
     
     private YamlParameters createParameters(List<DbTaskDetail> dbTaskDetailList) {
