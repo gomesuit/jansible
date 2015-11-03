@@ -38,9 +38,12 @@
 	<table border="1" rules="all">
 		<tr>
 			<td>task</td>
+			<td>description</td>
 		</tr>
 		<tr th:each="task : ${taskList}">
 			<td><a th:href="*{roleName} + '/' + ${task.taskId}" th:text="${task.moduleName}" /></td>
+			<td th:text="${task.description}" />
+			<td th:text="${task.parametersValue}" />
 		</tr>
 	</table>
 </body>

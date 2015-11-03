@@ -24,6 +24,7 @@ import jansible.web.project.form.ServiceGroupForm;
 import jansible.web.project.form.TaskDetailForm;
 import jansible.web.project.form.TaskForm;
 import jansible.web.project.form.TaskParameter;
+import jansible.web.project.form.TaskView;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,14 +104,37 @@ public class ProjectController {
     	form.setRoleName(roleName);
     	
     	model.addAttribute("form", form);
-    	model.addAttribute("taskList", projectService.getTaskList(projectName, roleName));
+    	List<DbTask> dbTaskList = projectService.getTaskList(projectName, roleName);
+    	List<TaskView> taskViewList = createTaskViewList(dbTaskList);
+    	model.addAttribute("taskList", taskViewList);
     	
     	// module名リスト
     	model.addAttribute("moduleNameList", moduleService.getModuleNameList());
         return "project/role/top";
     }
     
-    @RequestMapping("/project/view/role/{projectName}/{roleName}/{taskId}")
+    private List<TaskView> createTaskViewList(List<DbTask> dbTaskList){
+    	List<TaskView> taskViewList = new ArrayList<>();
+    	for(DbTask dbTask : dbTaskList){
+    		TaskView taskView = createTaskView(dbTask);
+    		taskViewList.add(taskView);
+    	}
+    	return taskViewList;
+    }
+    
+    private TaskView createTaskView(DbTask dbTask) {
+    	TaskView taskView = new TaskView();
+		taskView.setTaskId(dbTask.getTaskId());
+		taskView.setModuleName(dbTask.getModuleName());
+		taskView.setDescription(dbTask.getDescription());
+		List<DbTaskDetail> dbTaskDetailList = projectService.getTaskDetailList(dbTask.getProjectName(), dbTask.getRoleName(), dbTask.getTaskId());
+		YamlModule yamlModule = new YamlModule(dbTask.getModuleName(), createParameters(dbTaskDetailList));
+		yamlModule.setDescription(dbTask.getDescription());
+		taskView.setParametersValue(yamlModule.getParameters().toString());
+		return taskView;
+	}
+
+	@RequestMapping("/project/view/role/{projectName}/{roleName}/{taskId}")
     private String viewTask(@PathVariable String projectName, @PathVariable String roleName, @PathVariable int taskId, Model model){
     	DbTask dbTask = projectService.getTask(projectName, roleName, taskId);
     	String moduleName = dbTask.getModuleName();
