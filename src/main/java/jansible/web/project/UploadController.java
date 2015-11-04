@@ -14,10 +14,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class UploadController {
 	@Autowired
 	private UploadService uploadService;
+	@Autowired
+	private ProjectService projectService;
 	
 	@RequestMapping(value="/project/template/upload", method=RequestMethod.POST)
     private String uploadTemplate(@ModelAttribute UploadForm form, HttpServletRequest request){
 		uploadService.templateUpload(form);
+		projectService.registTemplate(form);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
@@ -26,6 +29,7 @@ public class UploadController {
 	@RequestMapping(value="/project/file/upload", method=RequestMethod.POST)
     private String uploadFile(@ModelAttribute UploadForm form, HttpServletRequest request){
 		uploadService.fileUpload(form);
+		projectService.registFile(form);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

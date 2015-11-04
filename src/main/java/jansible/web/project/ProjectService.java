@@ -11,6 +11,7 @@ import jansible.model.common.RoleKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.TaskKey;
 import jansible.model.database.DbEnvironment;
+import jansible.model.database.DbFile;
 import jansible.model.database.DbProject;
 import jansible.model.database.DbRole;
 import jansible.model.database.DbRoleRelation;
@@ -18,6 +19,7 @@ import jansible.model.database.DbServer;
 import jansible.model.database.DbServiceGroup;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
+import jansible.model.database.DbTemplate;
 import jansible.web.project.form.EnvironmentForm;
 import jansible.web.project.form.ProjectForm;
 import jansible.web.project.form.RoleForm;
@@ -27,9 +29,11 @@ import jansible.web.project.form.ServiceGroupForm;
 import jansible.web.project.form.TaskDetailForm;
 import jansible.web.project.form.TaskForm;
 import jansible.web.project.form.TaskParameter;
+import jansible.web.project.form.UploadForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ProjectService {
@@ -65,6 +69,16 @@ public class ProjectService {
 	public List<DbTask> getTaskList(String projectName, String roleName){
 		RoleKey roleKey = new RoleKey(projectName, roleName);
 		return projectMapper.selectTaskList(roleKey);
+	}
+	
+	public List<DbFile> getDbFileList(String projectName, String roleName){
+		RoleKey roleKey = new RoleKey(projectName, roleName);
+		return projectMapper.selectDbFileList(roleKey);
+	}
+	
+	public List<DbTemplate> getDbTemplateList(String projectName, String roleName){
+		RoleKey roleKey = new RoleKey(projectName, roleName);
+		return projectMapper.selectDbTemplateList(roleKey);
 	}
 	
 	public DbTask getTask(String projectName, String roleName, Integer taskId){
@@ -182,5 +196,27 @@ public class ProjectService {
 	
 	private DbRole createDbRole(RoleForm form){	
 		return new DbRole(form.getProjectName(), form.getRoleName());
+	}
+	
+	public void registFile(UploadForm form) {
+		DbFile dbFile = createDbFile(form);
+		projectMapper.insertDbFile(dbFile);
+	}
+
+	private DbFile createDbFile(UploadForm form) {
+		MultipartFile file = form.getFile();
+		DbFile dbFile = new DbFile(form.getProjectName(), form.getRoleName(), file.getOriginalFilename());
+		return dbFile;
+	}
+	
+	public void registTemplate(UploadForm form) {
+		DbTemplate dbTemplate = createDbTemplate(form);
+		projectMapper.insertDbTemplate(dbTemplate);
+	}
+
+	private DbTemplate createDbTemplate(UploadForm form) {
+		MultipartFile file = form.getFile();
+		DbTemplate dbTemplate = new DbTemplate(form.getProjectName(), form.getRoleName(), file.getOriginalFilename());
+		return dbTemplate;
 	}
 }
