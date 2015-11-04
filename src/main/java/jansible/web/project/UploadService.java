@@ -29,7 +29,7 @@ public class UploadService {
 	
 	private void upload(UploadForm form, String dirName){
 		MultipartFile file = form.getFile();
-		String name = form.getName();
+		String name = file.getOriginalFilename();
 		String filePath = dirName + "/" + name;
 		fileUpload(file, filePath);
 	}
