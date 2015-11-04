@@ -15,6 +15,7 @@ import jansible.model.yamldump.YamlParameter;
 import jansible.model.yamldump.YamlParameters;
 import jansible.util.YamlDumper;
 import jansible.web.module.ModuleService;
+import jansible.web.project.form.DownloadForm;
 import jansible.web.project.form.EnvironmentForm;
 import jansible.web.project.form.ProjectForm;
 import jansible.web.project.form.RoleForm;
@@ -119,6 +120,11 @@ public class ProjectController {
 
 		model.addAttribute("templateList", projectService.getDbTemplateList(projectName, roleName));
 		model.addAttribute("fileList", projectService.getDbFileList(projectName, roleName));
+		
+		DownloadForm downloadForm = new DownloadForm();
+		downloadForm.setProjectName(projectName);
+		downloadForm.setRoleName(roleName);
+		model.addAttribute("downloadForm", downloadForm);
 		
         return "project/role/top";
     }

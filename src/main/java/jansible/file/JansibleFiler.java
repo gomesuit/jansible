@@ -1,7 +1,9 @@
 package jansible.file;
 
+import jansible.model.common.FileKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
+import jansible.model.common.TemplateKey;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -94,5 +96,19 @@ public class JansibleFiler {
 		roleDirName += PATH_SEPARATOR;
 		roleDirName += "files";
 		return roleDirName;
+	}
+	
+	public String getTemplatePath(TemplateKey templateKey) {
+		String templateDirName = getTemplateDirName(templateKey);
+		templateDirName += PATH_SEPARATOR;
+		templateDirName += templateKey.getTemplateName();
+		return templateDirName;
+	}
+	
+	public String getFilePath(FileKey fileKey) {
+		String fileDirName = getFileDirName(fileKey);
+		fileDirName += PATH_SEPARATOR;
+		fileDirName += fileKey.getFileName();
+		return fileDirName;
 	}
 }

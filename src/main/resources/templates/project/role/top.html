@@ -62,9 +62,16 @@
 	<table border="1" rules="all">
 		<tr>
 			<td>template</td>
+			<td>Download</td>
 		</tr>
 		<tr th:each="template : ${templateList}">
-			<td th:text="${template.templateName}" />
+			<form method="POST" enctype="multipart/form-data" th:action="@{/project/download/template}" th:object="${downloadForm}">
+				<input type="hidden" th:field="*{projectName}" />
+				<input type="hidden" th:field="*{roleName}" />
+				<input type="hidden" name="fileName" th:value="${template.templateName}" />
+				<td th:text="${template.templateName}" />
+				<td><input type="submit" value="Download" /></td>
+			</form>
 		</tr>
 	</table>
 	
@@ -81,10 +88,17 @@
 	<div>ファイル一覧</div>
 	<table border="1" rules="all">
 		<tr>
-			<td>file</td>
+			<td>template</td>
+			<td>Download</td>
 		</tr>
 		<tr th:each="file : ${fileList}">
-			<td th:text="${file.fileName}" />
+			<form method="POST" enctype="multipart/form-data" th:action="@{/project/download/file}" th:object="${downloadForm}">
+				<input type="hidden" th:field="*{projectName}" />
+				<input type="hidden" th:field="*{roleName}" />
+				<input type="hidden" name="fileName" th:value="${file.fileName}" />
+				<td th:text="${file.fileName}" />
+				<td><input type="submit" value="Download" /></td>
+			</form>
 		</tr>
 	</table>
 </body>
