@@ -58,6 +58,15 @@
 		<br />
 		<input type="submit" value="Upload" /> Press here to upload the file!
 	</form>
+	<div>テンプレート一覧</div>
+	<table border="1" rules="all">
+		<tr>
+			<td>template</td>
+		</tr>
+		<tr th:each="template : ${templateList}">
+			<td th:text="${template.templateName}" />
+		</tr>
+	</table>
 	
 	<br />
 	<div>ファイルアップロード</div>
@@ -69,5 +78,14 @@
 		<br />
 		<input type="submit" value="Upload" /> Press here to upload the file!
 	</form>
+	<div>ファイル一覧</div>
+	<table border="1" rules="all">
+		<tr>
+			<td>file</td>
+		</tr>
+		<tr th:each="file : ${fileList}">
+			<td th:text="${file.fileName}" />
+		</tr>
+	</table>
 </body>
 </html>

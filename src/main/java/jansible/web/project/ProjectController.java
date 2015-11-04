@@ -116,6 +116,9 @@ public class ProjectController {
 		uploadForm.setProjectName(projectName);
 		uploadForm.setRoleName(roleName);
 		model.addAttribute("uploadForm", uploadForm);
+
+		model.addAttribute("templateList", projectService.getDbTemplateList(projectName, roleName));
+		model.addAttribute("fileList", projectService.getDbFileList(projectName, roleName));
 		
         return "project/role/top";
     }
