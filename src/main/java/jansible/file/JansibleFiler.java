@@ -115,7 +115,7 @@ public class JansibleFiler {
 		return fileDirName;
 	}
 
-	public void fileUpload(MultipartFile file, String filePath) {
+	public void uploadFile(MultipartFile file, String filePath) {
 		if (!file.isEmpty()) {
 			try(BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)))){
 				byte[] bytes = file.getBytes();
@@ -123,6 +123,13 @@ public class JansibleFiler {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	public void deleteFile(String filePath){
+		File file = new File(filePath);
+		if(file.exists()){
+			file.delete();
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package jansible.web.project;
 
+import jansible.web.project.form.GeneralFileForm;
 import jansible.web.project.form.UploadForm;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +31,22 @@ public class UploadController {
     private String uploadFile(@ModelAttribute UploadForm form, HttpServletRequest request){
 		uploadService.fileUpload(form);
 		projectService.registFile(form);
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+    }
+	
+	@RequestMapping(value="/project/template/delete", method=RequestMethod.POST)
+    private String deleteTemplate(@ModelAttribute GeneralFileForm form, HttpServletRequest request){
+		uploadService.deleteTemplate(form);
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+    }
+	
+	@RequestMapping(value="/project/file/delete", method=RequestMethod.POST)
+    private String deleteFile(@ModelAttribute GeneralFileForm form, HttpServletRequest request){
+		uploadService.deleteFile(form);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
