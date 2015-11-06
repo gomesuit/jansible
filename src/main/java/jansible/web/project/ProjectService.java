@@ -10,33 +10,33 @@ import jansible.model.common.FileKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
 import jansible.model.common.ServiceGroupKey;
-import jansible.model.common.Target;
 import jansible.model.common.TaskKey;
 import jansible.model.common.TemplateKey;
-import jansible.model.common.VariableKey;
 import jansible.model.database.DbEnvironment;
 import jansible.model.database.DbFile;
 import jansible.model.database.DbProject;
 import jansible.model.database.DbRole;
 import jansible.model.database.DbRoleRelation;
+import jansible.model.database.DbRoleVariable;
 import jansible.model.database.DbServer;
 import jansible.model.database.DbServiceGroup;
+import jansible.model.database.DbServiceGroupVariable;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.database.DbTemplate;
-import jansible.model.database.DbVariable;
 import jansible.web.project.form.EnvironmentForm;
 import jansible.web.project.form.GeneralFileForm;
 import jansible.web.project.form.ProjectForm;
 import jansible.web.project.form.RoleForm;
 import jansible.web.project.form.RoleRelationForm;
+import jansible.web.project.form.RoleVariableForm;
 import jansible.web.project.form.ServerForm;
 import jansible.web.project.form.ServiceGroupForm;
+import jansible.web.project.form.ServiceGroupVariableForm;
 import jansible.web.project.form.TaskDetailForm;
 import jansible.web.project.form.TaskForm;
 import jansible.web.project.form.TaskParameter;
 import jansible.web.project.form.UploadForm;
-import jansible.web.project.form.VariableForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,12 +88,19 @@ public class ProjectService {
 		return projectMapper.selectDbTemplateList(roleKey);
 	}
 	
-	public List<DbVariable> getDbVariableList(String projectName, Target target, String targetName){
-		VariableKey variableKey = new VariableKey();
-		variableKey.setProjectName(projectName);
-		variableKey.setTarget(target);
-		variableKey.setTargetName(targetName);
-		return projectMapper.selectDbVariableList(variableKey);
+	public List<DbRoleVariable> getDbRoleVariableList(String projectName, String roleName){
+		RoleKey roleKey = new RoleKey();
+		roleKey.setProjectName(projectName);
+		roleKey.setRoleName(roleName);
+		return projectMapper.selectDbRoleVariableList(roleKey);
+	}
+	
+	public List<DbServiceGroupVariable> getDbServiceGroupVariableList(String projectName, String environmentName, String groupName){
+		ServiceGroupKey serviceGroupKey = new ServiceGroupKey();
+		serviceGroupKey.setProjectName(projectName);
+		serviceGroupKey.setEnvironmentName(environmentName);
+		serviceGroupKey.setGroupName(groupName);
+		return projectMapper.selectDbServiceGroupVariableList(serviceGroupKey);
 	}
 	
 	public List<String> getAllDbVariableNameList(String projectName){
@@ -265,18 +272,32 @@ public class ProjectService {
 		projectMapper.deleteDbTemplate(templateKey);
 	}
 	
-	public void registVariable(VariableForm form) {
-		DbVariable dbVariable = createDbVariable(form);
-		projectMapper.insertDbVariable(dbVariable);
+	public void registRoleVariable(RoleVariableForm form) {
+		DbRoleVariable dbRoleVariable = createDbRoleVariable(form);
+		projectMapper.insertDbRoleVariable(dbRoleVariable);
+	}
+	
+	public void registServiceGroupVariable(ServiceGroupVariableForm form) {
+		DbServiceGroupVariable dbServiceGroupVariable = createDbServiceGroupVariable(form);
+		projectMapper.insertDbServiceGroupVariable(dbServiceGroupVariable);
 	}
 
-	private DbVariable createDbVariable(VariableForm form) {
-		DbVariable dbVariable = new DbVariable();
-		dbVariable.setProjectName(form.getProjectName());
-		dbVariable.setTarget(form.getTarget());
-		dbVariable.setTargetName(form.getTargetName());
-		dbVariable.setVariableName(form.getVariableName());
-		dbVariable.setValue(form.getValue());
-		return dbVariable;
+	private DbServiceGroupVariable createDbServiceGroupVariable(ServiceGroupVariableForm form) {
+		DbServiceGroupVariable dbServiceGroupVariable = new DbServiceGroupVariable();
+		dbServiceGroupVariable.setProjectName(form.getProjectName());
+		dbServiceGroupVariable.setEnvironmentName(form.getEnvironmentName());
+		dbServiceGroupVariable.setGroupName(form.getGroupName());
+		dbServiceGroupVariable.setVariableName(form.getVariableName());
+		dbServiceGroupVariable.setValue(form.getValue());
+		return dbServiceGroupVariable;
+	}
+
+	private DbRoleVariable createDbRoleVariable(RoleVariableForm form) {
+		DbRoleVariable dbRoleVariable = new DbRoleVariable();
+		dbRoleVariable.setProjectName(form.getProjectName());
+		dbRoleVariable.setRoleName(form.getRoleName());
+		dbRoleVariable.setVariableName(form.getVariableName());
+		dbRoleVariable.setValue(form.getValue());
+		return dbRoleVariable;
 	}
 }

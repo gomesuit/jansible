@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import jansible.file.JansibleFiler;
-import jansible.model.common.Target;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.gethtml.HtmlModule;
@@ -21,14 +20,15 @@ import jansible.web.project.form.GeneralFileForm;
 import jansible.web.project.form.ProjectForm;
 import jansible.web.project.form.RoleForm;
 import jansible.web.project.form.RoleRelationForm;
+import jansible.web.project.form.RoleVariableForm;
 import jansible.web.project.form.ServerForm;
 import jansible.web.project.form.ServiceGroupForm;
+import jansible.web.project.form.ServiceGroupVariableForm;
 import jansible.web.project.form.TaskDetailForm;
 import jansible.web.project.form.TaskForm;
 import jansible.web.project.form.TaskParameter;
 import jansible.web.project.form.TaskView;
 import jansible.web.project.form.UploadForm;
-import jansible.web.project.form.VariableForm;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,14 +74,14 @@ public class ProjectController {
     	model.addAttribute("roleList", projectService.getRoleList(projectName));
 		model.addAttribute("roleRelationList", projectService.getRoleRelationList(projectName, environmentName, groupName));
 		
-		VariableForm variableForm = new VariableForm();
+		ServiceGroupVariableForm variableForm = new ServiceGroupVariableForm();
 		variableForm.setProjectName(projectName);
-		variableForm.setTarget(Target.server_group);
-		variableForm.setTargetName(groupName);
+		variableForm.setEnvironmentName(environmentName);
+		variableForm.setGroupName(groupName);
 		model.addAttribute("variableForm", variableForm);
 		
 		model.addAttribute("allVariableNameList", projectService.getAllDbVariableNameList(projectName));
-		model.addAttribute("groupVariableList", projectService.getDbVariableList(projectName, Target.server_group, groupName));
+		model.addAttribute("groupVariableList", projectService.getDbServiceGroupVariableList(projectName, environmentName, groupName));
 		
 	    return "project/service_group/top";
 	}
@@ -138,13 +138,12 @@ public class ProjectController {
 		fileForm.setRoleName(roleName);
 		model.addAttribute("fileForm", fileForm);
 		
-		VariableForm variableForm = new VariableForm();
-		variableForm.setProjectName(projectName);
-		variableForm.setTarget(Target.role);
-		variableForm.setTargetName(roleName);
-		model.addAttribute("variableForm", variableForm);
+		RoleVariableForm roleVariableForm = new RoleVariableForm();
+		roleVariableForm.setProjectName(projectName);
+		roleVariableForm.setRoleName(roleName);
+		model.addAttribute("variableForm", roleVariableForm);
 		
-		model.addAttribute("variableList", projectService.getDbVariableList(projectName, Target.role, roleName));
+		model.addAttribute("variableList", projectService.getDbRoleVariableList(projectName, roleName));
 		
         return "project/role/top";
     }
@@ -189,7 +188,7 @@ public class ProjectController {
     	form.setTaskParameterList(taskParameterList);
     	model.addAttribute("form", form);
     	
-		model.addAttribute("variableList", projectService.getDbVariableList(projectName, Target.role, roleName));
+		model.addAttribute("variableList", projectService.getDbRoleVariableList(projectName, roleName));
     	
         return "project/task/top";
     }
@@ -313,9 +312,17 @@ public class ProjectController {
 		return "redirect:" + referer;
     }
 
-    @RequestMapping(value="/project/variable/regist", method=RequestMethod.POST)
-    private String registVariable(@ModelAttribute VariableForm form, HttpServletRequest request){
-    	projectService.registVariable(form);
+    @RequestMapping(value="/project/roleVariable/regist", method=RequestMethod.POST)
+    private String registRoleVariable(@ModelAttribute RoleVariableForm form, HttpServletRequest request){
+    	projectService.registRoleVariable(form);
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+    }
+
+    @RequestMapping(value="/project/serviceGroupVariable/regist", method=RequestMethod.POST)
+    private String registRoleVariable(@ModelAttribute ServiceGroupVariableForm form, HttpServletRequest request){
+    	projectService.registServiceGroupVariable(form);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

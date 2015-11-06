@@ -116,10 +116,9 @@
 	
 	<br /><hr /><br />
 	<div>【変数登録】</div>
-	<form method="POST" enctype="multipart/form-data" th:action="@{/project/variable/regist}" th:object="${variableForm}">
+	<form method="POST" enctype="multipart/form-data" th:action="@{/project/roleVariable/regist}" th:object="${variableForm}">
 		<input type="hidden" th:field="*{projectName}" />
-		<input type="hidden" th:field="*{target}" />
-		<input type="hidden" th:field="*{targetName}" />
+		<input type="hidden" th:field="*{roleName}" />
 		<table border="1" rules="all">
 			<tr>
 				<td>variableName</td>
