@@ -3,8 +3,11 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 /* Drop Tables */
 
 DROP TABLE IF EXISTS choice;
+DROP TABLE IF EXISTS environment_variable;
 DROP TABLE IF EXISTS role_relation;
+DROP TABLE IF EXISTS server_variable;
 DROP TABLE IF EXISTS server;
+DROP TABLE IF EXISTS service_group_variable;
 DROP TABLE IF EXISTS service_group;
 DROP TABLE IF EXISTS environment;
 DROP TABLE IF EXISTS file;
@@ -12,6 +15,7 @@ DROP TABLE IF EXISTS parameter;
 DROP TABLE IF EXISTS task_detail;
 DROP TABLE IF EXISTS task;
 DROP TABLE IF EXISTS module;
+DROP TABLE IF EXISTS role_variable;
 DROP TABLE IF EXISTS template;
 DROP TABLE IF EXISTS role;
 DROP TABLE IF EXISTS variable;
@@ -36,6 +40,16 @@ CREATE TABLE environment
 	project_name varchar(50) NOT NULL,
 	environment_name varchar(80) NOT NULL,
 	PRIMARY KEY (project_name, environment_name)
+);
+
+
+CREATE TABLE environment_variable
+(
+	project_name varchar(50) NOT NULL,
+	environment_name varchar(80) NOT NULL,
+	variable_name varchar(80) NOT NULL,
+	value varchar(80),
+	PRIMARY KEY (project_name, environment_name, variable_name)
 );
 
 
@@ -95,6 +109,16 @@ CREATE TABLE role_relation
 );
 
 
+CREATE TABLE role_variable
+(
+	project_name varchar(50) NOT NULL,
+	role_name varchar(30) NOT NULL,
+	variable_name varchar(80) NOT NULL,
+	value varchar(80),
+	PRIMARY KEY (project_name, role_name, variable_name)
+);
+
+
 CREATE TABLE server
 (
 	project_name varchar(50) NOT NULL,
@@ -105,12 +129,35 @@ CREATE TABLE server
 );
 
 
+CREATE TABLE server_variable
+(
+	project_name varchar(50) NOT NULL,
+	environment_name varchar(80) NOT NULL,
+	group_name varchar(80) NOT NULL,
+	server_name varchar(80) NOT NULL,
+	variable_name varchar(80) NOT NULL,
+	value varchar(80),
+	PRIMARY KEY (project_name, environment_name, group_name, server_name, variable_name)
+);
+
+
 CREATE TABLE service_group
 (
 	project_name varchar(50) NOT NULL,
 	environment_name varchar(80) NOT NULL,
 	group_name varchar(80) NOT NULL,
 	PRIMARY KEY (project_name, environment_name, group_name)
+);
+
+
+CREATE TABLE service_group_variable
+(
+	project_name varchar(50) NOT NULL,
+	environment_name varchar(80) NOT NULL,
+	group_name varchar(80) NOT NULL,
+	variable_name varchar(80) NOT NULL,
+	value varchar(80),
+	PRIMARY KEY (project_name, environment_name, group_name, variable_name)
 );
 
 
