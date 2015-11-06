@@ -154,14 +154,15 @@ public class ProjectController {
     private String viewTask(@PathVariable String projectName, @PathVariable String roleName, @PathVariable int taskId, Model model){
     	DbTask dbTask = projectService.getTask(projectName, roleName, taskId);
     	String moduleName = dbTask.getModuleName();
+    	model.addAttribute("moduleName", moduleName);
     	
     	HtmlModule module = moduleService.getModule(moduleName);
-    	model.addAttribute("module", module);
 
     	TaskDetailForm form = new TaskDetailForm();
     	form.setProjectName(projectName);
     	form.setRoleName(roleName);
     	form.setTaskId(taskId);
+    	form.setDescription(dbTask.getDescription());
     	List<TaskParameter> taskParameterList = createBlankTaskParameterList(module);
     	List<DbTaskDetail> dbTaskDetailList = projectService.getTaskDetailList(projectName, roleName, taskId);
     	mergeParameterList(taskParameterList, dbTaskDetailList);
@@ -216,6 +217,7 @@ public class ProjectController {
     
     @RequestMapping(value="/project/taskdetail/regist", method=RequestMethod.POST)
     private String registTaskDetail(@ModelAttribute TaskDetailForm form, HttpServletRequest request){
+    	projectService.updateTask(form);
     	projectService.registTaskDetail(form);
     	
     	List<DbTask> dbTaskList = projectService.getTaskList(form.getProjectName(), form.getRoleName());

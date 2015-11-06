@@ -136,6 +136,11 @@ public class ProjectService {
 		projectMapper.insertTask(dbTask);
 	}
 	
+	public void updateTask(TaskDetailForm form) {
+		DbTask dbTask = createDbTask(form);
+		projectMapper.updateTask(dbTask);
+	}
+	
 	public void registTaskDetail(TaskDetailForm form) {
 		List<DbTaskDetail> dbTaskDetailList = createDbTaskDetailList(form);
 		for(DbTaskDetail dbTaskDetail : dbTaskDetailList){
@@ -190,6 +195,15 @@ public class ProjectService {
 		dbTask.setDescription(form.getDescription());
 		dbTask.setFreeForm(form.getFreeForm());
 		dbTask.setSort(form.getSort());
+		return dbTask;
+	}
+
+	private DbTask createDbTask(TaskDetailForm form) {
+		DbTask dbTask = new DbTask();
+		dbTask.setTaskId(form.getTaskId());
+		dbTask.setProjectName(form.getProjectName());
+		dbTask.setRoleName(form.getRoleName());
+		dbTask.setDescription(form.getDescription());
 		return dbTask;
 	}
 

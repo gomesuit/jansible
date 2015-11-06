@@ -7,12 +7,14 @@
 </head>
 <body>
 	<div>タスクの画面です</div>
-	<div th:text="${module.name}" />
+	<div th:text="${moduleName}" />
 	
 	<form action="#" th:action="@{/project/taskdetail/regist}" th:object="${form}" method="post">
 		<input type="hidden" th:field="*{taskId}" />
 		<input type="hidden" th:field="*{projectName}" />
 		<input type="hidden" th:field="*{roleName}" />
+		description:
+		<input type="text" th:field="*{description}" />
 		<table border="1" rules="all">
 			<tr>
 				<td>parameterName</td>

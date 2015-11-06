@@ -39,6 +39,7 @@ public interface ProjectMapper {
 	void insertTask(DbTask dbTask);
 	List<DbTask> selectTaskList(RoleKey roleKey);
 	DbTask selectTask(TaskKey taskKey);
+	void updateTask(DbTask dbTask);
 
 	void insertTaskDetail(DbTaskDetail dbTaskDetail);
 	List<DbTaskDetail> selectTaskDetailList(TaskKey taskKey);

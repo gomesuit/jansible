@@ -143,6 +143,17 @@
 			)
 	</insert>
 	
+	<update id="updateTask" parameterType="DbTask">
+		UPDATE
+			task
+		SET
+			description = #{description}
+		WHERE
+			task_id = #{taskId} AND
+			project_name = #{projectName} AND
+			role_name = #{roleName}
+	</update>
+	
 	<select id="selectTaskList" resultType="DbTask">
 		SELECT
 			task_id as taskId,
