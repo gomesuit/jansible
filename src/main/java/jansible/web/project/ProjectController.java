@@ -73,6 +73,16 @@ public class ProjectController {
 		model.addAttribute("roleRelationForm", roleRelationForm);
     	model.addAttribute("roleList", projectService.getRoleList(projectName));
 		model.addAttribute("roleRelationList", projectService.getRoleRelationList(projectName, environmentName, groupName));
+		
+		VariableForm variableForm = new VariableForm();
+		variableForm.setProjectName(projectName);
+		variableForm.setTarget(Target.server_group);
+		variableForm.setTargetName(groupName);
+		model.addAttribute("variableForm", variableForm);
+		
+		model.addAttribute("allVariableNameList", projectService.getAllDbVariableNameList(projectName));
+		model.addAttribute("groupVariableList", projectService.getDbVariableList(projectName, Target.server_group, groupName));
+		
 	    return "project/service_group/top";
 	}
 
@@ -178,7 +188,7 @@ public class ProjectController {
     	mergeParameterList(taskParameterList, dbTaskDetailList);
     	form.setTaskParameterList(taskParameterList);
     	model.addAttribute("form", form);
-
+    	
 		model.addAttribute("variableList", projectService.getDbVariableList(projectName, Target.role, roleName));
     	
         return "project/task/top";

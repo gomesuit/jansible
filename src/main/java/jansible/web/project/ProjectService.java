@@ -96,6 +96,12 @@ public class ProjectService {
 		return projectMapper.selectDbVariableList(variableKey);
 	}
 	
+	public List<String> getAllDbVariableNameList(String projectName){
+		ProjectKey projectKey = new ProjectKey();
+		projectKey.setProjectName(projectName);
+		return projectMapper.selectAllDbVariableNameList(projectKey);
+	}
+	
 	public DbTask getTask(String projectName, String roleName, Integer taskId){
 		TaskKey taskKey = new TaskKey(projectName, roleName, taskId);
 		return projectMapper.selectTask(taskKey);

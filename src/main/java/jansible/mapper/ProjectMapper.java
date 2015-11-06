@@ -59,4 +59,5 @@ public interface ProjectMapper {
 
 	void insertDbVariable(DbVariable dbVariable);
 	List<DbVariable> selectDbVariableList(VariableKey variableKey);
+	List<String> selectAllDbVariableNameList(ProjectKey projectKey);
 }

@@ -367,4 +367,13 @@
 			target_name = #{targetName}
 	</select>
 	
+	<select id="selectAllDbVariableNameList" resultType="java.lang.String">
+		SELECT DISTINCT
+			variable_name as variableName
+		FROM
+			variable
+		WHERE
+			project_name = #{projectName}
+	</select>
+	
 </mapper>
