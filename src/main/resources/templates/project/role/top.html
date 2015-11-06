@@ -9,7 +9,7 @@
 	<div>ロールの画面です</div>
 	
 	<br />
-	<div>タスク登録</div>
+	<div>【タスク登録】</div>
 	<form action="#" th:action="@{/project/task/regist}" th:object="${form}" method="post">
 		<input type="hidden" th:field="*{projectName}" />
 		<input type="hidden" th:field="*{roleName}" />
@@ -35,7 +35,7 @@
 	</form>
 	
 	<br />
-	<div>タスク一覧</div>
+	<div>【タスク一覧】</div>
 	<table border="1" rules="all">
 		<tr>
 			<td>task</td>
@@ -49,16 +49,15 @@
 	</table>
 	
 	<br />
-	<div>テンプレートアップロード</div>
+	<div>【テンプレートアップロード】</div>
 	<form method="POST" enctype="multipart/form-data" th:action="@{/project/template/upload}" th:object="${uploadForm}">
 		<input type="hidden" th:field="*{projectName}" />
 		<input type="hidden" th:field="*{roleName}" />
-		File to upload: 
 		<input type="file" th:field="*{file}" />
 		<br />
-		<input type="submit" value="Upload" /> Press here to upload the file!
+		<input type="submit" value="Upload" />
 	</form>
-	<div>テンプレート一覧</div>
+	<div>【テンプレート一覧】</div>
 	<table border="1" rules="all">
 		<tr>
 			<td>template</td>
@@ -83,16 +82,15 @@
 	</table>
 	
 	<br />
-	<div>ファイルアップロード</div>
+	<div>【ファイルアップロード】</div>
 	<form method="POST" enctype="multipart/form-data" th:action="@{/project/file/upload}" th:object="${uploadForm}">
 		<input type="hidden" th:field="*{projectName}" />
 		<input type="hidden" th:field="*{roleName}" />
-		File to upload: 
 		<input type="file" th:field="*{file}" />
 		<br />
-		<input type="submit" value="Upload" /> Press here to upload the file!
+		<input type="submit" value="Upload" />
 	</form>
-	<div>ファイル一覧</div>
+	<div>【ファイル一覧】</div>
 	<table border="1" rules="all">
 		<tr>
 			<td>file</td>
