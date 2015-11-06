@@ -376,4 +376,144 @@
 			project_name = #{projectName}
 	</select>
 	
+	<select id="selectDbEnvironmentVariableList" resultType="DbEnvironmentVariable">
+		SELECT
+			project_name as projectName,
+			environment_name as environmentName,
+			variable_name as variableName,
+			value as value
+		FROM
+			environment_variable
+		WHERE
+			project_name = #{projectName} AND
+			environment_name = #{environmentName}
+	</select>
+	
+	<select id="selectDbServiceGroupVariableList" resultType="DbServiceGroupVariable">
+		SELECT
+			project_name as projectName,
+			environment_name as environmentName,
+			group_name as groupName,
+			variable_name as variableName,
+			value as value
+		FROM
+			service_group_variable
+		WHERE
+			project_name = #{projectName} AND
+			environment_name = #{environmentName} AND
+			group_name = #{groupName}
+	</select>
+	
+	<select id="selectDbServerVariableList" resultType="DbServerVariable">
+		SELECT
+			project_name as projectName,
+			environment_name as environmentName,
+			group_name as groupName,
+			server_name as serverName,
+			variable_name as variableName,
+			value as value
+		FROM
+			server_variable
+		WHERE
+			project_name = #{projectName} AND
+			environment_name = #{environmentName} AND
+			group_name = #{groupName} AND
+			server_name = #{serverName}
+	</select>
+	
+	<select id="selectDbRoleVariableList" resultType="DbRoleVariable">
+		SELECT
+			project_name as projectName,
+			role_name as roleName,
+			variable_name as variableName,
+			value as value
+		FROM
+			role_variable
+		WHERE
+			project_name = #{projectName} AND
+			role_name = #{roleName}
+	</select>
+	
+	<insert id="insertDbEnvironmentVariable" parameterType="DbEnvironmentVariable">
+		INSERT INTO environment_variable
+			(
+				project_name,
+				environment_name,
+				variable_name,
+				value
+			)
+		VALUES
+			(
+				#{projectName},
+				#{environmentName},
+				#{variableName},
+				#{value}
+			)
+		ON DUPLICATE KEY UPDATE
+			value = #{value}
+	</insert>
+	
+	<insert id="insertDbServiceGroupVariable" parameterType="DbServiceGroupVariable">
+		INSERT INTO service_group_variable
+			(
+				project_name,
+				environment_name,
+				group_name,
+				variable_name,
+				value
+			)
+		VALUES
+			(
+				#{projectName},
+				#{environmentName},
+				#{groupName},
+				#{variableName},
+				#{value}
+			)
+		ON DUPLICATE KEY UPDATE
+			value = #{value}
+	</insert>
+	
+	<insert id="insertDbServerVariable" parameterType="DbServerVariable">
+		INSERT INTO server_variable
+			(
+				project_name,
+				environment_name,
+				group_name,
+				server_name,
+				variable_name,
+				value
+			)
+		VALUES
+			(
+				#{projectName},
+				#{environmentName},
+				#{groupName},
+				#{serverName},
+				#{variableName},
+				#{value}
+			)
+		ON DUPLICATE KEY UPDATE
+			value = #{value}
+	</insert>
+	
+	<insert id="insertDbRoleVariable" parameterType="DbRoleVariable">
+		INSERT INTO role_variable
+			(
+				project_name,
+				role_name,
+				variable_name,
+				value
+			)
+		VALUES
+			(
+				#{projectName},
+				#{roleName},
+				#{variableName},
+				#{value}
+			)
+		ON DUPLICATE KEY UPDATE
+			value = #{value}
+	</insert>
+	
 </mapper>

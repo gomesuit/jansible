@@ -34,7 +34,7 @@
 	</table>
 	
 	<br /><hr /><br />
-	<div>ロール関連登録</div>
+	<div>適用ロール登録</div>
 	<form action="#" th:action="@{/project/roleRelation/regist}" th:object="${roleRelationForm}" method="post">
 		<input type="hidden" th:field="*{projectName}" />
 		<input type="hidden" th:field="*{environmentName}" />
@@ -54,7 +54,7 @@
 		</table>
 		<input type="submit" value="Submit" />
 	</form>
-	<div>ロール関連一覧</div>
+	<div>適用ロール一覧</div>
 	<table border="1" rules="all">
 		<tr>
 			<td>role</td>
