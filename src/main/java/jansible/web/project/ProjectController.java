@@ -129,6 +129,15 @@ public class ProjectController {
     	
     	model.addAttribute("form", serviceGroupForm);
     	model.addAttribute("serviceGroupList", projectService.getServiceGroupList(projectName, environmentName));
+    	
+    	EnvironmentVariableForm variableForm = new EnvironmentVariableForm();
+		variableForm.setProjectName(projectName);
+		variableForm.setEnvironmentName(environmentName);
+		model.addAttribute("variableForm", variableForm);
+		
+		model.addAttribute("allVariableNameList", projectService.getAllDbVariableNameList(projectName));
+		model.addAttribute("variableList", projectService.getDbEnvironmentVariableList(projectName, environmentName));
+    	
         return "project/environment/top";
     }
 
