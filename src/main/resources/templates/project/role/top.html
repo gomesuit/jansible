@@ -113,5 +113,37 @@
 			</form>
 		</tr>
 	</table>
+	
+	<br />
+	<div>【変数登録】</div>
+	<form method="POST" enctype="multipart/form-data" th:action="@{/project/variable/regist}" th:object="${variableForm}">
+		<input type="hidden" th:field="*{projectName}" />
+		<input type="hidden" th:field="*{target}" />
+		<input type="hidden" th:field="*{targetName}" />
+		<table border="1" rules="all">
+			<tr>
+				<td>variableName</td>
+				<td>value</td>
+			</tr>
+			<tr>
+				<td><input type="text" th:field="*{variableName}" /></td>
+				<td><input type="text" th:field="*{value}" /></td>
+			</tr>
+		</table>
+		<input type="submit" value="Submit" />
+	</form>
+	
+	<br />
+	<div>【変数一覧】</div>
+	<table border="1" rules="all">
+		<tr>
+			<td>variable</td>
+			<td>value</td>
+		</tr>
+		<tr th:each="variable : ${variableList}">
+			<td th:text="${variable.variableName}" />
+			<td th:text="${variable.value}" />
+		</tr>
+	</table>
 </body>
 </html>

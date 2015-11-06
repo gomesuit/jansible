@@ -9,6 +9,7 @@ import jansible.model.common.RoleKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.TaskKey;
 import jansible.model.common.TemplateKey;
+import jansible.model.common.VariableKey;
 import jansible.model.database.DbEnvironment;
 import jansible.model.database.DbFile;
 import jansible.model.database.DbProject;
@@ -19,6 +20,7 @@ import jansible.model.database.DbServiceGroup;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.database.DbTemplate;
+import jansible.model.database.DbVariable;
 
 public interface ProjectMapper {
 	void insertProject(DbProject dbProject);
@@ -54,4 +56,7 @@ public interface ProjectMapper {
 	void insertDbTemplate(DbTemplate dbTemplate);
 	List<DbTemplate> selectDbTemplateList(RoleKey roleKey);
 	void deleteDbTemplate(TemplateKey templateKey);
+
+	void insertDbVariable(DbVariable dbVariable);
+	List<DbVariable> selectDbVariableList(VariableKey variableKey);
 }

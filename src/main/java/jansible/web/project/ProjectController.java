@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import jansible.file.JansibleFiler;
+import jansible.model.common.Target;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.gethtml.HtmlModule;
@@ -27,6 +28,7 @@ import jansible.web.project.form.TaskForm;
 import jansible.web.project.form.TaskParameter;
 import jansible.web.project.form.TaskView;
 import jansible.web.project.form.UploadForm;
+import jansible.web.project.form.VariableForm;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,6 +127,14 @@ public class ProjectController {
 		fileForm.setProjectName(projectName);
 		fileForm.setRoleName(roleName);
 		model.addAttribute("fileForm", fileForm);
+		
+		VariableForm variableForm = new VariableForm();
+		variableForm.setProjectName(projectName);
+		variableForm.setTarget(Target.role);
+		variableForm.setTargetName(roleName);
+		model.addAttribute("variableForm", variableForm);
+		
+		model.addAttribute("variableList", projectService.getDbVariableList(projectName, Target.role, roleName));
 		
         return "project/role/top";
     }
@@ -286,6 +296,14 @@ public class ProjectController {
     @RequestMapping(value="/project/role/regist", method=RequestMethod.POST)
     private String registRole(@ModelAttribute RoleForm form, HttpServletRequest request){
     	projectService.registRole(form);
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+    }
+
+    @RequestMapping(value="/project/variable/regist", method=RequestMethod.POST)
+    private String registVariable(@ModelAttribute VariableForm form, HttpServletRequest request){
+    	projectService.registVariable(form);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

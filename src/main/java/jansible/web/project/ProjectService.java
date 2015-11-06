@@ -10,8 +10,10 @@ import jansible.model.common.FileKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
 import jansible.model.common.ServiceGroupKey;
+import jansible.model.common.Target;
 import jansible.model.common.TaskKey;
 import jansible.model.common.TemplateKey;
+import jansible.model.common.VariableKey;
 import jansible.model.database.DbEnvironment;
 import jansible.model.database.DbFile;
 import jansible.model.database.DbProject;
@@ -22,6 +24,7 @@ import jansible.model.database.DbServiceGroup;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.database.DbTemplate;
+import jansible.model.database.DbVariable;
 import jansible.web.project.form.EnvironmentForm;
 import jansible.web.project.form.GeneralFileForm;
 import jansible.web.project.form.ProjectForm;
@@ -33,6 +36,7 @@ import jansible.web.project.form.TaskDetailForm;
 import jansible.web.project.form.TaskForm;
 import jansible.web.project.form.TaskParameter;
 import jansible.web.project.form.UploadForm;
+import jansible.web.project.form.VariableForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,6 +86,14 @@ public class ProjectService {
 	public List<DbTemplate> getDbTemplateList(String projectName, String roleName){
 		RoleKey roleKey = new RoleKey(projectName, roleName);
 		return projectMapper.selectDbTemplateList(roleKey);
+	}
+	
+	public List<DbVariable> getDbVariableList(String projectName, Target target, String targetName){
+		VariableKey variableKey = new VariableKey();
+		variableKey.setProjectName(projectName);
+		variableKey.setTarget(target);
+		variableKey.setTargetName(targetName);
+		return projectMapper.selectDbVariableList(variableKey);
 	}
 	
 	public DbTask getTask(String projectName, String roleName, Integer taskId){
@@ -245,5 +257,20 @@ public class ProjectService {
 	public void deleteTemplate(GeneralFileForm form){
 		TemplateKey templateKey = new TemplateKey(form.getProjectName(), form.getRoleName(), form.getFileName());
 		projectMapper.deleteDbTemplate(templateKey);
+	}
+	
+	public void registVariable(VariableForm form) {
+		DbVariable dbVariable = createDbVariable(form);
+		projectMapper.insertDbVariable(dbVariable);
+	}
+
+	private DbVariable createDbVariable(VariableForm form) {
+		DbVariable dbVariable = new DbVariable();
+		dbVariable.setProjectName(form.getProjectName());
+		dbVariable.setTarget(form.getTarget());
+		dbVariable.setTargetName(form.getTargetName());
+		dbVariable.setVariableName(form.getVariableName());
+		dbVariable.setValue(form.getValue());
+		return dbVariable;
 	}
 }
