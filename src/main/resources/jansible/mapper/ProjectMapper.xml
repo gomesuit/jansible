@@ -331,42 +331,6 @@
 			template_name = #{templateName}
 	</delete>
 	
-	<insert id="insertDbVariable" parameterType="DbVariable">
-		INSERT INTO variable
-			(
-				project_name,
-				target,
-				target_name,
-				variable_name,
-				value
-			)
-		VALUES
-			(
-				#{projectName},
-				#{target},
-				#{targetName},
-				#{variableName},
-				#{value}
-			)
-		ON DUPLICATE KEY UPDATE
-			value = #{value}
-	</insert>
-	
-	<select id="selectDbVariableList" resultType="DbVariable">
-		SELECT
-			project_name as projectName,
-			target as target,
-			target_name as targetName,
-			variable_name as variableName,
-			value as value
-		FROM
-			variable
-		WHERE
-			project_name = #{projectName} AND
-			target = #{target} AND
-			target_name = #{targetName}
-	</select>
-	
 	<select id="selectAllDbVariableNameList" resultType="java.lang.String">
 		SELECT DISTINCT
 			variable_name as variableName

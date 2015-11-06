@@ -60,8 +60,6 @@ public interface ProjectMapper {
 	List<DbTemplate> selectDbTemplateList(RoleKey roleKey);
 	void deleteDbTemplate(TemplateKey templateKey);
 	
-//	void insertDbVariable(DbVariable dbVariable);
-//	List<DbVariable> selectDbVariableList(VariableKey variableKey);
 	List<String> selectAllDbVariableNameList(ProjectKey projectKey);
 	
 	void insertDbEnvironmentVariable(DbEnvironmentVariable dbEnvironmentVariable);
