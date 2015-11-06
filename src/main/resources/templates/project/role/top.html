@@ -48,7 +48,7 @@
 		</tr>
 	</table>
 	
-	<br />
+	<br /><hr /><br />
 	<div>【テンプレートアップロード】</div>
 	<form method="POST" enctype="multipart/form-data" th:action="@{/project/template/upload}" th:object="${uploadForm}">
 		<input type="hidden" th:field="*{projectName}" />
@@ -81,7 +81,7 @@
 		</tr>
 	</table>
 	
-	<br />
+	<br /><hr /><br />
 	<div>【ファイルアップロード】</div>
 	<form method="POST" enctype="multipart/form-data" th:action="@{/project/file/upload}" th:object="${uploadForm}">
 		<input type="hidden" th:field="*{projectName}" />
@@ -114,7 +114,7 @@
 		</tr>
 	</table>
 	
-	<br />
+	<br /><hr /><br />
 	<div>【変数登録】</div>
 	<form method="POST" enctype="multipart/form-data" th:action="@{/project/variable/regist}" th:object="${variableForm}">
 		<input type="hidden" th:field="*{projectName}" />
