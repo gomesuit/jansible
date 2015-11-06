@@ -178,6 +178,8 @@ public class ProjectController {
     	mergeParameterList(taskParameterList, dbTaskDetailList);
     	form.setTaskParameterList(taskParameterList);
     	model.addAttribute("form", form);
+
+		model.addAttribute("variableList", projectService.getDbVariableList(projectName, Target.role, roleName));
     	
         return "project/task/top";
     }

@@ -40,5 +40,16 @@
 		</table>
 		<input type="submit" value="Submit" />
 	</form>
+	
+	<br /><hr /><br />
+	<div>【変数一覧】</div>
+	<table border="1" rules="all">
+		<tr>
+			<td>variable</td>
+		</tr>
+		<tr th:each="variable : ${variableList}">
+			<td th:text="${variable.variableName}" />
+		</tr>
+	</table>
 </body>
 </html>
