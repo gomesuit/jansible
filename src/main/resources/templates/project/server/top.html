@@ -7,5 +7,42 @@
 </head>
 <body>
 	<div>サーバの画面です</div>
+	
+	<br /><hr /><br />
+	<div>【変数登録】</div>
+	<form method="POST" enctype="multipart/form-data" th:action="@{/project/serverVariable/regist}" th:object="${variableForm}">
+		<input type="hidden" th:field="*{projectName}" />
+		<input type="hidden" th:field="*{environmentName}" />
+		<input type="hidden" th:field="*{groupName}" />
+		<input type="hidden" th:field="*{serverName}" />
+		<table border="1" rules="all">
+			<tr>
+				<td>variableName</td>
+				<td>value</td>
+			</tr>
+			<tr>
+				<td>
+					<select size="1" th:field="*{variableName}">
+						<option th:each="variableName : ${allVariableNameList}" th:value="${variableName}" th:label="${variableName}" />
+					</select>
+				</td>
+				<td><input type="text" th:field="*{value}" /></td>
+			</tr>
+		</table>
+		<input type="submit" value="Submit" />
+	</form>
+	
+	<br />
+	<div>【変数一覧】</div>
+	<table border="1" rules="all">
+		<tr>
+			<td>variable</td>
+			<td>value</td>
+		</tr>
+		<tr th:each="variable : ${variableList}">
+			<td th:text="${variable.variableName}" />
+			<td th:text="${variable.value}" />
+		</tr>
+	</table>
 </body>
 </html>

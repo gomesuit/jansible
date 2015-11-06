@@ -9,28 +9,33 @@ import jansible.model.common.EnvironmentKey;
 import jansible.model.common.FileKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
+import jansible.model.common.ServerKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.TaskKey;
 import jansible.model.common.TemplateKey;
 import jansible.model.database.DbEnvironment;
+import jansible.model.database.DbEnvironmentVariable;
 import jansible.model.database.DbFile;
 import jansible.model.database.DbProject;
 import jansible.model.database.DbRole;
 import jansible.model.database.DbRoleRelation;
 import jansible.model.database.DbRoleVariable;
 import jansible.model.database.DbServer;
+import jansible.model.database.DbServerVariable;
 import jansible.model.database.DbServiceGroup;
 import jansible.model.database.DbServiceGroupVariable;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.database.DbTemplate;
 import jansible.web.project.form.EnvironmentForm;
+import jansible.web.project.form.EnvironmentVariableForm;
 import jansible.web.project.form.GeneralFileForm;
 import jansible.web.project.form.ProjectForm;
 import jansible.web.project.form.RoleForm;
 import jansible.web.project.form.RoleRelationForm;
 import jansible.web.project.form.RoleVariableForm;
 import jansible.web.project.form.ServerForm;
+import jansible.web.project.form.ServerVariableForm;
 import jansible.web.project.form.ServiceGroupForm;
 import jansible.web.project.form.ServiceGroupVariableForm;
 import jansible.web.project.form.TaskDetailForm;
@@ -101,6 +106,22 @@ public class ProjectService {
 		serviceGroupKey.setEnvironmentName(environmentName);
 		serviceGroupKey.setGroupName(groupName);
 		return projectMapper.selectDbServiceGroupVariableList(serviceGroupKey);
+	}
+	
+	public List<DbServerVariable> getDbServerVariableList(String projectName, String environmentName, String groupName, String serverName){
+		ServerKey serverKey = new ServerKey();
+		serverKey.setProjectName(projectName);
+		serverKey.setEnvironmentName(environmentName);
+		serverKey.setGroupName(groupName);
+		serverKey.setServerName(serverName);
+		return projectMapper.selectDbServerVariableList(serverKey);
+	}
+	
+	public List<DbEnvironmentVariable> getDbEnvironmentVariableList(String projectName, String environmentName){
+		EnvironmentKey environmentKey = new EnvironmentKey();
+		environmentKey.setProjectName(projectName);
+		environmentKey.setEnvironmentName(environmentName);
+		return projectMapper.selectDbEnvironmentVariableList(environmentKey);
 	}
 	
 	public List<String> getAllDbVariableNameList(String projectName){
@@ -280,6 +301,36 @@ public class ProjectService {
 	public void registServiceGroupVariable(ServiceGroupVariableForm form) {
 		DbServiceGroupVariable dbServiceGroupVariable = createDbServiceGroupVariable(form);
 		projectMapper.insertDbServiceGroupVariable(dbServiceGroupVariable);
+	}
+	
+	public void registServerVariable(ServerVariableForm form) {
+		DbServerVariable dbServerVariable = createDbServerVariable(form);
+		projectMapper.insertDbServerVariable(dbServerVariable);
+	}
+	
+	public void registEnvironmentVariable(EnvironmentVariableForm form) {
+		DbEnvironmentVariable dbEnvironmentVariable = createDbEnvironmentVariable(form);
+		projectMapper.insertDbEnvironmentVariable(dbEnvironmentVariable);
+	}
+
+	private DbEnvironmentVariable createDbEnvironmentVariable(EnvironmentVariableForm form) {
+		DbEnvironmentVariable dbEnvironmentVariable = new DbEnvironmentVariable();
+		dbEnvironmentVariable.setProjectName(form.getProjectName());
+		dbEnvironmentVariable.setEnvironmentName(form.getEnvironmentName());
+		dbEnvironmentVariable.setVariableName(form.getVariableName());
+		dbEnvironmentVariable.setValue(form.getValue());
+		return dbEnvironmentVariable;
+	}
+
+	private DbServerVariable createDbServerVariable(ServerVariableForm form) {
+		DbServerVariable dbServerVariable = new DbServerVariable();
+		dbServerVariable.setProjectName(form.getProjectName());
+		dbServerVariable.setEnvironmentName(form.getEnvironmentName());
+		dbServerVariable.setGroupName(form.getGroupName());
+		dbServerVariable.setServerName(form.getServerName());
+		dbServerVariable.setVariableName(form.getVariableName());
+		dbServerVariable.setValue(form.getValue());
+		return dbServerVariable;
 	}
 
 	private DbServiceGroupVariable createDbServiceGroupVariable(ServiceGroupVariableForm form) {
