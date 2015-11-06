@@ -6,7 +6,7 @@
 	<title>sample page</title>
 </head>
 <body>
-
+	<div>グループの画面です</div>
 	<div>サーバ登録</div>
 	<form action="#" th:action="@{/project/server/regist}" th:object="${serverForm}" method="post">
 		<input type="hidden" th:field="*{projectName}" />
@@ -33,9 +33,7 @@
 		</tr>
 	</table>
 	
-	<br />
-	<br />
-	<br />
+	<br /><hr /><br />
 	<div>ロール関連登録</div>
 	<form action="#" th:action="@{/project/roleRelation/regist}" th:object="${roleRelationForm}" method="post">
 		<input type="hidden" th:field="*{projectName}" />
