@@ -5,11 +5,14 @@ import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
 import jansible.model.common.TemplateKey;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class JansibleFiler {
@@ -32,7 +35,7 @@ public class JansibleFiler {
 		try(FileWriter filewriter = new FileWriter(file)){
 			filewriter.write(content);
 		}catch(IOException e){
-			System.out.println(e);
+			e.printStackTrace();
 		}
 	}
 	
@@ -110,5 +113,16 @@ public class JansibleFiler {
 		fileDirName += PATH_SEPARATOR;
 		fileDirName += fileKey.getFileName();
 		return fileDirName;
+	}
+
+	public void fileUpload(MultipartFile file, String filePath) {
+		if (!file.isEmpty()) {
+			try(BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filePath)))){
+				byte[] bytes = file.getBytes();
+				stream.write(bytes);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
