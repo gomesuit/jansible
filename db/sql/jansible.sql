@@ -18,7 +18,6 @@ DROP TABLE IF EXISTS module;
 DROP TABLE IF EXISTS role_variable;
 DROP TABLE IF EXISTS template;
 DROP TABLE IF EXISTS role;
-DROP TABLE IF EXISTS variable;
 DROP TABLE IF EXISTS project;
 
 
@@ -191,17 +190,6 @@ CREATE TABLE template
 	role_name varchar(30) NOT NULL,
 	template_name varchar(128) NOT NULL,
 	PRIMARY KEY (project_name, role_name, template_name)
-);
-
-
-CREATE TABLE variable
-(
-	project_name varchar(50) NOT NULL,
-	target enum('project','environment','server_group','server','role') NOT NULL,
-	target_name varchar(80) NOT NULL,
-	variable_name varchar(80) NOT NULL,
-	value varchar(80),
-	PRIMARY KEY (project_name, target, target_name, variable_name)
 );
 
 
