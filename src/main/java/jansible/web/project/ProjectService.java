@@ -6,10 +6,12 @@ import java.util.List;
 import jansible.file.JansibleFiler;
 import jansible.mapper.ProjectMapper;
 import jansible.model.common.EnvironmentKey;
+import jansible.model.common.FileKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.TaskKey;
+import jansible.model.common.TemplateKey;
 import jansible.model.database.DbEnvironment;
 import jansible.model.database.DbFile;
 import jansible.model.database.DbProject;
@@ -21,6 +23,7 @@ import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.database.DbTemplate;
 import jansible.web.project.form.EnvironmentForm;
+import jansible.web.project.form.GeneralFileForm;
 import jansible.web.project.form.ProjectForm;
 import jansible.web.project.form.RoleForm;
 import jansible.web.project.form.RoleRelationForm;
@@ -218,5 +221,15 @@ public class ProjectService {
 		MultipartFile file = form.getFile();
 		DbTemplate dbTemplate = new DbTemplate(form.getProjectName(), form.getRoleName(), file.getOriginalFilename());
 		return dbTemplate;
+	}
+	
+	public void deleteFile(GeneralFileForm form){
+		FileKey fileKey = new FileKey(form.getProjectName(), form.getRoleName(), form.getFileName());
+		projectMapper.deleteDbFile(fileKey);
+	}
+	
+	public void deleteTemplate(GeneralFileForm form){
+		TemplateKey templateKey = new TemplateKey(form.getProjectName(), form.getRoleName(), form.getFileName());
+		projectMapper.deleteDbTemplate(templateKey);
 	}
 }

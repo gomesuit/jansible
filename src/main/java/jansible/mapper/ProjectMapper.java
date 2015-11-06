@@ -3,10 +3,12 @@ package jansible.mapper;
 import java.util.List;
 
 import jansible.model.common.EnvironmentKey;
+import jansible.model.common.FileKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.TaskKey;
+import jansible.model.common.TemplateKey;
 import jansible.model.database.DbEnvironment;
 import jansible.model.database.DbFile;
 import jansible.model.database.DbProject;
@@ -46,7 +48,9 @@ public interface ProjectMapper {
 	
 	void insertDbFile(DbFile dbFile);
 	List<DbFile> selectDbFileList(RoleKey roleKey);
+	void deleteDbFile(FileKey fileKey);
 	
 	void insertDbTemplate(DbTemplate dbTemplate);
 	List<DbTemplate> selectDbTemplateList(RoleKey roleKey);
+	void deleteDbTemplate(TemplateKey templateKey);
 }

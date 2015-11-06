@@ -302,4 +302,22 @@
 			role_name = #{roleName}
 	</select>
 	
+	<delete id="deleteDbFile" parameterType="FileKey">
+	    DELETE FROM
+	    	file
+	    WHERE
+			project_name = #{projectName} AND
+			role_name = #{roleName} AND
+			file_name = #{fileName}
+	</delete>
+	
+	<delete id="deleteDbTemplate" parameterType="TemplateKey">
+	    DELETE FROM
+	    	template
+	    WHERE
+			project_name = #{projectName} AND
+			role_name = #{roleName} AND
+			template_name = #{templateName}
+	</delete>
+	
 </mapper>

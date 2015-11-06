@@ -97,19 +97,20 @@
 		<tr>
 			<td>file</td>
 			<td>Download</td>
+			<td>Delete</td>
 		</tr>
 		<tr th:each="file : ${fileList}">
+			<td th:text="${file.fileName}" />
 			<form method="POST" enctype="multipart/form-data" th:action="@{/project/download/file}" th:object="${fileForm}">
 				<input type="hidden" th:field="*{projectName}" />
 				<input type="hidden" th:field="*{roleName}" />
 				<input type="hidden" name="fileName" th:value="${file.fileName}" />
-				<td th:text="${file.fileName}" />
 				<td><input type="submit" value="Download" /></td>
 			</form>
 			<form method="POST" enctype="multipart/form-data" th:action="@{/project/file/delete}" th:object="${fileForm}">
 				<input type="hidden" th:field="*{projectName}" />
 				<input type="hidden" th:field="*{roleName}" />
-				<input type="hidden" name="fileName" th:value="${template.templateName}" />
+				<input type="hidden" name="fileName" th:value="${file.fileName}" />
 				<td><input type="submit" value="Delete" /></td>
 			</form>
 		</tr>

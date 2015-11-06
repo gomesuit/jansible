@@ -39,6 +39,7 @@ public class UploadController {
 	@RequestMapping(value="/project/template/delete", method=RequestMethod.POST)
     private String deleteTemplate(@ModelAttribute GeneralFileForm form, HttpServletRequest request){
 		uploadService.deleteTemplate(form);
+		projectService.deleteTemplate(form);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
@@ -47,6 +48,7 @@ public class UploadController {
 	@RequestMapping(value="/project/file/delete", method=RequestMethod.POST)
     private String deleteFile(@ModelAttribute GeneralFileForm form, HttpServletRequest request){
 		uploadService.deleteFile(form);
+		projectService.deleteFile(form);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
