@@ -4,6 +4,7 @@ import jansible.model.common.FileKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
 import jansible.model.common.ServerKey;
+import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.TemplateKey;
 
 import java.io.BufferedOutputStream;
@@ -40,6 +41,11 @@ public class JansibleFiler {
 		writeFile(filePath, yaml);
 	}
 	
+	public void writeGroupVariableYaml(ServiceGroupKey serviceGroupKey, String yaml){
+		String filePath = getGroupVariableYamlPath(serviceGroupKey);
+		writeFile(filePath, yaml);
+	}
+	
 	private String getTaskYamlPath(RoleKey roleKey){
 		String taskDirName = getTaskDirName(roleKey);
 		String filePath = taskDirName + PATH_SEPARATOR + DEFAULT_YAML_NAME;
@@ -58,6 +64,18 @@ public class JansibleFiler {
 		return filePath;
 	}
 	
+	private String getGroupVariableYamlPath(ServiceGroupKey serviceGroupKey){
+		String dirName = getGroupVariableDirName(serviceGroupKey);
+		String filePath = dirName + PATH_SEPARATOR + getGroupName(serviceGroupKey);
+		return filePath;
+	}
+	
+	private String getGroupName(ServiceGroupKey serviceGroupKey) {
+		String environmentName = serviceGroupKey.getEnvironmentName();
+		String groupName = serviceGroupKey.getGroupName();
+		return environmentName + "_" + groupName;
+	}
+
 	private void writeFile(String filePath, String content){
 		File file = new File(filePath);
 		try(FileWriter filewriter = new FileWriter(file)){

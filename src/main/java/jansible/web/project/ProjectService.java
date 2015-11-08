@@ -322,6 +322,21 @@ public class ProjectService {
 	public void registServiceGroupVariable(ServiceGroupVariableForm form) {
 		DbServiceGroupVariable dbServiceGroupVariable = createDbServiceGroupVariable(form);
 		projectMapper.insertDbServiceGroupVariable(dbServiceGroupVariable);
+		
+		writeServiceGroupVariableYaml(form);
+	}
+	
+	private void writeServiceGroupVariableYaml(ServiceGroupKey serviceGroupKey){
+		List<DbEnvironmentVariable> dbEnvironmentVariableList = projectMapper.selectDbEnvironmentVariableList(serviceGroupKey);
+		List<YamlVariable> envYamlVariableList = createYamlVariableList(dbEnvironmentVariableList);
+		
+		List<DbServiceGroupVariable> dbServiceGroupVariableList = projectMapper.selectDbServiceGroupVariableList(serviceGroupKey);
+		List<YamlVariable> groupVamlVariableList = createYamlVariableList(dbServiceGroupVariableList);
+		
+		envYamlVariableList.addAll(groupVamlVariableList);
+		
+		String yamlContent = yamlDumper.dumpVariable(envYamlVariableList);
+		jansibleFiler.writeGroupVariableYaml(serviceGroupKey, yamlContent);
 	}
 	
 	public void registServerVariable(ServerVariableForm form) {
@@ -337,6 +352,16 @@ public class ProjectService {
 	public void registEnvironmentVariable(EnvironmentVariableForm form) {
 		DbEnvironmentVariable dbEnvironmentVariable = createDbEnvironmentVariable(form);
 		projectMapper.insertDbEnvironmentVariable(dbEnvironmentVariable);
+		
+		writeEnvironmentVariableYaml(form);
+	}
+	
+	private void writeEnvironmentVariableYaml(EnvironmentKey environmentKey){
+		List<DbServiceGroup> dbServiceGroupList = projectMapper.selectServiceGroupList(environmentKey);
+		
+		for(DbServiceGroup dbServiceGroup : dbServiceGroupList){
+			writeServiceGroupVariableYaml(dbServiceGroup);
+		}
 	}
 
 	private DbEnvironmentVariable createDbEnvironmentVariable(EnvironmentVariableForm form) {
