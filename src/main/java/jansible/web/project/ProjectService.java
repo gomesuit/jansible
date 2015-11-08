@@ -27,6 +27,7 @@ import jansible.model.database.DbServiceGroupVariable;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.database.DbTemplate;
+import jansible.model.database.InterfaceDbVariable;
 import jansible.model.yamldump.YamlVariable;
 import jansible.util.YamlDumper;
 import jansible.web.project.form.EnvironmentForm;
@@ -154,6 +155,8 @@ public class ProjectService {
 		DbProject dbProject = new DbProject(form.getProjectName());
 		projectMapper.insertProject(dbProject);
 		jansibleFiler.mkProjectDir(dbProject);
+		jansibleFiler.mkHostVariableDir(dbProject);
+		jansibleFiler.mkGroupVariableDir(dbProject);
 	}
 	
 	public void registEnvironment(EnvironmentForm form) {
@@ -303,12 +306,17 @@ public class ProjectService {
 		projectMapper.insertDbRoleVariable(dbRoleVariable);
 		
 		List<DbRoleVariable> dbRoleVariableList = projectMapper.selectDbRoleVariableList(form);
-		List<YamlVariable> yamlVariableList = new ArrayList<>();
-		for(DbRoleVariable roleVariable : dbRoleVariableList){
-			yamlVariableList.add(new YamlVariable(roleVariable.getVariableName(), roleVariable.getValue()));
-		}
+		List<YamlVariable> yamlVariableList = createYamlVariableList(dbRoleVariableList);
 		String yamlContent = yamlDumper.dumpVariable(yamlVariableList);
 		jansibleFiler.writeRoleVariableYaml(form, yamlContent);
+	}
+	
+	private <T extends InterfaceDbVariable> List<YamlVariable> createYamlVariableList(List<T> dbVariableList){
+		List<YamlVariable> yamlVariableList = new ArrayList<>();
+		for(InterfaceDbVariable dbVariable : dbVariableList){
+			yamlVariableList.add(new YamlVariable(dbVariable.getVariableName(), dbVariable.getValue()));
+		}
+		return yamlVariableList;
 	}
 	
 	public void registServiceGroupVariable(ServiceGroupVariableForm form) {
@@ -319,6 +327,11 @@ public class ProjectService {
 	public void registServerVariable(ServerVariableForm form) {
 		DbServerVariable dbServerVariable = createDbServerVariable(form);
 		projectMapper.insertDbServerVariable(dbServerVariable);
+		
+		List<DbServerVariable> dbServerVariableList = projectMapper.selectDbServerVariableList(form);
+		List<YamlVariable> yamlVariableList = createYamlVariableList(dbServerVariableList);
+		String yamlContent = yamlDumper.dumpVariable(yamlVariableList);
+		jansibleFiler.writeHostVariableYaml(form, yamlContent);
 	}
 	
 	public void registEnvironmentVariable(EnvironmentVariableForm form) {

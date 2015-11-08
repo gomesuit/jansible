@@ -3,6 +3,7 @@ package jansible.file;
 import jansible.model.common.FileKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
+import jansible.model.common.ServerKey;
 import jansible.model.common.TemplateKey;
 
 import java.io.BufferedOutputStream;
@@ -34,6 +35,11 @@ public class JansibleFiler {
 		writeFile(filePath, yaml);
 	}
 	
+	public void writeHostVariableYaml(ServerKey serverKey, String yaml){
+		String filePath = getHostVariableYamlPath(serverKey);
+		writeFile(filePath, yaml);
+	}
+	
 	private String getTaskYamlPath(RoleKey roleKey){
 		String taskDirName = getTaskDirName(roleKey);
 		String filePath = taskDirName + PATH_SEPARATOR + DEFAULT_YAML_NAME;
@@ -43,6 +49,12 @@ public class JansibleFiler {
 	private String getRoleVariableYamlPath(RoleKey roleKey){
 		String dirName = getRoleVariableDirName(roleKey);
 		String filePath = dirName + PATH_SEPARATOR + DEFAULT_YAML_NAME;
+		return filePath;
+	}
+	
+	private String getHostVariableYamlPath(ServerKey serverKey){
+		String dirName = getHostVariableDirName(serverKey);
+		String filePath = dirName + PATH_SEPARATOR + serverKey.getServerName();
 		return filePath;
 	}
 	
@@ -62,6 +74,14 @@ public class JansibleFiler {
 
 	public void mkProjectDir(ProjectKey projectKey){
 		mkDir(getProjectDirName(projectKey));
+	}
+
+	public void mkHostVariableDir(ProjectKey projectKey){
+		mkDir(getHostVariableDirName(projectKey));
+	}
+
+	public void mkGroupVariableDir(ProjectKey projectKey){
+		mkDir(getGroupVariableDirName(projectKey));
 	}
 
 	public void mkRoleDir(RoleKey roleKey){
@@ -98,6 +118,20 @@ public class JansibleFiler {
 		dirName += "roles";
 		dirName += PATH_SEPARATOR;
 		dirName += roleKey.getRoleName();
+		return dirName;
+	}
+	
+	private String getHostVariableDirName(ProjectKey projectKey){
+		String dirName = getProjectDirName(projectKey);
+		dirName += PATH_SEPARATOR;
+		dirName += "hosr_vars";
+		return dirName;
+	}
+	
+	private String getGroupVariableDirName(ProjectKey projectKey){
+		String dirName = getProjectDirName(projectKey);
+		dirName += PATH_SEPARATOR;
+		dirName += "group_vars";
 		return dirName;
 	}
 	
