@@ -25,9 +25,25 @@ public class JansibleFiler {
 	}
 	
 	public void writeRoleYaml(RoleKey roleKey, String yaml){
+		String filePath = getTaskYamlPath(roleKey);
+		writeFile(filePath, yaml);
+	}
+	
+	public void writeRoleVariableYaml(RoleKey roleKey, String yaml){
+		String filePath = getRoleVariableYamlPath(roleKey);
+		writeFile(filePath, yaml);
+	}
+	
+	private String getTaskYamlPath(RoleKey roleKey){
 		String taskDirName = getTaskDirName(roleKey);
 		String filePath = taskDirName + PATH_SEPARATOR + DEFAULT_YAML_NAME;
-		writeFile(filePath, yaml);
+		return filePath;
+	}
+	
+	private String getRoleVariableYamlPath(RoleKey roleKey){
+		String dirName = getRoleVariableDirName(roleKey);
+		String filePath = dirName + PATH_SEPARATOR + DEFAULT_YAML_NAME;
+		return filePath;
 	}
 	
 	private void writeFile(String filePath, String content){
@@ -67,6 +83,11 @@ public class JansibleFiler {
 		mkDir(dirName);
 	}
 
+	public void mkRoleVariableDir(RoleKey roleKey){
+		String dirName = getRoleVariableDirName(roleKey);
+		mkDir(dirName);
+	}
+
 	private String getProjectDirName(ProjectKey projectKey) {
 		return ROOT_PATH + projectKey.getProjectName();
 	}
@@ -98,6 +119,13 @@ public class JansibleFiler {
 		String roleDirName = getRoleDirName(roleKey);
 		roleDirName += PATH_SEPARATOR;
 		roleDirName += "files";
+		return roleDirName;
+	}
+	
+	public String getRoleVariableDirName(RoleKey roleKey) {
+		String roleDirName = getRoleDirName(roleKey);
+		roleDirName += PATH_SEPARATOR;
+		roleDirName += "vars";
 		return roleDirName;
 	}
 	

@@ -27,6 +27,8 @@ import jansible.model.database.DbServiceGroupVariable;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.database.DbTemplate;
+import jansible.model.yamldump.YamlVariable;
+import jansible.util.YamlDumper;
 import jansible.web.project.form.EnvironmentForm;
 import jansible.web.project.form.EnvironmentVariableForm;
 import jansible.web.project.form.GeneralFileForm;
@@ -53,6 +55,8 @@ public class ProjectService {
 	private ProjectMapper projectMapper;
 	@Autowired
 	private JansibleFiler jansibleFiler;
+	@Autowired
+	private YamlDumper yamlDumper;
 
 	public List<DbProject> getProjectList(){
 		return projectMapper.selectProjectList();
@@ -174,6 +178,7 @@ public class ProjectService {
 		jansibleFiler.mkRoleTaskDir(dbRole);
 		jansibleFiler.mkRoleTemplateDir(dbRole);
 		jansibleFiler.mkRoleFileDir(dbRole);
+		jansibleFiler.mkRoleVariableDir(dbRole);
 		jansibleFiler.writeRoleYaml(dbRole);
 	}
 	
@@ -296,6 +301,14 @@ public class ProjectService {
 	public void registRoleVariable(RoleVariableForm form) {
 		DbRoleVariable dbRoleVariable = createDbRoleVariable(form);
 		projectMapper.insertDbRoleVariable(dbRoleVariable);
+		
+		List<DbRoleVariable> dbRoleVariableList = projectMapper.selectDbRoleVariableList(form);
+		List<YamlVariable> yamlVariableList = new ArrayList<>();
+		for(DbRoleVariable roleVariable : dbRoleVariableList){
+			yamlVariableList.add(new YamlVariable(roleVariable.getVariableName(), roleVariable.getValue()));
+		}
+		String yamlContent = yamlDumper.dumpVariable(yamlVariableList);
+		jansibleFiler.writeRoleVariableYaml(form, yamlContent);
 	}
 	
 	public void registServiceGroupVariable(ServiceGroupVariableForm form) {

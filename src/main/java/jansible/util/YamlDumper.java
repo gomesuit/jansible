@@ -11,6 +11,7 @@ import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
 import jansible.model.yamldump.YamlModule;
+import jansible.model.yamldump.YamlVariable;
 
 @Service
 public class YamlDumper {
@@ -46,5 +47,29 @@ public class YamlDumper {
 		}
 		data.put(module.getName(), module.getParameters().toString());
 		return data;
+	}
+	
+	private Map<String, String> createDataMap(List<YamlVariable> variableList){
+		Map<String, String> data = new LinkedHashMap<>();
+		for(YamlVariable variable : variableList){
+			data.put(variable.getKey(), variable.getValue());
+		}
+		return data;
+	}
+	
+	public String dumpVariable(List<YamlVariable> variableList){
+		Map<String, String> data = createDataMap(variableList);
+	    return yaml.dump(data);
+	}
+	
+	public static void main(String args[]){
+		Map<String, String> data = new LinkedHashMap<>();
+		data.put("key", "value");
+		data.put("key1", "value");
+		DumperOptions options = new DumperOptions();
+        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+	    options.setExplicitStart(true);
+	    Yaml yaml = new Yaml(options);
+		System.out.println(yaml.dump(data));
 	}
 }
