@@ -6,7 +6,9 @@
 	<title>sample page</title>
 </head>
 <body>
-
+	<div>環境の画面です</div>
+	
+	<br /><hr /><br />
 	<div>グループ登録</div>
 	<form action="#" th:action="@{/project/group/regist}" th:object="${form}" method="post">
 		<input type="hidden" th:field="*{projectName}" />

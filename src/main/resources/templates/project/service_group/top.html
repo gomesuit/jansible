@@ -7,6 +7,8 @@
 </head>
 <body>
 	<div>グループの画面です</div>
+	
+	<br /><hr /><br />
 	<div>サーバ登録</div>
 	<form action="#" th:action="@{/project/server/regist}" th:object="${serverForm}" method="post">
 		<input type="hidden" th:field="*{projectName}" />

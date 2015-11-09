@@ -7,6 +7,8 @@
 </head>
 <body>
 	<div>プロジェクトの画面です</div>
+	
+	<br /><hr /><br />
 	<div>環境登録</div>
 	<form action="#" th:action="@{/project/environment/regist}" th:object="${environmentForm}" method="post">
 		<input type="hidden" th:field="*{projectName}" />
@@ -31,6 +33,7 @@
 		</tr>
 	</table>
 	
+	<br /><hr /><br />
 	<div>ロール登録</div>
 	<form action="#" th:action="@{/project/role/regist}" th:object="${roleForm}" method="post">
 		<input type="hidden" th:field="*{projectName}" />
