@@ -243,6 +243,17 @@ public class JansibleFiler {
 		return dirName;
 	}
 	
+	private String getStartYamlPath(ServiceGroupKey serviceGroupKey){
+		String dirName = getProjectDirName(serviceGroupKey);
+		String filePath = dirName + PATH_SEPARATOR + getGroupName(serviceGroupKey) + ".yml";
+		return filePath;
+	}
+	
+	public void writeStartYaml(ServiceGroupKey serviceGroupKey, String fileContent){
+		String filePath = getStartYamlPath(serviceGroupKey);
+		writeFile(filePath, fileContent);
+	}
+	
 	public void writeHostsFile(ProjectKey projectKey, String hostsFileContent){
 		String hostsFilePath = getHostsFilePath(projectKey);
 		writeFile(hostsFilePath, hostsFileContent);

@@ -42,6 +42,7 @@ import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.database.DbTemplate;
 import jansible.model.database.InterfaceDbVariable;
+import jansible.model.yamldump.StartYaml;
 import jansible.model.yamldump.YamlVariable;
 import jansible.util.YamlDumper;
 import jansible.web.project.form.EnvironmentForm;
@@ -317,6 +318,16 @@ public class ProjectService {
 	public void registRoleRelationDetail(RoleRelationForm form) {
 		DbRoleRelation dbRoleRelation = createDbRoleRelation(form);
 		serviceGroupMapper.insertDbRoleRelation(dbRoleRelation);
+		
+		StartYaml startYaml = new StartYaml();
+		startYaml.setHosts(jansibleFiler.getGroupName(form));
+		
+		List<DbRoleRelation> dbRoleRelationList = serviceGroupMapper.selectDbRoleRelationList(form);
+		for(DbRoleRelation roleRelation : dbRoleRelationList){
+			startYaml.addRole(roleRelation.getRoleName());
+		}
+		String yamlContent = yamlDumper.dumpStartYaml(startYaml);
+		jansibleFiler.writeStartYaml(form, yamlContent);
 	}
 	
 	private DbRoleRelation createDbRoleRelation(RoleRelationForm form) {
