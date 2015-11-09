@@ -33,6 +33,11 @@
 				<a th:href="@{/environment/view(projectName=${environment.projectName}, environmentName=${environment.environmentName})}"
 				th:text="${environment.environmentName}" />
 			</td>
+			<form method="POST" th:action="@{/project/environment/delete}" th:object="${environmentKey}">
+				<input type="hidden" th:field="*{projectName}" />
+				<input type="hidden" name="environmentName" th:value="${environment.environmentName}" />
+				<td><input type="submit" value="Delete" /></td>
+			</form>
 		</tr>
 	</table>
 	

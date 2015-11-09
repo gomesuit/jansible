@@ -34,6 +34,12 @@
 				<a th:href="@{/serviceGroup/view(projectName=${serviceGroup.projectName}, environmentName=${serviceGroup.environmentName}, groupName=${serviceGroup.groupName})}"
 				th:text="${serviceGroup.groupName}" />
 			</td>
+			<form method="POST" th:action="@{/project/serviceGroup/delete}" th:object="${serviceGroupKey}">
+				<input type="hidden" th:field="*{projectName}" />
+				<input type="hidden" th:field="*{environmentName}" />
+				<input type="hidden" name="groupName" th:value="${serviceGroup.groupName}" />
+				<td><input type="submit" value="Delete" /></td>
+			</form>
 		</tr>
 	</table>
 	

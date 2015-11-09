@@ -81,6 +81,12 @@ public class ProjectController {
 		model.addAttribute("serverForm", serverForm);
 		model.addAttribute("serverList", projectService.getServerList(projectName, environmentName, groupName));
 		
+		ServerKey serverKey = new ServerKey();
+		serverKey.setProjectName(projectName);
+		serverKey.setEnvironmentName(environmentName);
+		serverKey.setGroupName(groupName);
+		model.addAttribute("serverKey", serverKey);
+		
 		RoleRelationForm roleRelationForm = new RoleRelationForm();
 		roleRelationForm.setProjectName(projectName);
 		roleRelationForm.setEnvironmentName(environmentName);
@@ -144,6 +150,11 @@ public class ProjectController {
     	model.addAttribute("environmentForm", environmentForm);
     	model.addAttribute("environmentList", projectService.getEnvironmentList(projectName));
     	
+    	EnvironmentKey environmentKey = new EnvironmentKey();
+    	environmentKey.setProjectName(projectName);
+    	model.addAttribute("environmentKey", environmentKey);
+    	
+    	
     	RoleForm roleForm = new RoleForm();
     	roleForm.setProjectName(projectName);
     	model.addAttribute("roleForm", roleForm);
@@ -162,6 +173,11 @@ public class ProjectController {
     	
     	model.addAttribute("form", serviceGroupForm);
     	model.addAttribute("serviceGroupList", projectService.getServiceGroupList(projectName, environmentName));
+    	
+    	ServiceGroupKey serviceGroupKey = new ServiceGroupKey();
+    	serviceGroupKey.setProjectName(projectName);
+    	serviceGroupKey.setEnvironmentName(environmentName);
+    	model.addAttribute("serviceGroupKey", serviceGroupKey);
     	
     	EnvironmentVariableForm variableForm = new EnvironmentVariableForm();
 		variableForm.setProjectName(projectName);
