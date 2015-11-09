@@ -52,5 +52,9 @@
 			<td th:text="${variable.variableName}" />
 		</tr>
 	</table>
+	
+	<br /><hr />
+	<a th:href="@{/role/view/(projectName=${form.projectName}, roleName=${form.roleName})}" >戻る</a>
+	<a th:href="@{/}" >トップ</a>
 </body>
 </html>

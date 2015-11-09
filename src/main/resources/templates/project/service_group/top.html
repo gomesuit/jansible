@@ -104,5 +104,9 @@
 			<td th:text="${variable.value}" />
 		</tr>
 	</table>
+	
+	<br /><hr />
+	<a th:href="@{/environment/view/(projectName=${serverForm.projectName}, environmentName=${serverForm.environmentName})}" >戻る</a>
+	<a th:href="@{/}" >トップ</a>
 </body>
 </html>
