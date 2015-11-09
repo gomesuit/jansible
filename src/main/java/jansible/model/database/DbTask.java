@@ -5,7 +5,6 @@ import jansible.model.common.TaskKey;
 public class DbTask extends TaskKey{
 	private String moduleName;
 	private String description;
-	private String freeForm;
 	private int sort;
 	
 	public DbTask(){}
@@ -28,14 +27,6 @@ public class DbTask extends TaskKey{
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public String getFreeForm() {
-		return freeForm;
-	}
-
-	public void setFreeForm(String freeForm) {
-		this.freeForm = freeForm;
 	}
 
 	public int getSort() {

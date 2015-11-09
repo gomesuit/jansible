@@ -11,7 +11,6 @@
 				role_name,
 				module_name,
 				description,
-				free_form,
 				sort
 			)
 		VALUES
@@ -20,7 +19,6 @@
 				#{roleName},
 				#{moduleName},
 				#{description},
-				#{freeForm},
 				#{sort}
 			)
 	</insert>
@@ -43,7 +41,6 @@
 			role_name as roleName,
 			module_name as moduleName,
 			description as description,
-			free_form as freeForm,
 			sort as sort
 		FROM
 			task
@@ -61,7 +58,6 @@
 			role_name as roleName,
 			module_name as moduleName,
 			description as description,
-			free_form as freeForm,
 			sort as sort
 		FROM
 			task

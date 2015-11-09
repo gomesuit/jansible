@@ -167,7 +167,6 @@ CREATE TABLE task
 	role_name varchar(30) NOT NULL,
 	module_name varchar(80) NOT NULL,
 	description varchar(512),
-	free_form varchar(512),
 	sort int NOT NULL,
 	PRIMARY KEY (task_id, project_name, role_name)
 );

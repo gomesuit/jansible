@@ -5,7 +5,6 @@ import jansible.model.common.TaskKey;
 public class TaskForm extends TaskKey{
 	private String moduleName;
 	private String description;
-	private String freeForm;
 	private int sort;
 	
 	public TaskForm(){}
@@ -24,14 +23,6 @@ public class TaskForm extends TaskKey{
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public String getFreeForm() {
-		return freeForm;
-	}
-
-	public void setFreeForm(String freeForm) {
-		this.freeForm = freeForm;
 	}
 
 	public int getSort() {

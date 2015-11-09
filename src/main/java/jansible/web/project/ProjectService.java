@@ -336,7 +336,6 @@ public class ProjectService {
 		dbTask.setRoleName(form.getRoleName());
 		dbTask.setModuleName(form.getModuleName());
 		dbTask.setDescription(form.getDescription());
-		dbTask.setFreeForm(form.getFreeForm());
 		dbTask.setSort(form.getSort());
 		return dbTask;
 	}
