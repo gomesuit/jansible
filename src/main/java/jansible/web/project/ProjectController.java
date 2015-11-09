@@ -290,6 +290,12 @@ public class ProjectController {
     	model.addAttribute("form", form);
     	
 		model.addAttribute("variableList", projectService.getDbRoleVariableList(projectName, roleName));
+		
+
+    	List<DbTask> dbTaskList = new ArrayList<>();
+    	dbTaskList.add(dbTask);
+    	List<YamlModule> modules = createYamlModuleList(dbTaskList);
+    	model.addAttribute("yaskYaml", yamlDumper.dump(modules).replaceAll("\n", "<br />"));
     	
         return "project/task/top";
     }
