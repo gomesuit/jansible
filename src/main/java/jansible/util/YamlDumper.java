@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
+import jansible.model.yamldump.StartYaml;
 import jansible.model.yamldump.YamlModule;
 import jansible.model.yamldump.YamlVariable;
 
@@ -63,13 +64,30 @@ public class YamlDumper {
 	}
 	
 	public static void main(String args[]){
-		Map<String, String> data = new LinkedHashMap<>();
-		data.put("key", "value");
-		data.put("key1", "value");
+		StartYaml startYaml = new StartYaml();
+		startYaml.setHosts("localhost");
+		startYaml.addRole("common");
+		startYaml.addRole("bundler");
+		List<Map<String, Object>> dataList = new ArrayList<>();
+		Map<String, Object> data = new LinkedHashMap<>();
+		data.put("hosts", startYaml.getHosts());
+		data.put("sudo", "yes");
+		data.put("roles", startYaml.getRoles());
+		dataList.add(data);
 		DumperOptions options = new DumperOptions();
         options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 	    options.setExplicitStart(true);
 	    Yaml yaml = new Yaml(options);
-		System.out.println(yaml.dump(data));
+		System.out.println(yaml.dump(dataList));
+	}
+	
+	public String dumpStartYaml(StartYaml startYaml){
+		List<Map<String, Object>> dataList = new ArrayList<>();
+		Map<String, Object> data = new LinkedHashMap<>();
+		data.put("hosts", startYaml.getHosts());
+		data.put("sudo", "yes");
+		data.put("roles", startYaml.getRoles());
+		dataList.add(data);
+		return yaml.dump(dataList);
 	}
 }
