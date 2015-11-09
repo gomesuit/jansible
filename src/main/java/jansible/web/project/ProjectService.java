@@ -3,7 +3,9 @@ package jansible.web.project;
 import java.util.ArrayList;
 import java.util.List;
 
+import jansible.file.HostGroup;
 import jansible.file.JansibleFiler;
+import jansible.file.JansibleHostsDumper;
 import jansible.git.JansibleGitter;
 import jansible.mapper.EnvironmentMapper;
 import jansible.mapper.ProjectMapper;
@@ -86,6 +88,8 @@ public class ProjectService {
 	private YamlDumper yamlDumper;
 	@Autowired
 	private JansibleGitter jansibleGitter;
+	@Autowired
+	private JansibleHostsDumper jansibleHostsDumper;
 
 	public List<DbProject> getProjectList(){
 		return projectMapper.selectProjectList();
@@ -266,6 +270,20 @@ public class ProjectService {
 	public void registServer(ServerForm form) {
 		DbServer dbServer = createDbServer(form);
 		serverMapper.insertServer(dbServer);
+		
+		List<DbServiceGroup> dbServiceGroupList = serviceGroupMapper.selectServiceGroupList(form);
+		List<HostGroup> hostGroupList = new ArrayList<>();
+		for(DbServiceGroup dbServiceGroup : dbServiceGroupList){
+			HostGroup hostGroup = new HostGroup();
+			hostGroup.setGroupName(jansibleFiler.getGroupName(dbServiceGroup));
+			List<DbServer> dbServerList = serverMapper.selectServerList(dbServiceGroup);
+			for(DbServer server : dbServerList){
+				hostGroup.addHost(server.getServerName());
+			}
+			hostGroupList.add(hostGroup);
+		}
+		String hostsFileContent = jansibleHostsDumper.getString(hostGroupList);
+		jansibleFiler.writeHostsFile(form, hostsFileContent);
 	}
 	
 	public void registRole(RoleForm form) {

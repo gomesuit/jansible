@@ -70,7 +70,7 @@ public class JansibleFiler {
 		return filePath;
 	}
 	
-	private String getGroupName(ServiceGroupKey serviceGroupKey) {
+	public String getGroupName(ServiceGroupKey serviceGroupKey) {
 		String environmentName = serviceGroupKey.getEnvironmentName();
 		String groupName = serviceGroupKey.getGroupName();
 		return environmentName + "_" + groupName;
@@ -234,6 +234,18 @@ public class JansibleFiler {
 		fileDirName += PATH_SEPARATOR;
 		fileDirName += fileKey.getFileName();
 		return fileDirName;
+	}
+	
+	private String getHostsFilePath(ProjectKey projectKey){
+		String dirName = getProjectDirName(projectKey);
+		dirName += PATH_SEPARATOR;
+		dirName += "hosts";
+		return dirName;
+	}
+	
+	public void writeHostsFile(ProjectKey projectKey, String hostsFileContent){
+		String hostsFilePath = getHostsFilePath(projectKey);
+		writeFile(hostsFilePath, hostsFileContent);
 	}
 
 	public void uploadFile(MultipartFile file, String filePath) {
