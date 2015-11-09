@@ -64,7 +64,6 @@ import jansible.web.project.form.UploadForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ProjectService {
@@ -101,13 +100,11 @@ public class ProjectService {
 		return environmentMapper.selectEnvironmentList(projectKey);
 	}
 
-	public List<DbServiceGroup> getServiceGroupList(String projectName, String environmentName){
-		EnvironmentKey environmentKey = new EnvironmentKey(projectName, environmentName);
+	public List<DbServiceGroup> getServiceGroupList(EnvironmentKey environmentKey){
 		return serviceGroupMapper.selectServiceGroupList(environmentKey);
 	}
 
-	public List<DbServer> getServerList(String projectName, String environmentName, String groupName){
-		ServiceGroupKey serviceGroupKey = new ServiceGroupKey(projectName, environmentName, groupName);
+	public List<DbServer> getServerList(ServiceGroupKey serviceGroupKey){
 		return serverMapper.selectServerList(serviceGroupKey);
 	}
 
@@ -116,65 +113,43 @@ public class ProjectService {
 		return roleMapper.selectRoleList(projectKey);
 	}
 	
-	public List<DbTask> getTaskList(String projectName, String roleName){
-		RoleKey roleKey = new RoleKey(projectName, roleName);
+	public List<DbTask> getTaskList(RoleKey roleKey){
 		return taskMapper.selectTaskList(roleKey);
 	}
 	
-	public List<DbFile> getDbFileList(String projectName, String roleName){
-		RoleKey roleKey = new RoleKey(projectName, roleName);
+	public List<DbFile> getDbFileList(RoleKey roleKey){
 		return roleMapper.selectDbFileList(roleKey);
 	}
 	
-	public List<DbTemplate> getDbTemplateList(String projectName, String roleName){
-		RoleKey roleKey = new RoleKey(projectName, roleName);
+	public List<DbTemplate> getDbTemplateList(RoleKey roleKey){
 		return roleMapper.selectDbTemplateList(roleKey);
 	}
 	
-	public List<DbRoleVariable> getDbRoleVariableList(String projectName, String roleName){
-		RoleKey roleKey = new RoleKey();
-		roleKey.setProjectName(projectName);
-		roleKey.setRoleName(roleName);
+	public List<DbRoleVariable> getDbRoleVariableList(RoleKey roleKey){
 		return variableMapper.selectDbRoleVariableList(roleKey);
 	}
 	
-	public List<DbServiceGroupVariable> getDbServiceGroupVariableList(String projectName, String environmentName, String groupName){
-		ServiceGroupKey serviceGroupKey = new ServiceGroupKey();
-		serviceGroupKey.setProjectName(projectName);
-		serviceGroupKey.setEnvironmentName(environmentName);
-		serviceGroupKey.setGroupName(groupName);
+	public List<DbServiceGroupVariable> getDbServiceGroupVariableList(ServiceGroupKey serviceGroupKey){
 		return variableMapper.selectDbServiceGroupVariableList(serviceGroupKey);
 	}
 	
-	public List<DbServerVariable> getDbServerVariableList(String projectName, String environmentName, String groupName, String serverName){
-		ServerKey serverKey = new ServerKey();
-		serverKey.setProjectName(projectName);
-		serverKey.setEnvironmentName(environmentName);
-		serverKey.setGroupName(groupName);
-		serverKey.setServerName(serverName);
+	public List<DbServerVariable> getDbServerVariableList(ServerKey serverKey){
 		return variableMapper.selectDbServerVariableList(serverKey);
 	}
 	
-	public List<DbEnvironmentVariable> getDbEnvironmentVariableList(String projectName, String environmentName){
-		EnvironmentKey environmentKey = new EnvironmentKey();
-		environmentKey.setProjectName(projectName);
-		environmentKey.setEnvironmentName(environmentName);
+	public List<DbEnvironmentVariable> getDbEnvironmentVariableList(EnvironmentKey environmentKey){
 		return variableMapper.selectDbEnvironmentVariableList(environmentKey);
 	}
 	
-	public List<String> getAllDbVariableNameList(String projectName){
-		ProjectKey projectKey = new ProjectKey();
-		projectKey.setProjectName(projectName);
+	public List<String> getAllDbVariableNameList(ProjectKey projectKey){
 		return variableMapper.selectAllDbVariableNameList(projectKey);
 	}
 	
-	public DbTask getTask(String projectName, String roleName, Integer taskId){
-		TaskKey taskKey = new TaskKey(projectName, roleName, taskId);
+	public DbTask getTask(TaskKey taskKey){
 		return taskMapper.selectTask(taskKey);
 	}
 	
-	public List<DbTaskDetail> getTaskDetailList(String projectName, String roleName, Integer taskId){
-		TaskKey taskKey = new TaskKey(projectName, roleName, taskId);
+	public List<DbTaskDetail> getTaskDetailList(TaskKey taskKey){
 		return taskMapper.selectTaskDetailList(taskKey);
 	}
 	
@@ -243,8 +218,7 @@ public class ProjectService {
 		variableMapper.deleteDbRoleVariable(roleVariableKey);
 	}
 	
-	public List<DbRoleRelation> getRoleRelationList(String projectName, String environmentName, String groupName){
-		ServiceGroupKey serviceGroupKey = new ServiceGroupKey(projectName, environmentName, groupName);
+	public List<DbRoleRelation> getRoleRelationList(ServiceGroupKey serviceGroupKey){
 		return serviceGroupMapper.selectDbRoleRelationList(serviceGroupKey);
 	}
 
@@ -264,12 +238,12 @@ public class ProjectService {
 	}
 	
 	public void registServiceGroup(ServiceGroupForm form) {
-		DbServiceGroup dbServiceGroup = new DbServiceGroup(form.getProjectName(), form.getEnvironmentName(), form.getGroupName());
+		DbServiceGroup dbServiceGroup = new DbServiceGroup(form);
 		serviceGroupMapper.insertServiceGroup(dbServiceGroup);
 	}
 	
 	public void registServer(ServerForm form) {
-		DbServer dbServer = createDbServer(form);
+		DbServer dbServer = new DbServer(form);
 		serverMapper.insertServer(dbServer);
 		
 		List<DbServiceGroup> dbServiceGroupList = serviceGroupMapper.selectServiceGroupList(form);
@@ -288,7 +262,7 @@ public class ProjectService {
 	}
 	
 	public void registRole(RoleForm form) {
-		DbRole dbRole = createDbRole(form);
+		DbRole dbRole = new DbRole(form);;
 		roleMapper.insertRole(dbRole);
 		jansibleFiler.mkRoleDir(dbRole);
 		jansibleFiler.mkRoleTaskDir(dbRole);
@@ -382,14 +356,6 @@ public class ProjectService {
 		dbTask.setDescription(form.getDescription());
 		return dbTask;
 	}
-
-	private DbServer createDbServer(ServerForm form){
-		return new DbServer(form.getProjectName(), form.getEnvironmentName(), form.getGroupName(), form.getServerName());
-	}
-	
-	private DbRole createDbRole(RoleForm form){	
-		return new DbRole(form.getProjectName(), form.getRoleName());
-	}
 	
 	public void registFile(UploadForm form) {
 		DbFile dbFile = createDbFile(form);
@@ -397,8 +363,8 @@ public class ProjectService {
 	}
 
 	private DbFile createDbFile(UploadForm form) {
-		MultipartFile file = form.getFile();
-		DbFile dbFile = new DbFile(form.getProjectName(), form.getRoleName(), file.getOriginalFilename());
+		DbFile dbFile = new DbFile(form);
+		dbFile.setFileName(form.getFileName());
 		return dbFile;
 	}
 	
@@ -408,18 +374,20 @@ public class ProjectService {
 	}
 
 	private DbTemplate createDbTemplate(UploadForm form) {
-		MultipartFile file = form.getFile();
-		DbTemplate dbTemplate = new DbTemplate(form.getProjectName(), form.getRoleName(), file.getOriginalFilename());
+		DbTemplate dbTemplate = new DbTemplate(form);
+		dbTemplate.setTemplateName(form.getFileName());
 		return dbTemplate;
 	}
 	
 	public void deleteFile(GeneralFileForm form){
-		FileKey fileKey = new FileKey(form.getProjectName(), form.getRoleName(), form.getFileName());
+		FileKey fileKey = new FileKey(form);
+		fileKey.setFileName(form.getFileName());
 		roleMapper.deleteDbFile(fileKey);
 	}
 	
 	public void deleteTemplate(GeneralFileForm form){
-		TemplateKey templateKey = new TemplateKey(form.getProjectName(), form.getRoleName(), form.getFileName());
+		TemplateKey templateKey = new TemplateKey(form);
+		templateKey.setTemplateName(form.getFileName());
 		roleMapper.deleteDbTemplate(templateKey);
 	}
 	

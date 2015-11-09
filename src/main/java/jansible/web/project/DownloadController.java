@@ -24,7 +24,8 @@ public class DownloadController {
 	@RequestMapping(value="/project/download/template", method=RequestMethod.POST, produces = "application/force-download")
 	@ResponseBody
     private Resource downloadTemplate(@ModelAttribute GeneralFileForm form, HttpServletResponse response){
-		TemplateKey templateKey = new TemplateKey(form.getProjectName(), form.getRoleName(), form.getFileName());
+		TemplateKey templateKey = new TemplateKey(form);
+		templateKey.setTemplateName(form.getFileName());
 		String templatePath = jansibleFiler.getTemplatePath(templateKey);
 		response.setHeader("Content-Disposition","attachment; filename=\"" + form.getFileName() +"\"");
     	
@@ -34,7 +35,8 @@ public class DownloadController {
 	@RequestMapping(value="/project/download/file", method=RequestMethod.POST, produces = "application/force-download")
 	@ResponseBody
     private Resource downloadFile(@ModelAttribute GeneralFileForm form, HttpServletResponse response){
-		FileKey fileKey = new FileKey(form.getProjectName(), form.getRoleName(), form.getFileName());
+		FileKey fileKey = new FileKey(form);
+		fileKey.setFileName(form.getFileName());
 		String filePath = jansibleFiler.getFilePath(fileKey);
 		response.setHeader("Content-Disposition","attachment; filename=\"" + form.getFileName() +"\"");
     	

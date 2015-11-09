@@ -5,8 +5,12 @@ public class ServiceGroupKey extends EnvironmentKey{
 	
 	public ServiceGroupKey(){}
 
-	public ServiceGroupKey(String projectName, String environmentName, String groupName) {
-		super(projectName, environmentName);
+	public ServiceGroupKey(EnvironmentKey environmentKey){
+		super(environmentKey, environmentKey.getEnvironmentName());
+	}
+	
+	public ServiceGroupKey(EnvironmentKey environmentKey, String groupName){
+		this(environmentKey);
 		this.groupName = groupName;
 	}
 

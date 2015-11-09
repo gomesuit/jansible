@@ -7,8 +7,8 @@ public class DbTaskDetail extends TaskDetailKey{
 	
 	public DbTaskDetail(){}
 
-	public DbTaskDetail(String projectName, String roleName, Integer taskId, String parameterName) {
-		super(projectName, roleName, taskId, parameterName);
+	public DbTaskDetail(TaskDetailKey taskDetailKey) {
+		super(taskDetailKey, taskDetailKey.getParameterName());
 	}
 
 	public String getParameterValue() {

@@ -7,8 +7,8 @@ public class DbServiceGroupVariable extends ServiceGroupVariableKey implements I
 	
 	public DbServiceGroupVariable(){}
 
-	public DbServiceGroupVariable(String projectName, String environmentName, String groupName, String variableName) {
-		super(projectName, environmentName, groupName, variableName);
+	public DbServiceGroupVariable(ServiceGroupVariableKey serviceGroupVariableKey) {
+		super(serviceGroupVariableKey, serviceGroupVariableKey.getVariableName());
 	}
 
 	@Override

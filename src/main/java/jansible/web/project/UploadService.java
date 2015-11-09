@@ -33,13 +33,15 @@ public class UploadService {
 	}
 	
 	public void deleteTemplate(GeneralFileForm form){
-		TemplateKey templateKey = new TemplateKey(form.getProjectName(), form.getRoleName(), form.getFileName());
+		TemplateKey templateKey = new TemplateKey(form);
+		templateKey.setRoleName(form.getFileName());
 		String filePath = jansibleFiler.getTemplatePath(templateKey);
 		jansibleFiler.deleteFile(filePath);
 	}
 	
 	public void deleteFile(GeneralFileForm form){
-		FileKey fileKey = new FileKey(form.getProjectName(), form.getRoleName(), form.getFileName());
+		FileKey fileKey = new FileKey(form);
+		fileKey.setFileName(form.getFileName());
 		String filePath = jansibleFiler.getFilePath(fileKey);
 		jansibleFiler.deleteFile(filePath);
 	}

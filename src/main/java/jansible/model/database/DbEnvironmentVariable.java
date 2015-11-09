@@ -1,5 +1,6 @@
 package jansible.model.database;
 
+import jansible.model.common.EnvironmentKey;
 import jansible.model.common.EnvironmentVariableKey;
 
 public class DbEnvironmentVariable extends EnvironmentVariableKey implements InterfaceDbVariable{
@@ -7,8 +8,12 @@ public class DbEnvironmentVariable extends EnvironmentVariableKey implements Int
 	
 	public DbEnvironmentVariable(){}
 
-	public DbEnvironmentVariable(String projectName, String environmentName, String variableName) {
-		super(projectName, environmentName, variableName);
+	public DbEnvironmentVariable(EnvironmentKey environmentKey){
+		super(environmentKey);
+	}
+
+	public DbEnvironmentVariable(EnvironmentVariableKey environmentVariableKey) {
+		super(environmentVariableKey, environmentVariableKey.getVariableName());
 	}
 
 	@Override

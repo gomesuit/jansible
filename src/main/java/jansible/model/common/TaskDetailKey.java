@@ -5,8 +5,12 @@ public class TaskDetailKey extends TaskKey{
 	
 	public TaskDetailKey(){}
 
-	public TaskDetailKey(String projectName, String roleName, Integer taskId, String parameterName) {
-		super(projectName, roleName, taskId);
+	public TaskDetailKey(TaskKey taskKey){
+		super(taskKey, taskKey.getTaskId());
+	}
+
+	public TaskDetailKey(TaskKey taskKey, String parameterName) {
+		this(taskKey);
 		this.parameterName = parameterName;
 	}
 

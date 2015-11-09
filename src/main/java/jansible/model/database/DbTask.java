@@ -9,8 +9,8 @@ public class DbTask extends TaskKey{
 	
 	public DbTask(){}
 
-	public DbTask(String projectName, String roleName, Integer taskId) {
-		super(projectName, roleName, taskId);
+	public DbTask(TaskKey taskKey) {
+		super(taskKey, taskKey.getTaskId());
 	}
 
 	public String getModuleName() {

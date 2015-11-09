@@ -5,8 +5,12 @@ public class ServerVariableKey extends ServerKey implements InterfaceVariableKey
 	
 	public ServerVariableKey(){}
 
-	public ServerVariableKey(String projectName, String environmentName, String groupName, String serverName, String variableName) {
-		super(projectName, environmentName, groupName, serverName);
+	public ServerVariableKey(ServerKey serverKey){
+		super(serverKey, serverKey.getServerName());
+	}
+
+	public ServerVariableKey(ServerKey serverKey, String variableName) {
+		this(serverKey);
 		this.variableName = variableName;
 	}
 

@@ -5,8 +5,12 @@ public class ServerKey extends ServiceGroupKey{
 	
 	public ServerKey(){}
 
-	public ServerKey(String projectName, String environmentName, String groupName, String serverName) {
-		super(projectName, environmentName, groupName);
+	public ServerKey(ServiceGroupKey serviceGroupKey){
+		super(serviceGroupKey, serviceGroupKey.getGroupName());
+	}
+	
+	public ServerKey(ServiceGroupKey serviceGroupKey, String serverName){
+		super(serviceGroupKey, serviceGroupKey.getGroupName());
 		this.serverName = serverName;
 	}
 

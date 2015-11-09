@@ -5,8 +5,8 @@ public class RoleKey extends ProjectKey{
 	
 	public RoleKey(){}
 	
-	public RoleKey(String projectName, String roleName) {
-		super(projectName);
+	public RoleKey(ProjectKey projectKey, String roleName) {
+		super(projectKey.getProjectName());
 		this.roleName = roleName;
 	}
 

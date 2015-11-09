@@ -5,8 +5,12 @@ public class ServiceGroupVariableKey extends ServiceGroupKey implements Interfac
 	
 	public ServiceGroupVariableKey(){}
 
-	public ServiceGroupVariableKey(String projectName, String environmentName, String groupName, String variableName) {
-		super(projectName, environmentName, groupName);
+	public ServiceGroupVariableKey(ServiceGroupKey serviceGroupKey){
+		super(serviceGroupKey, serviceGroupKey.getGroupName());
+	}
+
+	public ServiceGroupVariableKey(ServiceGroupKey serviceGroupKey, String variableName) {
+		this(serviceGroupKey);
 		this.variableName = variableName;
 	}
 

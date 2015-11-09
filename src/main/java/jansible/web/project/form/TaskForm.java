@@ -1,5 +1,6 @@
 package jansible.web.project.form;
 
+import jansible.model.common.RoleKey;
 import jansible.model.common.TaskKey;
 
 public class TaskForm extends TaskKey{
@@ -8,6 +9,14 @@ public class TaskForm extends TaskKey{
 	private int sort;
 	
 	public TaskForm(){}
+
+	public TaskForm(RoleKey roleKey){
+		super(roleKey);
+	}
+
+	public TaskForm(TaskKey taskKey){
+		super(taskKey, taskKey.getTaskId());
+	}
 
 	public String getModuleName() {
 		return moduleName;

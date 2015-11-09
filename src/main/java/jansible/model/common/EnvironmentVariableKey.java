@@ -5,8 +5,12 @@ public class EnvironmentVariableKey extends EnvironmentKey implements InterfaceV
 	
 	public EnvironmentVariableKey(){}
 
-	public EnvironmentVariableKey(String projectName, String environmentName, String variableName) {
-		super(projectName, environmentName);
+	public EnvironmentVariableKey(EnvironmentKey environmentKey){
+		super(environmentKey, environmentKey.getEnvironmentName());
+	}
+
+	public EnvironmentVariableKey(EnvironmentKey environmentKey, String variableName) {
+		this(environmentKey);
 		this.variableName = variableName;
 	}
 

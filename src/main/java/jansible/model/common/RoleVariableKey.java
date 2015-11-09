@@ -5,8 +5,12 @@ public class RoleVariableKey extends RoleKey implements InterfaceVariableKey{
 	
 	public RoleVariableKey(){}
 
-	public RoleVariableKey(String projectName, String roleName, String variableName) {
-		super(projectName, roleName);
+	public RoleVariableKey(RoleKey roleKey){
+		super(roleKey, roleKey.getRoleName());
+	}
+
+	public RoleVariableKey(RoleKey roleKey, String variableName) {
+		this(roleKey);
 		this.variableName = variableName;
 	}
 

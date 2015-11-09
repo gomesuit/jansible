@@ -1,9 +1,20 @@
 package jansible.web.project.form;
 
+import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.ServiceGroupVariableKey;
 
 public class ServiceGroupVariableForm extends ServiceGroupVariableKey implements InterfaceVariable{
 	private String value;
+	
+	public ServiceGroupVariableForm(){}
+	
+	public ServiceGroupVariableForm(ServiceGroupKey serviceGroupKey){
+		super(serviceGroupKey);
+	}
+	
+	public ServiceGroupVariableForm(ServiceGroupVariableKey serviceGroupVariableKey){
+		super(serviceGroupVariableKey, serviceGroupVariableKey.getVariableName());
+	}
 
 	public String getValue() {
 		return value;

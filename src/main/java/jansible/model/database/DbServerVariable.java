@@ -8,8 +8,8 @@ public class DbServerVariable extends ServerVariableKey implements InterfaceDbVa
 	
 	public DbServerVariable(){}
 
-	public DbServerVariable(String projectName, String environmentName, String groupName, String serverName, String variableName) {
-		super(projectName, environmentName, groupName, serverName, variableName);
+	public DbServerVariable(ServerVariableKey serverVariableKey) {
+		super(serverVariableKey, serverVariableKey.getVariableName());
 	}
 
 	@Override

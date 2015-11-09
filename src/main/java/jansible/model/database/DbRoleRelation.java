@@ -7,8 +7,8 @@ public class DbRoleRelation extends RoleRelationKey{
 	
 	public DbRoleRelation(){}
 	
-	public DbRoleRelation(String projectName, String environmentName, String groupName, String roleName) {
-		super(projectName, environmentName, groupName, roleName);
+	public DbRoleRelation(RoleRelationKey roleRelationKey) {
+		super(roleRelationKey, roleRelationKey.getRoleName());
 	}
 
 	public int getSort() {

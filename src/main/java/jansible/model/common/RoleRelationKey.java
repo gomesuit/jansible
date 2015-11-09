@@ -4,9 +4,13 @@ public class RoleRelationKey extends ServiceGroupKey{
 	private String roleName;
 	
 	public RoleRelationKey(){}
-
-	public RoleRelationKey(String projectName, String environmentName, String groupName, String roleName) {
-		super(projectName, environmentName, groupName);
+	
+	public RoleRelationKey(ServiceGroupKey serviceGroupKey){
+		super(serviceGroupKey, serviceGroupKey.getGroupName());
+	}
+	
+	public RoleRelationKey(ServiceGroupKey serviceGroupKey, String roleName){
+		super(serviceGroupKey, serviceGroupKey.getGroupName());
 		this.roleName = roleName;
 	}
 

@@ -5,8 +5,12 @@ public class TemplateKey extends RoleKey{
 	
 	public TemplateKey(){}
 
-	public TemplateKey(String projectName, String roleName, String templateName) {
-		super(projectName, roleName);
+	public TemplateKey(RoleKey roleKey){
+		super(roleKey, roleKey.getRoleName());
+	}
+
+	public TemplateKey(RoleKey roleKey, String templateName) {
+		this(roleKey);
 		this.templateName = templateName;
 	}
 

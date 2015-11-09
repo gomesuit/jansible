@@ -5,8 +5,12 @@ public class TaskKey extends RoleKey{
 	
 	public TaskKey(){}
 
-	public TaskKey(String projectName, String roleName, Integer taskId) {
-		super(projectName, roleName);
+	public TaskKey(RoleKey roleKey){
+		super(roleKey, roleKey.getRoleName());
+	}
+
+	public TaskKey(RoleKey roleKey, Integer taskId) {
+		this(roleKey);
 		this.taskId = taskId;
 	}
 

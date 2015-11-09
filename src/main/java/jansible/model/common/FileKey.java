@@ -5,8 +5,12 @@ public class FileKey extends RoleKey{
 	
 	public FileKey(){}
 
-	public FileKey(String projectName, String roleName, String fileName) {
-		super(projectName, roleName);
+	public FileKey(RoleKey roleKey){
+		super(roleKey, roleKey.getRoleName());
+	}
+
+	public FileKey(RoleKey roleKey, String fileName) {
+		this(roleKey);
 		this.fileName = fileName;
 	}
 

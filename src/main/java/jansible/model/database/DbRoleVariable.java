@@ -7,8 +7,8 @@ public class DbRoleVariable extends RoleVariableKey implements InterfaceDbVariab
 	
 	public DbRoleVariable(){}
 
-	public DbRoleVariable(String projectName, String roleName, String variableName) {
-		super(projectName, roleName, variableName);
+	public DbRoleVariable(RoleVariableKey roleVariableKey) {
+		super(roleVariableKey, roleVariableKey.getVariableName());
 	}
 
 	@Override
