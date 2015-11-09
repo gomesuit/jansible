@@ -31,6 +31,23 @@
 			environment_name = #{environmentName}
 	</select>
 	
+	<delete id="deleteServiceGroup">
+	    DELETE FROM
+	    	service_group
+	    WHERE
+			project_name = #{projectName} AND
+			environment_name = #{environmentName} AND
+			group_name = #{groupName}
+	</delete>
+	
+	<delete id="deleteServiceGroupByEnvironment">
+	    DELETE FROM
+	    	service_group
+	    WHERE
+			project_name = #{projectName} AND
+			environment_name = #{environmentName}
+	</delete>
+	
 	<insert id="insertDbRoleRelation" parameterType="DbRoleRelation">
 		INSERT INTO role_relation
 			(
@@ -64,5 +81,32 @@
 			environment_name = #{environmentName} AND
 			group_name = #{groupName}
 	</select>
+	
+	<delete id="deleteDbRoleRelation">
+	    DELETE FROM
+	    	role_relation
+	    WHERE
+			project_name = #{projectName} AND
+			environment_name = #{environmentName} AND
+			group_name = #{groupName} AND
+			sort = #{sort}
+	</delete>
+	
+	<delete id="deleteDbRoleRelationByServiceGroup">
+	    DELETE FROM
+	    	role_relation
+	    WHERE
+			project_name = #{projectName} AND
+			environment_name = #{environmentName} AND
+			group_name = #{groupName}
+	</delete>
+	
+	<delete id="deleteDbRoleRelationByEnvironment">
+	    DELETE FROM
+	    	role_relation
+	    WHERE
+			project_name = #{projectName} AND
+			environment_name = #{environmentName}
+	</delete>
 	
 </mapper>

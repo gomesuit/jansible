@@ -71,6 +71,30 @@
 			task_id = #{taskId}
 	</select>
 	
+	<delete id="deleteTask">
+		DELETE FROM
+			task
+		WHERE
+			project_name = #{projectName} AND
+			role_name = #{roleName} AND
+			task_id = #{taskId}
+	</delete>
+	
+	<delete id="deleteTaskByRole">
+		DELETE FROM
+			task
+		WHERE
+			project_name = #{projectName} AND
+			role_name = #{roleName}
+	</delete>
+	
+	<delete id="deleteTaskByProject">
+		DELETE FROM
+			task
+		WHERE
+			project_name = #{projectName}
+	</delete>
+	
 	<insert id="insertTaskDetail" parameterType="DbTaskDetail">
 		INSERT INTO task_detail
 			(
@@ -106,5 +130,29 @@
 			project_name = #{projectName} AND
 			role_name = #{roleName}
 	</select>
+	
+	<delete id="deleteTaskDetail">
+		DELETE FROM
+			task_detail
+		WHERE
+			task_id = #{taskId} AND
+			project_name = #{projectName} AND
+			role_name = #{roleName}
+	</delete>
+	
+	<delete id="deleteTaskDetailByRole">
+		DELETE FROM
+			task_detail
+		WHERE
+			project_name = #{projectName} AND
+			role_name = #{roleName}
+	</delete>
+	
+	<delete id="deleteTaskDetailByProject">
+		DELETE FROM
+			task_detail
+		WHERE
+			project_name = #{projectName}
+	</delete>
 	
 </mapper>

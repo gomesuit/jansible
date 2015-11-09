@@ -27,4 +27,12 @@
 			project_name = #{projectName}
 	</select>
 	
+	<delete id="deleteEnvironment">
+	    DELETE FROM
+	    	environment
+	    WHERE
+			project_name = #{projectName} AND
+			environment_name = #{environmentName}
+	</delete>
+	
 </mapper>

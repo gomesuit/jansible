@@ -12,11 +12,16 @@ import jansible.mapper.ServiceGroupMapper;
 import jansible.mapper.TaskMapper;
 import jansible.mapper.VariableMapper;
 import jansible.model.common.EnvironmentKey;
+import jansible.model.common.EnvironmentVariableKey;
 import jansible.model.common.FileKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
+import jansible.model.common.RoleRelationKey;
+import jansible.model.common.RoleVariableKey;
 import jansible.model.common.ServerKey;
+import jansible.model.common.ServerVariableKey;
 import jansible.model.common.ServiceGroupKey;
+import jansible.model.common.ServiceGroupVariableKey;
 import jansible.model.common.TaskKey;
 import jansible.model.common.TemplateKey;
 import jansible.model.database.DbEnvironment;
@@ -162,6 +167,63 @@ public class ProjectService {
 	public List<DbTaskDetail> getTaskDetailList(String projectName, String roleName, Integer taskId){
 		TaskKey taskKey = new TaskKey(projectName, roleName, taskId);
 		return taskMapper.selectTaskDetailList(taskKey);
+	}
+	
+	public void deleteTask(TaskKey taskKey){
+		taskMapper.deleteTask(taskKey);
+		taskMapper.deleteTaskDetail(taskKey);
+	}
+	
+	public void deleteRole(RoleKey roleKey){
+		roleMapper.deleteRole(roleKey);
+		roleMapper.deleteDbFileByRole(roleKey);
+		roleMapper.deleteDbTemplateByRole(roleKey);
+		taskMapper.deleteTaskByRole(roleKey);
+		taskMapper.deleteTaskDetailByRole(roleKey);
+		variableMapper.deleteDbRoleVariableByRole(roleKey);
+	}
+	
+	public void deleteServer(ServerKey serverKey){
+		serverMapper.deleteServer(serverKey);
+		variableMapper.deleteDbServerVariableByServer(serverKey);
+	}
+	
+	public void deleteRoleRelation(RoleRelationKey roleRelationKey){
+		serviceGroupMapper.deleteDbRoleRelation(roleRelationKey);
+	}
+	
+	public void deleteServiceGroup(ServiceGroupKey serviceGroupKey){
+		serviceGroupMapper.deleteServiceGroup(serviceGroupKey);
+		serviceGroupMapper.deleteDbRoleRelationByServiceGroup(serviceGroupKey);
+		serverMapper.deleteServerByServiceGroup(serviceGroupKey);
+		variableMapper.deleteDbServiceGroupVariableByServiceGroup(serviceGroupKey);
+		variableMapper.deleteDbServerVariableByServiceGroup(serviceGroupKey);
+	}
+	
+	public void deleteEnvironment(EnvironmentKey environmentKey){
+		environmentMapper.deleteEnvironment(environmentKey);
+		serviceGroupMapper.deleteServiceGroupByEnvironment(environmentKey);
+		serviceGroupMapper.deleteDbRoleRelationByEnvironment(environmentKey);
+		serverMapper.deleteServerByEnvironment(environmentKey);
+		variableMapper.deleteDbEnvironmentVariableByEnvironment(environmentKey);
+		variableMapper.deleteDbServerVariableByEnvironment(environmentKey);
+		variableMapper.deleteDbServiceGroupVariableByEnvironment(environmentKey);
+	}
+	
+	public void deleteEnvironmentVariable(EnvironmentVariableKey environmentVariableKey){
+		variableMapper.deleteDbEnvironmentVariable(environmentVariableKey);
+	}
+	
+	public void deleteServiceGroupVariable(ServiceGroupVariableKey serviceGroupVariableKey){
+		variableMapper.deleteDbServiceGroupVariable(serviceGroupVariableKey);
+	}
+	
+	public void deleteServerVariable(ServerVariableKey serverVariableKey){
+		variableMapper.deleteDbServerVariable(serverVariableKey);
+	}
+	
+	public void deleteRoleVariable(RoleVariableKey roleVariableKey){
+		variableMapper.deleteDbRoleVariable(roleVariableKey);
 	}
 	
 	public List<DbRoleRelation> getRoleRelationList(String projectName, String environmentName, String groupName){

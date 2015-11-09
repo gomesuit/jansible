@@ -35,4 +35,31 @@
 			group_name = #{groupName}
 	</select>
 	
+	<delete id="deleteServer">
+	    DELETE FROM
+	    	server
+	    WHERE
+			project_name = #{projectName} AND
+			environment_name = #{environmentName} AND
+			group_name = #{groupName} AND
+			server_name = #{serverName}
+	</delete>
+	
+	<delete id="deleteServerByServiceGroup">
+	    DELETE FROM
+	    	server
+	    WHERE
+			project_name = #{projectName} AND
+			environment_name = #{environmentName} AND
+			group_name = #{groupName}
+	</delete>
+	
+	<delete id="deleteServerByEnvironment">
+	    DELETE FROM
+	    	server
+	    WHERE
+			project_name = #{projectName} AND
+			environment_name = #{environmentName}
+	</delete>
+	
 </mapper>

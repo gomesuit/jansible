@@ -6,6 +6,15 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import jansible.file.JansibleFiler;
+import jansible.model.common.EnvironmentKey;
+import jansible.model.common.EnvironmentVariableKey;
+import jansible.model.common.RoleKey;
+import jansible.model.common.RoleVariableKey;
+import jansible.model.common.ServerKey;
+import jansible.model.common.ServerVariableKey;
+import jansible.model.common.ServiceGroupKey;
+import jansible.model.common.ServiceGroupVariableKey;
+import jansible.model.common.TaskKey;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.gethtml.HtmlModule;
@@ -165,6 +174,11 @@ public class ProjectController {
     	List<DbTask> dbTaskList = projectService.getTaskList(projectName, roleName);
     	List<TaskView> taskViewList = createTaskViewList(dbTaskList);
     	model.addAttribute("taskList", taskViewList);
+    	
+    	TaskKey taskKey = new TaskKey();
+    	taskKey.setProjectName(projectName);
+    	taskKey.setRoleName(roleName);
+    	model.addAttribute("taskKey", taskKey);
     	
     	// module名リスト
     	model.addAttribute("moduleNameList", moduleService.getModuleNameList());
@@ -368,9 +382,25 @@ public class ProjectController {
 		return "redirect:" + referer;
     }
 
+    @RequestMapping(value="/project/roleVariable/delete", method=RequestMethod.POST)
+    private String deleteRoleVariable(@ModelAttribute RoleVariableKey key, HttpServletRequest request){
+    	projectService.deleteRoleVariable(key);
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+    }
+
     @RequestMapping(value="/project/serviceGroupVariable/regist", method=RequestMethod.POST)
     private String registServiceGroupVariable(@ModelAttribute ServiceGroupVariableForm form, HttpServletRequest request){
     	projectService.registServiceGroupVariable(form);
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+    }
+
+    @RequestMapping(value="/project/serviceGroupVariable/delete", method=RequestMethod.POST)
+    private String deleteServiceGroupVariable(@ModelAttribute ServiceGroupVariableKey key, HttpServletRequest request){
+    	projectService.deleteServiceGroupVariable(key);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
@@ -384,9 +414,65 @@ public class ProjectController {
 		return "redirect:" + referer;
     }
 
+    @RequestMapping(value="/project/serverVariable/delete", method=RequestMethod.POST)
+    private String deleteServerVariable(@ModelAttribute ServerVariableKey key, HttpServletRequest request){
+    	projectService.deleteServerVariable(key);
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+    }
+
     @RequestMapping(value="/project/environmentVariable/regist", method=RequestMethod.POST)
     private String registEnvironmentVariable(@ModelAttribute EnvironmentVariableForm form, HttpServletRequest request){
     	projectService.registEnvironmentVariable(form);
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+    }
+
+    @RequestMapping(value="/project/environmentVariable/delete", method=RequestMethod.POST)
+    private String deleteEnvironmentVariable(@ModelAttribute EnvironmentVariableKey key, HttpServletRequest request){
+    	projectService.deleteEnvironmentVariable(key);
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+    }
+
+	@RequestMapping(value="/project/task/delete", method=RequestMethod.POST)
+    private String deleteTask(@ModelAttribute TaskKey key, HttpServletRequest request){
+    	projectService.deleteTask(key);
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+    }
+
+	@RequestMapping(value="/project/role/delete", method=RequestMethod.POST)
+    private String deleteRole(@ModelAttribute RoleKey key, HttpServletRequest request){
+    	projectService.deleteRole(key);
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+    }
+
+	@RequestMapping(value="/project/server/delete", method=RequestMethod.POST)
+    private String deleteServer(@ModelAttribute ServerKey key, HttpServletRequest request){
+    	projectService.deleteServer(key);
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+    }
+
+	@RequestMapping(value="/project/serviceGroup/delete", method=RequestMethod.POST)
+    private String deleteServiceGroup(@ModelAttribute ServiceGroupKey key, HttpServletRequest request){
+    	projectService.deleteServiceGroup(key);
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+    }
+
+	@RequestMapping(value="/project/serviceGroup/delete", method=RequestMethod.POST)
+    private String deleteEnvironment(@ModelAttribute EnvironmentKey key, HttpServletRequest request){
+    	projectService.deleteEnvironment(key);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

@@ -48,6 +48,12 @@
 			</td>
 			<td th:text="${task.description}" />
 			<td th:text="${task.parametersValue}" />
+			<form method="POST" th:action="@{/project/task/delete}" th:object="${taskKey}">
+				<input type="hidden" th:field="*{projectName}" />
+				<input type="hidden" th:field="*{roleName}" />
+				<input type="hidden" name="taskId" th:value="${task.taskId}" />
+				<td><input type="submit" value="Delete" /></td>
+			</form>
 		</tr>
 	</table>
 	
