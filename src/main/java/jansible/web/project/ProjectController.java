@@ -154,11 +154,15 @@ public class ProjectController {
     	environmentKey.setProjectName(projectName);
     	model.addAttribute("environmentKey", environmentKey);
     	
-    	
     	RoleForm roleForm = new RoleForm();
     	roleForm.setProjectName(projectName);
     	model.addAttribute("roleForm", roleForm);
     	model.addAttribute("roleList", projectService.getRoleList(projectName));
+
+		RoleKey roleKey = new RoleKey();
+		roleKey.setProjectName(projectName);
+    	model.addAttribute("roleKey", roleKey);
+    	
         return "project/project/top";
     }
 

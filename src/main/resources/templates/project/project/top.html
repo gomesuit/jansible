@@ -66,6 +66,11 @@
 				<a th:href="@{/role/view(projectName=${role.projectName}, roleName=${role.roleName})}"
 				th:text="${role.roleName}" />
 			</td>
+			<form method="POST" th:action="@{/project/role/delete}" th:object="${roleKey}">
+				<input type="hidden" th:field="*{projectName}" />
+				<input type="hidden" name="roleName" th:value="${role.roleName}" />
+				<td><input type="submit" value="Delete" /></td>
+			</form>
 		</tr>
 	</table>
 </body>

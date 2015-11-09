@@ -85,6 +85,47 @@ public class JansibleFiler {
 		}
 	}
 	
+	public void deleteGroupVariableYaml(ServiceGroupKey serviceGroupKey){
+		String filePath = getGroupVariableYamlPath(serviceGroupKey);
+		deleteFile(filePath);
+	}
+	
+	public void deleteHostVariableYaml(ServerKey serverKey){
+		String filePath = getHostVariableYamlPath(serverKey);
+		deleteFile(filePath);
+	}
+	
+	public void deleteRoleDir(RoleKey roleKey){
+		String dirName = getRoleDirName(roleKey);
+		deleteDirByRecursive(dirName);
+	}
+	
+	private void deleteDirByRecursive(String dirPath){
+		File file = new File(dirPath);
+		deleteDirByRecursive(file);
+	}
+
+	private void deleteDirByRecursive(File root){
+		if(root == null) return;
+		if(!root.exists()) return;
+		
+		if(root.isFile()){
+			// ファイル削除
+			if(root.exists() && !root.delete()){
+				root.deleteOnExit();
+			}
+		}else{
+			// ディレクトリの場合、再帰する
+			File[] fileList = root.listFiles();
+			for(File file : fileList){
+				deleteDirByRecursive(file);
+			}
+			if(root.exists() && !root.delete()){
+				root.deleteOnExit();
+			}
+		}
+	}
+	
 	private void mkDir(String dirName){
 		File newfile = new File(dirName);
 		newfile.mkdirs();

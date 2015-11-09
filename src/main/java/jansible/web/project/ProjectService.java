@@ -181,11 +181,13 @@ public class ProjectService {
 		taskMapper.deleteTaskByRole(roleKey);
 		taskMapper.deleteTaskDetailByRole(roleKey);
 		variableMapper.deleteDbRoleVariableByRole(roleKey);
+		jansibleFiler.deleteRoleDir(roleKey);
 	}
 	
 	public void deleteServer(ServerKey serverKey){
 		serverMapper.deleteServer(serverKey);
 		variableMapper.deleteDbServerVariableByServer(serverKey);
+		jansibleFiler.deleteHostVariableYaml(serverKey);
 	}
 	
 	public void deleteRoleRelation(RoleRelationKey roleRelationKey){
@@ -198,6 +200,7 @@ public class ProjectService {
 		serverMapper.deleteServerByServiceGroup(serviceGroupKey);
 		variableMapper.deleteDbServiceGroupVariableByServiceGroup(serviceGroupKey);
 		variableMapper.deleteDbServerVariableByServiceGroup(serviceGroupKey);
+		jansibleFiler.deleteGroupVariableYaml(serviceGroupKey);
 	}
 	
 	public void deleteEnvironment(EnvironmentKey environmentKey){
@@ -208,6 +211,11 @@ public class ProjectService {
 		variableMapper.deleteDbEnvironmentVariableByEnvironment(environmentKey);
 		variableMapper.deleteDbServerVariableByEnvironment(environmentKey);
 		variableMapper.deleteDbServiceGroupVariableByEnvironment(environmentKey);
+		
+		List<DbServiceGroup> dbServiceGroupList = serviceGroupMapper.selectServiceGroupList(environmentKey);
+		for(DbServiceGroup dbServiceGroup : dbServiceGroupList){
+			jansibleFiler.deleteGroupVariableYaml(dbServiceGroup);
+		}
 	}
 	
 	public void deleteEnvironmentVariable(EnvironmentVariableKey environmentVariableKey){
