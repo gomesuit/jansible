@@ -31,7 +31,10 @@
 			<td>server</td>
 		</tr>
 		<tr th:each="server : ${serverList}">
-			<td><a th:href="*{groupName} + '/' + ${server.serverName}" th:text="${server.serverName}" /></td>
+			<td>
+				<a th:href="@{/server/view(projectName=${server.projectName}, environmentName=${server.environmentName}, groupName=${server.groupName}, serverName=${server.serverName})}"
+				th:text="${server.serverName}" />
+			</td>
 		</tr>
 	</table>
 	

@@ -30,7 +30,10 @@
 			<td>group</td>
 		</tr>
 		<tr th:each="serviceGroup : ${serviceGroupList}">
-			<td><a th:href="*{environmentName} + '/' + ${serviceGroup.groupName}" th:text="${serviceGroup.groupName}" /></td>
+			<td>
+				<a th:href="@{/serviceGroup/view(projectName=${serviceGroup.projectName}, environmentName=${serviceGroup.environmentName}, groupName=${serviceGroup.groupName})}"
+				th:text="${serviceGroup.groupName}" />
+			</td>
 		</tr>
 	</table>
 	
@@ -68,5 +71,9 @@
 			<td th:text="${variable.value}" />
 		</tr>
 	</table>
+	
+	<br /><hr />
+	<a th:href="@{/project/view/(${form.projectName})}" >戻る</a>
+	<a th:href="@{/project/top}" >トップ</a>
 </body>
 </html>

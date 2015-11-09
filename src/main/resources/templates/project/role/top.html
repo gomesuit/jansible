@@ -42,7 +42,10 @@
 			<td>description</td>
 		</tr>
 		<tr th:each="task : ${taskList}">
-			<td><a th:href="*{roleName} + '/' + ${task.taskId}" th:text="${task.moduleName}" /></td>
+			<td>
+				<a th:href="@{/task/view(projectName=${form.projectName}, roleName=${form.roleName}, taskId=${task.taskId})}"
+				th:text="${task.moduleName}" />
+			</td>
 			<td th:text="${task.description}" />
 			<td th:text="${task.parametersValue}" />
 		</tr>

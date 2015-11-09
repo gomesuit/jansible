@@ -29,7 +29,10 @@
 			<td>environment</td>
 		</tr>
 		<tr th:each="environment : ${environmentList}">
-			<td><a th:href="*{projectName} + '/' + ${environment.environmentName}" th:text="${environment.environmentName}" /></td>
+			<td>
+				<a th:href="@{/environment/view(projectName=${environment.projectName}, environmentName=${environment.environmentName})}"
+				th:text="${environment.environmentName}" />
+			</td>
 		</tr>
 	</table>
 	
@@ -54,7 +57,10 @@
 			<td>role</td>
 		</tr>
 		<tr th:each="role : ${roleList}">
-			<td><a th:href="'role/' + *{projectName} + '/' + ${role.roleName}" th:text="${role.roleName}" /></td>
+			<td>
+				<a th:href="@{/role/view(projectName=${role.projectName}, roleName=${role.roleName})}"
+				th:text="${role.roleName}" />
+			</td>
 		</tr>
 	</table>
 </body>

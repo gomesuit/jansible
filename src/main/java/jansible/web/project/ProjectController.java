@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ProjectController {
@@ -52,15 +53,19 @@ public class ProjectController {
 	@Autowired
 	private JansibleFiler jansibleFiler;
     
-    @RequestMapping("/project/top")
+    @RequestMapping("/")
     private String top(Model model){
     	model.addAttribute("form", new ProjectForm());
     	model.addAttribute("projectList", projectService.getProjectList());
         return "project/top";
     }
 
-    @RequestMapping("/project/view/{projectName}/{environmentName}/{groupName}")
-	private String viewServiceGroup(@PathVariable String projectName, @PathVariable String environmentName, @PathVariable String groupName, Model model){
+    @RequestMapping("/serviceGroup/view")
+	private String viewServiceGroup(
+    		@RequestParam(value = "projectName", required = true) String projectName,
+    		@RequestParam(value = "environmentName", required = true) String environmentName,
+    		@RequestParam(value = "groupName", required = true) String groupName,
+			Model model){
 		ServerForm serverForm = new ServerForm();
 		serverForm.setProjectName(projectName);
 		serverForm.setEnvironmentName(environmentName);
@@ -88,10 +93,12 @@ public class ProjectController {
 	    return "project/service_group/top";
 	}
 
-    @RequestMapping("/project/view/{projectName}/{environmentName}/{groupName}/{serverName}")
-	private String viewServer(@PathVariable String projectName,
-			@PathVariable String environmentName,
-			@PathVariable String groupName, @PathVariable String serverName,
+    @RequestMapping("/server/view")
+	private String viewServer(
+    		@RequestParam(value = "projectName", required = true) String projectName,
+    		@RequestParam(value = "environmentName", required = true) String environmentName,
+    		@RequestParam(value = "groupName", required = true) String groupName,
+    		@RequestParam(value = "serverName", required = true) String serverName,
 			Model model) {
 
     	ServerVariableForm variableForm = new ServerVariableForm();
@@ -107,8 +114,10 @@ public class ProjectController {
 		return "project/server/top";
 	}
 
-	@RequestMapping("/project/view/{projectName}")
-    private String viewProject(@PathVariable String projectName, Model model){
+	@RequestMapping("/project/view")
+    private String viewProject(
+    		@RequestParam(value = "projectName", required = true) String projectName,
+    		Model model){
     	EnvironmentForm environmentForm = new EnvironmentForm();
     	environmentForm.setProjectName(projectName);
     	model.addAttribute("environmentForm", environmentForm);
@@ -121,8 +130,11 @@ public class ProjectController {
         return "project/project/top";
     }
 
-    @RequestMapping("/project/view/{projectName}/{environmentName}")
-    private String viewEnvironment(@PathVariable String projectName, @PathVariable String environmentName, Model model){
+    @RequestMapping("/environment/view")
+    private String viewEnvironment(
+    		@RequestParam(value = "projectName", required = true) String projectName,
+    		@RequestParam(value = "environmentName", required = true) String environmentName,
+    		Model model){
     	ServiceGroupForm serviceGroupForm = new ServiceGroupForm();
     	serviceGroupForm.setProjectName(projectName);
     	serviceGroupForm.setEnvironmentName(environmentName);
@@ -141,8 +153,11 @@ public class ProjectController {
         return "project/environment/top";
     }
 
-    @RequestMapping("/project/view/role/{projectName}/{roleName}")
-    private String viewRole(@PathVariable String projectName, @PathVariable String roleName, Model model){
+    @RequestMapping("/role/view")
+    private String viewRole(
+    		@RequestParam(value = "projectName", required = true) String projectName,
+    		@RequestParam(value = "roleName", required = true) String roleName,
+    		Model model){
     	TaskForm form = new TaskForm();
     	form.setProjectName(projectName);
     	form.setRoleName(roleName);
@@ -199,8 +214,12 @@ public class ProjectController {
 		return taskView;
 	}
 
-	@RequestMapping("/project/view/role/{projectName}/{roleName}/{taskId}")
-    private String viewTask(@PathVariable String projectName, @PathVariable String roleName, @PathVariable int taskId, Model model){
+	@RequestMapping("/task/view")
+    private String viewTask(
+    		@RequestParam(value = "projectName", required = true) String projectName,
+    		@RequestParam(value = "roleName", required = true) String roleName,
+    		@RequestParam(value = "taskId", required = true) int taskId,
+    		Model model){
     	DbTask dbTask = projectService.getTask(projectName, roleName, taskId);
     	String moduleName = dbTask.getModuleName();
     	model.addAttribute("moduleName", moduleName);
