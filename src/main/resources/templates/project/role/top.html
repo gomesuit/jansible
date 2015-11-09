@@ -151,6 +151,12 @@
 		<tr th:each="variable : ${variableList}">
 			<td th:text="${variable.variableName}" />
 			<td th:text="${variable.value}" />
+			<form method="POST" th:action="@{/project/roleVariable/delete}" th:object="${roleVariableKey}">
+				<input type="hidden" th:field="*{projectName}" />
+				<input type="hidden" th:field="*{roleName}" />
+				<input type="hidden" name="variableName" th:value="${variable.variableName}" />
+				<td><input type="submit" value="Delete" /></td>
+			</form>
 		</tr>
 	</table>
 	

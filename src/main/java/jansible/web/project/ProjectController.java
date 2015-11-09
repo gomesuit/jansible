@@ -98,6 +98,12 @@ public class ProjectController {
 		model.addAttribute("allVariableNameList", projectService.getAllDbVariableNameList(projectName));
 		model.addAttribute("groupVariableList", projectService.getDbServiceGroupVariableList(projectName, environmentName, groupName));
 		
+		ServiceGroupVariableKey serviceGroupVariableKey = new ServiceGroupVariableKey();
+		serviceGroupVariableKey.setProjectName(projectName);
+		serviceGroupVariableKey.setEnvironmentName(environmentName);
+		serviceGroupVariableKey.setGroupName(groupName);
+		model.addAttribute("serviceGroupVariableKey", serviceGroupVariableKey);
+		
 	    return "project/service_group/top";
 	}
 
@@ -118,6 +124,13 @@ public class ProjectController {
 		
 		model.addAttribute("allVariableNameList", projectService.getAllDbVariableNameList(projectName));
 		model.addAttribute("variableList", projectService.getDbServerVariableList(projectName, environmentName, groupName, serverName));
+		
+		ServerVariableKey serverVariableKey = new ServerVariableKey();
+		serverVariableKey.setProjectName(projectName);
+		serverVariableKey.setEnvironmentName(environmentName);
+		serverVariableKey.setGroupName(groupName);
+		serverVariableKey.setServerName(serverName);
+		model.addAttribute("serverVariableKey", serverVariableKey);
 
 		return "project/server/top";
 	}
@@ -157,6 +170,11 @@ public class ProjectController {
 		
 		model.addAttribute("allVariableNameList", projectService.getAllDbVariableNameList(projectName));
 		model.addAttribute("variableList", projectService.getDbEnvironmentVariableList(projectName, environmentName));
+		
+		EnvironmentVariableKey environmentVariableKey = new EnvironmentVariableKey();
+		environmentVariableKey.setProjectName(projectName);
+		environmentVariableKey.setEnvironmentName(environmentName);
+		model.addAttribute("environmentVariableKey", environmentVariableKey);
     	
         return "project/environment/top";
     }
@@ -200,6 +218,11 @@ public class ProjectController {
 		roleVariableForm.setProjectName(projectName);
 		roleVariableForm.setRoleName(roleName);
 		model.addAttribute("variableForm", roleVariableForm);
+
+		RoleVariableKey roleVariableKey = new RoleVariableKey();
+		roleVariableKey.setProjectName(projectName);
+		roleVariableKey.setRoleName(roleName);
+    	model.addAttribute("roleVariableKey", roleVariableKey);
 		
 		model.addAttribute("variableList", projectService.getDbRoleVariableList(projectName, roleName));
 		
@@ -470,7 +493,7 @@ public class ProjectController {
 		return "redirect:" + referer;
     }
 
-	@RequestMapping(value="/project/serviceGroup/delete", method=RequestMethod.POST)
+	@RequestMapping(value="/project/environment/delete", method=RequestMethod.POST)
     private String deleteEnvironment(@ModelAttribute EnvironmentKey key, HttpServletRequest request){
     	projectService.deleteEnvironment(key);
     	
