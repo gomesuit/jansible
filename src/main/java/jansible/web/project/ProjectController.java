@@ -27,6 +27,7 @@ import jansible.web.module.ModuleService;
 import jansible.web.project.form.EnvironmentForm;
 import jansible.web.project.form.EnvironmentVariableForm;
 import jansible.web.project.form.GeneralFileForm;
+import jansible.web.project.form.GitForm;
 import jansible.web.project.form.ProjectForm;
 import jansible.web.project.form.RoleForm;
 import jansible.web.project.form.RoleRelationForm;
@@ -162,6 +163,10 @@ public class ProjectController {
 		RoleKey roleKey = new RoleKey();
 		roleKey.setProjectName(projectName);
     	model.addAttribute("roleKey", roleKey);
+    	
+    	GitForm gitForm = new GitForm();
+    	gitForm.setProjectName(projectName);
+    	model.addAttribute("gitForm", gitForm);
     	
         return "project/project/top";
     }
@@ -526,4 +531,12 @@ public class ProjectController {
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
     }
+
+	@RequestMapping(value="/project/git/commit", method=RequestMethod.POST)
+	private String commitGit(@ModelAttribute GitForm form, HttpServletRequest request){
+		projectService.commitGit(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
 }

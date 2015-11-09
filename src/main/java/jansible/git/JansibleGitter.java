@@ -4,7 +4,6 @@ import jansible.file.JansibleFiler;
 import jansible.model.common.ProjectKey;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 
 import org.eclipse.jgit.api.AddCommand;
@@ -53,28 +52,38 @@ public class JansibleGitter {
 		}
 	}
 	
-	public void commitAndPush(String localPath, String name, String pass, String comment) throws InvalidRemoteException, TransportException, GitAPIException, IOException{
+	public void commitAndPush(ProjectKey projectKey, String name, String pass, String comment){
+		String projectDirName = jansibleFiler.getProjectDirName(projectKey);
+		commitAndPush(projectDirName, name, pass, comment);
+	}
+	
+	private void commitAndPush(String localPath, String name, String pass, String comment) {
 		FileRepositoryBuilder builder = new FileRepositoryBuilder();
-		Repository repository = builder.setGitDir(new File(localPath)).readEnvironment().findGitDir().build();
+		try {
+			Repository repository = builder.setGitDir(new File(localPath + "/.git")).readEnvironment().findGitDir().build();
 
-		Git git = new Git(repository);
-		
-        AddCommand ac = git.add();
-        ac.addFilepattern(".").call();
-		
-		git.commit().setMessage(comment).call();
-		
-		
-		CredentialsProvider cp = new UsernamePasswordCredentialsProvider(name, pass);
-		
-        PushCommand pc = git.push();
-        pc.setCredentialsProvider(cp).setForce(true).setPushAll();
+			Git git = new Git(repository);
+			
+	        AddCommand ac = git.add();
+	        ac.addFilepattern(".").call();
+			
+			git.commit().setMessage(comment).call();
+			
+			
+			CredentialsProvider cp = new UsernamePasswordCredentialsProvider(name, pass);
+			
+	        PushCommand pc = git.push();
+	        pc.setCredentialsProvider(cp).setForce(true).setPushAll();
 
-        Iterator<PushResult> it = pc.call().iterator();
-        if(it.hasNext()){
-            System.out.println(it.next().toString());
-        }
-		
-        git.close();
+	        Iterator<PushResult> it = pc.call().iterator();
+	        if(it.hasNext()){
+	            System.out.println(it.next().toString());
+	        }
+			
+	        git.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

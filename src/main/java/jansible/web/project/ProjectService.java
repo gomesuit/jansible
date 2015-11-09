@@ -45,6 +45,7 @@ import jansible.util.YamlDumper;
 import jansible.web.project.form.EnvironmentForm;
 import jansible.web.project.form.EnvironmentVariableForm;
 import jansible.web.project.form.GeneralFileForm;
+import jansible.web.project.form.GitForm;
 import jansible.web.project.form.ProjectForm;
 import jansible.web.project.form.RoleForm;
 import jansible.web.project.form.RoleRelationForm;
@@ -493,5 +494,9 @@ public class ProjectService {
 		dbRoleVariable.setVariableName(form.getVariableName());
 		dbRoleVariable.setValue(form.getValue());
 		return dbRoleVariable;
+	}
+
+	public void commitGit(GitForm form) {
+		jansibleGitter.commitAndPush(form, form.getUserName(), form.getPassword(), form.getComment());
 	}
 }

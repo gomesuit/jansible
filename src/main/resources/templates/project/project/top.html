@@ -74,6 +74,25 @@
 		</tr>
 	</table>
 	
+	<br /><hr /><br />
+	<div>Gitコミット</div>
+	<form action="#" th:action="@{/project/git/commit}" th:object="${gitForm}" method="post">
+		<input type="hidden" th:field="*{projectName}" />
+		<table border="1" rules="all">
+			<tr>
+				<td>userName</td>
+				<td>password</td>
+				<td>comment</td>
+			</tr>
+			<tr>
+				<td><input type="text" th:field="*{userName}" /></td>
+				<td><input type="password" th:field="*{password}" /></td>
+				<td><input type="text" th:field="*{comment}" /></td>
+			</tr>
+		</table>
+		<input type="submit" value="Commit" />
+	</form>
+	
 	<br /><hr />
 	<a th:href="@{/}" >トップ</a>
 </body>
