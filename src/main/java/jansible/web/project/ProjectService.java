@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jansible.file.JansibleFiler;
+import jansible.git.JansibleGitter;
 import jansible.mapper.EnvironmentMapper;
 import jansible.mapper.ProjectMapper;
 import jansible.mapper.RoleMapper;
@@ -82,6 +83,8 @@ public class ProjectService {
 	private JansibleFiler jansibleFiler;
 	@Autowired
 	private YamlDumper yamlDumper;
+	@Autowired
+	private JansibleGitter jansibleGitter;
 
 	public List<DbProject> getProjectList(){
 		return projectMapper.selectProjectList();
@@ -103,8 +106,8 @@ public class ProjectService {
 	}
 
 	public List<DbRole> getRoleList(String projectName){
-		DbProject dbProject = new DbProject(projectName);
-		return roleMapper.selectRoleList(dbProject);
+		ProjectKey projectKey = new ProjectKey(projectName);
+		return roleMapper.selectRoleList(projectKey);
 	}
 	
 	public List<DbTask> getTaskList(String projectName, String roleName){
@@ -241,9 +244,10 @@ public class ProjectService {
 
 
 	public void registProject(ProjectForm form) {
-		DbProject dbProject = new DbProject(form.getProjectName());
+		DbProject dbProject = new DbProject(form.getProjectName(), form.getRepositoryUrl());
 		projectMapper.insertProject(dbProject);
-		jansibleFiler.mkProjectDir(dbProject);
+		jansibleGitter.cloneRepository(form, form.getRepositoryUrl());
+		//jansibleFiler.mkProjectDir(dbProject);
 		jansibleFiler.mkHostVariableDir(dbProject);
 		jansibleFiler.mkGroupVariableDir(dbProject);
 	}

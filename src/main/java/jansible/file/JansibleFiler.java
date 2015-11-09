@@ -167,7 +167,7 @@ public class JansibleFiler {
 		mkDir(dirName);
 	}
 
-	private String getProjectDirName(ProjectKey projectKey) {
+	public String getProjectDirName(ProjectKey projectKey) {
 		return ROOT_PATH + projectKey.getProjectName();
 	}
 	

@@ -6,14 +6,21 @@
 	
 	<insert id="insertProject" parameterType="DbProject">
 		INSERT INTO project
-			(project_name)
+			(
+				project_name,
+				repository_url
+			)
 		VALUES
-			(#{projectName})
+			(
+				#{projectName},
+				#{repositoryUrl}
+			)
 	</insert>
 	
 	<select id="selectProjectList" resultType="ProjectKey">
 		SELECT
-			project_name as projectName
+			project_name as projectName,
+			repository_url as repositoryUrl
 		FROM
 			project
 	</select>

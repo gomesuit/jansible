@@ -85,6 +85,7 @@ CREATE TABLE parameter
 CREATE TABLE project
 (
 	project_name varchar(50) NOT NULL,
+	repository_url varchar(100) NOT NULL,
 	PRIMARY KEY (project_name)
 );
 
