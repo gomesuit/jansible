@@ -4,7 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jansible.file.JansibleFiler;
+import jansible.mapper.EnvironmentMapper;
 import jansible.mapper.ProjectMapper;
+import jansible.mapper.RoleMapper;
+import jansible.mapper.ServerMapper;
+import jansible.mapper.ServiceGroupMapper;
+import jansible.mapper.TaskMapper;
+import jansible.mapper.VariableMapper;
 import jansible.model.common.EnvironmentKey;
 import jansible.model.common.FileKey;
 import jansible.model.common.ProjectKey;
@@ -55,6 +61,19 @@ public class ProjectService {
 	@Autowired
 	private ProjectMapper projectMapper;
 	@Autowired
+	private EnvironmentMapper environmentMapper;
+	@Autowired
+	private ServiceGroupMapper serviceGroupMapper;
+	@Autowired
+	private RoleMapper roleMapper;
+	@Autowired
+	private ServerMapper serverMapper;
+	@Autowired
+	private TaskMapper taskMapper;
+	@Autowired
+	private VariableMapper variableMapper;
+	
+	@Autowired
 	private JansibleFiler jansibleFiler;
 	@Autowired
 	private YamlDumper yamlDumper;
@@ -65,44 +84,44 @@ public class ProjectService {
 
 	public List<DbEnvironment> getEnvironmentList(String projectName){
 		ProjectKey projectKey = new ProjectKey(projectName);
-		return projectMapper.selectEnvironmentList(projectKey);
+		return environmentMapper.selectEnvironmentList(projectKey);
 	}
 
 	public List<DbServiceGroup> getServiceGroupList(String projectName, String environmentName){
 		EnvironmentKey environmentKey = new EnvironmentKey(projectName, environmentName);
-		return projectMapper.selectServiceGroupList(environmentKey);
+		return serviceGroupMapper.selectServiceGroupList(environmentKey);
 	}
 
 	public List<DbServer> getServerList(String projectName, String environmentName, String groupName){
 		ServiceGroupKey serviceGroupKey = new ServiceGroupKey(projectName, environmentName, groupName);
-		return projectMapper.selectServerList(serviceGroupKey);
+		return serverMapper.selectServerList(serviceGroupKey);
 	}
 
 	public List<DbRole> getRoleList(String projectName){
 		DbProject dbProject = new DbProject(projectName);
-		return projectMapper.selectRoleList(dbProject);
+		return roleMapper.selectRoleList(dbProject);
 	}
 	
 	public List<DbTask> getTaskList(String projectName, String roleName){
 		RoleKey roleKey = new RoleKey(projectName, roleName);
-		return projectMapper.selectTaskList(roleKey);
+		return taskMapper.selectTaskList(roleKey);
 	}
 	
 	public List<DbFile> getDbFileList(String projectName, String roleName){
 		RoleKey roleKey = new RoleKey(projectName, roleName);
-		return projectMapper.selectDbFileList(roleKey);
+		return roleMapper.selectDbFileList(roleKey);
 	}
 	
 	public List<DbTemplate> getDbTemplateList(String projectName, String roleName){
 		RoleKey roleKey = new RoleKey(projectName, roleName);
-		return projectMapper.selectDbTemplateList(roleKey);
+		return roleMapper.selectDbTemplateList(roleKey);
 	}
 	
 	public List<DbRoleVariable> getDbRoleVariableList(String projectName, String roleName){
 		RoleKey roleKey = new RoleKey();
 		roleKey.setProjectName(projectName);
 		roleKey.setRoleName(roleName);
-		return projectMapper.selectDbRoleVariableList(roleKey);
+		return variableMapper.selectDbRoleVariableList(roleKey);
 	}
 	
 	public List<DbServiceGroupVariable> getDbServiceGroupVariableList(String projectName, String environmentName, String groupName){
@@ -110,7 +129,7 @@ public class ProjectService {
 		serviceGroupKey.setProjectName(projectName);
 		serviceGroupKey.setEnvironmentName(environmentName);
 		serviceGroupKey.setGroupName(groupName);
-		return projectMapper.selectDbServiceGroupVariableList(serviceGroupKey);
+		return variableMapper.selectDbServiceGroupVariableList(serviceGroupKey);
 	}
 	
 	public List<DbServerVariable> getDbServerVariableList(String projectName, String environmentName, String groupName, String serverName){
@@ -119,35 +138,35 @@ public class ProjectService {
 		serverKey.setEnvironmentName(environmentName);
 		serverKey.setGroupName(groupName);
 		serverKey.setServerName(serverName);
-		return projectMapper.selectDbServerVariableList(serverKey);
+		return variableMapper.selectDbServerVariableList(serverKey);
 	}
 	
 	public List<DbEnvironmentVariable> getDbEnvironmentVariableList(String projectName, String environmentName){
 		EnvironmentKey environmentKey = new EnvironmentKey();
 		environmentKey.setProjectName(projectName);
 		environmentKey.setEnvironmentName(environmentName);
-		return projectMapper.selectDbEnvironmentVariableList(environmentKey);
+		return variableMapper.selectDbEnvironmentVariableList(environmentKey);
 	}
 	
 	public List<String> getAllDbVariableNameList(String projectName){
 		ProjectKey projectKey = new ProjectKey();
 		projectKey.setProjectName(projectName);
-		return projectMapper.selectAllDbVariableNameList(projectKey);
+		return variableMapper.selectAllDbVariableNameList(projectKey);
 	}
 	
 	public DbTask getTask(String projectName, String roleName, Integer taskId){
 		TaskKey taskKey = new TaskKey(projectName, roleName, taskId);
-		return projectMapper.selectTask(taskKey);
+		return taskMapper.selectTask(taskKey);
 	}
 	
 	public List<DbTaskDetail> getTaskDetailList(String projectName, String roleName, Integer taskId){
 		TaskKey taskKey = new TaskKey(projectName, roleName, taskId);
-		return projectMapper.selectTaskDetailList(taskKey);
+		return taskMapper.selectTaskDetailList(taskKey);
 	}
 	
 	public List<DbRoleRelation> getRoleRelationList(String projectName, String environmentName, String groupName){
 		ServiceGroupKey serviceGroupKey = new ServiceGroupKey(projectName, environmentName, groupName);
-		return projectMapper.selectDbRoleRelationList(serviceGroupKey);
+		return serviceGroupMapper.selectDbRoleRelationList(serviceGroupKey);
 	}
 
 
@@ -161,22 +180,22 @@ public class ProjectService {
 	
 	public void registEnvironment(EnvironmentForm form) {
 		DbEnvironment dbEnvironment = new DbEnvironment(form.getProjectName(), form.getEnvironmentName());
-		projectMapper.insertEnvironment(dbEnvironment);;
+		environmentMapper.insertEnvironment(dbEnvironment);;
 	}
 	
 	public void registServiceGroup(ServiceGroupForm form) {
 		DbServiceGroup dbServiceGroup = new DbServiceGroup(form.getProjectName(), form.getEnvironmentName(), form.getGroupName());
-		projectMapper.insertServiceGroup(dbServiceGroup);
+		serviceGroupMapper.insertServiceGroup(dbServiceGroup);
 	}
 	
 	public void registServer(ServerForm form) {
 		DbServer dbServer = createDbServer(form);
-		projectMapper.insertServer(dbServer);
+		serverMapper.insertServer(dbServer);
 	}
 	
 	public void registRole(RoleForm form) {
 		DbRole dbRole = createDbRole(form);
-		projectMapper.insertRole(dbRole);
+		roleMapper.insertRole(dbRole);
 		jansibleFiler.mkRoleDir(dbRole);
 		jansibleFiler.mkRoleTaskDir(dbRole);
 		jansibleFiler.mkRoleTemplateDir(dbRole);
@@ -187,24 +206,24 @@ public class ProjectService {
 	
 	public void registTask(TaskForm form) {
 		DbTask dbTask = createDbTask(form);
-		projectMapper.insertTask(dbTask);
+		taskMapper.insertTask(dbTask);
 	}
 	
 	public void updateTask(TaskDetailForm form) {
 		DbTask dbTask = createDbTask(form);
-		projectMapper.updateTask(dbTask);
+		taskMapper.updateTask(dbTask);
 	}
 	
 	public void registTaskDetail(TaskDetailForm form) {
 		List<DbTaskDetail> dbTaskDetailList = createDbTaskDetailList(form);
 		for(DbTaskDetail dbTaskDetail : dbTaskDetailList){
-			projectMapper.insertTaskDetail(dbTaskDetail);
+			taskMapper.insertTaskDetail(dbTaskDetail);
 		}
 	}
 	
 	public void registRoleRelationDetail(RoleRelationForm form) {
 		DbRoleRelation dbRoleRelation = createDbRoleRelation(form);
-		projectMapper.insertDbRoleRelation(dbRoleRelation);
+		serviceGroupMapper.insertDbRoleRelation(dbRoleRelation);
 	}
 	
 	private DbRoleRelation createDbRoleRelation(RoleRelationForm form) {
@@ -271,7 +290,7 @@ public class ProjectService {
 	
 	public void registFile(UploadForm form) {
 		DbFile dbFile = createDbFile(form);
-		projectMapper.insertDbFile(dbFile);
+		roleMapper.insertDbFile(dbFile);
 	}
 
 	private DbFile createDbFile(UploadForm form) {
@@ -282,7 +301,7 @@ public class ProjectService {
 	
 	public void registTemplate(UploadForm form) {
 		DbTemplate dbTemplate = createDbTemplate(form);
-		projectMapper.insertDbTemplate(dbTemplate);
+		roleMapper.insertDbTemplate(dbTemplate);
 	}
 
 	private DbTemplate createDbTemplate(UploadForm form) {
@@ -293,19 +312,19 @@ public class ProjectService {
 	
 	public void deleteFile(GeneralFileForm form){
 		FileKey fileKey = new FileKey(form.getProjectName(), form.getRoleName(), form.getFileName());
-		projectMapper.deleteDbFile(fileKey);
+		roleMapper.deleteDbFile(fileKey);
 	}
 	
 	public void deleteTemplate(GeneralFileForm form){
 		TemplateKey templateKey = new TemplateKey(form.getProjectName(), form.getRoleName(), form.getFileName());
-		projectMapper.deleteDbTemplate(templateKey);
+		roleMapper.deleteDbTemplate(templateKey);
 	}
 	
 	public void registRoleVariable(RoleVariableForm form) {
 		DbRoleVariable dbRoleVariable = createDbRoleVariable(form);
-		projectMapper.insertDbRoleVariable(dbRoleVariable);
+		variableMapper.insertDbRoleVariable(dbRoleVariable);
 		
-		List<DbRoleVariable> dbRoleVariableList = projectMapper.selectDbRoleVariableList(form);
+		List<DbRoleVariable> dbRoleVariableList = variableMapper.selectDbRoleVariableList(form);
 		List<YamlVariable> yamlVariableList = createYamlVariableList(dbRoleVariableList);
 		String yamlContent = yamlDumper.dumpVariable(yamlVariableList);
 		jansibleFiler.writeRoleVariableYaml(form, yamlContent);
@@ -321,16 +340,16 @@ public class ProjectService {
 	
 	public void registServiceGroupVariable(ServiceGroupVariableForm form) {
 		DbServiceGroupVariable dbServiceGroupVariable = createDbServiceGroupVariable(form);
-		projectMapper.insertDbServiceGroupVariable(dbServiceGroupVariable);
+		variableMapper.insertDbServiceGroupVariable(dbServiceGroupVariable);
 		
 		writeServiceGroupVariableYaml(form);
 	}
 	
 	private void writeServiceGroupVariableYaml(ServiceGroupKey serviceGroupKey){
-		List<DbEnvironmentVariable> dbEnvironmentVariableList = projectMapper.selectDbEnvironmentVariableList(serviceGroupKey);
+		List<DbEnvironmentVariable> dbEnvironmentVariableList = variableMapper.selectDbEnvironmentVariableList(serviceGroupKey);
 		List<YamlVariable> envYamlVariableList = createYamlVariableList(dbEnvironmentVariableList);
 		
-		List<DbServiceGroupVariable> dbServiceGroupVariableList = projectMapper.selectDbServiceGroupVariableList(serviceGroupKey);
+		List<DbServiceGroupVariable> dbServiceGroupVariableList = variableMapper.selectDbServiceGroupVariableList(serviceGroupKey);
 		List<YamlVariable> groupVamlVariableList = createYamlVariableList(dbServiceGroupVariableList);
 		
 		envYamlVariableList.addAll(groupVamlVariableList);
@@ -341,9 +360,9 @@ public class ProjectService {
 	
 	public void registServerVariable(ServerVariableForm form) {
 		DbServerVariable dbServerVariable = createDbServerVariable(form);
-		projectMapper.insertDbServerVariable(dbServerVariable);
+		variableMapper.insertDbServerVariable(dbServerVariable);
 		
-		List<DbServerVariable> dbServerVariableList = projectMapper.selectDbServerVariableList(form);
+		List<DbServerVariable> dbServerVariableList = variableMapper.selectDbServerVariableList(form);
 		List<YamlVariable> yamlVariableList = createYamlVariableList(dbServerVariableList);
 		String yamlContent = yamlDumper.dumpVariable(yamlVariableList);
 		jansibleFiler.writeHostVariableYaml(form, yamlContent);
@@ -351,13 +370,13 @@ public class ProjectService {
 	
 	public void registEnvironmentVariable(EnvironmentVariableForm form) {
 		DbEnvironmentVariable dbEnvironmentVariable = createDbEnvironmentVariable(form);
-		projectMapper.insertDbEnvironmentVariable(dbEnvironmentVariable);
+		variableMapper.insertDbEnvironmentVariable(dbEnvironmentVariable);
 		
 		writeEnvironmentVariableYaml(form);
 	}
 	
 	private void writeEnvironmentVariableYaml(EnvironmentKey environmentKey){
-		List<DbServiceGroup> dbServiceGroupList = projectMapper.selectServiceGroupList(environmentKey);
+		List<DbServiceGroup> dbServiceGroupList = serviceGroupMapper.selectServiceGroupList(environmentKey);
 		
 		for(DbServiceGroup dbServiceGroup : dbServiceGroupList){
 			writeServiceGroupVariableYaml(dbServiceGroup);

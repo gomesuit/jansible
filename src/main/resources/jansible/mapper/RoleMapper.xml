@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jansible.mapper.RoleMapper">
+	
+	<insert id="insertRole" parameterType="DbRole">
+		INSERT INTO role
+			(
+				project_name,
+				role_name
+			)
+		VALUES
+			(
+				#{projectName},
+				#{roleName}
+			)
+	</insert>
+	
+	<select id="selectRoleList" resultType="DbRole">
+		SELECT
+			project_name as projectName,
+			role_name as roleName
+		FROM
+			role
+		WHERE
+			project_name = #{projectName}
+	</select>
+	
+	<insert id="insertDbFile" parameterType="DbFile">
+		INSERT INTO file
+			(
+				project_name,
+				role_name,
+				file_name
+			)
+		VALUES
+			(
+				#{projectName},
+				#{roleName},
+				#{fileName}
+			)
+	</insert>
+	
+	<select id="selectDbFileList" resultType="DbFile">
+		SELECT
+			project_name as projectName,
+			role_name as roleName,
+			file_name as fileName
+		FROM
+			file
+		WHERE
+			project_name = #{projectName} AND
+			role_name = #{roleName}
+	</select>
+	
+	<insert id="insertDbTemplate" parameterType="DbTemplate">
+		INSERT INTO template
+			(
+				project_name,
+				role_name,
+				template_name
+			)
+		VALUES
+			(
+				#{projectName},
+				#{roleName},
+				#{templateName}
+			)
+	</insert>
+	
+	<select id="selectDbTemplateList" resultType="DbTemplate">
+		SELECT
+			project_name as projectName,
+			role_name as roleName,
+			template_name as templateName
+		FROM
+			template
+		WHERE
+			project_name = #{projectName} AND
+			role_name = #{roleName}
+	</select>
+	
+	<delete id="deleteDbFile" parameterType="FileKey">
+	    DELETE FROM
+	    	file
+	    WHERE
+			project_name = #{projectName} AND
+			role_name = #{roleName} AND
+			file_name = #{fileName}
+	</delete>
+	
+	<delete id="deleteDbTemplate" parameterType="TemplateKey">
+	    DELETE FROM
+	    	template
+	    WHERE
+			project_name = #{projectName} AND
+			role_name = #{roleName} AND
+			template_name = #{templateName}
+	</delete>
+	
+</mapper>

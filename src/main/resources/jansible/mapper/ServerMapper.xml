@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jansible.mapper.ServerMapper">
+	
+	<insert id="insertServer" parameterType="DbServer">
+		INSERT INTO server
+			(
+				project_name,
+				environment_name,
+				group_name,
+				server_name
+			)
+		VALUES
+			(
+				#{projectName},
+				#{environmentName},
+				#{groupName},
+				#{serverName}
+			)
+	</insert>
+	
+	<select id="selectServerList" resultType="DbServer">
+		SELECT
+			project_name as projectName,
+			environment_name as environmentName,
+			group_name as groupName,
+			server_name as serverName
+		FROM
+			server
+		WHERE
+			project_name = #{projectName} AND
+			environment_name = #{environmentName} AND
+			group_name = #{groupName}
+	</select>
+	
+</mapper>
