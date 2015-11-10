@@ -97,21 +97,24 @@
 	
 	<br /><hr /><br />
 	<div>Jenkins</div>
-	<div>コミット</div>
-	<form action="#" th:action="@{/project/jenkins/build}" th:object="${buildForm}" method="post">
-		<input type="hidden" th:field="*{projectName}" />
-		<table border="1" rules="all">
-			<tr>
-				<td>environmentName</td>
-				<td>groupName</td>
-			</tr>
-			<tr>
-				<td><input type="text" th:field="*{environmentName}" /></td>
-				<td><input type="text" th:field="*{groupName}" /></td>
-			</tr>
-		</table>
-		<input type="submit" value="Build" />
-	</form>
+	<div>適用</div>
+	<table border="1" rules="all">
+		<tr>
+			<td>environment</td>
+			<td>group</td>
+			<td>Build</td>
+		</tr>
+		<tr th:each="group : ${groupList}">
+			<td><div th:text="${group.environmentName}" /></td>
+			<td><div th:text="${group.groupName}" /></td>
+			<form method="POST" th:action="@{/project/jenkins/build}" th:object="${buildForm}">
+				<input type="hidden" th:field="*{projectName}" />
+				<input type="hidden" name="environmentName" th:value="${group.environmentName}" />
+				<input type="hidden" name="groupName" th:value="${group.groupName}" />
+				<td><input type="submit" value="Build" /></td>
+			</form>
+		</tr>
+	</table>
 	
 	<br /><hr />
 	<a th:href="@{/}" >トップ</a>

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import jansible.file.JansibleFiler;
 import jansible.model.common.EnvironmentKey;
 import jansible.model.common.EnvironmentVariableKey;
+import jansible.model.common.Group;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
 import jansible.model.common.RoleVariableKey;
@@ -16,6 +17,8 @@ import jansible.model.common.ServerVariableKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.ServiceGroupVariableKey;
 import jansible.model.common.TaskKey;
+import jansible.model.database.DbEnvironment;
+import jansible.model.database.DbServiceGroup;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.gethtml.HtmlModule;
@@ -101,7 +104,26 @@ public class ProjectController {
 		buildForm.setProjectName(projectName);
 		model.addAttribute("buildForm", buildForm);
 		
+		List<Group> groupList = getGroupList(projectKey);
+		model.addAttribute("groupList", groupList);
+		
 	    return "project/project/top";
+	}
+
+	private List<Group> getGroupList(ProjectKey projectKey) {
+		List<Group> groupList = new ArrayList<>();
+		
+		List<DbEnvironment> dbEnvironmentList = projectService.getEnvironmentList(projectKey);
+		
+		for(DbEnvironment dbEnvironment : dbEnvironmentList){
+			List<DbServiceGroup> dbServiceGroupList = projectService.getServiceGroupList(dbEnvironment);
+			for(DbServiceGroup dbServiceGroup : dbServiceGroupList){
+				Group group = new Group(dbServiceGroup.getEnvironmentName(), dbServiceGroup.getGroupName());
+				groupList.add(group);
+			}
+		}
+		
+		return groupList;
 	}
 
 	@RequestMapping("/role/view")

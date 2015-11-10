@@ -1,6 +1,7 @@
 package jansible.file;
 
 import jansible.model.common.FileKey;
+import jansible.model.common.Group;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
 import jansible.model.common.ServerKey;
@@ -73,6 +74,16 @@ public class JansibleFiler {
 	public String getGroupName(ServiceGroupKey serviceGroupKey) {
 		String environmentName = serviceGroupKey.getEnvironmentName();
 		String groupName = serviceGroupKey.getGroupName();
+		return getGroupName(environmentName, groupName);
+	}
+	
+	public String getGroupName(Group group) {
+		String environmentName = group.getEnvironmentName();
+		String groupName = group.getGroupName();
+		return getGroupName(environmentName, groupName);
+	}
+	
+	public String getGroupName(String environmentName, String groupName) {
 		return environmentName + "_" + groupName;
 	}
 
