@@ -95,6 +95,24 @@
 		<input type="submit" value="Commit" />
 	</form>
 	
+	<br /><hr /><br />
+	<div>Jenkins</div>
+	<div>コミット</div>
+	<form action="#" th:action="@{/project/jenkins/build}" th:object="${buildForm}" method="post">
+		<input type="hidden" th:field="*{projectName}" />
+		<table border="1" rules="all">
+			<tr>
+				<td>environmentName</td>
+				<td>groupName</td>
+			</tr>
+			<tr>
+				<td><input type="text" th:field="*{environmentName}" /></td>
+				<td><input type="text" th:field="*{groupName}" /></td>
+			</tr>
+		</table>
+		<input type="submit" value="Build" />
+	</form>
+	
 	<br /><hr />
 	<a th:href="@{/}" >トップ</a>
 </body>

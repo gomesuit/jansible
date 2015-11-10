@@ -7,6 +7,7 @@ import jansible.file.HostGroup;
 import jansible.file.JansibleFiler;
 import jansible.file.JansibleHostsDumper;
 import jansible.git.JansibleGitter;
+import jansible.jenkins.JenkinsBuilder;
 import jansible.mapper.EnvironmentMapper;
 import jansible.mapper.ProjectMapper;
 import jansible.mapper.RoleMapper;
@@ -42,9 +43,11 @@ import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.database.DbTemplate;
 import jansible.model.database.InterfaceDbVariable;
+import jansible.model.jenkins.JenkinsParameter;
 import jansible.model.yamldump.StartYaml;
 import jansible.model.yamldump.YamlVariable;
 import jansible.util.YamlDumper;
+import jansible.web.project.form.BuildForm;
 import jansible.web.project.form.EnvironmentForm;
 import jansible.web.project.form.EnvironmentVariableForm;
 import jansible.web.project.form.GeneralFileForm;
@@ -90,6 +93,17 @@ public class ProjectService {
 	private JansibleGitter jansibleGitter;
 	@Autowired
 	private JansibleHostsDumper jansibleHostsDumper;
+	@Autowired
+	private JenkinsBuilder jenkinsBuilder;
+	
+	public void build(BuildForm form){
+		DbProject project = getProject(form);
+		JenkinsParameter jenkinsParameter = new JenkinsParameter();
+		jenkinsParameter.setProjectName(form.getProjectName());
+		jenkinsParameter.setGroupName(jansibleFiler.getGroupName(form));
+		jenkinsParameter.setRepositoryUrl(project.getRepositoryUrl());
+		jenkinsBuilder.build("http://192.168.33.11:8080/job/test2/build?delay=0sec", jenkinsParameter);
+	}
 	
 	public List<DbProject> getProjectList(){
 		return projectMapper.selectProjectList();

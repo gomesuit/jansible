@@ -25,6 +25,7 @@ import jansible.model.yamldump.YamlParameter;
 import jansible.model.yamldump.YamlParameters;
 import jansible.util.YamlDumper;
 import jansible.web.module.ModuleService;
+import jansible.web.project.form.BuildForm;
 import jansible.web.project.form.EnvironmentForm;
 import jansible.web.project.form.EnvironmentVariableForm;
 import jansible.web.project.form.GeneralFileForm;
@@ -93,9 +94,12 @@ public class ProjectController {
 
 		model.addAttribute("project", projectService.getProject(projectKey));
 		
-		
 		GitForm gitForm = new GitForm(projectKey);
 		model.addAttribute("gitForm", gitForm);
+		
+		BuildForm buildForm = new BuildForm();
+		buildForm.setProjectName(projectName);
+		model.addAttribute("buildForm", buildForm);
 		
 	    return "project/project/top";
 	}
@@ -515,6 +519,14 @@ public class ProjectController {
 	@RequestMapping(value="/project/git/commit", method=RequestMethod.POST)
 	private String commitGit(@ModelAttribute GitForm form, HttpServletRequest request){
 		projectService.commitGit(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/jenkins/build", method=RequestMethod.POST)
+	private String build(@ModelAttribute BuildForm form, HttpServletRequest request){
+		projectService.build(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
