@@ -7,7 +7,7 @@ public class EnvironmentForm extends EnvironmentKey{
 	public EnvironmentForm(){}
 	
 	public EnvironmentForm(ProjectKey projectKey){
-		
+		super(projectKey);
 	}
 	
 	public EnvironmentForm(EnvironmentKey environmentKey){
