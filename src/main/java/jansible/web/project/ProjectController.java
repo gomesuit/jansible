@@ -90,6 +90,9 @@ public class ProjectController {
 	
 		RoleKey roleKey = new RoleKey(projectKey);
 		model.addAttribute("roleKey", roleKey);
+
+		model.addAttribute("project", projectService.getProject(projectKey));
+		
 		
 		GitForm gitForm = new GitForm(projectKey);
 		model.addAttribute("gitForm", gitForm);

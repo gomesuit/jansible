@@ -90,9 +90,13 @@ public class ProjectService {
 	private JansibleGitter jansibleGitter;
 	@Autowired
 	private JansibleHostsDumper jansibleHostsDumper;
-
+	
 	public List<DbProject> getProjectList(){
 		return projectMapper.selectProjectList();
+	}
+
+	public DbProject getProject(ProjectKey projectKey){
+		return projectMapper.selectProject(projectKey);
 	}
 
 	public List<DbEnvironment> getEnvironmentList(ProjectKey projectKey){
@@ -303,11 +307,7 @@ public class ProjectService {
 	}
 	
 	private DbRoleRelation createDbRoleRelation(RoleRelationForm form) {
-		DbRoleRelation dbRoleRelation = new DbRoleRelation();
-		dbRoleRelation.setProjectName(form.getProjectName());
-		dbRoleRelation.setEnvironmentName(form.getEnvironmentName());
-		dbRoleRelation.setGroupName(form.getGroupName());
-		dbRoleRelation.setRoleName(form.getRoleName());
+		DbRoleRelation dbRoleRelation = new DbRoleRelation(form);
 		dbRoleRelation.setSort(form.getSort());
 		return dbRoleRelation;
 	}
@@ -337,9 +337,7 @@ public class ProjectService {
 	}
 
 	private DbTask createDbTask(TaskForm form) {
-		DbTask dbTask = new DbTask();
-		dbTask.setProjectName(form.getProjectName());
-		dbTask.setRoleName(form.getRoleName());
+		DbTask dbTask = new DbTask(form);
 		dbTask.setModuleName(form.getModuleName());
 		dbTask.setDescription(form.getDescription());
 		dbTask.setSort(form.getSort());
@@ -347,10 +345,7 @@ public class ProjectService {
 	}
 
 	private DbTask createDbTask(TaskDetailForm form) {
-		DbTask dbTask = new DbTask();
-		dbTask.setTaskId(form.getTaskId());
-		dbTask.setProjectName(form.getProjectName());
-		dbTask.setRoleName(form.getRoleName());
+		DbTask dbTask = new DbTask(form);
 		dbTask.setDescription(form.getDescription());
 		return dbTask;
 	}
@@ -453,40 +448,25 @@ public class ProjectService {
 	}
 
 	private DbEnvironmentVariable createDbEnvironmentVariable(EnvironmentVariableForm form) {
-		DbEnvironmentVariable dbEnvironmentVariable = new DbEnvironmentVariable();
-		dbEnvironmentVariable.setProjectName(form.getProjectName());
-		dbEnvironmentVariable.setEnvironmentName(form.getEnvironmentName());
-		dbEnvironmentVariable.setVariableName(form.getVariableName());
+		DbEnvironmentVariable dbEnvironmentVariable = new DbEnvironmentVariable(form);
 		dbEnvironmentVariable.setValue(form.getValue());
 		return dbEnvironmentVariable;
 	}
 
 	private DbServerVariable createDbServerVariable(ServerVariableForm form) {
-		DbServerVariable dbServerVariable = new DbServerVariable();
-		dbServerVariable.setProjectName(form.getProjectName());
-		dbServerVariable.setEnvironmentName(form.getEnvironmentName());
-		dbServerVariable.setGroupName(form.getGroupName());
-		dbServerVariable.setServerName(form.getServerName());
-		dbServerVariable.setVariableName(form.getVariableName());
+		DbServerVariable dbServerVariable = new DbServerVariable(form);
 		dbServerVariable.setValue(form.getValue());
 		return dbServerVariable;
 	}
 
 	private DbServiceGroupVariable createDbServiceGroupVariable(ServiceGroupVariableForm form) {
-		DbServiceGroupVariable dbServiceGroupVariable = new DbServiceGroupVariable();
-		dbServiceGroupVariable.setProjectName(form.getProjectName());
-		dbServiceGroupVariable.setEnvironmentName(form.getEnvironmentName());
-		dbServiceGroupVariable.setGroupName(form.getGroupName());
-		dbServiceGroupVariable.setVariableName(form.getVariableName());
+		DbServiceGroupVariable dbServiceGroupVariable = new DbServiceGroupVariable(form);
 		dbServiceGroupVariable.setValue(form.getValue());
 		return dbServiceGroupVariable;
 	}
 
 	private DbRoleVariable createDbRoleVariable(RoleVariableForm form) {
-		DbRoleVariable dbRoleVariable = new DbRoleVariable();
-		dbRoleVariable.setProjectName(form.getProjectName());
-		dbRoleVariable.setRoleName(form.getRoleName());
-		dbRoleVariable.setVariableName(form.getVariableName());
+		DbRoleVariable dbRoleVariable = new DbRoleVariable(form);
 		dbRoleVariable.setValue(form.getValue());
 		return dbRoleVariable;
 	}

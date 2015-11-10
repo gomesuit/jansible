@@ -17,12 +17,22 @@
 			)
 	</insert>
 	
-	<select id="selectProjectList" resultType="ProjectKey">
+	<select id="selectProjectList" resultType="DbProject">
 		SELECT
 			project_name as projectName,
 			repository_url as repositoryUrl
 		FROM
 			project
+	</select>
+	
+	<select id="selectProject" resultType="DbProject">
+		SELECT
+			project_name as projectName,
+			repository_url as repositoryUrl
+		FROM
+			project
+		WHERE
+			project_name = #{projectName}
 	</select>
 	
 </mapper>

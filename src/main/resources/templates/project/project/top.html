@@ -75,7 +75,9 @@
 	</table>
 	
 	<br /><hr /><br />
-	<div>Gitコミット</div>
+	<div>Git</div>
+	レポジトリ：<span th:text="${project.repositoryUrl}" />
+	<div>コミット</div>
 	<form action="#" th:action="@{/project/git/commit}" th:object="${gitForm}" method="post">
 		<input type="hidden" th:field="*{projectName}" />
 		<table border="1" rules="all">
