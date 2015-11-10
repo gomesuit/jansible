@@ -4,14 +4,13 @@ public class EnvironmentKey extends ProjectKey{
 	private String environmentName;
 	
 	public EnvironmentKey(){}
-	
-	public EnvironmentKey(ProjectKey projectKey, String environmentName){
+
+	public EnvironmentKey(ProjectKey projectKey){
 		super(projectKey.getProjectName());
-		this.environmentName = environmentName;
 	}
 	
-	public EnvironmentKey(String projectName, String environmentName){
-		super(projectName);
+	public EnvironmentKey(ProjectKey projectKey, String environmentName){
+		this(projectKey);
 		this.environmentName = environmentName;
 	}
 

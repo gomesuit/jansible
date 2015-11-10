@@ -4,9 +4,13 @@ public class RoleKey extends ProjectKey{
 	private String roleName;
 	
 	public RoleKey(){}
+
+	public RoleKey(ProjectKey projectKey){
+		super(projectKey.getProjectName());
+	}
 	
 	public RoleKey(ProjectKey projectKey, String roleName) {
-		super(projectKey.getProjectName());
+		this(projectKey);
 		this.roleName = roleName;
 	}
 

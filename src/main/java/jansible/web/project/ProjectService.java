@@ -95,8 +95,7 @@ public class ProjectService {
 		return projectMapper.selectProjectList();
 	}
 
-	public List<DbEnvironment> getEnvironmentList(String projectName){
-		ProjectKey projectKey = new ProjectKey(projectName);
+	public List<DbEnvironment> getEnvironmentList(ProjectKey projectKey){
 		return environmentMapper.selectEnvironmentList(projectKey);
 	}
 
@@ -108,8 +107,7 @@ public class ProjectService {
 		return serverMapper.selectServerList(serviceGroupKey);
 	}
 
-	public List<DbRole> getRoleList(String projectName){
-		ProjectKey projectKey = new ProjectKey(projectName);
+	public List<DbRole> getRoleList(ProjectKey projectKey){
 		return roleMapper.selectRoleList(projectKey);
 	}
 	
@@ -233,7 +231,7 @@ public class ProjectService {
 	}
 	
 	public void registEnvironment(EnvironmentForm form) {
-		DbEnvironment dbEnvironment = new DbEnvironment(form.getProjectName(), form.getEnvironmentName());
+		DbEnvironment dbEnvironment = new DbEnvironment(form);
 		environmentMapper.insertEnvironment(dbEnvironment);;
 	}
 	

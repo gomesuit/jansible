@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import jansible.file.JansibleFiler;
 import jansible.model.common.EnvironmentKey;
 import jansible.model.common.EnvironmentVariableKey;
+import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
 import jansible.model.common.RoleVariableKey;
 import jansible.model.common.ServerKey;
@@ -69,7 +70,141 @@ public class ProjectController {
         return "project/top";
     }
 
-    @RequestMapping("/serviceGroup/view")
+    @RequestMapping("/project/view")
+	private String viewProject(
+			@RequestParam(value = "projectName", required = true) String projectName,
+			Model model){
+    	
+    	ProjectKey projectKey = new ProjectKey(projectName);
+    	
+		EnvironmentForm environmentForm = new EnvironmentForm(projectKey);
+		model.addAttribute("environmentForm", environmentForm);
+		model.addAttribute("environmentList", projectService.getEnvironmentList(projectKey));
+		
+		EnvironmentKey environmentKey = new EnvironmentKey(projectKey);
+		model.addAttribute("environmentKey", environmentKey);
+		
+		RoleForm roleForm = new RoleForm(projectKey);
+		model.addAttribute("roleForm", roleForm);
+		model.addAttribute("roleList", projectService.getRoleList(projectKey));
+	
+		RoleKey roleKey = new RoleKey(projectKey);
+		model.addAttribute("roleKey", roleKey);
+		
+		GitForm gitForm = new GitForm(projectKey);
+		model.addAttribute("gitForm", gitForm);
+		
+	    return "project/project/top";
+	}
+
+	@RequestMapping("/role/view")
+	private String viewRole(
+			@RequestParam(value = "projectName", required = true) String projectName,
+			@RequestParam(value = "roleName", required = true) String roleName,
+			Model model){
+		RoleKey roleKey = new RoleKey();
+		roleKey.setProjectName(projectName);
+		roleKey.setRoleName(roleName);
+		
+		TaskForm form = new TaskForm(roleKey);
+		
+		model.addAttribute("form", form);
+		List<DbTask> dbTaskList = projectService.getTaskList(roleKey);
+		List<TaskView> taskViewList = createTaskViewList(dbTaskList);
+		model.addAttribute("taskList", taskViewList);
+		
+		TaskKey taskKey = new TaskKey(roleKey);
+		model.addAttribute("taskKey", taskKey);
+		
+		// module名リスト
+		model.addAttribute("moduleNameList", moduleService.getModuleNameList());
+		
+		UploadForm uploadForm = new UploadForm(roleKey);
+		model.addAttribute("uploadForm", uploadForm);
+	
+		model.addAttribute("templateList", projectService.getDbTemplateList(roleKey));
+		model.addAttribute("fileList", projectService.getDbFileList(roleKey));
+		
+		GeneralFileForm fileForm = new GeneralFileForm(roleKey);
+		model.addAttribute("fileForm", fileForm);
+		
+		RoleVariableForm roleVariableForm = new RoleVariableForm(roleKey);
+		model.addAttribute("variableForm", roleVariableForm);
+	
+		RoleVariableKey roleVariableKey = new RoleVariableKey(roleKey);
+		model.addAttribute("roleVariableKey", roleVariableKey);
+		
+		model.addAttribute("variableList", projectService.getDbRoleVariableList(roleKey));
+		
+	    return "project/role/top";
+	}
+
+	@RequestMapping("/task/view")
+	private String viewTask(
+			@RequestParam(value = "projectName", required = true) String projectName,
+			@RequestParam(value = "roleName", required = true) String roleName,
+			@RequestParam(value = "taskId", required = true) int taskId,
+			Model model){
+		TaskKey taskKey = new TaskKey();
+		taskKey.setProjectName(projectName);
+		taskKey.setRoleName(roleName);
+		taskKey.setTaskId(taskId);
+		
+		DbTask dbTask = projectService.getTask(taskKey);
+		String moduleName = dbTask.getModuleName();
+		model.addAttribute("moduleName", moduleName);
+		
+		HtmlModule module = moduleService.getModule(moduleName);
+	
+		TaskDetailForm form = new TaskDetailForm(taskKey);
+		form.setDescription(dbTask.getDescription());
+		List<TaskParameter> taskParameterList = createBlankTaskParameterList(module);
+		List<DbTaskDetail> dbTaskDetailList = projectService.getTaskDetailList(taskKey);
+		mergeParameterList(taskParameterList, dbTaskDetailList);
+		form.setTaskParameterList(taskParameterList);
+		model.addAttribute("form", form);
+		
+		model.addAttribute("variableList", projectService.getDbRoleVariableList(taskKey));
+		
+	
+		List<DbTask> dbTaskList = new ArrayList<>();
+		dbTaskList.add(dbTask);
+		List<YamlModule> modules = createYamlModuleList(dbTaskList);
+		model.addAttribute("yaskYaml", yamlDumper.dump(modules).replaceAll("\n", "<br />"));
+		
+	    return "project/task/top";
+	}
+
+	@RequestMapping("/environment/view")
+	private String viewEnvironment(
+			@RequestParam(value = "projectName", required = true) String projectName,
+			@RequestParam(value = "environmentName", required = true) String environmentName,
+			Model model){
+		EnvironmentKey environmentKey = new EnvironmentKey();
+		environmentKey.setProjectName(projectName);
+		environmentKey.setEnvironmentName(environmentName);
+		
+		ServiceGroupForm serviceGroupForm = new ServiceGroupForm(environmentKey);
+		
+		model.addAttribute("form", serviceGroupForm);
+		model.addAttribute("serviceGroupList", projectService.getServiceGroupList(environmentKey));
+		
+		ServiceGroupKey serviceGroupKey = new ServiceGroupKey(environmentKey);
+		model.addAttribute("serviceGroupKey", serviceGroupKey);
+		
+		EnvironmentVariableForm variableForm = new EnvironmentVariableForm(environmentKey);
+		model.addAttribute("variableForm", variableForm);
+		
+		model.addAttribute("allVariableNameList", projectService.getAllDbVariableNameList(environmentKey));
+		model.addAttribute("variableList", projectService.getDbEnvironmentVariableList(environmentKey));
+		
+		EnvironmentVariableKey environmentVariableKey = new EnvironmentVariableKey(environmentKey);
+		model.addAttribute("environmentVariableKey", environmentVariableKey);
+		
+	    return "project/environment/top";
+	}
+
+	@RequestMapping("/serviceGroup/view")
 	private String viewServiceGroup(
     		@RequestParam(value = "projectName", required = true) String projectName,
     		@RequestParam(value = "environmentName", required = true) String environmentName,
@@ -89,7 +224,7 @@ public class ProjectController {
 		
 		RoleRelationForm roleRelationForm = new RoleRelationForm(serviceGroupKey);
 		model.addAttribute("roleRelationForm", roleRelationForm);
-    	model.addAttribute("roleList", projectService.getRoleList(projectName));
+    	model.addAttribute("roleList", projectService.getRoleList(serviceGroupKey));
 		model.addAttribute("roleRelationList", projectService.getRoleRelationList(serviceGroupKey));
 		
 		ServiceGroupVariableForm variableForm = new ServiceGroupVariableForm(serviceGroupKey);
@@ -130,117 +265,8 @@ public class ProjectController {
 		return "project/server/top";
 	}
 
-	@RequestMapping("/project/view")
-    private String viewProject(
-    		@RequestParam(value = "projectName", required = true) String projectName,
-    		Model model){
-    	EnvironmentForm environmentForm = new EnvironmentForm();
-    	environmentForm.setProjectName(projectName);
-    	model.addAttribute("environmentForm", environmentForm);
-    	model.addAttribute("environmentList", projectService.getEnvironmentList(projectName));
-    	
-    	EnvironmentKey environmentKey = new EnvironmentKey();
-    	environmentKey.setProjectName(projectName);
-    	model.addAttribute("environmentKey", environmentKey);
-    	
-    	RoleForm roleForm = new RoleForm();
-    	roleForm.setProjectName(projectName);
-    	model.addAttribute("roleForm", roleForm);
-    	model.addAttribute("roleList", projectService.getRoleList(projectName));
-
-		RoleKey roleKey = new RoleKey();
-		roleKey.setProjectName(projectName);
-    	model.addAttribute("roleKey", roleKey);
-    	
-    	GitForm gitForm = new GitForm();
-    	gitForm.setProjectName(projectName);
-    	model.addAttribute("gitForm", gitForm);
-    	
-        return "project/project/top";
-    }
-
-    @RequestMapping("/environment/view")
-    private String viewEnvironment(
-    		@RequestParam(value = "projectName", required = true) String projectName,
-    		@RequestParam(value = "environmentName", required = true) String environmentName,
-    		Model model){
-    	EnvironmentKey environmentKey = new EnvironmentKey();
-    	environmentKey.setProjectName(projectName);
-    	environmentKey.setEnvironmentName(environmentName);
-    	
-    	ServiceGroupForm serviceGroupForm = new ServiceGroupForm(environmentKey);
-    	
-    	model.addAttribute("form", serviceGroupForm);
-    	model.addAttribute("serviceGroupList", projectService.getServiceGroupList(environmentKey));
-    	
-    	ServiceGroupKey serviceGroupKey = new ServiceGroupKey(environmentKey);
-    	model.addAttribute("serviceGroupKey", serviceGroupKey);
-    	
-    	EnvironmentVariableForm variableForm = new EnvironmentVariableForm(environmentKey);
-		model.addAttribute("variableForm", variableForm);
-		
-		model.addAttribute("allVariableNameList", projectService.getAllDbVariableNameList(environmentKey));
-		model.addAttribute("variableList", projectService.getDbEnvironmentVariableList(environmentKey));
-		
-		EnvironmentVariableKey environmentVariableKey = new EnvironmentVariableKey(environmentKey);
-		model.addAttribute("environmentVariableKey", environmentVariableKey);
-    	
-        return "project/environment/top";
-    }
-
-    @RequestMapping("/role/view")
-    private String viewRole(
-    		@RequestParam(value = "projectName", required = true) String projectName,
-    		@RequestParam(value = "roleName", required = true) String roleName,
-    		Model model){
-    	RoleKey roleKey = new RoleKey();
-    	roleKey.setProjectName(projectName);
-    	roleKey.setRoleName(roleName);
-    	
-    	TaskForm form = new TaskForm(roleKey);
-    	
-    	model.addAttribute("form", form);
-    	List<DbTask> dbTaskList = projectService.getTaskList(roleKey);
-    	List<TaskView> taskViewList = createTaskViewList(dbTaskList);
-    	model.addAttribute("taskList", taskViewList);
-    	
-    	TaskKey taskKey = new TaskKey(roleKey);
-    	model.addAttribute("taskKey", taskKey);
-    	
-    	// module名リスト
-    	model.addAttribute("moduleNameList", moduleService.getModuleNameList());
-    	
-		UploadForm uploadForm = new UploadForm(roleKey);
-		model.addAttribute("uploadForm", uploadForm);
-
-		model.addAttribute("templateList", projectService.getDbTemplateList(roleKey));
-		model.addAttribute("fileList", projectService.getDbFileList(roleKey));
-		
-		GeneralFileForm fileForm = new GeneralFileForm(roleKey);
-		model.addAttribute("fileForm", fileForm);
-		
-		RoleVariableForm roleVariableForm = new RoleVariableForm(roleKey);
-		model.addAttribute("variableForm", roleVariableForm);
-
-		RoleVariableKey roleVariableKey = new RoleVariableKey(roleKey);
-    	model.addAttribute("roleVariableKey", roleVariableKey);
-		
-		model.addAttribute("variableList", projectService.getDbRoleVariableList(roleKey));
-		
-        return "project/role/top";
-    }
-    
-    private List<TaskView> createTaskViewList(List<DbTask> dbTaskList){
-    	List<TaskView> taskViewList = new ArrayList<>();
-    	for(DbTask dbTask : dbTaskList){
-    		TaskView taskView = createTaskView(dbTask);
-    		taskViewList.add(taskView);
-    	}
-    	return taskViewList;
-    }
-    
-    private TaskView createTaskView(DbTask dbTask) {
-    	TaskView taskView = new TaskView();
+	private TaskView createTaskView(DbTask dbTask) {
+		TaskView taskView = new TaskView();
 		taskView.setTaskId(dbTask.getTaskId());
 		taskView.setModuleName(dbTask.getModuleName());
 		taskView.setDescription(dbTask.getDescription());
@@ -251,42 +277,15 @@ public class ProjectController {
 		return taskView;
 	}
 
-	@RequestMapping("/task/view")
-    private String viewTask(
-    		@RequestParam(value = "projectName", required = true) String projectName,
-    		@RequestParam(value = "roleName", required = true) String roleName,
-    		@RequestParam(value = "taskId", required = true) int taskId,
-    		Model model){
-		TaskKey taskKey = new TaskKey();
-		taskKey.setProjectName(projectName);
-		taskKey.setRoleName(roleName);
-		taskKey.setTaskId(taskId);
-		
-    	DbTask dbTask = projectService.getTask(taskKey);
-    	String moduleName = dbTask.getModuleName();
-    	model.addAttribute("moduleName", moduleName);
-    	
-    	HtmlModule module = moduleService.getModule(moduleName);
-
-    	TaskDetailForm form = new TaskDetailForm(taskKey);
-    	form.setDescription(dbTask.getDescription());
-    	List<TaskParameter> taskParameterList = createBlankTaskParameterList(module);
-    	List<DbTaskDetail> dbTaskDetailList = projectService.getTaskDetailList(taskKey);
-    	mergeParameterList(taskParameterList, dbTaskDetailList);
-    	form.setTaskParameterList(taskParameterList);
-    	model.addAttribute("form", form);
-    	
-		model.addAttribute("variableList", projectService.getDbRoleVariableList(taskKey));
-		
-
-    	List<DbTask> dbTaskList = new ArrayList<>();
-    	dbTaskList.add(dbTask);
-    	List<YamlModule> modules = createYamlModuleList(dbTaskList);
-    	model.addAttribute("yaskYaml", yamlDumper.dump(modules).replaceAll("\n", "<br />"));
-    	
-        return "project/task/top";
+	private List<TaskView> createTaskViewList(List<DbTask> dbTaskList){
+    	List<TaskView> taskViewList = new ArrayList<>();
+    	for(DbTask dbTask : dbTaskList){
+    		TaskView taskView = createTaskView(dbTask);
+    		taskViewList.add(taskView);
+    	}
+    	return taskViewList;
     }
-
+    
     private void mergeParameterList(List<TaskParameter> taskParameterList, List<DbTaskDetail> dbTaskDetailList) {
 		for(TaskParameter taskParameter : taskParameterList){
 			String formParameterName = taskParameter.getParameterName();

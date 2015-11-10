@@ -9,6 +9,10 @@ public class GitForm extends ProjectKey{
 	
 	public GitForm(){}
 
+	public GitForm(ProjectKey projectKey){
+		super(projectKey.getProjectName());
+	}
+
 	public String getUserName() {
 		return userName;
 	}

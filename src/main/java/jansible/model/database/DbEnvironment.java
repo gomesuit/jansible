@@ -6,7 +6,7 @@ public class DbEnvironment extends EnvironmentKey{
 	
 	public DbEnvironment(){}
 
-	public DbEnvironment(String projectName, String environmentName) {
-		super(projectName, environmentName);
+	public DbEnvironment(EnvironmentKey environmentKey) {
+		super(environmentKey, environmentKey.getEnvironmentName());
 	}
 }
