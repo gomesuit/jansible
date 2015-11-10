@@ -1,30 +1,16 @@
-package jansible.model.database;
+package jansible.web.project.form;
 
 import jansible.model.common.ProjectKey;
 
-public class DbProject extends ProjectKey{
-	private String repositoryUrl;
+public class JenkinsInfoForm extends ProjectKey{
 	private String jenkinsIpAddress;
 	private String jenkinsPort;
 	private String jenkinsJobName;
 	
-	public DbProject(){}
-
-	public DbProject(ProjectKey projectKey){
+	public JenkinsInfoForm(){}
+	
+	public JenkinsInfoForm(ProjectKey projectKey){
 		super(projectKey.getProjectName());
-	}
-
-	public DbProject(ProjectKey projectKey, String repositoryUrl) {
-		this(projectKey);
-		this.repositoryUrl = repositoryUrl;
-	}
-
-	public String getRepositoryUrl() {
-		return repositoryUrl;
-	}
-
-	public void setRepositoryUrl(String repositoryUrl) {
-		this.repositoryUrl = repositoryUrl;
 	}
 
 	public String getJenkinsIpAddress() {

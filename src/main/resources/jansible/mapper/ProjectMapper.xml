@@ -28,11 +28,25 @@
 	<select id="selectProject" resultType="DbProject">
 		SELECT
 			project_name as projectName,
-			repository_url as repositoryUrl
+			repository_url as repositoryUrl,
+			jenkins_ip_address as jenkinsIpAddress,
+			jenkins_port as jenkinsPort,
+			jenkins_job_name as jenkinsJobName
 		FROM
 			project
 		WHERE
 			project_name = #{projectName}
 	</select>
+	
+	<update id="updateJenkinsInfo" parameterType="DbProject">
+		UPDATE
+			project
+		SET
+			jenkins_ip_address = #{jenkinsIpAddress},
+			jenkins_port = #{jenkinsPort},
+			jenkins_job_name = #{jenkinsJobName}
+		WHERE
+			project_name = #{projectName}
+	</update>
 	
 </mapper>

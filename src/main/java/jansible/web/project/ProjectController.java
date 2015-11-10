@@ -17,6 +17,7 @@ import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.ServiceGroupVariableKey;
 import jansible.model.common.TaskKey;
 import jansible.model.database.DbEnvironment;
+import jansible.model.database.DbProject;
 import jansible.model.database.DbServiceGroup;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
@@ -30,6 +31,7 @@ import jansible.web.project.form.EnvironmentForm;
 import jansible.web.project.form.EnvironmentVariableForm;
 import jansible.web.project.form.GeneralFileForm;
 import jansible.web.project.form.GitForm;
+import jansible.web.project.form.JenkinsInfoForm;
 import jansible.web.project.form.ProjectForm;
 import jansible.web.project.form.RoleForm;
 import jansible.web.project.form.RoleRelationForm;
@@ -100,6 +102,13 @@ public class ProjectController {
 		
 		List<Group> groupList = getGroupList(projectKey);
 		model.addAttribute("groupList", groupList);
+		
+		DbProject dbProject = projectService.getProject(projectKey);
+		JenkinsInfoForm jenkinsInfoForm = new JenkinsInfoForm(dbProject);
+		jenkinsInfoForm.setJenkinsIpAddress(dbProject.getJenkinsIpAddress());
+		jenkinsInfoForm.setJenkinsPort(dbProject.getJenkinsPort());
+		jenkinsInfoForm.setJenkinsJobName(dbProject.getJenkinsJobName());
+		model.addAttribute("jenkinsInfoForm", jenkinsInfoForm);
 		
 	    return "project/project/top";
 	}
@@ -515,6 +524,14 @@ public class ProjectController {
 	@RequestMapping(value="/project/jenkins/build", method=RequestMethod.POST)
 	private String build(@ModelAttribute BuildForm form, HttpServletRequest request){
 		projectService.build(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/jenkins/regist", method=RequestMethod.POST)
+	private String registJenkins(@ModelAttribute JenkinsInfoForm form, HttpServletRequest request){
+		projectService.registJenkinsInfo(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

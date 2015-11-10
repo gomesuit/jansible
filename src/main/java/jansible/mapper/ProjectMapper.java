@@ -9,4 +9,6 @@ public interface ProjectMapper {
 	void insertProject(DbProject dbProject);
 	List<DbProject> selectProjectList();
 	DbProject selectProject(ProjectKey projectKey);
+	
+	void updateJenkinsInfo(DbProject dbProject);
 }

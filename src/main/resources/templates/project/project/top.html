@@ -97,7 +97,26 @@
 	
 	<br /><hr /><br />
 	<div>Jenkins</div>
-	<div>適用</div>
+	
+	<div>Jenkins登録</div>
+	<form action="#" th:action="@{/project/jenkins/regist}" th:object="${jenkinsInfoForm}" method="post">
+		<input type="hidden" th:field="*{projectName}" />
+		<table border="1" rules="all">
+			<tr>
+				<td>IpAddress</td>
+				<td>Port</td>
+				<td>JobName</td>
+			</tr>
+			<tr>
+				<td><input type="text" th:field="*{jenkinsIpAddress}" /></td>
+				<td><input type="text" th:field="*{jenkinsPort}" /></td>
+				<td><input type="text" th:field="*{jenkinsJobName}" /></td>
+			</tr>
+		</table>
+		<input type="submit" value="Submit" />
+	</form>
+	
+	<div>タスク適用</div>
 	<table border="1" rules="all">
 		<tr>
 			<td>environment</td>

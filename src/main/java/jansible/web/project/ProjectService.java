@@ -56,6 +56,7 @@ import jansible.web.project.form.EnvironmentForm;
 import jansible.web.project.form.EnvironmentVariableForm;
 import jansible.web.project.form.GeneralFileForm;
 import jansible.web.project.form.GitForm;
+import jansible.web.project.form.JenkinsInfoForm;
 import jansible.web.project.form.ProjectForm;
 import jansible.web.project.form.RoleForm;
 import jansible.web.project.form.RoleRelationForm;
@@ -101,6 +102,14 @@ public class ProjectService {
 	@Autowired
 	private JenkinsBuilder jenkinsBuilder;
 	
+	public void registJenkinsInfo(JenkinsInfoForm form){
+		DbProject dbProject = new DbProject(form);
+		dbProject.setJenkinsIpAddress(form.getJenkinsIpAddress());
+		dbProject.setJenkinsPort(form.getJenkinsPort());
+		dbProject.setJenkinsJobName(form.getJenkinsJobName());
+		projectMapper.updateJenkinsInfo(dbProject);
+	}
+	
 	public void build(BuildForm form){
 		DbProject project = getProject(form);
 		JenkinsParameter jenkinsParameter = new JenkinsParameter();
@@ -108,10 +117,11 @@ public class ProjectService {
 		jenkinsParameter.setGroupName(jansibleFiler.getGroupName(form));
 		jenkinsParameter.setRepositoryUrl(project.getRepositoryUrl());
 		
+		DbProject dbProject = projectMapper.selectProject(form);
 		JenkinsInfo jenkinsInfo = new JenkinsInfo();
-		jenkinsInfo.setIpAddress("192.168.33.11");
-		jenkinsInfo.setPort("8080");
-		jenkinsInfo.setJobName("test2");
+		jenkinsInfo.setIpAddress(dbProject.getJenkinsIpAddress());
+		jenkinsInfo.setPort(dbProject.getJenkinsPort());
+		jenkinsInfo.setJobName(dbProject.getJenkinsJobName());
 		
 		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
 	}
@@ -251,7 +261,7 @@ public class ProjectService {
 
 
 	public void registProject(ProjectForm form) {
-		DbProject dbProject = new DbProject(form.getProjectName(), form.getRepositoryUrl());
+		DbProject dbProject = new DbProject(form, form.getRepositoryUrl());
 		projectMapper.insertProject(dbProject);
 		jansibleGitter.cloneRepository(form, form.getRepositoryUrl());
 		outputProjectData(dbProject);
