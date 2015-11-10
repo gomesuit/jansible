@@ -1,5 +1,6 @@
 package jansible.jenkins;
 
+import jansible.model.jenkins.JenkinsInfo;
 import jansible.model.jenkins.JenkinsParameter;
 import jansible.model.jenkins.JenkinsParameters;
 
@@ -25,6 +26,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class JenkinsBuilder {
+	
+	public void build(JenkinsInfo jenkinsInfo, JenkinsParameter jenkinsParameter){
+		build(getJenkinsJobUrl(jenkinsInfo), jenkinsParameter);
+	}
+	
+	private String getJenkinsJobUrl(JenkinsInfo jenkinsInfo){
+		String ipAddress = jenkinsInfo.getIpAddress();
+		String port = jenkinsInfo.getPort();
+		String jobName = jenkinsInfo.getJobName();
+		
+		return "http://" + ipAddress + ":" + port + "/job/" + jobName + "/build?delay=0sec";
+	}
 	
 	public void build(String buildUrl, JenkinsParameter jenkinsParameter){		
 		String json = getJenkinsJson(jenkinsParameter);

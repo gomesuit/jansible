@@ -43,6 +43,7 @@ import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.database.DbTemplate;
 import jansible.model.database.InterfaceDbVariable;
+import jansible.model.jenkins.JenkinsInfo;
 import jansible.model.jenkins.JenkinsParameter;
 import jansible.model.yamldump.StartYaml;
 import jansible.model.yamldump.YamlModule;
@@ -106,7 +107,13 @@ public class ProjectService {
 		jenkinsParameter.setProjectName(form.getProjectName());
 		jenkinsParameter.setGroupName(jansibleFiler.getGroupName(form));
 		jenkinsParameter.setRepositoryUrl(project.getRepositoryUrl());
-		jenkinsBuilder.build("http://192.168.33.11:8080/job/test2/build?delay=0sec", jenkinsParameter);
+		
+		JenkinsInfo jenkinsInfo = new JenkinsInfo();
+		jenkinsInfo.setIpAddress("192.168.33.11");
+		jenkinsInfo.setPort("8080");
+		jenkinsInfo.setJobName("test2");
+		
+		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
 	}
 	
 	public List<DbProject> getProjectList(){
