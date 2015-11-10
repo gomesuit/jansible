@@ -111,6 +111,29 @@ public class JansibleFiler {
 		deleteDirByRecursive(dirName);
 	}
 	
+	public void deleteAllStartYamlfile(ProjectKey projectKey){
+		deleteAllStartYamlfile(getProjectDirName(projectKey));
+	}
+	
+	private void deleteAllStartYamlfile(String dirPath){
+		File root = new File(dirPath);
+		File[] fileList = root.listFiles();
+		for(File file : fileList){
+			if(isYamlFile(file)){
+				deleteFile(file);
+			}
+		}
+	}
+	
+	private boolean isYamlFile(File file) {
+		String fileName = file.getName();
+		if(fileName.endsWith(".yml")){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
 	private void deleteDirByRecursive(String dirPath){
 		File file = new File(dirPath);
 		deleteDirByRecursive(file);
@@ -122,24 +145,22 @@ public class JansibleFiler {
 		
 		if(root.isFile()){
 			// ファイル削除
-			if(root.exists() && !root.delete()){
-				root.deleteOnExit();
-			}
+			deleteFile(root);
 		}else{
 			// ディレクトリの場合、再帰する
 			File[] fileList = root.listFiles();
 			for(File file : fileList){
 				deleteDirByRecursive(file);
 			}
-			if(root.exists() && !root.delete()){
-				root.deleteOnExit();
-			}
+			deleteFile(root);
 		}
 	}
 	
 	private void mkDir(String dirName){
 		File newfile = new File(dirName);
-		newfile.mkdirs();
+		if(!newfile.exists()){
+			newfile.mkdirs();
+		}
 	}
 
 	public void mkProjectDir(ProjectKey projectKey){
@@ -150,8 +171,16 @@ public class JansibleFiler {
 		mkDir(getHostVariableDirName(projectKey));
 	}
 
+	public void deleteHostVariableDir(ProjectKey projectKey){
+		deleteDirByRecursive(getHostVariableDirName(projectKey));
+	}
+
 	public void mkGroupVariableDir(ProjectKey projectKey){
 		mkDir(getGroupVariableDirName(projectKey));
+	}
+
+	public void deleteGroupVariableDir(ProjectKey projectKey){
+		deleteDirByRecursive(getGroupVariableDirName(projectKey));
 	}
 
 	public void mkRoleDir(RoleKey roleKey){
@@ -194,7 +223,7 @@ public class JansibleFiler {
 	private String getHostVariableDirName(ProjectKey projectKey){
 		String dirName = getProjectDirName(projectKey);
 		dirName += PATH_SEPARATOR;
-		dirName += "hosr_vars";
+		dirName += "host_vars";
 		return dirName;
 	}
 	
@@ -283,6 +312,10 @@ public class JansibleFiler {
 	
 	public void deleteFile(String filePath){
 		File file = new File(filePath);
+		deleteFile(file);
+	}
+	
+	public void deleteFile(File file){
 		if(file.exists()){
 			file.delete();
 		}

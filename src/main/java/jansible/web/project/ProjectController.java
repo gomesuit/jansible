@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import jansible.file.JansibleFiler;
 import jansible.model.common.EnvironmentKey;
 import jansible.model.common.EnvironmentVariableKey;
 import jansible.model.common.Group;
@@ -24,8 +23,6 @@ import jansible.model.database.DbTaskDetail;
 import jansible.model.gethtml.HtmlModule;
 import jansible.model.gethtml.HtmlParameter;
 import jansible.model.yamldump.YamlModule;
-import jansible.model.yamldump.YamlParameter;
-import jansible.model.yamldump.YamlParameters;
 import jansible.util.YamlDumper;
 import jansible.web.module.ModuleService;
 import jansible.web.project.form.BuildForm;
@@ -47,7 +44,6 @@ import jansible.web.project.form.TaskParameter;
 import jansible.web.project.form.TaskView;
 import jansible.web.project.form.UploadForm;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -64,8 +60,6 @@ public class ProjectController {
 	private ModuleService moduleService;
 	@Autowired
 	private YamlDumper yamlDumper;
-	@Autowired
-	private JansibleFiler jansibleFiler;
     
     @RequestMapping("/")
     private String top(Model model){
@@ -198,7 +192,7 @@ public class ProjectController {
 	
 		List<DbTask> dbTaskList = new ArrayList<>();
 		dbTaskList.add(dbTask);
-		List<YamlModule> modules = createYamlModuleList(dbTaskList);
+		List<YamlModule> modules = projectService.createYamlModuleList(dbTaskList);
 		model.addAttribute("yaskYaml", yamlDumper.dump(modules).replaceAll("\n", "<br />"));
 		
 	    return "project/task/top";
@@ -300,7 +294,7 @@ public class ProjectController {
 		taskView.setModuleName(dbTask.getModuleName());
 		taskView.setDescription(dbTask.getDescription());
 		List<DbTaskDetail> dbTaskDetailList = projectService.getTaskDetailList(dbTask);
-		YamlModule yamlModule = new YamlModule(dbTask.getModuleName(), createParameters(dbTaskDetailList));
+		YamlModule yamlModule = new YamlModule(dbTask.getModuleName(), projectService.createParameters(dbTaskDetailList));
 		yamlModule.setDescription(dbTask.getDescription());
 		taskView.setParametersValue(yamlModule.getParameters().toString());
 		return taskView;
@@ -361,38 +355,10 @@ public class ProjectController {
     @RequestMapping(value="/project/taskdetail/regist", method=RequestMethod.POST)
     private String registTaskDetail(@ModelAttribute TaskDetailForm form, HttpServletRequest request){
     	projectService.updateTask(form);
-    	projectService.registTaskDetail(form);
-    	
-    	List<DbTask> dbTaskList = projectService.getTaskList(form);
-    	List<YamlModule> modules = createYamlModuleList(dbTaskList);
-    	jansibleFiler.writeRoleYaml(form, yamlDumper.dump(modules));
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
     }
-    
-    private List<YamlModule> createYamlModuleList(List<DbTask> dbTaskList){
-    	List<YamlModule> modules = new ArrayList<>();
-    	for(DbTask dbTask : dbTaskList){
-    		List<DbTaskDetail> dbTaskDetailList = projectService.getTaskDetailList(dbTask);
-    		YamlModule yamlModule = new YamlModule(dbTask.getModuleName(), createParameters(dbTaskDetailList));
-    		yamlModule.setDescription(dbTask.getDescription());
-    		modules.add(yamlModule);
-    	}
-    	return modules;
-    }
-    
-    private YamlParameters createParameters(List<DbTaskDetail> dbTaskDetailList) {
-    	YamlParameters yamlParameters = new YamlParameters();
-    	for(DbTaskDetail dbTaskDetail : dbTaskDetailList){
-    		if(StringUtils.isBlank(dbTaskDetail.getParameterValue())){
-    			continue;
-    		}
-    		YamlParameter YamlParameter = new YamlParameter(dbTaskDetail.getParameterName(), dbTaskDetail.getParameterValue());
-    		yamlParameters.addParameter(YamlParameter);
-    	}
-		return yamlParameters;
-	}
 
 	@RequestMapping(value="/project/environment/regist", method=RequestMethod.POST)
     private String registEnvironment(@ModelAttribute EnvironmentForm form, HttpServletRequest request){

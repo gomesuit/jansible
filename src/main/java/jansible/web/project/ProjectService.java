@@ -45,6 +45,9 @@ import jansible.model.database.DbTemplate;
 import jansible.model.database.InterfaceDbVariable;
 import jansible.model.jenkins.JenkinsParameter;
 import jansible.model.yamldump.StartYaml;
+import jansible.model.yamldump.YamlModule;
+import jansible.model.yamldump.YamlParameter;
+import jansible.model.yamldump.YamlParameters;
 import jansible.model.yamldump.YamlVariable;
 import jansible.util.YamlDumper;
 import jansible.web.project.form.BuildForm;
@@ -65,6 +68,7 @@ import jansible.web.project.form.TaskForm;
 import jansible.web.project.form.TaskParameter;
 import jansible.web.project.form.UploadForm;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -243,9 +247,7 @@ public class ProjectService {
 		DbProject dbProject = new DbProject(form.getProjectName(), form.getRepositoryUrl());
 		projectMapper.insertProject(dbProject);
 		jansibleGitter.cloneRepository(form, form.getRepositoryUrl());
-		//jansibleFiler.mkProjectDir(dbProject);
-		jansibleFiler.mkHostVariableDir(dbProject);
-		jansibleFiler.mkGroupVariableDir(dbProject);
+		outputProjectData(dbProject);
 	}
 	
 	public void registEnvironment(EnvironmentForm form) {
@@ -262,32 +264,141 @@ public class ProjectService {
 		DbServer dbServer = new DbServer(form);
 		serverMapper.insertServer(dbServer);
 		
-		List<DbServiceGroup> dbServiceGroupList = serviceGroupMapper.selectServiceGroupList(form);
-		List<HostGroup> hostGroupList = new ArrayList<>();
-		for(DbServiceGroup dbServiceGroup : dbServiceGroupList){
-			HostGroup hostGroup = new HostGroup();
-			hostGroup.setGroupName(jansibleFiler.getGroupName(dbServiceGroup));
-			List<DbServer> dbServerList = serverMapper.selectServerList(dbServiceGroup);
-			for(DbServer server : dbServerList){
-				hostGroup.addHost(server.getServerName());
-			}
-			hostGroupList.add(hostGroup);
-		}
-		String hostsFileContent = jansibleHostsDumper.getString(hostGroupList);
-		jansibleFiler.writeHostsFile(form, hostsFileContent);
+		outputHostsData(form);
 	}
 	
 	public void registRole(RoleForm form) {
-		DbRole dbRole = new DbRole(form);;
+		DbRole dbRole = new DbRole(form);
 		roleMapper.insertRole(dbRole);
-		jansibleFiler.mkRoleDir(dbRole);
-		jansibleFiler.mkRoleTaskDir(dbRole);
-		jansibleFiler.mkRoleTemplateDir(dbRole);
-		jansibleFiler.mkRoleFileDir(dbRole);
-		jansibleFiler.mkRoleVariableDir(dbRole);
-		jansibleFiler.writeRoleYaml(dbRole);
+		outputRoleData(dbRole);
 	}
 	
+	private void outputProjectData(ProjectKey projectKey){
+		jansibleFiler.mkHostVariableDir(projectKey);
+		jansibleFiler.mkGroupVariableDir(projectKey);
+	}
+	
+	private void outputRoleData(RoleKey roleKey){
+		jansibleFiler.mkRoleDir(roleKey);
+		jansibleFiler.mkRoleTaskDir(roleKey);
+		jansibleFiler.mkRoleTemplateDir(roleKey);
+		jansibleFiler.mkRoleFileDir(roleKey);
+		jansibleFiler.mkRoleVariableDir(roleKey);
+		jansibleFiler.writeRoleYaml(roleKey);
+	}
+	
+	private void outputRoleVariableData(RoleKey roleKey){
+		List<DbRoleVariable> dbRoleVariableList = variableMapper.selectDbRoleVariableList(roleKey);
+		List<YamlVariable> yamlVariableList = createYamlVariableList(dbRoleVariableList);
+		String yamlContent = yamlDumper.dumpVariable(yamlVariableList);
+		jansibleFiler.writeRoleVariableYaml(roleKey, yamlContent);
+	}
+	
+	private void outputServiceGroupVariableData(ServiceGroupKey serviceGroupKey){
+		List<DbEnvironmentVariable> dbEnvironmentVariableList = variableMapper.selectDbEnvironmentVariableList(serviceGroupKey);
+		List<YamlVariable> envYamlVariableList = createYamlVariableList(dbEnvironmentVariableList);
+		
+		List<DbServiceGroupVariable> dbServiceGroupVariableList = variableMapper.selectDbServiceGroupVariableList(serviceGroupKey);
+		List<YamlVariable> groupVamlVariableList = createYamlVariableList(dbServiceGroupVariableList);
+		
+		envYamlVariableList.addAll(groupVamlVariableList);
+		
+		if(!envYamlVariableList.isEmpty()){
+			String yamlContent = yamlDumper.dumpVariable(envYamlVariableList);
+			jansibleFiler.writeGroupVariableYaml(serviceGroupKey, yamlContent);
+		}
+	}
+
+	private void outputRoleRelationData(ServiceGroupKey serviceGroupKey){
+		StartYaml startYaml = new StartYaml();
+		startYaml.setHosts(jansibleFiler.getGroupName(serviceGroupKey));
+		
+		List<DbRoleRelation> dbRoleRelationList = serviceGroupMapper.selectDbRoleRelationList(serviceGroupKey);
+		for(DbRoleRelation roleRelation : dbRoleRelationList){
+			startYaml.addRole(roleRelation.getRoleName());
+		}
+		String yamlContent = yamlDumper.dumpStartYaml(startYaml);
+		jansibleFiler.writeStartYaml(serviceGroupKey, yamlContent);
+	}
+	
+	private void outputTaskData(TaskKey taskKey){
+    	List<DbTask> dbTaskList = getTaskList(taskKey);
+    	List<YamlModule> modules = createYamlModuleList(dbTaskList);
+    	jansibleFiler.writeRoleYaml(taskKey, yamlDumper.dump(modules));
+	}
+
+	private void outputServerVariableData(ServerKey serverKey){
+		List<DbServerVariable> dbServerVariableList = variableMapper.selectDbServerVariableList(serverKey);
+		List<YamlVariable> yamlVariableList = createYamlVariableList(dbServerVariableList);
+		
+		if(!yamlVariableList.isEmpty()){
+			String yamlContent = yamlDumper.dumpVariable(yamlVariableList);
+			jansibleFiler.writeHostVariableYaml(serverKey, yamlContent);
+		}
+	}
+	
+	private void outputHostsData(ProjectKey projectKey){
+		List<HostGroup> hostGroupList = createHostGroupList(projectKey);
+		
+		if(!hostGroupList.isEmpty()){
+			String hostsFileContent = jansibleHostsDumper.getString(hostGroupList);
+			jansibleFiler.writeHostsFile(projectKey, hostsFileContent);
+		}
+	}
+	
+	private List<HostGroup> createHostGroupList(ProjectKey projectKey){
+		List<HostGroup> hostGroupList = new ArrayList<>();
+		
+		List<DbEnvironment> dbEnvironmentList = environmentMapper.selectEnvironmentList(projectKey);
+		for(DbEnvironment dbEnvironment : dbEnvironmentList){
+			List<DbServiceGroup> dbServiceGroupList = serviceGroupMapper.selectServiceGroupList(dbEnvironment);
+			for(DbServiceGroup dbServiceGroup : dbServiceGroupList){
+				HostGroup hostGroup = createHostGroup(dbServiceGroup);
+				hostGroupList.add(hostGroup);
+			}
+		}
+		return hostGroupList;
+	}
+	
+	private HostGroup createHostGroup(ServiceGroupKey serviceGroupKey){
+		HostGroup hostGroup = new HostGroup();
+		hostGroup.setGroupName(jansibleFiler.getGroupName(serviceGroupKey));
+		List<DbServer> dbServerList = serverMapper.selectServerList(serviceGroupKey);
+		for(DbServer server : dbServerList){
+			hostGroup.addHost(server.getServerName());
+		}
+		return hostGroup;
+	}
+	
+	private void outputEnvironmentVariableData(EnvironmentKey environmentKey){
+		List<DbServiceGroup> dbServiceGroupList = serviceGroupMapper.selectServiceGroupList(environmentKey);
+		
+		for(DbServiceGroup dbServiceGroup : dbServiceGroupList){
+			outputServiceGroupVariableData(dbServiceGroup);
+		}
+	}
+
+	public void reOutputAllData(ProjectKey projectKey){
+		jansibleFiler.deleteAllStartYamlfile(projectKey);
+		jansibleFiler.deleteGroupVariableDir(projectKey);
+		jansibleFiler.deleteHostVariableDir(projectKey);
+		
+		outputProjectData(projectKey);
+		outputHostsData(projectKey);
+		List<DbEnvironment> dbEnvironmentList = environmentMapper.selectEnvironmentList(projectKey);
+		for(DbEnvironment dbEnvironment : dbEnvironmentList){
+			List<DbServiceGroup> dbServiceGroupList = serviceGroupMapper.selectServiceGroupList(dbEnvironment);
+			for(DbServiceGroup dbServiceGroup : dbServiceGroupList){
+				outputServiceGroupVariableData(dbServiceGroup);
+				outputRoleRelationData(dbServiceGroup);
+				List<DbServer> dbServerList = serverMapper.selectServerList(dbServiceGroup);
+				for(DbServer dbServer : dbServerList){
+					outputServerVariableData(dbServer);
+				}
+			}
+		}
+	}
+
 	public void registTask(TaskForm form) {
 		DbTask dbTask = createDbTask(form);
 		taskMapper.insertTask(dbTask);
@@ -296,9 +407,36 @@ public class ProjectService {
 	public void updateTask(TaskDetailForm form) {
 		DbTask dbTask = createDbTask(form);
 		taskMapper.updateTask(dbTask);
+		
+		registTaskDetail(form);
+		
+		outputTaskData(form);
+	}
+    
+    public List<YamlModule> createYamlModuleList(List<DbTask> dbTaskList){
+    	List<YamlModule> modules = new ArrayList<>();
+    	for(DbTask dbTask : dbTaskList){
+    		List<DbTaskDetail> dbTaskDetailList = getTaskDetailList(dbTask);
+    		YamlModule yamlModule = new YamlModule(dbTask.getModuleName(), createParameters(dbTaskDetailList));
+    		yamlModule.setDescription(dbTask.getDescription());
+    		modules.add(yamlModule);
+    	}
+    	return modules;
+    }
+    
+    public YamlParameters createParameters(List<DbTaskDetail> dbTaskDetailList) {
+    	YamlParameters yamlParameters = new YamlParameters();
+    	for(DbTaskDetail dbTaskDetail : dbTaskDetailList){
+    		if(StringUtils.isBlank(dbTaskDetail.getParameterValue())){
+    			continue;
+    		}
+    		YamlParameter YamlParameter = new YamlParameter(dbTaskDetail.getParameterName(), dbTaskDetail.getParameterValue());
+    		yamlParameters.addParameter(YamlParameter);
+    	}
+		return yamlParameters;
 	}
 	
-	public void registTaskDetail(TaskDetailForm form) {
+	private void registTaskDetail(TaskDetailForm form) {
 		List<DbTaskDetail> dbTaskDetailList = createDbTaskDetailList(form);
 		for(DbTaskDetail dbTaskDetail : dbTaskDetailList){
 			taskMapper.insertTaskDetail(dbTaskDetail);
@@ -309,15 +447,7 @@ public class ProjectService {
 		DbRoleRelation dbRoleRelation = createDbRoleRelation(form);
 		serviceGroupMapper.insertDbRoleRelation(dbRoleRelation);
 		
-		StartYaml startYaml = new StartYaml();
-		startYaml.setHosts(jansibleFiler.getGroupName(form));
-		
-		List<DbRoleRelation> dbRoleRelationList = serviceGroupMapper.selectDbRoleRelationList(form);
-		for(DbRoleRelation roleRelation : dbRoleRelationList){
-			startYaml.addRole(roleRelation.getRoleName());
-		}
-		String yamlContent = yamlDumper.dumpStartYaml(startYaml);
-		jansibleFiler.writeStartYaml(form, yamlContent);
+		outputRoleRelationData(form);
 	}
 	
 	private DbRoleRelation createDbRoleRelation(RoleRelationForm form) {
@@ -402,10 +532,7 @@ public class ProjectService {
 		DbRoleVariable dbRoleVariable = createDbRoleVariable(form);
 		variableMapper.insertDbRoleVariable(dbRoleVariable);
 		
-		List<DbRoleVariable> dbRoleVariableList = variableMapper.selectDbRoleVariableList(form);
-		List<YamlVariable> yamlVariableList = createYamlVariableList(dbRoleVariableList);
-		String yamlContent = yamlDumper.dumpVariable(yamlVariableList);
-		jansibleFiler.writeRoleVariableYaml(form, yamlContent);
+		outputRoleVariableData(form);
 	}
 	
 	private <T extends InterfaceDbVariable> List<YamlVariable> createYamlVariableList(List<T> dbVariableList){
@@ -420,47 +547,23 @@ public class ProjectService {
 		DbServiceGroupVariable dbServiceGroupVariable = createDbServiceGroupVariable(form);
 		variableMapper.insertDbServiceGroupVariable(dbServiceGroupVariable);
 		
-		writeServiceGroupVariableYaml(form);
-	}
-	
-	private void writeServiceGroupVariableYaml(ServiceGroupKey serviceGroupKey){
-		List<DbEnvironmentVariable> dbEnvironmentVariableList = variableMapper.selectDbEnvironmentVariableList(serviceGroupKey);
-		List<YamlVariable> envYamlVariableList = createYamlVariableList(dbEnvironmentVariableList);
-		
-		List<DbServiceGroupVariable> dbServiceGroupVariableList = variableMapper.selectDbServiceGroupVariableList(serviceGroupKey);
-		List<YamlVariable> groupVamlVariableList = createYamlVariableList(dbServiceGroupVariableList);
-		
-		envYamlVariableList.addAll(groupVamlVariableList);
-		
-		String yamlContent = yamlDumper.dumpVariable(envYamlVariableList);
-		jansibleFiler.writeGroupVariableYaml(serviceGroupKey, yamlContent);
+		outputServiceGroupVariableData(form);
 	}
 	
 	public void registServerVariable(ServerVariableForm form) {
 		DbServerVariable dbServerVariable = createDbServerVariable(form);
 		variableMapper.insertDbServerVariable(dbServerVariable);
 		
-		List<DbServerVariable> dbServerVariableList = variableMapper.selectDbServerVariableList(form);
-		List<YamlVariable> yamlVariableList = createYamlVariableList(dbServerVariableList);
-		String yamlContent = yamlDumper.dumpVariable(yamlVariableList);
-		jansibleFiler.writeHostVariableYaml(form, yamlContent);
+		outputServerVariableData(form);
 	}
 	
 	public void registEnvironmentVariable(EnvironmentVariableForm form) {
 		DbEnvironmentVariable dbEnvironmentVariable = createDbEnvironmentVariable(form);
 		variableMapper.insertDbEnvironmentVariable(dbEnvironmentVariable);
 		
-		writeEnvironmentVariableYaml(form);
+		outputEnvironmentVariableData(form);
 	}
 	
-	private void writeEnvironmentVariableYaml(EnvironmentKey environmentKey){
-		List<DbServiceGroup> dbServiceGroupList = serviceGroupMapper.selectServiceGroupList(environmentKey);
-		
-		for(DbServiceGroup dbServiceGroup : dbServiceGroupList){
-			writeServiceGroupVariableYaml(dbServiceGroup);
-		}
-	}
-
 	private DbEnvironmentVariable createDbEnvironmentVariable(EnvironmentVariableForm form) {
 		DbEnvironmentVariable dbEnvironmentVariable = new DbEnvironmentVariable(form);
 		dbEnvironmentVariable.setValue(form.getValue());
@@ -486,6 +589,7 @@ public class ProjectService {
 	}
 
 	public void commitGit(GitForm form) {
+		reOutputAllData(form);
 		jansibleGitter.commitAndPush(form, form.getUserName(), form.getPassword(), form.getComment());
 	}
 }

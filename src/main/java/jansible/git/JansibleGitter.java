@@ -64,11 +64,11 @@ public class JansibleGitter {
 
 			Git git = new Git(repository);
 			
+	        //AddCommand ac = git.add().setUpdate(true);
 	        AddCommand ac = git.add();
 	        ac.addFilepattern(".").call();
 			
-			git.commit().setMessage(comment).call();
-			
+			git.commit().setMessage(comment).setAll(true).call();
 			
 			CredentialsProvider cp = new UsernamePasswordCredentialsProvider(name, pass);
 			
