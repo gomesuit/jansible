@@ -29,6 +29,7 @@
 	<table border="1" rules="all">
 		<tr>
 			<td>server</td>
+			<td>Delete</td>
 		</tr>
 		<tr th:each="server : ${serverList}">
 			<td>
@@ -105,6 +106,7 @@
 		<tr>
 			<td>variable</td>
 			<td>value</td>
+			<td>Delete</td>
 		</tr>
 		<tr th:each="variable : ${groupVariableList}">
 			<td th:text="${variable.variableName}" />

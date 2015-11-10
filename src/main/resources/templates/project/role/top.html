@@ -38,6 +38,8 @@
 		<tr>
 			<td>task</td>
 			<td>description</td>
+			<td>parameter</td>
+			<td>Delete</td>
 		</tr>
 		<tr th:each="task : ${taskList}">
 			<td>
@@ -145,6 +147,7 @@
 		<tr>
 			<td>variable</td>
 			<td>value</td>
+			<td>Delete</td>
 		</tr>
 		<tr th:each="variable : ${variableList}">
 			<td th:text="${variable.variableName}" />
