@@ -89,7 +89,7 @@
 			project_name = #{projectName} AND
 			environment_name = #{environmentName} AND
 			group_name = #{groupName} AND
-			sort = #{sort}
+			role_name = #{roleName}
 	</delete>
 	
 	<delete id="deleteDbRoleRelationByServiceGroup">

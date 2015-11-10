@@ -10,6 +10,7 @@ import jansible.model.common.EnvironmentVariableKey;
 import jansible.model.common.Group;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
+import jansible.model.common.RoleRelationKey;
 import jansible.model.common.RoleVariableKey;
 import jansible.model.common.ServerKey;
 import jansible.model.common.ServerVariableKey;
@@ -259,6 +260,9 @@ public class ProjectController {
     	model.addAttribute("roleList", projectService.getRoleList(serviceGroupKey));
 		model.addAttribute("roleRelationList", projectService.getRoleRelationList(serviceGroupKey));
 		
+		RoleRelationKey roleRelationKey = new RoleRelationKey(serviceGroupKey);
+    	model.addAttribute("roleRelationKey", roleRelationKey);
+		
 		ServiceGroupVariableForm variableForm = new ServiceGroupVariableForm(serviceGroupKey);
 		model.addAttribute("variableForm", variableForm);
 		
@@ -412,6 +416,14 @@ public class ProjectController {
     @RequestMapping(value="/project/roleVariable/regist", method=RequestMethod.POST)
     private String registRoleVariable(@ModelAttribute RoleVariableForm form, HttpServletRequest request){
     	projectService.registRoleVariable(form);
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+    }
+
+    @RequestMapping(value="/project/roleRelation/delete", method=RequestMethod.POST)
+    private String deleteRoleRelation(@ModelAttribute RoleRelationKey key, HttpServletRequest request){
+    	projectService.deleteRoleRelation(key);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
