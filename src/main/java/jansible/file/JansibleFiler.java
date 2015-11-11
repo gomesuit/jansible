@@ -14,12 +14,15 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class JansibleFiler {
-	private final String ROOT_PATH = "D:/temp/";
+	
+	@Value("${jansible.root.path}")
+	private String ROOT_PATH;
 	private final String PATH_SEPARATOR = "/";
 	private final String DEFAULT_YAML_NAME = "main.yml";
 	
