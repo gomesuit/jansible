@@ -8,6 +8,7 @@ import java.util.Iterator;
 
 import org.eclipse.jgit.api.AddCommand;
 import org.eclipse.jgit.api.CloneCommand;
+import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PushCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -59,16 +60,20 @@ public class JansibleGitter {
 	
 	private void commitAndPush(String localPath, String name, String pass, String comment) {
 		FileRepositoryBuilder builder = new FileRepositoryBuilder();
-		try {
-			Repository repository = builder.setGitDir(new File(localPath + "/.git")).readEnvironment().findGitDir().build();
-
-			Git git = new Git(repository);
+		File gitDir = new File(localPath + "/.git");
+		builder.setGitDir(gitDir);
+		builder.readEnvironment();
+		
+		try(Git git = new Git(builder.build())){
 			
-	        //AddCommand ac = git.add().setUpdate(true);
-	        AddCommand ac = git.add();
-	        ac.addFilepattern(".").call();
+	        AddCommand addCommand = git.add();
+	        addCommand.addFilepattern(".");
+	        addCommand.call();
 			
-			git.commit().setMessage(comment).setAll(true).call();
+	        CommitCommand commitCommand = git.commit();
+	        commitCommand.setMessage(comment);
+	        commitCommand.setAll(true);
+	        commitCommand.call();
 			
 			CredentialsProvider cp = new UsernamePasswordCredentialsProvider(name, pass);
 			
@@ -80,7 +85,6 @@ public class JansibleGitter {
 	            System.out.println(it.next().toString());
 	        }
 			
-	        git.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
