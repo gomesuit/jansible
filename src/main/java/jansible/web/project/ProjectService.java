@@ -605,7 +605,7 @@ public class ProjectService {
 		return dbRoleVariable;
 	}
 
-	public void commitGit(GitForm form) {
+	public void commitGit(GitForm form) throws Exception {
 		reOutputAllData(form);
 		jansibleGitter.commitAndPush(form, form.getUserName(), form.getPassword(), form.getComment());
 	}

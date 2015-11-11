@@ -526,7 +526,7 @@ public class ProjectController {
     }
 
 	@RequestMapping(value="/project/git/commit", method=RequestMethod.POST)
-	private String commitGit(@ModelAttribute GitForm form, HttpServletRequest request){
+	private String commitGit(@ModelAttribute GitForm form, HttpServletRequest request) throws Exception{
 		projectService.commitGit(form);
 		
 		String referer = request.getHeader("Referer");

@@ -14,7 +14,6 @@ import org.eclipse.jgit.api.PushCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.TransportException;
-import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.PushResult;
@@ -53,12 +52,12 @@ public class JansibleGitter {
 		}
 	}
 	
-	public void commitAndPush(ProjectKey projectKey, String name, String pass, String comment){
+	public void commitAndPush(ProjectKey projectKey, String name, String pass, String comment) throws Exception{
 		String projectDirName = jansibleFiler.getProjectDirName(projectKey);
 		commitAndPush(projectDirName, name, pass, comment);
 	}
 	
-	private void commitAndPush(String localPath, String name, String pass, String comment) {
+	private void commitAndPush(String localPath, String name, String pass, String comment) throws Exception {
 		FileRepositoryBuilder builder = new FileRepositoryBuilder();
 		File gitDir = new File(localPath + "/.git");
 		builder.setGitDir(gitDir);
@@ -77,17 +76,18 @@ public class JansibleGitter {
 			
 			CredentialsProvider cp = new UsernamePasswordCredentialsProvider(name, pass);
 			
-	        PushCommand pc = git.push();
-	        pc.setCredentialsProvider(cp).setForce(true).setPushAll();
+	        PushCommand pushCommand = git.push();
+	        pushCommand.setCredentialsProvider(cp).setForce(true).setPushAll();
 
-	        Iterator<PushResult> it = pc.call().iterator();
+	        Iterator<PushResult> it = pushCommand.call().iterator();
 	        if(it.hasNext()){
 	            System.out.println(it.next().toString());
 	        }
-			
+	        
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new Exception(e);
 		}
 	}
 }
