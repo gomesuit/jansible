@@ -12,6 +12,7 @@
 				group_name,
 				server_name,
 				tag_name,
+				tag_comment,
 				apply_time
 			)
 		VALUES
@@ -21,6 +22,7 @@
 				#{groupName},
 				#{serverName},
 				#{tagName},
+				#{tagComment},
 				#{applyTime}
 			)
 	</insert>
@@ -33,6 +35,7 @@
 			group_name as groupName,
 			server_name as serverName,
 			tag_name as tagName,
+			tag_comment as tagComment,
 			apply_time as applyTime
 		FROM
 			apply_history
@@ -50,6 +53,7 @@
 			group_name as groupName,
 			server_name as serverName,
 			tag_name as tagName,
+			tag_comment as tagComment,
 			apply_time as applyTime
 		FROM
 			apply_history

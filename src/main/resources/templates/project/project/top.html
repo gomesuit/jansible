@@ -149,6 +149,7 @@
 			<td>environment</td>
 			<td>group</td>
 			<td>tagName</td>
+			<td>tagComment</td>
 			<td>applyTime</td>
 			<td>Rebuild</td>
 		</tr>
@@ -156,6 +157,7 @@
 			<td><div th:text="${applyHistory.environmentName}" /></td>
 			<td><div th:text="${applyHistory.groupName}" /></td>
 			<td><div th:text="${applyHistory.tagName}" /></td>
+			<td><div th:text="${applyHistory.tagComment}" /></td>
 			<td><div th:text="${#dates.format(applyHistory.applyTime, 'yyyy/MM/dd HH:mm:ss')}" /></td>
 			<form method="POST" th:action="@{/project/jenkins/rebuild}" th:object="${rebuildForm}">
 				<input type="hidden" th:field="*{projectName}" />

@@ -137,6 +137,7 @@ public class ProjectService {
 		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
 		
 		dbApplyHistory.setApplyTime(new Date());
+		dbApplyHistory.setTagComment(dbApplyHistory.getTagComment() + "(rebuid)");
 		applyHistoryMapper.insertDbApplyHistory(dbApplyHistory);
 	}
 	
@@ -164,6 +165,7 @@ public class ProjectService {
 		dbApplyHistory.setEnvironmentName(form.getEnvironmentName());
 		dbApplyHistory.setGroupName(form.getGroupName());
 		dbApplyHistory.setTagName(tagName);
+		dbApplyHistory.setTagComment(form.getComment());
 		dbApplyHistory.setApplyTime(new Date());
 		
 		applyHistoryMapper.insertDbApplyHistory(dbApplyHistory);

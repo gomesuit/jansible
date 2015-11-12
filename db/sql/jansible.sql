@@ -34,6 +34,7 @@ CREATE TABLE apply_history
 	group_name varchar(80),
 	server_name varchar(80),
 	tag_name varchar(120) NOT NULL,
+	tag_comment varchar(256),
 	apply_time datetime NOT NULL,
 	PRIMARY KEY (apply_histroy_id, project_name)
 );

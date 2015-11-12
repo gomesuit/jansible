@@ -10,6 +10,7 @@ public class DbApplyHistory extends ApplyHistoryKey{
 	private String groupName;
 	private String serverName;
 	private String tagName;
+	private String tagComment;
 	private Date applyTime;
 	
 	public DbApplyHistory(){}
@@ -62,5 +63,13 @@ public class DbApplyHistory extends ApplyHistoryKey{
 
 	public void setServerName(String serverName) {
 		this.serverName = serverName;
+	}
+
+	public String getTagComment() {
+		return tagComment;
+	}
+
+	public void setTagComment(String tagComment) {
+		this.tagComment = tagComment;
 	}
 }
