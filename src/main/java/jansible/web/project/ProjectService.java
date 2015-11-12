@@ -1,6 +1,8 @@
 package jansible.web.project;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import jansible.file.HostGroup;
@@ -110,7 +112,9 @@ public class ProjectService {
 		projectMapper.updateJenkinsInfo(dbProject);
 	}
 	
-	public void build(BuildForm form){
+	public void build(BuildForm form) throws Exception{
+		jansibleGitter.tagAndPush(form, form.getUserName(), form.getPassword(), getTagName(form), form.getComment());
+		
 		DbProject project = getProject(form);
 		JenkinsParameter jenkinsParameter = new JenkinsParameter();
 		jenkinsParameter.setProjectName(form.getProjectName());
@@ -124,6 +128,17 @@ public class ProjectService {
 		jenkinsInfo.setJobName(dbProject.getJenkinsJobName());
 		
 		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
+	}
+	
+	private String getDateString(){
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+		return format.format(new Date());
+	}
+	
+	private String getTagName(ServiceGroupKey serviceGroupKey){
+		String groupName = jansibleFiler.getGroupName(serviceGroupKey);
+		String dateString = getDateString();
+		return groupName + dateString;
 	}
 	
 	public List<DbProject> getProjectList(){

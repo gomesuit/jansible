@@ -534,7 +534,7 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value="/project/jenkins/build", method=RequestMethod.POST)
-	private String build(@ModelAttribute BuildForm form, HttpServletRequest request){
+	private String build(@ModelAttribute BuildForm form, HttpServletRequest request) throws Exception{
 		projectService.build(form);
 		
 		String referer = request.getHeader("Referer");

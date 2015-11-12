@@ -123,6 +123,9 @@
 		<tr>
 			<td>environment</td>
 			<td>group</td>
+			<td>userName</td>
+			<td>password</td>
+			<td>comment</td>
 			<td>Build</td>
 		</tr>
 		<tr th:each="group : ${groupList}">
@@ -132,6 +135,9 @@
 				<input type="hidden" th:field="*{projectName}" />
 				<input type="hidden" name="environmentName" th:value="${group.environmentName}" />
 				<input type="hidden" name="groupName" th:value="${group.groupName}" />
+				<td><input type="text" th:field="*{userName}" /></td>
+				<td><input type="password" th:field="*{password}" /></td>
+				<td><input type="text" th:field="*{comment}" /></td>
 				<td><input type="submit" value="Build" /></td>
 			</form>
 		</tr>
