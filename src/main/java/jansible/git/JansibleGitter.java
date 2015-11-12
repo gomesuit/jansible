@@ -77,7 +77,9 @@ public class JansibleGitter {
 			CredentialsProvider cp = new UsernamePasswordCredentialsProvider(name, pass);
 			
 	        PushCommand pushCommand = git.push();
-	        pushCommand.setCredentialsProvider(cp).setForce(true).setPushAll();
+	        pushCommand.setCredentialsProvider(cp);
+	        pushCommand.setForce(true);
+	        pushCommand.setPushAll();
 
 	        Iterator<PushResult> it = pushCommand.call().iterator();
 	        if(it.hasNext()){
