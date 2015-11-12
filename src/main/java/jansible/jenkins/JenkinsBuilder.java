@@ -53,6 +53,7 @@ public class JenkinsBuilder {
 		jenkinsParameters.addParameter("projectName", jenkinsParameter.getProjectName());
 		jenkinsParameters.addParameter("repositoryUrl", jenkinsParameter.getRepositoryUrl());
 		jenkinsParameters.addParameter("groupName", jenkinsParameter.getGroupName());
+		jenkinsParameters.addParameter("tagName", jenkinsParameter.getTagName());
 		ObjectMapper mapper = new ObjectMapper();
 		String json = "";
 		try {

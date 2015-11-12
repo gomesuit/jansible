@@ -87,7 +87,7 @@ public class JansibleFiler {
 	}
 	
 	public String getGroupName(String environmentName, String groupName) {
-		return environmentName + "_" + groupName;
+		return "E_" + environmentName + "_G_" + groupName;
 	}
 
 	private void writeFile(String filePath, String content){

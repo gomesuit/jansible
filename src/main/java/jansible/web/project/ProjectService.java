@@ -113,13 +113,15 @@ public class ProjectService {
 	}
 	
 	public void build(BuildForm form) throws Exception{
-		jansibleGitter.tagAndPush(form, form.getUserName(), form.getPassword(), getTagName(form), form.getComment());
+		String tagName = getTagName(form);
+		jansibleGitter.tagAndPush(form, form.getUserName(), form.getPassword(), tagName, form.getComment());
 		
 		DbProject project = getProject(form);
 		JenkinsParameter jenkinsParameter = new JenkinsParameter();
 		jenkinsParameter.setProjectName(form.getProjectName());
 		jenkinsParameter.setGroupName(jansibleFiler.getGroupName(form));
 		jenkinsParameter.setRepositoryUrl(project.getRepositoryUrl());
+		jenkinsParameter.setTagName(tagName);
 		
 		DbProject dbProject = projectMapper.selectProject(form);
 		JenkinsInfo jenkinsInfo = new JenkinsInfo();

@@ -4,6 +4,7 @@ public class JenkinsParameter {
 	private String repositoryUrl;
 	private String projectName;
 	private String groupName;
+	private String tagName;
 	
 	public String getRepositoryUrl() {
 		return repositoryUrl;
@@ -22,5 +23,11 @@ public class JenkinsParameter {
 	}
 	public void setGroupName(String groupName) {
 		this.groupName = groupName;
+	}
+	public String getTagName() {
+		return tagName;
+	}
+	public void setTagName(String tagName) {
+		this.tagName = tagName;
 	}
 }
