@@ -143,6 +143,28 @@
 		</tr>
 	</table>
 	
+	<div>履歴</div>
+	<table border="1" rules="all">
+		<tr>
+			<td>environment</td>
+			<td>group</td>
+			<td>tagName</td>
+			<td>applyTime</td>
+			<td>Rebuild</td>
+		</tr>
+		<tr th:each="applyHistory : ${applyHistoryList}">
+			<td><div th:text="${applyHistory.environmentName}" /></td>
+			<td><div th:text="${applyHistory.groupName}" /></td>
+			<td><div th:text="${applyHistory.tagName}" /></td>
+			<td><div th:text="${#dates.format(applyHistory.applyTime, 'yyyy/MM/dd HH:mm:ss')}" /></td>
+			<form method="POST" th:action="@{/project/jenkins/rebuild}" th:object="${rebuildForm}">
+				<input type="hidden" th:field="*{projectName}" />
+				<input type="hidden" name="applyHistroyId" th:value="${applyHistory.applyHistroyId}" />
+				<td><input type="submit" value="Rebuild" /></td>
+			</form>
+		</tr>
+	</table>
+	
 	<br /><hr />
 	<a th:href="@{/}" >トップ</a>
 </body>

@@ -2,12 +2,12 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 
 /* Drop Tables */
 
+DROP TABLE IF EXISTS apply_history;
 DROP TABLE IF EXISTS choice;
 DROP TABLE IF EXISTS environment_variable;
 DROP TABLE IF EXISTS role_relation;
 DROP TABLE IF EXISTS server_variable;
 DROP TABLE IF EXISTS server;
-DROP TABLE IF EXISTS service_group_apply_history;
 DROP TABLE IF EXISTS service_group_variable;
 DROP TABLE IF EXISTS service_group;
 DROP TABLE IF EXISTS environment;
@@ -25,6 +25,19 @@ DROP TABLE IF EXISTS project;
 
 
 /* Create Tables */
+
+CREATE TABLE apply_history
+(
+	apply_histroy_id int NOT NULL AUTO_INCREMENT,
+	project_name varchar(50) NOT NULL,
+	environment_name varchar(80),
+	group_name varchar(80),
+	server_name varchar(80),
+	tag_name varchar(120) NOT NULL,
+	apply_time datetime NOT NULL,
+	PRIMARY KEY (apply_histroy_id, project_name)
+);
+
 
 CREATE TABLE choice
 (
@@ -151,17 +164,6 @@ CREATE TABLE service_group
 	environment_name varchar(80) NOT NULL,
 	group_name varchar(80) NOT NULL,
 	PRIMARY KEY (project_name, environment_name, group_name)
-);
-
-
-CREATE TABLE service_group_apply_history
-(
-	apply_histroy_id int NOT NULL AUTO_INCREMENT,
-	project_name varchar(50) NOT NULL,
-	environment_name varchar(80) NOT NULL,
-	group_name varchar(80) NOT NULL,
-	tag_name varchar(120) NOT NULL,
-	PRIMARY KEY (apply_histroy_id, project_name, environment_name, group_name)
 );
 
 

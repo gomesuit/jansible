@@ -10,6 +10,7 @@ import jansible.file.JansibleFiler;
 import jansible.file.JansibleHostsDumper;
 import jansible.git.JansibleGitter;
 import jansible.jenkins.JenkinsBuilder;
+import jansible.mapper.ApplyHistoryMapper;
 import jansible.mapper.EnvironmentMapper;
 import jansible.mapper.ProjectMapper;
 import jansible.mapper.RoleMapper;
@@ -17,6 +18,7 @@ import jansible.mapper.ServerMapper;
 import jansible.mapper.ServiceGroupMapper;
 import jansible.mapper.TaskMapper;
 import jansible.mapper.VariableMapper;
+import jansible.model.common.ApplyHistoryKey;
 import jansible.model.common.EnvironmentKey;
 import jansible.model.common.EnvironmentVariableKey;
 import jansible.model.common.FileKey;
@@ -30,6 +32,7 @@ import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.ServiceGroupVariableKey;
 import jansible.model.common.TaskKey;
 import jansible.model.common.TemplateKey;
+import jansible.model.database.DbApplyHistory;
 import jansible.model.database.DbEnvironment;
 import jansible.model.database.DbEnvironmentVariable;
 import jansible.model.database.DbFile;
@@ -60,6 +63,7 @@ import jansible.web.project.form.GeneralFileForm;
 import jansible.web.project.form.GitForm;
 import jansible.web.project.form.JenkinsInfoForm;
 import jansible.web.project.form.ProjectForm;
+import jansible.web.project.form.RebuildForm;
 import jansible.web.project.form.RoleForm;
 import jansible.web.project.form.RoleRelationForm;
 import jansible.web.project.form.RoleVariableForm;
@@ -92,6 +96,8 @@ public class ProjectService {
 	private TaskMapper taskMapper;
 	@Autowired
 	private VariableMapper variableMapper;
+	@Autowired
+	private ApplyHistoryMapper applyHistoryMapper;
 	
 	@Autowired
 	private JansibleFiler jansibleFiler;
@@ -112,6 +118,28 @@ public class ProjectService {
 		projectMapper.updateJenkinsInfo(dbProject);
 	}
 	
+	public void rebuild(RebuildForm form) throws Exception{
+		DbProject dbProject = projectMapper.selectProject(form);
+		JenkinsInfo jenkinsInfo = new JenkinsInfo();
+		jenkinsInfo.setIpAddress(dbProject.getJenkinsIpAddress());
+		jenkinsInfo.setPort(dbProject.getJenkinsPort());
+		jenkinsInfo.setJobName(dbProject.getJenkinsJobName());
+		
+		DbApplyHistory dbApplyHistory = getDbApplyHistory(form);
+
+		DbProject project = getProject(form);
+		JenkinsParameter jenkinsParameter = new JenkinsParameter();
+		jenkinsParameter.setProjectName(form.getProjectName());
+		jenkinsParameter.setGroupName(jansibleFiler.getGroupName(dbApplyHistory.getEnvironmentName(), dbApplyHistory.getGroupName()));
+		jenkinsParameter.setRepositoryUrl(project.getRepositoryUrl());
+		jenkinsParameter.setTagName(dbApplyHistory.getTagName());
+		
+		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
+		
+		dbApplyHistory.setApplyTime(new Date());
+		applyHistoryMapper.insertDbApplyHistory(dbApplyHistory);
+	}
+	
 	public void build(BuildForm form) throws Exception{
 		String tagName = getTagName(form);
 		jansibleGitter.tagAndPush(form, form.getUserName(), form.getPassword(), tagName, form.getComment());
@@ -130,6 +158,15 @@ public class ProjectService {
 		jenkinsInfo.setJobName(dbProject.getJenkinsJobName());
 		
 		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
+		
+		DbApplyHistory dbApplyHistory = new DbApplyHistory();
+		dbApplyHistory.setProjectName(form.getProjectName());
+		dbApplyHistory.setEnvironmentName(form.getEnvironmentName());
+		dbApplyHistory.setGroupName(form.getGroupName());
+		dbApplyHistory.setTagName(tagName);
+		dbApplyHistory.setApplyTime(new Date());
+		
+		applyHistoryMapper.insertDbApplyHistory(dbApplyHistory);
 	}
 	
 	private String getDateString(){
@@ -141,6 +178,14 @@ public class ProjectService {
 		String groupName = jansibleFiler.getGroupName(serviceGroupKey);
 		String dateString = getDateString();
 		return groupName + dateString;
+	}
+	
+	public List<DbApplyHistory> getDbApplyHistoryList(ProjectKey projectKey){
+		return applyHistoryMapper.selectDbApplyHistoryList(projectKey);
+	}
+	
+	public DbApplyHistory getDbApplyHistory(ApplyHistoryKey applyHistoryKey){
+		return applyHistoryMapper.selectDbApplyHistory(applyHistoryKey);
 	}
 	
 	public List<DbProject> getProjectList(){

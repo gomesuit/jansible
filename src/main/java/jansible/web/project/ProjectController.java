@@ -34,6 +34,7 @@ import jansible.web.project.form.GeneralFileForm;
 import jansible.web.project.form.GitForm;
 import jansible.web.project.form.JenkinsInfoForm;
 import jansible.web.project.form.ProjectForm;
+import jansible.web.project.form.RebuildForm;
 import jansible.web.project.form.RoleForm;
 import jansible.web.project.form.RoleRelationForm;
 import jansible.web.project.form.RoleVariableForm;
@@ -110,6 +111,11 @@ public class ProjectController {
 		jenkinsInfoForm.setJenkinsPort(dbProject.getJenkinsPort());
 		jenkinsInfoForm.setJenkinsJobName(dbProject.getJenkinsJobName());
 		model.addAttribute("jenkinsInfoForm", jenkinsInfoForm);
+
+		model.addAttribute("applyHistoryList", projectService.getDbApplyHistoryList(projectKey));
+		
+		RebuildForm rebuildForm = new RebuildForm(projectKey);
+		model.addAttribute("rebuildForm", rebuildForm);
 		
 	    return "project/project/top";
 	}
@@ -544,6 +550,14 @@ public class ProjectController {
 	@RequestMapping(value="/project/jenkins/regist", method=RequestMethod.POST)
 	private String registJenkins(@ModelAttribute JenkinsInfoForm form, HttpServletRequest request){
 		projectService.registJenkinsInfo(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/jenkins/rebuild", method=RequestMethod.POST)
+	private String build(@ModelAttribute RebuildForm form, HttpServletRequest request) throws Exception{
+		projectService.rebuild(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
