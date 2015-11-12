@@ -151,4 +151,55 @@
 			project_name = #{projectName}
 	</delete>
 	
+	
+	<insert id="insertDbTaskConditional" parameterType="DbTaskConditional">
+		INSERT INTO task_conditional
+			(
+				task_id,
+				project_name,
+				role_name,
+				conditional_name,
+				conditional_value
+			)
+		VALUES
+			(
+				#{taskId},
+				#{projectName},
+				#{roleName},
+				#{conditionalName},
+				#{conditionalValue}
+			)
+	</insert>
+	
+	<select id="selectDbTaskConditionalList" resultType="DbTaskConditional">
+		SELECT
+			task_id as taskId,
+			project_name as projectName,
+			role_name as roleName,
+			conditional_name as conditionalName,
+			conditional_value as conditionalValue
+		FROM
+			task_conditional
+		WHERE
+			project_name = #{projectName} AND
+			role_name = #{roleName} AND
+			task_id = #{taskId}
+	</select>
+	
+	<select id="selectDbTaskConditional" resultType="DbTaskConditional">
+		SELECT
+			task_id as taskId,
+			project_name as projectName,
+			role_name as roleName,
+			conditional_name as conditionalName,
+			conditional_value as conditionalValue
+		FROM
+			task_conditional
+		WHERE
+			project_name = #{projectName} AND
+			role_name = #{roleName} AND
+			task_id = #{taskId} AND
+			conditional_name = #{conditionalName}
+	</select>
+	
 </mapper>

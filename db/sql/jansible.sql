@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS service_group;
 DROP TABLE IF EXISTS environment;
 DROP TABLE IF EXISTS file;
 DROP TABLE IF EXISTS parameter;
+DROP TABLE IF EXISTS task_conditional;
 DROP TABLE IF EXISTS task_detail;
 DROP TABLE IF EXISTS task;
 DROP TABLE IF EXISTS module;
@@ -188,6 +189,17 @@ CREATE TABLE task
 	description varchar(512),
 	sort int NOT NULL,
 	PRIMARY KEY (task_id, project_name, role_name)
+);
+
+
+CREATE TABLE task_conditional
+(
+	task_id int NOT NULL,
+	project_name varchar(50) NOT NULL,
+	role_name varchar(30) NOT NULL,
+	conditional_name varchar(80) NOT NULL,
+	conditional_value varchar(256) NOT NULL,
+	PRIMARY KEY (task_id, project_name, role_name, conditional_name)
 );
 
 
