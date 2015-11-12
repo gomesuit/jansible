@@ -98,10 +98,6 @@ public class ProjectController {
 		GitForm gitForm = new GitForm(projectKey);
 		model.addAttribute("gitForm", gitForm);
 		
-		BuildForm buildForm = new BuildForm();
-		buildForm.setProjectName(projectName);
-		model.addAttribute("buildForm", buildForm);
-		
 		List<Group> groupList = getGroupList(projectKey);
 		model.addAttribute("groupList", groupList);
 		
@@ -118,6 +114,27 @@ public class ProjectController {
 		model.addAttribute("rebuildForm", rebuildForm);
 		
 	    return "project/project/top";
+	}
+
+    @RequestMapping("/apply/view")
+	private String viewApply(
+			@RequestParam(value = "projectName", required = true) String projectName,
+			@RequestParam(value = "environmentName", required = true) String environmentName,
+			@RequestParam(value = "groupName", required = true) String groupName,
+			Model model){
+    	
+    	ServiceGroupKey serviceGroupKey = new ServiceGroupKey();
+    	serviceGroupKey.setProjectName(projectName);
+    	serviceGroupKey.setEnvironmentName(environmentName);
+    	serviceGroupKey.setGroupName(groupName);
+    			
+		BuildForm buildForm = new BuildForm(serviceGroupKey);
+		model.addAttribute("buildForm", buildForm);
+		
+		List<Group> groupList = getGroupList(serviceGroupKey);
+		model.addAttribute("groupList", groupList);
+		
+	    return "project/apply/top";
 	}
 
 	private List<Group> getGroupList(ProjectKey projectKey) {

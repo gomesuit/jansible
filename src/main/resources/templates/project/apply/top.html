@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta content="ja" http-equiv="Content-Language" />
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<title>sample page</title>
+</head>
+<body>
+	<div>適用の画面です</div>
+	
+	<br /><hr /><br />
+	<div>タスク適用</div>
+	<form method="POST" th:action="@{/project/jenkins/build}" th:object="${buildForm}">
+		<input type="hidden" th:field="*{projectName}" />
+		<input type="hidden" th:field="*{environmentName}" />
+		<input type="hidden" th:field="*{groupName}" />
+		<table border="1" rules="all">
+			<tr>
+				<td>environment</td>
+				<td>group</td>
+			</tr>
+			<tr>
+				<td><div th:text="*{environmentName}" /></td>
+				<td><div th:text="*{groupName}" /></td>
+			</tr>
+		</table>
+		
+		<br />
+		<table border="1" rules="all">
+			<tr>
+				<td>userName</td>
+				<td>password</td>
+				<td>comment</td>
+			</tr>
+			<tr>
+				<td><input type="text" th:field="*{userName}" /></td>
+				<td><input type="password" th:field="*{password}" /></td>
+				<td><input type="text" th:field="*{comment}" /></td>
+			</tr>
+		</table>
+		<input type="submit" value="Build" />
+	</form>
+	
+	<br /><hr />
+	<a th:href="@{/project/view/(projectName=${buildForm.projectName})}" >戻る</a>
+	<a th:href="@{/}" >トップ</a>
+</body>
+</html>

@@ -123,23 +123,15 @@
 		<tr>
 			<td>environment</td>
 			<td>group</td>
-			<td>userName</td>
-			<td>password</td>
-			<td>comment</td>
 			<td>Build</td>
 		</tr>
 		<tr th:each="group : ${groupList}">
 			<td><div th:text="${group.environmentName}" /></td>
 			<td><div th:text="${group.groupName}" /></td>
-			<form method="POST" th:action="@{/project/jenkins/build}" th:object="${buildForm}">
-				<input type="hidden" th:field="*{projectName}" />
-				<input type="hidden" name="environmentName" th:value="${group.environmentName}" />
-				<input type="hidden" name="groupName" th:value="${group.groupName}" />
-				<td><input type="text" th:field="*{userName}" /></td>
-				<td><input type="password" th:field="*{password}" /></td>
-				<td><input type="text" th:field="*{comment}" /></td>
-				<td><input type="submit" value="Build" /></td>
-			</form>
+			<td>
+				<a th:href="@{/apply/view(projectName=${project.projectName}, environmentName=${group.environmentName}, groupName=${group.groupName})}"
+				th:text="Build" />
+			</td>
 		</tr>
 	</table>
 	
