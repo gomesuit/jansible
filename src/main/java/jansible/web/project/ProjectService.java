@@ -137,7 +137,7 @@ public class ProjectService {
 		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
 		
 		dbApplyHistory.setApplyTime(new Date());
-		dbApplyHistory.setTagComment(dbApplyHistory.getTagComment() + "(rebuid)");
+		dbApplyHistory.setTagComment(dbApplyHistory.getTagComment() + "(rebuild)");
 		applyHistoryMapper.insertDbApplyHistory(dbApplyHistory);
 	}
 	
