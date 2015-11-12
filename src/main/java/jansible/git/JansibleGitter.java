@@ -11,9 +11,16 @@ import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PushCommand;
+import org.eclipse.jgit.api.errors.AbortedByHookException;
+import org.eclipse.jgit.api.errors.ConcurrentRefUpdateException;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
+import org.eclipse.jgit.api.errors.NoFilepatternException;
+import org.eclipse.jgit.api.errors.NoHeadException;
+import org.eclipse.jgit.api.errors.NoMessageException;
 import org.eclipse.jgit.api.errors.TransportException;
+import org.eclipse.jgit.api.errors.UnmergedPathsException;
+import org.eclipse.jgit.api.errors.WrongRepositoryStateException;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.PushResult;
@@ -26,30 +33,20 @@ public class JansibleGitter {
 	@Autowired
 	private JansibleFiler jansibleFiler;
 	
-	public void cloneRepository(ProjectKey projectKey, String url) {
+	public void cloneRepository(ProjectKey projectKey, String url) throws Exception {
 		String projectDirName = jansibleFiler.getProjectDirName(projectKey);
 		cloneRepository(url, projectDirName);
 	}
 	
-	private void cloneRepository(String url, String localPath) {
+	private void cloneRepository(String url, String localPath) throws Exception {
+		callClone(url, localPath);
+	}
+	
+	private void callClone(String url, String localPath) throws InvalidRemoteException, TransportException, GitAPIException{
 		CloneCommand cmd = Git.cloneRepository();
 		cmd.setURI(url);
 		cmd.setDirectory(new File(localPath));
-		
-		Git git;
-		try {
-			git = cmd.call();
-			git.getRepository().close();
-		} catch (InvalidRemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TransportException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (GitAPIException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		cmd.call();
 	}
 	
 	public void commitAndPush(ProjectKey projectKey, String name, String pass, String comment) throws Exception{
@@ -58,38 +55,61 @@ public class JansibleGitter {
 	}
 	
 	private void commitAndPush(String localPath, String name, String pass, String comment) throws Exception {
+		File gitDir = getGitDir(localPath);
+		
 		FileRepositoryBuilder builder = new FileRepositoryBuilder();
-		File gitDir = new File(localPath + "/.git");
 		builder.setGitDir(gitDir);
 		builder.readEnvironment();
 		
 		try(Git git = new Git(builder.build())){
 			
-	        AddCommand addCommand = git.add();
-	        addCommand.addFilepattern(".");
-	        addCommand.call();
+	        callAdd(git);
+	        
+	        callCommit(git, comment);
 			
-	        CommitCommand commitCommand = git.commit();
-	        commitCommand.setMessage(comment);
-	        commitCommand.setAll(true);
-	        commitCommand.call();
-			
-			CredentialsProvider cp = new UsernamePasswordCredentialsProvider(name, pass);
-			
-	        PushCommand pushCommand = git.push();
-	        pushCommand.setCredentialsProvider(cp);
-	        pushCommand.setForce(true);
-	        pushCommand.setPushAll();
-
-	        Iterator<PushResult> it = pushCommand.call().iterator();
-	        if(it.hasNext()){
-	            System.out.println(it.next().toString());
-	        }
+	        callPush(git, getCredentialsProvider(name, pass));
 	        
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new Exception(e);
 		}
+	}
+	
+	private CredentialsProvider getCredentialsProvider(String name, String pass){
+		return new UsernamePasswordCredentialsProvider(name, pass);
+	}
+	
+	private void callPush(Git git, CredentialsProvider cp) throws InvalidRemoteException, TransportException, GitAPIException{
+        PushCommand pushCommand = git.push();
+        pushCommand.setCredentialsProvider(cp);
+        pushCommand.setForce(true);
+        pushCommand.setPushAll();
+        
+        Iterator<PushResult> it = pushCommand.call().iterator();
+        if(it.hasNext()){
+            System.out.println(it.next().toString());
+        }
+	}
+	
+	private void callAdd(Git git) throws NoFilepatternException, GitAPIException{
+        AddCommand addCommand = git.add();
+        addCommand.addFilepattern(".");
+        addCommand.call();
+	}
+	
+	private void callCommit(Git git, String comment) throws NoHeadException, NoMessageException, UnmergedPathsException, ConcurrentRefUpdateException, WrongRepositoryStateException, AbortedByHookException, GitAPIException{
+        CommitCommand commitCommand = git.commit();
+        commitCommand.setMessage(comment);
+        commitCommand.setAll(true);
+        commitCommand.call();
+	}
+	
+	private File getGitDir(String localPath){
+		return new File(getGitDirName(localPath));
+	}
+	
+	private String getGitDirName(String localPath){
+		return localPath + "/.git";
 	}
 }

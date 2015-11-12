@@ -350,7 +350,7 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value="/project/regist", method=RequestMethod.POST)
-	private String registProject(@ModelAttribute ProjectForm form, HttpServletRequest request){
+	private String registProject(@ModelAttribute ProjectForm form, HttpServletRequest request) throws Exception{
 		projectService.registProject(form);
 		
 		String referer = request.getHeader("Referer");

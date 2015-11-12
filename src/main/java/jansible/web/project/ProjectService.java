@@ -260,7 +260,7 @@ public class ProjectService {
 	}
 
 
-	public void registProject(ProjectForm form) {
+	public void registProject(ProjectForm form) throws Exception {
 		DbProject dbProject = new DbProject(form, form.getRepositoryUrl());
 		projectMapper.insertProject(dbProject);
 		jansibleGitter.cloneRepository(form, form.getRepositoryUrl());
