@@ -6,6 +6,7 @@ import jansible.model.common.EnvironmentKey;
 import jansible.model.common.EnvironmentVariableKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.web.project.ProjectService;
+import jansible.web.project.VariableService;
 import jansible.web.project.environment.EnvironmentVariableForm;
 import jansible.web.project.group.ServiceGroupForm;
 
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class EnvironmentController {
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	private VariableService variableService;
 
 	@RequestMapping("/environment/view")
 	private String viewEnvironment(
@@ -42,8 +45,8 @@ public class EnvironmentController {
 		EnvironmentVariableForm variableForm = new EnvironmentVariableForm(environmentKey);
 		model.addAttribute("variableForm", variableForm);
 		
-		model.addAttribute("allVariableNameList", projectService.getAllDbVariableNameList(environmentKey));
-		model.addAttribute("variableList", projectService.getDbEnvironmentVariableList(environmentKey));
+		model.addAttribute("allVariableNameList", variableService.getAllDbVariableNameList(environmentKey));
+		model.addAttribute("variableList", variableService.getDbEnvironmentVariableList(environmentKey));
 		
 		EnvironmentVariableKey environmentVariableKey = new EnvironmentVariableKey(environmentKey);
 		model.addAttribute("environmentVariableKey", environmentVariableKey);
@@ -61,7 +64,7 @@ public class EnvironmentController {
 
     @RequestMapping(value="/project/environmentVariable/regist", method=RequestMethod.POST)
     private String registEnvironmentVariable(@ModelAttribute EnvironmentVariableForm form, HttpServletRequest request){
-    	projectService.registEnvironmentVariable(form);
+    	variableService.registEnvironmentVariable(form);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
@@ -69,7 +72,7 @@ public class EnvironmentController {
 
     @RequestMapping(value="/project/environmentVariable/delete", method=RequestMethod.POST)
     private String deleteEnvironmentVariable(@ModelAttribute EnvironmentVariableKey key, HttpServletRequest request){
-    	projectService.deleteEnvironmentVariable(key);
+    	variableService.deleteEnvironmentVariable(key);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

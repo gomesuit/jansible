@@ -8,6 +8,7 @@ import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.ServiceGroupVariableKey;
 import jansible.web.project.ProjectService;
 import jansible.web.project.RoleService;
+import jansible.web.project.VariableService;
 import jansible.web.project.group.RoleRelationForm;
 import jansible.web.project.group.ServiceGroupVariableForm;
 import jansible.web.project.server.ServerForm;
@@ -26,6 +27,8 @@ public class GroupController {
 	private ProjectService projectService;
 	@Autowired
 	private RoleService roleService;
+	@Autowired
+	private VariableService variableService;
     
     @RequestMapping("/serviceGroup/view")
 	private String viewServiceGroup(
@@ -56,8 +59,8 @@ public class GroupController {
 		ServiceGroupVariableForm variableForm = new ServiceGroupVariableForm(serviceGroupKey);
 		model.addAttribute("variableForm", variableForm);
 		
-		model.addAttribute("allVariableNameList", projectService.getAllDbVariableNameList(serviceGroupKey));
-		model.addAttribute("groupVariableList", projectService.getDbServiceGroupVariableList(serviceGroupKey));
+		model.addAttribute("allVariableNameList", variableService.getAllDbVariableNameList(serviceGroupKey));
+		model.addAttribute("groupVariableList", variableService.getDbServiceGroupVariableList(serviceGroupKey));
 		
 		ServiceGroupVariableKey serviceGroupVariableKey = new ServiceGroupVariableKey(serviceGroupKey);
 		model.addAttribute("serviceGroupVariableKey", serviceGroupVariableKey);
@@ -91,7 +94,7 @@ public class GroupController {
 
 	@RequestMapping(value="/project/serviceGroupVariable/regist", method=RequestMethod.POST)
 	private String registServiceGroupVariable(@ModelAttribute ServiceGroupVariableForm form, HttpServletRequest request){
-		projectService.registServiceGroupVariable(form);
+		variableService.registServiceGroupVariable(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
@@ -99,7 +102,7 @@ public class GroupController {
 
 	@RequestMapping(value="/project/serviceGroupVariable/delete", method=RequestMethod.POST)
 	private String deleteServiceGroupVariable(@ModelAttribute ServiceGroupVariableKey key, HttpServletRequest request){
-		projectService.deleteServiceGroupVariable(key);
+		variableService.deleteServiceGroupVariable(key);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

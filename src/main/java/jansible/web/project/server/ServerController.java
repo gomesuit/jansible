@@ -6,6 +6,7 @@ import jansible.model.common.RoleRelationKey;
 import jansible.model.common.ServerKey;
 import jansible.model.common.ServerVariableKey;
 import jansible.web.project.ProjectService;
+import jansible.web.project.VariableService;
 import jansible.web.project.server.ServerVariableForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ServerController {
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	private VariableService variableService;
     
     @RequestMapping("/server/view")
 	private String viewServer(
@@ -38,8 +41,8 @@ public class ServerController {
     	ServerVariableForm variableForm = new ServerVariableForm(serverKey);
 		model.addAttribute("variableForm", variableForm);
 		
-		model.addAttribute("allVariableNameList", projectService.getAllDbVariableNameList(serverKey));
-		model.addAttribute("variableList", projectService.getDbServerVariableList(serverKey));
+		model.addAttribute("allVariableNameList", variableService.getAllDbVariableNameList(serverKey));
+		model.addAttribute("variableList", variableService.getDbServerVariableList(serverKey));
 		
 		ServerVariableKey serverVariableKey = new ServerVariableKey(serverKey);
 		model.addAttribute("serverVariableKey", serverVariableKey);
@@ -57,7 +60,7 @@ public class ServerController {
 
     @RequestMapping(value="/project/serverVariable/regist", method=RequestMethod.POST)
     private String registServerVariable(@ModelAttribute ServerVariableForm form, HttpServletRequest request){
-    	projectService.registServerVariable(form);
+    	variableService.registServerVariable(form);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
@@ -65,7 +68,7 @@ public class ServerController {
 
     @RequestMapping(value="/project/serverVariable/delete", method=RequestMethod.POST)
     private String deleteServerVariable(@ModelAttribute ServerVariableKey key, HttpServletRequest request){
-    	projectService.deleteServerVariable(key);
+    	variableService.deleteServerVariable(key);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

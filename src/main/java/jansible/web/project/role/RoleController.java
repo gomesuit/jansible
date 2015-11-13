@@ -14,6 +14,7 @@ import jansible.model.yamldump.YamlModule;
 import jansible.web.module.ModuleService;
 import jansible.web.project.ProjectService;
 import jansible.web.project.RoleService;
+import jansible.web.project.VariableService;
 import jansible.web.project.YamlService;
 import jansible.web.project.role.GeneralFileForm;
 import jansible.web.project.role.RoleVariableForm;
@@ -39,6 +40,8 @@ public class RoleController {
 	private YamlService yamlService;
 	@Autowired
 	private RoleService roleService;
+	@Autowired
+	private VariableService variableService;
     
     @RequestMapping("/role/view")
 	private String viewRole(
@@ -77,14 +80,14 @@ public class RoleController {
 		RoleVariableKey roleVariableKey = new RoleVariableKey(roleKey);
 		model.addAttribute("roleVariableKey", roleVariableKey);
 		
-		model.addAttribute("variableList", roleService.getDbRoleVariableList(roleKey));
+		model.addAttribute("variableList", variableService.getDbRoleVariableList(roleKey));
 		
 	    return "project/role/top";
 	}
 
 	@RequestMapping(value="/project/roleVariable/regist", method=RequestMethod.POST)
 	private String registRoleVariable(@ModelAttribute RoleVariableForm form, HttpServletRequest request){
-		roleService.registRoleVariable(form);
+		variableService.registRoleVariable(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
@@ -92,7 +95,7 @@ public class RoleController {
 
 	@RequestMapping(value="/project/roleVariable/delete", method=RequestMethod.POST)
 	private String deleteRoleVariable(@ModelAttribute RoleVariableKey key, HttpServletRequest request){
-		projectService.deleteRoleVariable(key);
+		variableService.deleteRoleVariable(key);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

@@ -14,38 +14,28 @@ import jansible.mapper.TaskMapper;
 import jansible.mapper.VariableMapper;
 import jansible.model.common.ApplyHistoryKey;
 import jansible.model.common.EnvironmentKey;
-import jansible.model.common.EnvironmentVariableKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
 import jansible.model.common.RoleRelationKey;
-import jansible.model.common.RoleVariableKey;
 import jansible.model.common.ServerKey;
-import jansible.model.common.ServerVariableKey;
 import jansible.model.common.ServiceGroupKey;
-import jansible.model.common.ServiceGroupVariableKey;
 import jansible.model.common.TaskKey;
 import jansible.model.database.DbApplyHistory;
 import jansible.model.database.DbEnvironment;
-import jansible.model.database.DbEnvironmentVariable;
 import jansible.model.database.DbFile;
 import jansible.model.database.DbProject;
 import jansible.model.database.DbRoleRelation;
 import jansible.model.database.DbServer;
-import jansible.model.database.DbServerVariable;
 import jansible.model.database.DbServiceGroup;
-import jansible.model.database.DbServiceGroupVariable;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.database.DbTemplate;
-import jansible.web.project.environment.EnvironmentVariableForm;
 import jansible.web.project.group.RoleRelationForm;
 import jansible.web.project.group.ServiceGroupForm;
-import jansible.web.project.group.ServiceGroupVariableForm;
 import jansible.web.project.project.EnvironmentForm;
 import jansible.web.project.project.JenkinsInfoForm;
 import jansible.web.project.role.UploadForm;
 import jansible.web.project.server.ServerForm;
-import jansible.web.project.server.ServerVariableForm;
 import jansible.web.project.task.TaskDetailForm;
 import jansible.web.project.task.TaskForm;
 import jansible.web.project.task.TaskParameter;
@@ -135,14 +125,6 @@ public class ProjectService {
 		}
 	}
 
-	public void deleteEnvironmentVariable(EnvironmentVariableKey environmentVariableKey){
-		variableMapper.deleteDbEnvironmentVariable(environmentVariableKey);
-	}
-
-	public List<DbEnvironmentVariable> getDbEnvironmentVariableList(EnvironmentKey environmentKey){
-		return variableMapper.selectDbEnvironmentVariableList(environmentKey);
-	}
-
 	public void registServiceGroup(ServiceGroupForm form) {
 		DbServiceGroup dbServiceGroup = new DbServiceGroup(form);
 		serviceGroupMapper.insertServiceGroup(dbServiceGroup);
@@ -157,10 +139,6 @@ public class ProjectService {
 		jansibleFiler.deleteGroupVariableYaml(serviceGroupKey);
 	}
 
-	public void deleteServiceGroupVariable(ServiceGroupVariableKey serviceGroupVariableKey){
-		variableMapper.deleteDbServiceGroupVariable(serviceGroupVariableKey);
-	}
-
 	public List<DbServiceGroup> getServiceGroupList(EnvironmentKey environmentKey){
 		return serviceGroupMapper.selectServiceGroupList(environmentKey);
 	}
@@ -173,19 +151,11 @@ public class ProjectService {
 		return serviceGroupMapper.selectDbRoleRelationList(serviceGroupKey);
 	}
 
-	public void deleteRoleVariable(RoleVariableKey roleVariableKey){
-		variableMapper.deleteDbRoleVariable(roleVariableKey);
-	}
-
 	public void registServer(ServerForm form) {
 		DbServer dbServer = new DbServer(form);
 		serverMapper.insertServer(dbServer);
 		
 		fileService.outputHostsData(form);
-	}
-
-	public List<DbServiceGroupVariable> getDbServiceGroupVariableList(ServiceGroupKey serviceGroupKey){
-		return variableMapper.selectDbServiceGroupVariableList(serviceGroupKey);
 	}
 
 	public void registRoleRelationDetail(RoleRelationForm form) {
@@ -197,18 +167,6 @@ public class ProjectService {
 
 	public List<DbServer> getServerList(ServiceGroupKey serviceGroupKey){
 		return serverMapper.selectServerList(serviceGroupKey);
-	}
-
-	public List<String> getAllDbVariableNameList(ProjectKey projectKey){
-		return variableMapper.selectAllDbVariableNameList(projectKey);
-	}
-
-	public List<DbServerVariable> getDbServerVariableList(ServerKey serverKey){
-		return variableMapper.selectDbServerVariableList(serverKey);
-	}
-
-	public void deleteServerVariable(ServerVariableKey serverVariableKey){
-		variableMapper.deleteDbServerVariable(serverVariableKey);
 	}
 
 	public void deleteServer(ServerKey serverKey){
@@ -257,27 +215,6 @@ public class ProjectService {
 		return taskMapper.selectTask(taskKey);
 	}
 	
-	public void registServiceGroupVariable(ServiceGroupVariableForm form) {
-		DbServiceGroupVariable dbServiceGroupVariable = createDbServiceGroupVariable(form);
-		variableMapper.insertDbServiceGroupVariable(dbServiceGroupVariable);
-		
-		fileService.outputServiceGroupVariableData(form);
-	}
-
-	public void registServerVariable(ServerVariableForm form) {
-		DbServerVariable dbServerVariable = createDbServerVariable(form);
-		variableMapper.insertDbServerVariable(dbServerVariable);
-		
-		fileService.outputServerVariableData(form);
-	}
-
-	public void registEnvironmentVariable(EnvironmentVariableForm form) {
-		DbEnvironmentVariable dbEnvironmentVariable = createDbEnvironmentVariable(form);
-		variableMapper.insertDbEnvironmentVariable(dbEnvironmentVariable);
-		
-		fileService.outputEnvironmentVariableData(form);
-	}
-
 	private void registTaskDetail(TaskDetailForm form) {
 		List<DbTaskDetail> dbTaskDetailList = createDbTaskDetailList(form);
 		for(DbTaskDetail dbTaskDetail : dbTaskDetailList){
@@ -337,23 +274,5 @@ public class ProjectService {
 		DbTemplate dbTemplate = new DbTemplate(form);
 		dbTemplate.setTemplateName(form.getFileName());
 		return dbTemplate;
-	}
-
-	private DbEnvironmentVariable createDbEnvironmentVariable(EnvironmentVariableForm form) {
-		DbEnvironmentVariable dbEnvironmentVariable = new DbEnvironmentVariable(form);
-		dbEnvironmentVariable.setValue(form.getValue());
-		return dbEnvironmentVariable;
-	}
-
-	private DbServerVariable createDbServerVariable(ServerVariableForm form) {
-		DbServerVariable dbServerVariable = new DbServerVariable(form);
-		dbServerVariable.setValue(form.getValue());
-		return dbServerVariable;
-	}
-
-	private DbServiceGroupVariable createDbServiceGroupVariable(ServiceGroupVariableForm form) {
-		DbServiceGroupVariable dbServiceGroupVariable = new DbServiceGroupVariable(form);
-		dbServiceGroupVariable.setValue(form.getValue());
-		return dbServiceGroupVariable;
 	}
 }
