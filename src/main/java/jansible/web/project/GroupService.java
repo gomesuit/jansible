@@ -10,6 +10,8 @@ import jansible.model.common.ServiceGroupKey;
 import jansible.model.database.DbRoleRelation;
 import jansible.model.database.DbServiceGroup;
 import jansible.web.project.group.RoleRelationForm;
+import jansible.web.project.group.RoleRelationSortForm;
+import jansible.web.project.group.RoleRelationSortType;
 import jansible.web.project.group.ServiceGroupForm;
 
 import java.util.List;
@@ -73,27 +75,41 @@ public class GroupService {
 		return dbRoleRelation;
 	}
 
-	public void modifyRoleRelationSort(RoleRelationKey roleRelationKey) {
-		List<DbRoleRelation> dbRoleRelationList = serviceGroupMapper.selectDbRoleRelationList(roleRelationKey);
+	public void modifyRoleRelationSort(RoleRelationSortForm roleRelationSortForm) {
+		List<DbRoleRelation> dbRoleRelationList = serviceGroupMapper.selectDbRoleRelationList(roleRelationSortForm);
 		int tagetIndex = 0;
 		DbRoleRelation targetDbRoleRelation = null;
 		
 		for(int i = 0; i < dbRoleRelationList.size(); i++){
 			DbRoleRelation dbRoleRelation = dbRoleRelationList.get(i);
-			RoleRelationKey aaa = dbRoleRelation;
-			if(aaa.equals(roleRelationKey)){
-				tagetIndex = i + 1;
+			RoleRelationKey comparisonRoleRelationKey = new RoleRelationKey(dbRoleRelation, dbRoleRelation.getRoleName());
+			RoleRelationKey targetRoleRelationKey = new RoleRelationKey(roleRelationSortForm, roleRelationSortForm.getRoleName());
+			if(comparisonRoleRelationKey.equals(targetRoleRelationKey)){
+				tagetIndex = i;
 				targetDbRoleRelation = dbRoleRelation;
 				break;
 			}
 		}
 		
-		dbRoleRelationList.remove(tagetIndex);
-		dbRoleRelationList.add(tagetIndex - 1, targetDbRoleRelation);
+		if(roleRelationSortForm.getSortType() == RoleRelationSortType.UP){
+			if(tagetIndex - 1 < 0){
+				return;
+			}
+
+			dbRoleRelationList.remove(tagetIndex);
+			dbRoleRelationList.add(tagetIndex - 1, targetDbRoleRelation);
+		}else{
+			if(tagetIndex + 1 >= dbRoleRelationList.size()){
+				return;
+			}
+			
+			dbRoleRelationList.remove(tagetIndex);
+			dbRoleRelationList.add(tagetIndex + 1, targetDbRoleRelation);
+		}
 		
 		sortRoleRelation(dbRoleRelationList);
 		
-		fileService.outputRoleRelationData(roleRelationKey);
+		fileService.outputRoleRelationData(roleRelationSortForm);
 	}
 	
 	private void sortRoleRelation(List<DbRoleRelation> dbRoleRelationList){

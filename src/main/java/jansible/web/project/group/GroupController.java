@@ -59,6 +59,10 @@ public class GroupController {
 		RoleRelationKey roleRelationKey = new RoleRelationKey(serviceGroupKey);
     	model.addAttribute("roleRelationKey", roleRelationKey);
 		
+		RoleRelationSortForm roleRelationSortForm = new RoleRelationSortForm(serviceGroupKey);
+    	model.addAttribute("roleRelationSortForm", roleRelationSortForm);
+    	
+		
 		ServiceGroupVariableForm variableForm = new ServiceGroupVariableForm(serviceGroupKey);
 		model.addAttribute("variableForm", variableForm);
 		
@@ -98,6 +102,14 @@ public class GroupController {
 	@RequestMapping(value="/project/roleRelation/delete", method=RequestMethod.POST)
 	private String deleteRoleRelation(@ModelAttribute RoleRelationKey key, HttpServletRequest request){
 		groupService.deleteRoleRelation(key);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/roleRelation/sort", method=RequestMethod.POST)
+	private String sortRoleRelation(@ModelAttribute RoleRelationSortForm form, HttpServletRequest request){
+		groupService.modifyRoleRelationSort(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
