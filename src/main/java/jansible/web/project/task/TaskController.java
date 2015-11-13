@@ -77,7 +77,7 @@ public class TaskController {
 		List<DbTask> dbTaskList = new ArrayList<>();
 		dbTaskList.add(dbTask);
 		List<YamlModule> modules = yamlService.createYamlModuleList(dbTaskList);
-		model.addAttribute("yaskYaml", yamlDumper.dump(modules).replaceAll("\n", "<br />"));
+		model.addAttribute("taskYaml", yamlDumper.dump(modules).replaceAll("\n", "<br />"));
 		
 		model.addAttribute("variableList", variableService.getDbRoleVariableList(taskKey));
 		

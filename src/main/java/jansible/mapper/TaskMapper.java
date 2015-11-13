@@ -29,4 +29,7 @@ public interface TaskMapper {
 	List<DbTaskConditional> selectDbTaskConditionalList(TaskKey taskKey);
 	DbTaskConditional selectDbTaskConditional(TaskConditionalKey taskConditionalKey);
 	void deleteTaskConditional(TaskConditionalKey taskConditionalKey);
+	void deleteTaskConditionalByTask(TaskKey taskKey);
+	void deleteTaskConditionalByRole(RoleKey roleKey);
+	void deleteTaskConditionalByProject(ProjectKey projectKey);
 }

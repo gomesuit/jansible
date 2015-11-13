@@ -212,4 +212,28 @@
 			conditional_name = #{conditionalName}
 	</delete>
 	
+	<delete id="deleteTaskConditionalByTask">
+		DELETE FROM
+			task_conditional
+		WHERE
+			project_name = #{projectName} AND
+			role_name = #{roleName} AND
+			task_id = #{taskId}
+	</delete>
+	
+	<delete id="deleteTaskConditionalByRole">
+		DELETE FROM
+			task_conditional
+		WHERE
+			project_name = #{projectName} AND
+			role_name = #{roleName}
+	</delete>
+	
+	<delete id="deleteTaskConditionalByProject">
+		DELETE FROM
+			task_conditional
+		WHERE
+			project_name = #{projectName}
+	</delete>
+	
 </mapper>

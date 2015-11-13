@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
+import jansible.model.yamldump.Conditional;
 import jansible.model.yamldump.StartYaml;
 import jansible.model.yamldump.YamlModule;
 import jansible.model.yamldump.YamlVariable;
@@ -47,6 +48,9 @@ public class YamlDumper {
 			data.put("name", module.getDescription());
 		}
 		data.put(module.getName(), module.getParameters().toString());
+		for(Conditional conditional : module.getConditionalList()){
+			data.put(conditional.getName(), conditional.getValue());
+		}
 		return data;
 	}
 	

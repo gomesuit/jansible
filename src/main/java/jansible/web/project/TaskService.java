@@ -33,6 +33,7 @@ public class TaskService {
 	public void deleteTask(TaskKey taskKey){
 		taskMapper.deleteTask(taskKey);
 		taskMapper.deleteTaskDetail(taskKey);
+		taskMapper.deleteTaskConditionalByTask(taskKey);
 	}
 
 	public void updateTask(TaskDetailForm form) {
@@ -67,6 +68,8 @@ public class TaskService {
 		DbTaskConditional dbTaskConditional = new DbTaskConditional(form);
 		dbTaskConditional.setConditionalValue(form.getConditionalValue());
 		taskMapper.insertDbTaskConditional(dbTaskConditional);
+		
+		fileService.outputTaskData(form);
 	}
 	
 	public List<DbTaskConditional> getTaskConditionalList(TaskKey taskKey){
@@ -79,6 +82,7 @@ public class TaskService {
 	
 	public void deleteTaskConditional(TaskConditionalKey taskConditionalKey){
 		taskMapper.deleteTaskConditional(taskConditionalKey);
+		fileService.outputTaskData(taskConditionalKey);
 	}
 
 	private List<DbTaskDetail> createDbTaskDetailList(TaskDetailForm form) {

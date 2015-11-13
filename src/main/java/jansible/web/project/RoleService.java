@@ -49,6 +49,7 @@ public class RoleService {
 		roleMapper.deleteDbTemplateByRole(roleKey);
 		taskMapper.deleteTaskByRole(roleKey);
 		taskMapper.deleteTaskDetailByRole(roleKey);
+		taskMapper.deleteTaskConditionalByRole(roleKey);
 		variableMapper.deleteDbRoleVariableByRole(roleKey);
 		jansibleFiler.deleteRoleDir(roleKey);
 	}

@@ -54,7 +54,13 @@
 				<td>conditionalValue</td>
 			</tr>
 			<tr>
-				<td><input type="text" th:field="*{conditionalName}" /></td>
+				<td>
+					<select size="1" th:field="*{conditionalName}">
+						<option value="when" label="when" />
+						<option value="register" label="register" />
+						<option value="ignore_errors" label="ignore_errors" />
+					</select>
+				</td>
 				<td><input type="text" th:field="*{conditionalValue}" /></td>
 			</tr>
 		</table>
@@ -82,7 +88,7 @@
 	
 	<br /><hr /><br />
 	<div>プレビュー</div>
-	<pre th:utext="${yaskYaml}" />
+	<pre th:utext="${taskYaml}" />
 	
 	<br /><hr /><br />
 	<div>【変数一覧】</div>

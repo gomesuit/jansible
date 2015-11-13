@@ -2,6 +2,7 @@ package jansible.web.project;
 
 import jansible.mapper.TaskMapper;
 import jansible.model.database.DbTask;
+import jansible.model.database.DbTaskConditional;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.database.InterfaceDbVariable;
 import jansible.model.yamldump.YamlModule;
@@ -25,8 +26,12 @@ public class YamlService {
 		List<YamlModule> modules = new ArrayList<>();
 		for(DbTask dbTask : dbTaskList){
 			List<DbTaskDetail> dbTaskDetailList = taskMapper.selectTaskDetailList(dbTask);
-			YamlModule yamlModule = new YamlModule(dbTask.getModuleName(), createParameters(dbTaskDetailList));
+			YamlParameters yamlParameters = createParameters(dbTaskDetailList); 
+			YamlModule yamlModule = new YamlModule(dbTask.getModuleName(), yamlParameters);
 			yamlModule.setDescription(dbTask.getDescription());
+			for(DbTaskConditional dbTaskConditional : taskMapper.selectDbTaskConditionalList(dbTask)){
+				yamlModule.addConditional(dbTaskConditional.getConditionalName(), dbTaskConditional.getConditionalValue());
+			}
 			modules.add(yamlModule);
 		}
 		return modules;

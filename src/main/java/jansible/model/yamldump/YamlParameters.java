@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class YamlParameters {
-	private List<YamlParameter> pList = new ArrayList<>();
+	private List<YamlParameter> parameterList = new ArrayList<>();
 	private String freeForm;
 
 	public void addParameter(YamlParameter param){
-		pList.add(param);
+		parameterList.add(param);
 	}
 
 	public void setFreeForm(String freeForm) {
@@ -24,7 +24,7 @@ public class YamlParameters {
 			result.append(" ");
 		}
 		
-		for(YamlParameter param : pList){
+		for(YamlParameter param : parameterList){
 			result.append(param);
 			result.append(" ");
 		}
