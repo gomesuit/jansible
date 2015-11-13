@@ -14,6 +14,7 @@ import jansible.model.database.DbProject;
 import jansible.model.database.DbServiceGroup;
 import jansible.util.YamlDumper;
 import jansible.web.module.ModuleService;
+import jansible.web.project.GitService;
 import jansible.web.project.JenkinsBuildService;
 import jansible.web.project.ProjectService;
 
@@ -35,6 +36,8 @@ public class ProjectController {
 	private YamlDumper yamlDumper;
 	@Autowired
 	private JenkinsBuildService jenkinsBuildService;
+	@Autowired
+	private GitService gitService;
     
     @RequestMapping("/project/view")
 	private String viewProject(
@@ -114,7 +117,7 @@ public class ProjectController {
 
 	@RequestMapping(value="/project/git/commit", method=RequestMethod.POST)
 	private String commitGit(@ModelAttribute GitForm form, HttpServletRequest request) throws Exception{
-		projectService.commitGit(form);
+		gitService.commitGit(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
