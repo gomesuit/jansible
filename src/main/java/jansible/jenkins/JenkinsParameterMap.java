@@ -1,4 +1,4 @@
-package jansible.model.jenkins;
+package jansible.jenkins;
 
 public class JenkinsParameterMap {
 	private String name;

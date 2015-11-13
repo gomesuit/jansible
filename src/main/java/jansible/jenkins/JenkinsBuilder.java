@@ -1,9 +1,5 @@
 package jansible.jenkins;
 
-import jansible.model.jenkins.JenkinsInfo;
-import jansible.model.jenkins.JenkinsParameter;
-import jansible.model.jenkins.JenkinsParameters;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;

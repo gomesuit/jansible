@@ -1,4 +1,4 @@
-package jansible.model.jenkins;
+package jansible.jenkins;
 
 import java.util.ArrayList;
 import java.util.List;

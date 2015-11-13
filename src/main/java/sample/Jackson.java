@@ -3,7 +3,7 @@ package sample;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jansible.model.jenkins.JenkinsParameter;
+import jansible.jenkins.JenkinsParameter;
 
 public class Jackson {
 

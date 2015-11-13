@@ -1,4 +1,4 @@
-package jansible.model.jenkins;
+package jansible.jenkins;
 
 public class JenkinsParameter {
 	private String repositoryUrl;

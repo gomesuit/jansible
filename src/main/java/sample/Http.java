@@ -1,7 +1,7 @@
 package sample;
 
-import jansible.model.jenkins.JenkinsParameter;
-import jansible.model.jenkins.JenkinsParameters;
+import jansible.jenkins.JenkinsParameter;
+import jansible.jenkins.JenkinsParameters;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
