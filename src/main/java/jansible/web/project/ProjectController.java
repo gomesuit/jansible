@@ -9,10 +9,7 @@ import jansible.model.common.EnvironmentKey;
 import jansible.model.common.Group;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
-import jansible.model.common.RoleRelationKey;
 import jansible.model.common.RoleVariableKey;
-import jansible.model.common.ServerKey;
-import jansible.model.common.ServerVariableKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.TaskKey;
 import jansible.model.database.DbEnvironment;
@@ -35,7 +32,6 @@ import jansible.web.project.role.GeneralFileForm;
 import jansible.web.project.role.RoleForm;
 import jansible.web.project.role.RoleVariableForm;
 import jansible.web.project.role.UploadForm;
-import jansible.web.project.server.ServerVariableForm;
 import jansible.web.project.task.TaskDetailForm;
 import jansible.web.project.task.TaskForm;
 import jansible.web.project.task.TaskParameter;
@@ -363,57 +359,7 @@ public class ProjectController {
 		return "redirect:" + referer;
 	}
 
-	@RequestMapping("/server/view")
-	private String viewServer(
-    		@RequestParam(value = "projectName", required = true) String projectName,
-    		@RequestParam(value = "environmentName", required = true) String environmentName,
-    		@RequestParam(value = "groupName", required = true) String groupName,
-    		@RequestParam(value = "serverName", required = true) String serverName,
-			Model model) {
-    	
-    	ServerKey serverKey = new ServerKey();
-    	serverKey.setProjectName(projectName);
-    	serverKey.setEnvironmentName(environmentName);
-    	serverKey.setGroupName(groupName);
-    	serverKey.setServerName(serverName);
-
-    	ServerVariableForm variableForm = new ServerVariableForm(serverKey);
-		model.addAttribute("variableForm", variableForm);
-		
-		model.addAttribute("allVariableNameList", projectService.getAllDbVariableNameList(serverKey));
-		model.addAttribute("variableList", projectService.getDbServerVariableList(serverKey));
-		
-		ServerVariableKey serverVariableKey = new ServerVariableKey(serverKey);
-		model.addAttribute("serverVariableKey", serverVariableKey);
-
-		return "project/server/top";
-	}
-
-	@RequestMapping(value="/project/roleRelation/delete", method=RequestMethod.POST)
-    private String deleteRoleRelation(@ModelAttribute RoleRelationKey key, HttpServletRequest request){
-    	projectService.deleteRoleRelation(key);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-
-    @RequestMapping(value="/project/serverVariable/regist", method=RequestMethod.POST)
-    private String registServerVariable(@ModelAttribute ServerVariableForm form, HttpServletRequest request){
-    	projectService.registServerVariable(form);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-
-    @RequestMapping(value="/project/serverVariable/delete", method=RequestMethod.POST)
-    private String deleteServerVariable(@ModelAttribute ServerVariableKey key, HttpServletRequest request){
-    	projectService.deleteServerVariable(key);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-
-    @RequestMapping("/apply/view")
+	@RequestMapping("/apply/view")
 	private String viewApply(
 			@RequestParam(value = "projectName", required = true) String projectName,
 			@RequestParam(value = "environmentName", required = true) String environmentName,
