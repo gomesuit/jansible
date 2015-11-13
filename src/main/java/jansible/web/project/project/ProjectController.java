@@ -14,6 +14,7 @@ import jansible.model.database.DbProject;
 import jansible.model.database.DbServiceGroup;
 import jansible.util.YamlDumper;
 import jansible.web.module.ModuleService;
+import jansible.web.project.JenkinsBuildService;
 import jansible.web.project.ProjectService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ public class ProjectController {
 	private ModuleService moduleService;
 	@Autowired
 	private YamlDumper yamlDumper;
+	@Autowired
+	private JenkinsBuildService jenkinsBuildService;
     
     @RequestMapping("/project/view")
 	private String viewProject(
@@ -127,7 +130,7 @@ public class ProjectController {
 
 	@RequestMapping(value="/project/jenkins/rebuild", method=RequestMethod.POST)
 	private String rebuild(@ModelAttribute RebuildForm form, HttpServletRequest request) throws Exception{
-		projectService.rebuild(form);
+		jenkinsBuildService.rebuild(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

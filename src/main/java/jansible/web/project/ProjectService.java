@@ -1,7 +1,6 @@
 package jansible.web.project;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import jansible.file.HostGroup;
@@ -9,8 +8,6 @@ import jansible.file.JansibleFiler;
 import jansible.file.JansibleHostsDumper;
 import jansible.git.JansibleGitter;
 import jansible.jenkins.JenkinsBuilder;
-import jansible.jenkins.JenkinsInfo;
-import jansible.jenkins.JenkinsParameter;
 import jansible.mapper.ApplyHistoryMapper;
 import jansible.mapper.EnvironmentMapper;
 import jansible.mapper.ProjectMapper;
@@ -54,9 +51,7 @@ import jansible.model.yamldump.YamlModule;
 import jansible.model.yamldump.YamlParameter;
 import jansible.model.yamldump.YamlParameters;
 import jansible.model.yamldump.YamlVariable;
-import jansible.util.DateFormatter;
 import jansible.util.YamlDumper;
-import jansible.web.project.apply.BuildForm;
 import jansible.web.project.environment.EnvironmentVariableForm;
 import jansible.web.project.group.RoleRelationForm;
 import jansible.web.project.group.ServiceGroupForm;
@@ -64,7 +59,6 @@ import jansible.web.project.group.ServiceGroupVariableForm;
 import jansible.web.project.project.EnvironmentForm;
 import jansible.web.project.project.GitForm;
 import jansible.web.project.project.JenkinsInfoForm;
-import jansible.web.project.project.RebuildForm;
 import jansible.web.project.project.RoleForm;
 import jansible.web.project.role.GeneralFileForm;
 import jansible.web.project.role.RoleVariableForm;
@@ -118,70 +112,6 @@ public class ProjectService {
 		projectMapper.updateJenkinsInfo(dbProject);
 	}
 
-	private JenkinsInfo createJenkinsInfo(ProjectKey projectKey){
-		DbProject dbProject = projectMapper.selectProject(projectKey);
-		return createJenkinsInfo(dbProject);
-	}
-	
-	private JenkinsInfo createJenkinsInfo(DbProject dbProject){
-		JenkinsInfo jenkinsInfo = new JenkinsInfo();
-		jenkinsInfo.setIpAddress(dbProject.getJenkinsIpAddress());
-		jenkinsInfo.setPort(dbProject.getJenkinsPort());
-		jenkinsInfo.setJobName(dbProject.getJenkinsJobName());
-		return jenkinsInfo;
-	}
-	
-	public void rebuild(RebuildForm form) throws Exception{
-		JenkinsInfo jenkinsInfo = createJenkinsInfo(form);
-		
-		DbApplyHistory dbApplyHistory = getDbApplyHistory(form);
-	
-		DbProject project = getProject(form);
-		JenkinsParameter jenkinsParameter = new JenkinsParameter();
-		jenkinsParameter.setProjectName(form.getProjectName());
-		jenkinsParameter.setGroupName(jansibleFiler.getGroupName(dbApplyHistory.getEnvironmentName(), dbApplyHistory.getGroupName()));
-		jenkinsParameter.setRepositoryUrl(project.getRepositoryUrl());
-		jenkinsParameter.setTagName(dbApplyHistory.getTagName());
-		
-		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
-		
-		dbApplyHistory.setApplyTime(new Date());
-		dbApplyHistory.setTagComment(dbApplyHistory.getTagComment() + "(rebuild)");
-		applyHistoryMapper.insertDbApplyHistory(dbApplyHistory);
-	}
-
-	public void build(BuildForm form) throws Exception{
-		String tagName = getTagName(form);
-		jansibleGitter.tagAndPush(form, form.getUserName(), form.getPassword(), tagName, form.getComment());
-		
-		DbProject project = getProject(form);
-		JenkinsParameter jenkinsParameter = new JenkinsParameter();
-		jenkinsParameter.setProjectName(form.getProjectName());
-		jenkinsParameter.setGroupName(jansibleFiler.getGroupName(form));
-		jenkinsParameter.setRepositoryUrl(project.getRepositoryUrl());
-		jenkinsParameter.setTagName(tagName);
-
-		JenkinsInfo jenkinsInfo = createJenkinsInfo(form);
-		
-		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
-		
-		DbApplyHistory dbApplyHistory = new DbApplyHistory();
-		dbApplyHistory.setProjectName(form.getProjectName());
-		dbApplyHistory.setEnvironmentName(form.getEnvironmentName());
-		dbApplyHistory.setGroupName(form.getGroupName());
-		dbApplyHistory.setTagName(tagName);
-		dbApplyHistory.setTagComment(form.getComment());
-		dbApplyHistory.setApplyTime(new Date());
-		
-		applyHistoryMapper.insertDbApplyHistory(dbApplyHistory);
-	}
-	
-	private String getTagName(ServiceGroupKey serviceGroupKey){
-		String groupName = jansibleFiler.getGroupName(serviceGroupKey);
-		String dateString = DateFormatter.getDateString(new Date());
-		return groupName + dateString;
-	}
-	
 	public List<DbApplyHistory> getDbApplyHistoryList(ProjectKey projectKey){
 		return applyHistoryMapper.selectDbApplyHistoryList(projectKey);
 	}

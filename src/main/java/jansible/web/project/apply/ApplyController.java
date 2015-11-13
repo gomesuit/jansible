@@ -3,6 +3,7 @@ package jansible.web.project.apply;
 import javax.servlet.http.HttpServletRequest;
 
 import jansible.model.common.ServiceGroupKey;
+import jansible.web.project.JenkinsBuildService;
 import jansible.web.project.ProjectService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ApplyController {
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	private JenkinsBuildService jenkinsBuildService;
 
 	@RequestMapping("/apply/view")
 	private String viewApply(
@@ -38,7 +41,7 @@ public class ApplyController {
 
 	@RequestMapping(value="/project/jenkins/build", method=RequestMethod.POST)
 	private String build(@ModelAttribute BuildForm form, HttpServletRequest request) throws Exception{
-		projectService.build(form);
+		jenkinsBuildService.build(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
