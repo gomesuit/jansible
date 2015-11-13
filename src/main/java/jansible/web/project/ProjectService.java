@@ -64,7 +64,6 @@ import jansible.web.project.group.ServiceGroupForm;
 import jansible.web.project.group.ServiceGroupVariableForm;
 import jansible.web.project.project.GitForm;
 import jansible.web.project.project.JenkinsInfoForm;
-import jansible.web.project.project.ProjectForm;
 import jansible.web.project.project.RebuildForm;
 import jansible.web.project.role.GeneralFileForm;
 import jansible.web.project.role.RoleForm;
@@ -75,6 +74,7 @@ import jansible.web.project.server.ServerVariableForm;
 import jansible.web.project.task.TaskDetailForm;
 import jansible.web.project.task.TaskForm;
 import jansible.web.project.task.TaskParameter;
+import jansible.web.project.top.ProjectForm;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

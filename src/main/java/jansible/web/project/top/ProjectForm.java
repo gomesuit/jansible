@@ -1,4 +1,4 @@
-package jansible.web.project.project;
+package jansible.web.project.top;
 
 import jansible.model.common.ProjectKey;
 

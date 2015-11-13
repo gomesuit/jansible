@@ -17,9 +17,9 @@ import jansible.web.module.ModuleService;
 import jansible.web.project.environment.EnvironmentForm;
 import jansible.web.project.project.GitForm;
 import jansible.web.project.project.JenkinsInfoForm;
-import jansible.web.project.project.ProjectForm;
 import jansible.web.project.project.RebuildForm;
 import jansible.web.project.role.RoleForm;
+import jansible.web.project.top.ProjectForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
