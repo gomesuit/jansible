@@ -19,7 +19,6 @@ import jansible.web.project.project.GitForm;
 import jansible.web.project.project.JenkinsInfoForm;
 import jansible.web.project.project.RebuildForm;
 import jansible.web.project.role.RoleForm;
-import jansible.web.project.top.ProjectForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,22 +37,7 @@ public class ProjectController {
 	@Autowired
 	private YamlDumper yamlDumper;
     
-    @RequestMapping("/")
-    private String top(Model model){
-    	model.addAttribute("form", new ProjectForm());
-    	model.addAttribute("projectList", projectService.getProjectList());
-        return "project/top";
-    }
-
-    @RequestMapping(value="/project/regist", method=RequestMethod.POST)
-	private String registProject(@ModelAttribute ProjectForm form, HttpServletRequest request) throws Exception{
-		projectService.registProject(form);
-		
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-	}
-
-	@RequestMapping("/project/view")
+    @RequestMapping("/project/view")
 	private String viewProject(
 			@RequestParam(value = "projectName", required = true) String projectName,
 			Model model){
