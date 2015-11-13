@@ -1,4 +1,4 @@
-package jansible.web.project.project.form;
+package jansible.web.project.project;
 
 import jansible.model.common.InterfaceVariableKey;
 

@@ -1,16 +1,16 @@
-package jansible.web.project.project.form;
+package jansible.web.project.project;
 
-import jansible.model.common.ProjectKey;
+import jansible.model.common.ServiceGroupKey;
 
-public class GitForm extends ProjectKey{
+public class BuildForm extends ServiceGroupKey{
 	private String userName;
 	private String password;
 	private String comment;
 	
-	public GitForm(){}
-
-	public GitForm(ProjectKey projectKey){
-		super(projectKey.getProjectName());
+	public BuildForm(){}
+	
+	public BuildForm(ServiceGroupKey serviceGroupKey){
+		super(serviceGroupKey, serviceGroupKey.getGroupName());
 	}
 
 	public String getUserName() {

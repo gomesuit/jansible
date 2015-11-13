@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import jansible.model.common.EnvironmentKey;
-import jansible.model.common.EnvironmentVariableKey;
 import jansible.model.common.Group;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
@@ -28,15 +27,13 @@ import jansible.model.yamldump.YamlModule;
 import jansible.util.YamlDumper;
 import jansible.web.module.ModuleService;
 import jansible.web.project.environment.EnvironmentForm;
-import jansible.web.project.environment.EnvironmentVariableForm;
 import jansible.web.project.group.RoleRelationForm;
-import jansible.web.project.group.ServiceGroupForm;
 import jansible.web.project.group.ServiceGroupVariableForm;
-import jansible.web.project.project.form.BuildForm;
-import jansible.web.project.project.form.GitForm;
-import jansible.web.project.project.form.JenkinsInfoForm;
-import jansible.web.project.project.form.ProjectForm;
-import jansible.web.project.project.form.RebuildForm;
+import jansible.web.project.project.BuildForm;
+import jansible.web.project.project.GitForm;
+import jansible.web.project.project.JenkinsInfoForm;
+import jansible.web.project.project.ProjectForm;
+import jansible.web.project.project.RebuildForm;
 import jansible.web.project.role.GeneralFileForm;
 import jansible.web.project.role.RoleForm;
 import jansible.web.project.role.RoleVariableForm;
@@ -231,35 +228,6 @@ public class ProjectController {
 	    return "project/task/top";
 	}
 
-	@RequestMapping("/environment/view")
-	private String viewEnvironment(
-			@RequestParam(value = "projectName", required = true) String projectName,
-			@RequestParam(value = "environmentName", required = true) String environmentName,
-			Model model){
-		EnvironmentKey environmentKey = new EnvironmentKey();
-		environmentKey.setProjectName(projectName);
-		environmentKey.setEnvironmentName(environmentName);
-		
-		ServiceGroupForm serviceGroupForm = new ServiceGroupForm(environmentKey);
-		
-		model.addAttribute("form", serviceGroupForm);
-		model.addAttribute("serviceGroupList", projectService.getServiceGroupList(environmentKey));
-		
-		ServiceGroupKey serviceGroupKey = new ServiceGroupKey(environmentKey);
-		model.addAttribute("serviceGroupKey", serviceGroupKey);
-		
-		EnvironmentVariableForm variableForm = new EnvironmentVariableForm(environmentKey);
-		model.addAttribute("variableForm", variableForm);
-		
-		model.addAttribute("allVariableNameList", projectService.getAllDbVariableNameList(environmentKey));
-		model.addAttribute("variableList", projectService.getDbEnvironmentVariableList(environmentKey));
-		
-		EnvironmentVariableKey environmentVariableKey = new EnvironmentVariableKey(environmentKey);
-		model.addAttribute("environmentVariableKey", environmentVariableKey);
-		
-	    return "project/environment/top";
-	}
-
 	@RequestMapping("/serviceGroup/view")
 	private String viewServiceGroup(
     		@RequestParam(value = "projectName", required = true) String projectName,
@@ -404,14 +372,6 @@ public class ProjectController {
 		return "redirect:" + referer;
     }
     
-    @RequestMapping(value="/project/group/regist", method=RequestMethod.POST)
-    private String registServiceGroup(@ModelAttribute ServiceGroupForm form, HttpServletRequest request){
-    	projectService.registServiceGroup(form);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-
     @RequestMapping(value="/project/server/regist", method=RequestMethod.POST)
     private String registServer(@ModelAttribute ServerForm form, HttpServletRequest request){
     	projectService.registServer(form);
@@ -492,23 +452,7 @@ public class ProjectController {
 		return "redirect:" + referer;
     }
 
-    @RequestMapping(value="/project/environmentVariable/regist", method=RequestMethod.POST)
-    private String registEnvironmentVariable(@ModelAttribute EnvironmentVariableForm form, HttpServletRequest request){
-    	projectService.registEnvironmentVariable(form);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-
-    @RequestMapping(value="/project/environmentVariable/delete", method=RequestMethod.POST)
-    private String deleteEnvironmentVariable(@ModelAttribute EnvironmentVariableKey key, HttpServletRequest request){
-    	projectService.deleteEnvironmentVariable(key);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-
-	@RequestMapping(value="/project/task/delete", method=RequestMethod.POST)
+    @RequestMapping(value="/project/task/delete", method=RequestMethod.POST)
     private String deleteTask(@ModelAttribute TaskKey key, HttpServletRequest request){
     	projectService.deleteTask(key);
     	
@@ -527,14 +471,6 @@ public class ProjectController {
 	@RequestMapping(value="/project/server/delete", method=RequestMethod.POST)
     private String deleteServer(@ModelAttribute ServerKey key, HttpServletRequest request){
     	projectService.deleteServer(key);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-
-	@RequestMapping(value="/project/serviceGroup/delete", method=RequestMethod.POST)
-    private String deleteServiceGroup(@ModelAttribute ServiceGroupKey key, HttpServletRequest request){
-    	projectService.deleteServiceGroup(key);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
