@@ -59,8 +59,8 @@ public class GroupController {
 		RoleRelationKey roleRelationKey = new RoleRelationKey(serviceGroupKey);
     	model.addAttribute("roleRelationKey", roleRelationKey);
 		
-		RoleRelationSortForm roleRelationSortForm = new RoleRelationSortForm(serviceGroupKey);
-    	model.addAttribute("roleRelationSortForm", roleRelationSortForm);
+		RoleRelationOrderForm roleRelationOrderForm = new RoleRelationOrderForm(serviceGroupKey);
+    	model.addAttribute("roleRelationOrderForm", roleRelationOrderForm);
     	
 		
 		ServiceGroupVariableForm variableForm = new ServiceGroupVariableForm(serviceGroupKey);
@@ -108,8 +108,8 @@ public class GroupController {
 	}
 
 	@RequestMapping(value="/project/roleRelation/sort", method=RequestMethod.POST)
-	private String sortRoleRelation(@ModelAttribute RoleRelationSortForm form, HttpServletRequest request){
-		groupService.modifyRoleRelationSort(form);
+	private String sortRoleRelation(@ModelAttribute RoleRelationOrderForm form, HttpServletRequest request){
+		groupService.modifyRoleRelationOrder(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

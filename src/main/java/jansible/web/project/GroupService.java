@@ -10,8 +10,8 @@ import jansible.model.common.ServiceGroupKey;
 import jansible.model.database.DbRoleRelation;
 import jansible.model.database.DbServiceGroup;
 import jansible.web.project.group.RoleRelationForm;
-import jansible.web.project.group.RoleRelationSortForm;
-import jansible.web.project.group.RoleRelationSortType;
+import jansible.web.project.group.RoleRelationOrderForm;
+import jansible.web.project.group.RoleRelationOrderType;
 import jansible.web.project.group.ServiceGroupForm;
 
 import java.util.List;
@@ -75,15 +75,15 @@ public class GroupService {
 		return dbRoleRelation;
 	}
 
-	public void modifyRoleRelationSort(RoleRelationSortForm roleRelationSortForm) {
-		List<DbRoleRelation> dbRoleRelationList = serviceGroupMapper.selectDbRoleRelationList(roleRelationSortForm);
+	public void modifyRoleRelationOrder(RoleRelationOrderForm roleRelationOrderForm) {
+		List<DbRoleRelation> dbRoleRelationList = serviceGroupMapper.selectDbRoleRelationList(roleRelationOrderForm);
 		int tagetIndex = 0;
 		DbRoleRelation targetDbRoleRelation = null;
 		
 		for(int i = 0; i < dbRoleRelationList.size(); i++){
 			DbRoleRelation dbRoleRelation = dbRoleRelationList.get(i);
 			RoleRelationKey comparisonRoleRelationKey = new RoleRelationKey(dbRoleRelation, dbRoleRelation.getRoleName());
-			RoleRelationKey targetRoleRelationKey = new RoleRelationKey(roleRelationSortForm, roleRelationSortForm.getRoleName());
+			RoleRelationKey targetRoleRelationKey = new RoleRelationKey(roleRelationOrderForm, roleRelationOrderForm.getRoleName());
 			if(comparisonRoleRelationKey.equals(targetRoleRelationKey)){
 				tagetIndex = i;
 				targetDbRoleRelation = dbRoleRelation;
@@ -91,7 +91,7 @@ public class GroupService {
 			}
 		}
 		
-		if(roleRelationSortForm.getSortType() == RoleRelationSortType.UP){
+		if(roleRelationOrderForm.getOrderType() == RoleRelationOrderType.UP){
 			if(tagetIndex - 1 < 0){
 				return;
 			}
@@ -109,7 +109,7 @@ public class GroupService {
 		
 		sortRoleRelation(dbRoleRelationList);
 		
-		fileService.outputRoleRelationData(roleRelationSortForm);
+		fileService.outputRoleRelationData(roleRelationOrderForm);
 	}
 	
 	private void sortRoleRelation(List<DbRoleRelation> dbRoleRelationList){

@@ -77,19 +77,19 @@
 		<tr th:each="roleRelation : ${roleRelationList}">
 			<td th:text="${roleRelation.roleName}" />
 			<td>
-				<form method="POST" th:action="@{/project/roleRelation/sort}" th:object="${roleRelationSortForm}">
+				<form method="POST" th:action="@{/project/roleRelation/sort}" th:object="${roleRelationOrderForm}">
 					<input type="hidden" th:field="*{projectName}" />
 					<input type="hidden" th:field="*{environmentName}" />
 					<input type="hidden" th:field="*{groupName}" />
-					<input type="hidden" name="SortType" value="UP" />
+					<input type="hidden" name="OrderType" value="UP" />
 					<input type="hidden" name="roleName" th:value="${roleRelation.roleName}" />
 					<input type="submit" value="↑" />
 				</form>
-				<form method="POST" th:action="@{/project/roleRelation/sort}" th:object="${roleRelationSortForm}">
+				<form method="POST" th:action="@{/project/roleRelation/sort}" th:object="${roleRelationOrderForm}">
 					<input type="hidden" th:field="*{projectName}" />
 					<input type="hidden" th:field="*{environmentName}" />
 					<input type="hidden" th:field="*{groupName}" />
-					<input type="hidden" name="SortType" value="DOWN" />
+					<input type="hidden" name="OrderType" value="DOWN" />
 					<input type="hidden" name="roleName" th:value="${roleRelation.roleName}" />
 					<input type="submit" value="↓" />
 				</form>

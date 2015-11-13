@@ -1,6 +1,6 @@
 package jansible.web.project.group;
 
-public enum RoleRelationSortType {
+public enum RoleRelationOrderType {
 	UP,
 	DOWN;
 }
