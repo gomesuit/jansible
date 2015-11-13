@@ -14,7 +14,6 @@ import jansible.model.common.RoleVariableKey;
 import jansible.model.common.ServerKey;
 import jansible.model.common.ServerVariableKey;
 import jansible.model.common.ServiceGroupKey;
-import jansible.model.common.ServiceGroupVariableKey;
 import jansible.model.common.TaskKey;
 import jansible.model.database.DbEnvironment;
 import jansible.model.database.DbProject;
@@ -27,8 +26,6 @@ import jansible.model.yamldump.YamlModule;
 import jansible.util.YamlDumper;
 import jansible.web.module.ModuleService;
 import jansible.web.project.environment.EnvironmentForm;
-import jansible.web.project.group.RoleRelationForm;
-import jansible.web.project.group.ServiceGroupVariableForm;
 import jansible.web.project.project.BuildForm;
 import jansible.web.project.project.GitForm;
 import jansible.web.project.project.JenkinsInfoForm;
@@ -38,7 +35,6 @@ import jansible.web.project.role.GeneralFileForm;
 import jansible.web.project.role.RoleForm;
 import jansible.web.project.role.RoleVariableForm;
 import jansible.web.project.role.UploadForm;
-import jansible.web.project.server.ServerForm;
 import jansible.web.project.server.ServerVariableForm;
 import jansible.web.project.task.TaskDetailForm;
 import jansible.web.project.task.TaskForm;
@@ -362,84 +358,6 @@ public class ProjectController {
 	@RequestMapping(value="/project/taskdetail/regist", method=RequestMethod.POST)
 	private String registTaskDetail(@ModelAttribute TaskDetailForm form, HttpServletRequest request){
 		projectService.updateTask(form);
-		
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-	}
-
-	@RequestMapping("/serviceGroup/view")
-	private String viewServiceGroup(
-    		@RequestParam(value = "projectName", required = true) String projectName,
-    		@RequestParam(value = "environmentName", required = true) String environmentName,
-    		@RequestParam(value = "groupName", required = true) String groupName,
-			Model model){
-    	ServiceGroupKey serviceGroupKey = new ServiceGroupKey();
-    	serviceGroupKey.setProjectName(projectName);
-    	serviceGroupKey.setEnvironmentName(environmentName);
-    	serviceGroupKey.setGroupName(groupName);
-    	
-		ServerForm serverForm = new ServerForm(serviceGroupKey);
-		model.addAttribute("serverForm", serverForm);
-		model.addAttribute("serverList", projectService.getServerList(serviceGroupKey));
-		
-		ServerKey serverKey = new ServerKey(serviceGroupKey);
-		model.addAttribute("serverKey", serverKey);
-		
-		RoleRelationForm roleRelationForm = new RoleRelationForm(serviceGroupKey);
-		model.addAttribute("roleRelationForm", roleRelationForm);
-    	model.addAttribute("roleList", projectService.getRoleList(serviceGroupKey));
-		model.addAttribute("roleRelationList", projectService.getRoleRelationList(serviceGroupKey));
-		
-		RoleRelationKey roleRelationKey = new RoleRelationKey(serviceGroupKey);
-    	model.addAttribute("roleRelationKey", roleRelationKey);
-		
-		ServiceGroupVariableForm variableForm = new ServiceGroupVariableForm(serviceGroupKey);
-		model.addAttribute("variableForm", variableForm);
-		
-		model.addAttribute("allVariableNameList", projectService.getAllDbVariableNameList(serviceGroupKey));
-		model.addAttribute("groupVariableList", projectService.getDbServiceGroupVariableList(serviceGroupKey));
-		
-		ServiceGroupVariableKey serviceGroupVariableKey = new ServiceGroupVariableKey(serviceGroupKey);
-		model.addAttribute("serviceGroupVariableKey", serviceGroupVariableKey);
-		
-	    return "project/service_group/top";
-	}
-
-    @RequestMapping(value="/project/server/regist", method=RequestMethod.POST)
-	private String registServer(@ModelAttribute ServerForm form, HttpServletRequest request){
-		projectService.registServer(form);
-		
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-	}
-
-	@RequestMapping(value="/project/server/delete", method=RequestMethod.POST)
-	private String deleteServer(@ModelAttribute ServerKey key, HttpServletRequest request){
-		projectService.deleteServer(key);
-		
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-	}
-
-	@RequestMapping(value="/project/roleRelation/regist", method=RequestMethod.POST)
-	private String registRoleRelation(@ModelAttribute RoleRelationForm form, HttpServletRequest request){
-		projectService.registRoleRelationDetail(form);
-		
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-	}
-
-	@RequestMapping(value="/project/serviceGroupVariable/regist", method=RequestMethod.POST)
-	private String registServiceGroupVariable(@ModelAttribute ServiceGroupVariableForm form, HttpServletRequest request){
-		projectService.registServiceGroupVariable(form);
-		
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-	}
-
-	@RequestMapping(value="/project/serviceGroupVariable/delete", method=RequestMethod.POST)
-	private String deleteServiceGroupVariable(@ModelAttribute ServiceGroupVariableKey key, HttpServletRequest request){
-		projectService.deleteServiceGroupVariable(key);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
