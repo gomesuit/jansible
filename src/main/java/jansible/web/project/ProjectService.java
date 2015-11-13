@@ -117,26 +117,7 @@ public class ProjectService {
 		dbProject.setJenkinsJobName(form.getJenkinsJobName());
 		projectMapper.updateJenkinsInfo(dbProject);
 	}
-	
-	public void rebuild(RebuildForm form) throws Exception{
-		JenkinsInfo jenkinsInfo = createJenkinsInfo(form);
-		
-		DbApplyHistory dbApplyHistory = getDbApplyHistory(form);
 
-		DbProject project = getProject(form);
-		JenkinsParameter jenkinsParameter = new JenkinsParameter();
-		jenkinsParameter.setProjectName(form.getProjectName());
-		jenkinsParameter.setGroupName(jansibleFiler.getGroupName(dbApplyHistory.getEnvironmentName(), dbApplyHistory.getGroupName()));
-		jenkinsParameter.setRepositoryUrl(project.getRepositoryUrl());
-		jenkinsParameter.setTagName(dbApplyHistory.getTagName());
-		
-		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
-		
-		dbApplyHistory.setApplyTime(new Date());
-		dbApplyHistory.setTagComment(dbApplyHistory.getTagComment() + "(rebuild)");
-		applyHistoryMapper.insertDbApplyHistory(dbApplyHistory);
-	}
-	
 	private JenkinsInfo createJenkinsInfo(ProjectKey projectKey){
 		DbProject dbProject = projectMapper.selectProject(projectKey);
 		return createJenkinsInfo(dbProject);
@@ -150,6 +131,25 @@ public class ProjectService {
 		return jenkinsInfo;
 	}
 	
+	public void rebuild(RebuildForm form) throws Exception{
+		JenkinsInfo jenkinsInfo = createJenkinsInfo(form);
+		
+		DbApplyHistory dbApplyHistory = getDbApplyHistory(form);
+	
+		DbProject project = getProject(form);
+		JenkinsParameter jenkinsParameter = new JenkinsParameter();
+		jenkinsParameter.setProjectName(form.getProjectName());
+		jenkinsParameter.setGroupName(jansibleFiler.getGroupName(dbApplyHistory.getEnvironmentName(), dbApplyHistory.getGroupName()));
+		jenkinsParameter.setRepositoryUrl(project.getRepositoryUrl());
+		jenkinsParameter.setTagName(dbApplyHistory.getTagName());
+		
+		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
+		
+		dbApplyHistory.setApplyTime(new Date());
+		dbApplyHistory.setTagComment(dbApplyHistory.getTagComment() + "(rebuild)");
+		applyHistoryMapper.insertDbApplyHistory(dbApplyHistory);
+	}
+
 	public void build(BuildForm form) throws Exception{
 		String tagName = getTagName(form);
 		jansibleGitter.tagAndPush(form, form.getUserName(), form.getPassword(), tagName, form.getComment());
@@ -190,6 +190,13 @@ public class ProjectService {
 		return applyHistoryMapper.selectDbApplyHistory(applyHistoryKey);
 	}
 	
+	public void registProject(ProjectForm form) throws Exception {
+		DbProject dbProject = new DbProject(form, form.getRepositoryUrl());
+		projectMapper.insertProject(dbProject);
+		jansibleGitter.cloneRepository(form, form.getRepositoryUrl());
+		outputProjectData(dbProject);
+	}
+
 	public List<DbProject> getProjectList(){
 		return projectMapper.selectProjectList();
 	}
@@ -202,92 +209,11 @@ public class ProjectService {
 		return environmentMapper.selectEnvironmentList(projectKey);
 	}
 
-	public List<DbServiceGroup> getServiceGroupList(EnvironmentKey environmentKey){
-		return serviceGroupMapper.selectServiceGroupList(environmentKey);
+	public void registEnvironment(EnvironmentForm form) {
+		DbEnvironment dbEnvironment = new DbEnvironment(form);
+		environmentMapper.insertEnvironment(dbEnvironment);;
 	}
 
-	public List<DbServer> getServerList(ServiceGroupKey serviceGroupKey){
-		return serverMapper.selectServerList(serviceGroupKey);
-	}
-
-	public List<DbRole> getRoleList(ProjectKey projectKey){
-		return roleMapper.selectRoleList(projectKey);
-	}
-	
-	public List<DbTask> getTaskList(RoleKey roleKey){
-		return taskMapper.selectTaskList(roleKey);
-	}
-	
-	public List<DbFile> getDbFileList(RoleKey roleKey){
-		return roleMapper.selectDbFileList(roleKey);
-	}
-	
-	public List<DbTemplate> getDbTemplateList(RoleKey roleKey){
-		return roleMapper.selectDbTemplateList(roleKey);
-	}
-	
-	public List<DbRoleVariable> getDbRoleVariableList(RoleKey roleKey){
-		return variableMapper.selectDbRoleVariableList(roleKey);
-	}
-	
-	public List<DbServiceGroupVariable> getDbServiceGroupVariableList(ServiceGroupKey serviceGroupKey){
-		return variableMapper.selectDbServiceGroupVariableList(serviceGroupKey);
-	}
-	
-	public List<DbServerVariable> getDbServerVariableList(ServerKey serverKey){
-		return variableMapper.selectDbServerVariableList(serverKey);
-	}
-	
-	public List<DbEnvironmentVariable> getDbEnvironmentVariableList(EnvironmentKey environmentKey){
-		return variableMapper.selectDbEnvironmentVariableList(environmentKey);
-	}
-	
-	public List<String> getAllDbVariableNameList(ProjectKey projectKey){
-		return variableMapper.selectAllDbVariableNameList(projectKey);
-	}
-	
-	public DbTask getTask(TaskKey taskKey){
-		return taskMapper.selectTask(taskKey);
-	}
-	
-	public List<DbTaskDetail> getTaskDetailList(TaskKey taskKey){
-		return taskMapper.selectTaskDetailList(taskKey);
-	}
-	
-	public void deleteTask(TaskKey taskKey){
-		taskMapper.deleteTask(taskKey);
-		taskMapper.deleteTaskDetail(taskKey);
-	}
-	
-	public void deleteRole(RoleKey roleKey){
-		roleMapper.deleteRole(roleKey);
-		roleMapper.deleteDbFileByRole(roleKey);
-		roleMapper.deleteDbTemplateByRole(roleKey);
-		taskMapper.deleteTaskByRole(roleKey);
-		taskMapper.deleteTaskDetailByRole(roleKey);
-		variableMapper.deleteDbRoleVariableByRole(roleKey);
-		jansibleFiler.deleteRoleDir(roleKey);
-	}
-	
-	public void deleteServer(ServerKey serverKey){
-		serverMapper.deleteServer(serverKey);
-		variableMapper.deleteDbServerVariableByServer(serverKey);
-		jansibleFiler.deleteHostVariableYaml(serverKey);
-	}
-	
-	public void deleteRoleRelation(RoleRelationKey roleRelationKey){
-		serviceGroupMapper.deleteDbRoleRelation(roleRelationKey);
-	}
-	
-	public void deleteServiceGroup(ServiceGroupKey serviceGroupKey){
-		serviceGroupMapper.deleteServiceGroup(serviceGroupKey);
-		serviceGroupMapper.deleteDbRoleRelationByServiceGroup(serviceGroupKey);
-		serverMapper.deleteServerByServiceGroup(serviceGroupKey);
-		variableMapper.deleteDbServiceGroupVariableByServiceGroup(serviceGroupKey);
-		variableMapper.deleteDbServerVariableByServiceGroup(serviceGroupKey);
-		jansibleFiler.deleteGroupVariableYaml(serviceGroupKey);
-	}
-	
 	public void deleteEnvironment(EnvironmentKey environmentKey){
 		environmentMapper.deleteEnvironment(environmentKey);
 		serviceGroupMapper.deleteServiceGroupByEnvironment(environmentKey);
@@ -302,70 +228,292 @@ public class ProjectService {
 			jansibleFiler.deleteGroupVariableYaml(dbServiceGroup);
 		}
 	}
-	
+
 	public void deleteEnvironmentVariable(EnvironmentVariableKey environmentVariableKey){
 		variableMapper.deleteDbEnvironmentVariable(environmentVariableKey);
 	}
-	
-	public void deleteServiceGroupVariable(ServiceGroupVariableKey serviceGroupVariableKey){
-		variableMapper.deleteDbServiceGroupVariable(serviceGroupVariableKey);
-	}
-	
-	public void deleteServerVariable(ServerVariableKey serverVariableKey){
-		variableMapper.deleteDbServerVariable(serverVariableKey);
-	}
-	
-	public void deleteRoleVariable(RoleVariableKey roleVariableKey){
-		variableMapper.deleteDbRoleVariable(roleVariableKey);
-	}
-	
-	public List<DbRoleRelation> getRoleRelationList(ServiceGroupKey serviceGroupKey){
-		return serviceGroupMapper.selectDbRoleRelationList(serviceGroupKey);
+
+	public List<DbEnvironmentVariable> getDbEnvironmentVariableList(EnvironmentKey environmentKey){
+		return variableMapper.selectDbEnvironmentVariableList(environmentKey);
 	}
 
-
-	public void registProject(ProjectForm form) throws Exception {
-		DbProject dbProject = new DbProject(form, form.getRepositoryUrl());
-		projectMapper.insertProject(dbProject);
-		jansibleGitter.cloneRepository(form, form.getRepositoryUrl());
-		outputProjectData(dbProject);
-	}
-	
-	public void registEnvironment(EnvironmentForm form) {
-		DbEnvironment dbEnvironment = new DbEnvironment(form);
-		environmentMapper.insertEnvironment(dbEnvironment);;
-	}
-	
 	public void registServiceGroup(ServiceGroupForm form) {
 		DbServiceGroup dbServiceGroup = new DbServiceGroup(form);
 		serviceGroupMapper.insertServiceGroup(dbServiceGroup);
 	}
-	
+
+	public void deleteServiceGroup(ServiceGroupKey serviceGroupKey){
+		serviceGroupMapper.deleteServiceGroup(serviceGroupKey);
+		serviceGroupMapper.deleteDbRoleRelationByServiceGroup(serviceGroupKey);
+		serverMapper.deleteServerByServiceGroup(serviceGroupKey);
+		variableMapper.deleteDbServiceGroupVariableByServiceGroup(serviceGroupKey);
+		variableMapper.deleteDbServerVariableByServiceGroup(serviceGroupKey);
+		jansibleFiler.deleteGroupVariableYaml(serviceGroupKey);
+	}
+
+	public void deleteServiceGroupVariable(ServiceGroupVariableKey serviceGroupVariableKey){
+		variableMapper.deleteDbServiceGroupVariable(serviceGroupVariableKey);
+	}
+
+	public List<DbServiceGroup> getServiceGroupList(EnvironmentKey environmentKey){
+		return serviceGroupMapper.selectServiceGroupList(environmentKey);
+	}
+
+	public void deleteRoleRelation(RoleRelationKey roleRelationKey){
+		serviceGroupMapper.deleteDbRoleRelation(roleRelationKey);
+	}
+
+	public List<DbRoleRelation> getRoleRelationList(ServiceGroupKey serviceGroupKey){
+		return serviceGroupMapper.selectDbRoleRelationList(serviceGroupKey);
+	}
+
+	public void deleteRoleVariable(RoleVariableKey roleVariableKey){
+		variableMapper.deleteDbRoleVariable(roleVariableKey);
+	}
+
 	public void registServer(ServerForm form) {
 		DbServer dbServer = new DbServer(form);
 		serverMapper.insertServer(dbServer);
 		
 		outputHostsData(form);
 	}
-	
+
+	public List<DbServiceGroupVariable> getDbServiceGroupVariableList(ServiceGroupKey serviceGroupKey){
+		return variableMapper.selectDbServiceGroupVariableList(serviceGroupKey);
+	}
+
+	public List<DbServer> getServerList(ServiceGroupKey serviceGroupKey){
+		return serverMapper.selectServerList(serviceGroupKey);
+	}
+
+	public List<String> getAllDbVariableNameList(ProjectKey projectKey){
+		return variableMapper.selectAllDbVariableNameList(projectKey);
+	}
+
+	public List<DbServerVariable> getDbServerVariableList(ServerKey serverKey){
+		return variableMapper.selectDbServerVariableList(serverKey);
+	}
+
+	public void deleteServerVariable(ServerVariableKey serverVariableKey){
+		variableMapper.deleteDbServerVariable(serverVariableKey);
+	}
+
+	public void deleteServer(ServerKey serverKey){
+		serverMapper.deleteServer(serverKey);
+		variableMapper.deleteDbServerVariableByServer(serverKey);
+		jansibleFiler.deleteHostVariableYaml(serverKey);
+	}
+
 	public void registRole(RoleForm form) {
 		DbRole dbRole = new DbRole(form);
 		roleMapper.insertRole(dbRole);
 		outputRoleData(dbRole);
 	}
+
+	public List<DbRole> getRoleList(ProjectKey projectKey){
+		return roleMapper.selectRoleList(projectKey);
+	}
 	
+	public void deleteRole(RoleKey roleKey){
+		roleMapper.deleteRole(roleKey);
+		roleMapper.deleteDbFileByRole(roleKey);
+		roleMapper.deleteDbTemplateByRole(roleKey);
+		taskMapper.deleteTaskByRole(roleKey);
+		taskMapper.deleteTaskDetailByRole(roleKey);
+		variableMapper.deleteDbRoleVariableByRole(roleKey);
+		jansibleFiler.deleteRoleDir(roleKey);
+	}
+
+	public List<DbRoleVariable> getDbRoleVariableList(RoleKey roleKey){
+		return variableMapper.selectDbRoleVariableList(roleKey);
+	}
+
+	public void registFile(UploadForm form) {
+		DbFile dbFile = createDbFile(form);
+		roleMapper.insertDbFile(dbFile);
+	}
+
+	public void deleteFile(GeneralFileForm form){
+		FileKey fileKey = new FileKey(form);
+		fileKey.setFileName(form.getFileName());
+		roleMapper.deleteDbFile(fileKey);
+	}
+
+	public void deleteTemplate(GeneralFileForm form){
+		TemplateKey templateKey = new TemplateKey(form);
+		templateKey.setTemplateName(form.getFileName());
+		roleMapper.deleteDbTemplate(templateKey);
+	}
+
+	public void registRoleVariable(RoleVariableForm form) {
+		DbRoleVariable dbRoleVariable = createDbRoleVariable(form);
+		variableMapper.insertDbRoleVariable(dbRoleVariable);
+		
+		outputRoleVariableData(form);
+	}
+
+	public void registRoleRelationDetail(RoleRelationForm form) {
+		DbRoleRelation dbRoleRelation = createDbRoleRelation(form);
+		serviceGroupMapper.insertDbRoleRelation(dbRoleRelation);
+		
+		outputRoleRelationData(form);
+	}
+
+	public void registTemplate(UploadForm form) {
+		DbTemplate dbTemplate = createDbTemplate(form);
+		roleMapper.insertDbTemplate(dbTemplate);
+	}
+
+	public List<DbFile> getDbFileList(RoleKey roleKey){
+		return roleMapper.selectDbFileList(roleKey);
+	}
+
+	public List<DbTemplate> getDbTemplateList(RoleKey roleKey){
+		return roleMapper.selectDbTemplateList(roleKey);
+	}
+
+	public void deleteTask(TaskKey taskKey){
+		taskMapper.deleteTask(taskKey);
+		taskMapper.deleteTaskDetail(taskKey);
+	}
+
+	public void updateTask(TaskDetailForm form) {
+		DbTask dbTask = createDbTask(form);
+		taskMapper.updateTask(dbTask);
+		
+		registTaskDetail(form);
+		
+		outputTaskData(form);
+	}
+
+	public void registTask(TaskForm form) {
+		DbTask dbTask = createDbTask(form);
+		taskMapper.insertTask(dbTask);
+	}
+
+	public List<DbTask> getTaskList(RoleKey roleKey){
+		return taskMapper.selectTaskList(roleKey);
+	}
+	
+	public DbTask getTask(TaskKey taskKey){
+		return taskMapper.selectTask(taskKey);
+	}
+	
+	public void registServiceGroupVariable(ServiceGroupVariableForm form) {
+		DbServiceGroupVariable dbServiceGroupVariable = createDbServiceGroupVariable(form);
+		variableMapper.insertDbServiceGroupVariable(dbServiceGroupVariable);
+		
+		outputServiceGroupVariableData(form);
+	}
+
+	public void registServerVariable(ServerVariableForm form) {
+		DbServerVariable dbServerVariable = createDbServerVariable(form);
+		variableMapper.insertDbServerVariable(dbServerVariable);
+		
+		outputServerVariableData(form);
+	}
+
+	public void registEnvironmentVariable(EnvironmentVariableForm form) {
+		DbEnvironmentVariable dbEnvironmentVariable = createDbEnvironmentVariable(form);
+		variableMapper.insertDbEnvironmentVariable(dbEnvironmentVariable);
+		
+		outputEnvironmentVariableData(form);
+	}
+
+	private void registTaskDetail(TaskDetailForm form) {
+		List<DbTaskDetail> dbTaskDetailList = createDbTaskDetailList(form);
+		for(DbTaskDetail dbTaskDetail : dbTaskDetailList){
+			taskMapper.insertTaskDetail(dbTaskDetail);
+		}
+	}
+
+	public List<DbTaskDetail> getTaskDetailList(TaskKey taskKey){
+		return taskMapper.selectTaskDetailList(taskKey);
+	}
+	
+	private DbRoleRelation createDbRoleRelation(RoleRelationForm form) {
+		DbRoleRelation dbRoleRelation = new DbRoleRelation(form);
+		dbRoleRelation.setSort(form.getSort());
+		return dbRoleRelation;
+	}
+
+	private List<DbTaskDetail> createDbTaskDetailList(TaskDetailForm form) {
+			List<DbTaskDetail> dbTaskDetailList = new ArrayList<>();
+			List<TaskParameter> taskParameterList = form.getTaskParameterList();
+			for(TaskParameter taskParameter : taskParameterList){
+	//			if(StringUtils.isBlank(taskParameter.getParameterValue())){
+	//				continue;
+	//			}
+				
+				DbTaskDetail dbTaskDetail = createDbTaskDetail(form.getTaskId(), form.getProjectName(), form.getRoleName(), taskParameter);
+				dbTaskDetailList.add(dbTaskDetail);
+			}
+			return dbTaskDetailList;
+		}
+
+	private DbTaskDetail createDbTaskDetail(Integer taskId, String projectName, String roleName, TaskParameter taskParameter) {
+		DbTaskDetail dbTaskDetail = new DbTaskDetail();
+		dbTaskDetail.setTaskId(taskId);
+		dbTaskDetail.setProjectName(projectName);
+		dbTaskDetail.setRoleName(roleName);
+		dbTaskDetail.setParameterName(taskParameter.getParameterName());
+		dbTaskDetail.setParameterValue(taskParameter.getParameterValue());
+		return dbTaskDetail;
+	}
+
+	private DbTask createDbTask(TaskForm form) {
+		DbTask dbTask = new DbTask(form);
+		dbTask.setModuleName(form.getModuleName());
+		dbTask.setDescription(form.getDescription());
+		dbTask.setSort(form.getSort());
+		return dbTask;
+	}
+
+	private DbTask createDbTask(TaskDetailForm form) {
+		DbTask dbTask = new DbTask(form);
+		dbTask.setDescription(form.getDescription());
+		return dbTask;
+	}
+
+	private DbFile createDbFile(UploadForm form) {
+		DbFile dbFile = new DbFile(form);
+		dbFile.setFileName(form.getFileName());
+		return dbFile;
+	}
+
+	private DbTemplate createDbTemplate(UploadForm form) {
+		DbTemplate dbTemplate = new DbTemplate(form);
+		dbTemplate.setTemplateName(form.getFileName());
+		return dbTemplate;
+	}
+
+	private DbEnvironmentVariable createDbEnvironmentVariable(EnvironmentVariableForm form) {
+		DbEnvironmentVariable dbEnvironmentVariable = new DbEnvironmentVariable(form);
+		dbEnvironmentVariable.setValue(form.getValue());
+		return dbEnvironmentVariable;
+	}
+
+	private DbServerVariable createDbServerVariable(ServerVariableForm form) {
+		DbServerVariable dbServerVariable = new DbServerVariable(form);
+		dbServerVariable.setValue(form.getValue());
+		return dbServerVariable;
+	}
+
+	private DbServiceGroupVariable createDbServiceGroupVariable(ServiceGroupVariableForm form) {
+		DbServiceGroupVariable dbServiceGroupVariable = new DbServiceGroupVariable(form);
+		dbServiceGroupVariable.setValue(form.getValue());
+		return dbServiceGroupVariable;
+	}
+
+	private DbRoleVariable createDbRoleVariable(RoleVariableForm form) {
+		DbRoleVariable dbRoleVariable = new DbRoleVariable(form);
+		dbRoleVariable.setValue(form.getValue());
+		return dbRoleVariable;
+	}
+
 	private void outputProjectData(ProjectKey projectKey){
 		jansibleFiler.mkHostVariableDir(projectKey);
 		jansibleFiler.mkGroupVariableDir(projectKey);
-	}
-	
-	private void outputRoleData(RoleKey roleKey){
-		jansibleFiler.mkRoleDir(roleKey);
-		jansibleFiler.mkRoleTaskDir(roleKey);
-		jansibleFiler.mkRoleTemplateDir(roleKey);
-		jansibleFiler.mkRoleFileDir(roleKey);
-		jansibleFiler.mkRoleVariableDir(roleKey);
-		jansibleFiler.writeRoleYaml(roleKey);
 	}
 	
 	private void outputRoleVariableData(RoleKey roleKey){
@@ -374,7 +522,15 @@ public class ProjectService {
 		String yamlContent = yamlDumper.dumpVariable(yamlVariableList);
 		jansibleFiler.writeRoleVariableYaml(roleKey, yamlContent);
 	}
-	
+
+	private void outputEnvironmentVariableData(EnvironmentKey environmentKey){
+		List<DbServiceGroup> dbServiceGroupList = serviceGroupMapper.selectServiceGroupList(environmentKey);
+		
+		for(DbServiceGroup dbServiceGroup : dbServiceGroupList){
+			outputServiceGroupVariableData(dbServiceGroup);
+		}
+	}
+
 	private void outputServiceGroupVariableData(ServiceGroupKey serviceGroupKey){
 		List<DbEnvironmentVariable> dbEnvironmentVariableList = variableMapper.selectDbEnvironmentVariableList(serviceGroupKey);
 		List<YamlVariable> envYamlVariableList = createYamlVariableList(dbEnvironmentVariableList);
@@ -390,6 +546,25 @@ public class ProjectService {
 		}
 	}
 
+	private void outputServerVariableData(ServerKey serverKey){
+		List<DbServerVariable> dbServerVariableList = variableMapper.selectDbServerVariableList(serverKey);
+		List<YamlVariable> yamlVariableList = createYamlVariableList(dbServerVariableList);
+		
+		if(!yamlVariableList.isEmpty()){
+			String yamlContent = yamlDumper.dumpVariable(yamlVariableList);
+			jansibleFiler.writeHostVariableYaml(serverKey, yamlContent);
+		}
+	}
+
+	private void outputRoleData(RoleKey roleKey){
+		jansibleFiler.mkRoleDir(roleKey);
+		jansibleFiler.mkRoleTaskDir(roleKey);
+		jansibleFiler.mkRoleTemplateDir(roleKey);
+		jansibleFiler.mkRoleFileDir(roleKey);
+		jansibleFiler.mkRoleVariableDir(roleKey);
+		jansibleFiler.writeRoleYaml(roleKey);
+	}
+	
 	private void outputRoleRelationData(ServiceGroupKey serviceGroupKey){
 		StartYaml startYaml = new StartYaml();
 		startYaml.setHosts(jansibleFiler.getGroupName(serviceGroupKey));
@@ -408,16 +583,6 @@ public class ProjectService {
     	jansibleFiler.writeRoleYaml(taskKey, yamlDumper.dump(modules));
 	}
 
-	private void outputServerVariableData(ServerKey serverKey){
-		List<DbServerVariable> dbServerVariableList = variableMapper.selectDbServerVariableList(serverKey);
-		List<YamlVariable> yamlVariableList = createYamlVariableList(dbServerVariableList);
-		
-		if(!yamlVariableList.isEmpty()){
-			String yamlContent = yamlDumper.dumpVariable(yamlVariableList);
-			jansibleFiler.writeHostVariableYaml(serverKey, yamlContent);
-		}
-	}
-	
 	private void outputHostsData(ProjectKey projectKey){
 		List<HostGroup> hostGroupList = createHostGroupList(projectKey);
 		
@@ -451,14 +616,6 @@ public class ProjectService {
 		return hostGroup;
 	}
 	
-	private void outputEnvironmentVariableData(EnvironmentKey environmentKey){
-		List<DbServiceGroup> dbServiceGroupList = serviceGroupMapper.selectServiceGroupList(environmentKey);
-		
-		for(DbServiceGroup dbServiceGroup : dbServiceGroupList){
-			outputServiceGroupVariableData(dbServiceGroup);
-		}
-	}
-
 	public void reOutputAllData(ProjectKey projectKey){
 		jansibleFiler.deleteAllStartYamlfile(projectKey);
 		jansibleFiler.deleteGroupVariableDir(projectKey);
@@ -480,21 +637,7 @@ public class ProjectService {
 		}
 	}
 
-	public void registTask(TaskForm form) {
-		DbTask dbTask = createDbTask(form);
-		taskMapper.insertTask(dbTask);
-	}
-	
-	public void updateTask(TaskDetailForm form) {
-		DbTask dbTask = createDbTask(form);
-		taskMapper.updateTask(dbTask);
-		
-		registTaskDetail(form);
-		
-		outputTaskData(form);
-	}
-    
-    public List<YamlModule> createYamlModuleList(List<DbTask> dbTaskList){
+	public List<YamlModule> createYamlModuleList(List<DbTask> dbTaskList){
     	List<YamlModule> modules = new ArrayList<>();
     	for(DbTask dbTask : dbTaskList){
     		List<DbTaskDetail> dbTaskDetailList = getTaskDetailList(dbTask);
@@ -517,105 +660,6 @@ public class ProjectService {
 		return yamlParameters;
 	}
 	
-	private void registTaskDetail(TaskDetailForm form) {
-		List<DbTaskDetail> dbTaskDetailList = createDbTaskDetailList(form);
-		for(DbTaskDetail dbTaskDetail : dbTaskDetailList){
-			taskMapper.insertTaskDetail(dbTaskDetail);
-		}
-	}
-	
-	public void registRoleRelationDetail(RoleRelationForm form) {
-		DbRoleRelation dbRoleRelation = createDbRoleRelation(form);
-		serviceGroupMapper.insertDbRoleRelation(dbRoleRelation);
-		
-		outputRoleRelationData(form);
-	}
-	
-	private DbRoleRelation createDbRoleRelation(RoleRelationForm form) {
-		DbRoleRelation dbRoleRelation = new DbRoleRelation(form);
-		dbRoleRelation.setSort(form.getSort());
-		return dbRoleRelation;
-	}
-
-	private List<DbTaskDetail> createDbTaskDetailList(TaskDetailForm form) {
-		List<DbTaskDetail> dbTaskDetailList = new ArrayList<>();
-		List<TaskParameter> taskParameterList = form.getTaskParameterList();
-		for(TaskParameter taskParameter : taskParameterList){
-//			if(StringUtils.isBlank(taskParameter.getParameterValue())){
-//				continue;
-//			}
-			
-			DbTaskDetail dbTaskDetail = createDbTaskDetail(form.getTaskId(), form.getProjectName(), form.getRoleName(), taskParameter);
-			dbTaskDetailList.add(dbTaskDetail);
-		}
-		return dbTaskDetailList;
-	}
-
-	private DbTaskDetail createDbTaskDetail(Integer taskId, String projectName, String roleName, TaskParameter taskParameter) {
-		DbTaskDetail dbTaskDetail = new DbTaskDetail();
-		dbTaskDetail.setTaskId(taskId);
-		dbTaskDetail.setProjectName(projectName);
-		dbTaskDetail.setRoleName(roleName);
-		dbTaskDetail.setParameterName(taskParameter.getParameterName());
-		dbTaskDetail.setParameterValue(taskParameter.getParameterValue());
-		return dbTaskDetail;
-	}
-
-	private DbTask createDbTask(TaskForm form) {
-		DbTask dbTask = new DbTask(form);
-		dbTask.setModuleName(form.getModuleName());
-		dbTask.setDescription(form.getDescription());
-		dbTask.setSort(form.getSort());
-		return dbTask;
-	}
-
-	private DbTask createDbTask(TaskDetailForm form) {
-		DbTask dbTask = new DbTask(form);
-		dbTask.setDescription(form.getDescription());
-		return dbTask;
-	}
-	
-	public void registFile(UploadForm form) {
-		DbFile dbFile = createDbFile(form);
-		roleMapper.insertDbFile(dbFile);
-	}
-
-	private DbFile createDbFile(UploadForm form) {
-		DbFile dbFile = new DbFile(form);
-		dbFile.setFileName(form.getFileName());
-		return dbFile;
-	}
-	
-	public void registTemplate(UploadForm form) {
-		DbTemplate dbTemplate = createDbTemplate(form);
-		roleMapper.insertDbTemplate(dbTemplate);
-	}
-
-	private DbTemplate createDbTemplate(UploadForm form) {
-		DbTemplate dbTemplate = new DbTemplate(form);
-		dbTemplate.setTemplateName(form.getFileName());
-		return dbTemplate;
-	}
-	
-	public void deleteFile(GeneralFileForm form){
-		FileKey fileKey = new FileKey(form);
-		fileKey.setFileName(form.getFileName());
-		roleMapper.deleteDbFile(fileKey);
-	}
-	
-	public void deleteTemplate(GeneralFileForm form){
-		TemplateKey templateKey = new TemplateKey(form);
-		templateKey.setTemplateName(form.getFileName());
-		roleMapper.deleteDbTemplate(templateKey);
-	}
-	
-	public void registRoleVariable(RoleVariableForm form) {
-		DbRoleVariable dbRoleVariable = createDbRoleVariable(form);
-		variableMapper.insertDbRoleVariable(dbRoleVariable);
-		
-		outputRoleVariableData(form);
-	}
-	
 	private <T extends InterfaceDbVariable> List<YamlVariable> createYamlVariableList(List<T> dbVariableList){
 		List<YamlVariable> yamlVariableList = new ArrayList<>();
 		for(InterfaceDbVariable dbVariable : dbVariableList){
@@ -624,51 +668,6 @@ public class ProjectService {
 		return yamlVariableList;
 	}
 	
-	public void registServiceGroupVariable(ServiceGroupVariableForm form) {
-		DbServiceGroupVariable dbServiceGroupVariable = createDbServiceGroupVariable(form);
-		variableMapper.insertDbServiceGroupVariable(dbServiceGroupVariable);
-		
-		outputServiceGroupVariableData(form);
-	}
-	
-	public void registServerVariable(ServerVariableForm form) {
-		DbServerVariable dbServerVariable = createDbServerVariable(form);
-		variableMapper.insertDbServerVariable(dbServerVariable);
-		
-		outputServerVariableData(form);
-	}
-	
-	public void registEnvironmentVariable(EnvironmentVariableForm form) {
-		DbEnvironmentVariable dbEnvironmentVariable = createDbEnvironmentVariable(form);
-		variableMapper.insertDbEnvironmentVariable(dbEnvironmentVariable);
-		
-		outputEnvironmentVariableData(form);
-	}
-	
-	private DbEnvironmentVariable createDbEnvironmentVariable(EnvironmentVariableForm form) {
-		DbEnvironmentVariable dbEnvironmentVariable = new DbEnvironmentVariable(form);
-		dbEnvironmentVariable.setValue(form.getValue());
-		return dbEnvironmentVariable;
-	}
-
-	private DbServerVariable createDbServerVariable(ServerVariableForm form) {
-		DbServerVariable dbServerVariable = new DbServerVariable(form);
-		dbServerVariable.setValue(form.getValue());
-		return dbServerVariable;
-	}
-
-	private DbServiceGroupVariable createDbServiceGroupVariable(ServiceGroupVariableForm form) {
-		DbServiceGroupVariable dbServiceGroupVariable = new DbServiceGroupVariable(form);
-		dbServiceGroupVariable.setValue(form.getValue());
-		return dbServiceGroupVariable;
-	}
-
-	private DbRoleVariable createDbRoleVariable(RoleVariableForm form) {
-		DbRoleVariable dbRoleVariable = new DbRoleVariable(form);
-		dbRoleVariable.setValue(form.getValue());
-		return dbRoleVariable;
-	}
-
 	public void commitGit(GitForm form) throws Exception {
 		reOutputAllData(form);
 		jansibleGitter.commitAndPush(form, form.getUserName(), form.getPassword(), form.getComment());
