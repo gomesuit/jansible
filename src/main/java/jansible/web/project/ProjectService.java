@@ -119,11 +119,7 @@ public class ProjectService {
 	}
 	
 	public void rebuild(RebuildForm form) throws Exception{
-		DbProject dbProject = projectMapper.selectProject(form);
-		JenkinsInfo jenkinsInfo = new JenkinsInfo();
-		jenkinsInfo.setIpAddress(dbProject.getJenkinsIpAddress());
-		jenkinsInfo.setPort(dbProject.getJenkinsPort());
-		jenkinsInfo.setJobName(dbProject.getJenkinsJobName());
+		JenkinsInfo jenkinsInfo = createJenkinsInfo(form);
 		
 		DbApplyHistory dbApplyHistory = getDbApplyHistory(form);
 
@@ -141,6 +137,19 @@ public class ProjectService {
 		applyHistoryMapper.insertDbApplyHistory(dbApplyHistory);
 	}
 	
+	private JenkinsInfo createJenkinsInfo(ProjectKey projectKey){
+		DbProject dbProject = projectMapper.selectProject(projectKey);
+		return createJenkinsInfo(dbProject);
+	}
+	
+	private JenkinsInfo createJenkinsInfo(DbProject dbProject){
+		JenkinsInfo jenkinsInfo = new JenkinsInfo();
+		jenkinsInfo.setIpAddress(dbProject.getJenkinsIpAddress());
+		jenkinsInfo.setPort(dbProject.getJenkinsPort());
+		jenkinsInfo.setJobName(dbProject.getJenkinsJobName());
+		return jenkinsInfo;
+	}
+	
 	public void build(BuildForm form) throws Exception{
 		String tagName = getTagName(form);
 		jansibleGitter.tagAndPush(form, form.getUserName(), form.getPassword(), tagName, form.getComment());
@@ -151,12 +160,8 @@ public class ProjectService {
 		jenkinsParameter.setGroupName(jansibleFiler.getGroupName(form));
 		jenkinsParameter.setRepositoryUrl(project.getRepositoryUrl());
 		jenkinsParameter.setTagName(tagName);
-		
-		DbProject dbProject = projectMapper.selectProject(form);
-		JenkinsInfo jenkinsInfo = new JenkinsInfo();
-		jenkinsInfo.setIpAddress(dbProject.getJenkinsIpAddress());
-		jenkinsInfo.setPort(dbProject.getJenkinsPort());
-		jenkinsInfo.setJobName(dbProject.getJenkinsJobName());
+
+		JenkinsInfo jenkinsInfo = createJenkinsInfo(form);
 		
 		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
 		
