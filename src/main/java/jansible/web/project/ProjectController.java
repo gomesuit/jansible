@@ -69,7 +69,15 @@ public class ProjectController {
         return "project/top";
     }
 
-    @RequestMapping("/project/view")
+    @RequestMapping(value="/project/regist", method=RequestMethod.POST)
+	private String registProject(@ModelAttribute ProjectForm form, HttpServletRequest request) throws Exception{
+		projectService.registProject(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping("/project/view")
 	private String viewProject(
 			@RequestParam(value = "projectName", required = true) String projectName,
 			Model model){
@@ -113,25 +121,68 @@ public class ProjectController {
 	    return "project/project/top";
 	}
 
-    @RequestMapping("/apply/view")
-	private String viewApply(
-			@RequestParam(value = "projectName", required = true) String projectName,
-			@RequestParam(value = "environmentName", required = true) String environmentName,
-			@RequestParam(value = "groupName", required = true) String groupName,
-			Model model){
-    	
-    	ServiceGroupKey serviceGroupKey = new ServiceGroupKey();
-    	serviceGroupKey.setProjectName(projectName);
-    	serviceGroupKey.setEnvironmentName(environmentName);
-    	serviceGroupKey.setGroupName(groupName);
-    			
-		BuildForm buildForm = new BuildForm(serviceGroupKey);
-		model.addAttribute("buildForm", buildForm);
+    @RequestMapping(value="/project/role/regist", method=RequestMethod.POST)
+	private String registRole(@ModelAttribute RoleForm form, HttpServletRequest request){
+		projectService.registRole(form);
 		
-		List<Group> groupList = getGroupList(serviceGroupKey);
-		model.addAttribute("groupList", groupList);
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/role/delete", method=RequestMethod.POST)
+	private String deleteRole(@ModelAttribute RoleKey key, HttpServletRequest request){
+		projectService.deleteRole(key);
 		
-	    return "project/apply/top";
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/environment/regist", method=RequestMethod.POST)
+	private String registEnvironment(@ModelAttribute EnvironmentForm form, HttpServletRequest request){
+		projectService.registEnvironment(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/environment/delete", method=RequestMethod.POST)
+	private String deleteEnvironment(@ModelAttribute EnvironmentKey key, HttpServletRequest request){
+		projectService.deleteEnvironment(key);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/git/commit", method=RequestMethod.POST)
+	private String commitGit(@ModelAttribute GitForm form, HttpServletRequest request) throws Exception{
+		projectService.commitGit(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/jenkins/regist", method=RequestMethod.POST)
+	private String registJenkins(@ModelAttribute JenkinsInfoForm form, HttpServletRequest request){
+		projectService.registJenkinsInfo(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/jenkins/build", method=RequestMethod.POST)
+	private String build(@ModelAttribute BuildForm form, HttpServletRequest request) throws Exception{
+		projectService.build(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/jenkins/rebuild", method=RequestMethod.POST)
+	private String rebuild(@ModelAttribute RebuildForm form, HttpServletRequest request) throws Exception{
+		projectService.rebuild(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 
 	private List<Group> getGroupList(ProjectKey projectKey) {
@@ -192,6 +243,59 @@ public class ProjectController {
 	    return "project/role/top";
 	}
 
+	@RequestMapping(value="/project/roleVariable/regist", method=RequestMethod.POST)
+	private String registRoleVariable(@ModelAttribute RoleVariableForm form, HttpServletRequest request){
+		projectService.registRoleVariable(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/roleVariable/delete", method=RequestMethod.POST)
+	private String deleteRoleVariable(@ModelAttribute RoleVariableKey key, HttpServletRequest request){
+		projectService.deleteRoleVariable(key);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	private TaskView createTaskView(DbTask dbTask) {
+		TaskView taskView = new TaskView();
+		taskView.setTaskId(dbTask.getTaskId());
+		taskView.setModuleName(dbTask.getModuleName());
+		taskView.setDescription(dbTask.getDescription());
+		List<DbTaskDetail> dbTaskDetailList = projectService.getTaskDetailList(dbTask);
+		YamlModule yamlModule = new YamlModule(dbTask.getModuleName(), projectService.createParameters(dbTaskDetailList));
+		yamlModule.setDescription(dbTask.getDescription());
+		taskView.setParametersValue(yamlModule.getParameters().toString());
+		return taskView;
+	}
+
+	private List<TaskView> createTaskViewList(List<DbTask> dbTaskList){
+		List<TaskView> taskViewList = new ArrayList<>();
+		for(DbTask dbTask : dbTaskList){
+			TaskView taskView = createTaskView(dbTask);
+			taskViewList.add(taskView);
+		}
+		return taskViewList;
+	}
+
+	@RequestMapping(value="/project/task/regist", method=RequestMethod.POST)
+	private String registTask(@ModelAttribute TaskForm form, HttpServletRequest request){
+		projectService.registTask(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/task/delete", method=RequestMethod.POST)
+	private String deleteTask(@ModelAttribute TaskKey key, HttpServletRequest request){
+		projectService.deleteTask(key);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
 	@RequestMapping("/task/view")
 	private String viewTask(
 			@RequestParam(value = "projectName", required = true) String projectName,
@@ -226,6 +330,41 @@ public class ProjectController {
 		model.addAttribute("yaskYaml", yamlDumper.dump(modules).replaceAll("\n", "<br />"));
 		
 	    return "project/task/top";
+	}
+
+	private void mergeParameterList(List<TaskParameter> taskParameterList, List<DbTaskDetail> dbTaskDetailList) {
+		for(TaskParameter taskParameter : taskParameterList){
+			String formParameterName = taskParameter.getParameterName();
+			for(DbTaskDetail dbTaskDetail : dbTaskDetailList){
+				String dbParameterName = dbTaskDetail.getParameterName();
+				if(formParameterName.equals(dbParameterName)){
+					taskParameter.setParameterValue(dbTaskDetail.getParameterValue());
+				}
+			}
+		}
+	}
+
+	private List<TaskParameter> createBlankTaskParameterList(HtmlModule module) {
+		List<TaskParameter> taskParameterList = new ArrayList<>();
+		for(HtmlParameter htmlParameter : module.getParameterList()){
+			TaskParameter taskParameter = new TaskParameter();
+			taskParameter.setParameterName(htmlParameter.getName());
+			taskParameter.setAddedVersion(htmlParameter.getAddedVersion());
+			taskParameter.setRequired(htmlParameter.isRequired());
+			taskParameter.setDefaultValue(htmlParameter.getDefaultValue());
+			taskParameter.setChoices(htmlParameter.getChoices());
+			taskParameter.setDescription(htmlParameter.getDescription());
+			taskParameterList.add(taskParameter);
+		}
+		return taskParameterList;
+	}
+
+	@RequestMapping(value="/project/taskdetail/regist", method=RequestMethod.POST)
+	private String registTaskDetail(@ModelAttribute TaskDetailForm form, HttpServletRequest request){
+		projectService.updateTask(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 
 	@RequestMapping("/serviceGroup/view")
@@ -266,7 +405,47 @@ public class ProjectController {
 	    return "project/service_group/top";
 	}
 
-    @RequestMapping("/server/view")
+    @RequestMapping(value="/project/server/regist", method=RequestMethod.POST)
+	private String registServer(@ModelAttribute ServerForm form, HttpServletRequest request){
+		projectService.registServer(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/server/delete", method=RequestMethod.POST)
+	private String deleteServer(@ModelAttribute ServerKey key, HttpServletRequest request){
+		projectService.deleteServer(key);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/roleRelation/regist", method=RequestMethod.POST)
+	private String registRoleRelation(@ModelAttribute RoleRelationForm form, HttpServletRequest request){
+		projectService.registRoleRelationDetail(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/serviceGroupVariable/regist", method=RequestMethod.POST)
+	private String registServiceGroupVariable(@ModelAttribute ServiceGroupVariableForm form, HttpServletRequest request){
+		projectService.registServiceGroupVariable(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/serviceGroupVariable/delete", method=RequestMethod.POST)
+	private String deleteServiceGroupVariable(@ModelAttribute ServiceGroupVariableKey key, HttpServletRequest request){
+		projectService.deleteServiceGroupVariable(key);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping("/server/view")
 	private String viewServer(
     		@RequestParam(value = "projectName", required = true) String projectName,
     		@RequestParam(value = "environmentName", required = true) String environmentName,
@@ -292,145 +471,9 @@ public class ProjectController {
 		return "project/server/top";
 	}
 
-	private TaskView createTaskView(DbTask dbTask) {
-		TaskView taskView = new TaskView();
-		taskView.setTaskId(dbTask.getTaskId());
-		taskView.setModuleName(dbTask.getModuleName());
-		taskView.setDescription(dbTask.getDescription());
-		List<DbTaskDetail> dbTaskDetailList = projectService.getTaskDetailList(dbTask);
-		YamlModule yamlModule = new YamlModule(dbTask.getModuleName(), projectService.createParameters(dbTaskDetailList));
-		yamlModule.setDescription(dbTask.getDescription());
-		taskView.setParametersValue(yamlModule.getParameters().toString());
-		return taskView;
-	}
-
-	private List<TaskView> createTaskViewList(List<DbTask> dbTaskList){
-    	List<TaskView> taskViewList = new ArrayList<>();
-    	for(DbTask dbTask : dbTaskList){
-    		TaskView taskView = createTaskView(dbTask);
-    		taskViewList.add(taskView);
-    	}
-    	return taskViewList;
-    }
-    
-    private void mergeParameterList(List<TaskParameter> taskParameterList, List<DbTaskDetail> dbTaskDetailList) {
-		for(TaskParameter taskParameter : taskParameterList){
-			String formParameterName = taskParameter.getParameterName();
-			for(DbTaskDetail dbTaskDetail : dbTaskDetailList){
-				String dbParameterName = dbTaskDetail.getParameterName();
-				if(formParameterName.equals(dbParameterName)){
-					taskParameter.setParameterValue(dbTaskDetail.getParameterValue());
-				}
-			}
-		}
-	}
-
-	private List<TaskParameter> createBlankTaskParameterList(HtmlModule module) {
-    	List<TaskParameter> taskParameterList = new ArrayList<>();
-    	for(HtmlParameter htmlParameter : module.getParameterList()){
-    		TaskParameter taskParameter = new TaskParameter();
-    		taskParameter.setParameterName(htmlParameter.getName());
-    		taskParameter.setAddedVersion(htmlParameter.getAddedVersion());
-    		taskParameter.setRequired(htmlParameter.isRequired());
-    		taskParameter.setDefaultValue(htmlParameter.getDefaultValue());
-    		taskParameter.setChoices(htmlParameter.getChoices());
-    		taskParameter.setDescription(htmlParameter.getDescription());
-    		taskParameterList.add(taskParameter);
-    	}
-		return taskParameterList;
-	}
-
-	@RequestMapping(value="/project/regist", method=RequestMethod.POST)
-	private String registProject(@ModelAttribute ProjectForm form, HttpServletRequest request) throws Exception{
-		projectService.registProject(form);
-		
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-	}
-
-	@RequestMapping(value="/project/task/regist", method=RequestMethod.POST)
-    private String registTask(@ModelAttribute TaskForm form, HttpServletRequest request){
-    	projectService.registTask(form);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-    
-    @RequestMapping(value="/project/taskdetail/regist", method=RequestMethod.POST)
-    private String registTaskDetail(@ModelAttribute TaskDetailForm form, HttpServletRequest request){
-    	projectService.updateTask(form);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-
-	@RequestMapping(value="/project/environment/regist", method=RequestMethod.POST)
-    private String registEnvironment(@ModelAttribute EnvironmentForm form, HttpServletRequest request){
-    	projectService.registEnvironment(form);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-    
-    @RequestMapping(value="/project/server/regist", method=RequestMethod.POST)
-    private String registServer(@ModelAttribute ServerForm form, HttpServletRequest request){
-    	projectService.registServer(form);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-
-    @RequestMapping(value="/project/roleRelation/regist", method=RequestMethod.POST)
-    private String registRoleRelation(@ModelAttribute RoleRelationForm form, HttpServletRequest request){
-    	projectService.registRoleRelationDetail(form);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-
-    @RequestMapping(value="/project/role/regist", method=RequestMethod.POST)
-    private String registRole(@ModelAttribute RoleForm form, HttpServletRequest request){
-    	projectService.registRole(form);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-
-    @RequestMapping(value="/project/roleVariable/regist", method=RequestMethod.POST)
-    private String registRoleVariable(@ModelAttribute RoleVariableForm form, HttpServletRequest request){
-    	projectService.registRoleVariable(form);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-
-    @RequestMapping(value="/project/roleRelation/delete", method=RequestMethod.POST)
+	@RequestMapping(value="/project/roleRelation/delete", method=RequestMethod.POST)
     private String deleteRoleRelation(@ModelAttribute RoleRelationKey key, HttpServletRequest request){
     	projectService.deleteRoleRelation(key);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-
-    @RequestMapping(value="/project/roleVariable/delete", method=RequestMethod.POST)
-    private String deleteRoleVariable(@ModelAttribute RoleVariableKey key, HttpServletRequest request){
-    	projectService.deleteRoleVariable(key);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-
-    @RequestMapping(value="/project/serviceGroupVariable/regist", method=RequestMethod.POST)
-    private String registServiceGroupVariable(@ModelAttribute ServiceGroupVariableForm form, HttpServletRequest request){
-    	projectService.registServiceGroupVariable(form);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-
-    @RequestMapping(value="/project/serviceGroupVariable/delete", method=RequestMethod.POST)
-    private String deleteServiceGroupVariable(@ModelAttribute ServiceGroupVariableKey key, HttpServletRequest request){
-    	projectService.deleteServiceGroupVariable(key);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
@@ -452,67 +495,24 @@ public class ProjectController {
 		return "redirect:" + referer;
     }
 
-    @RequestMapping(value="/project/task/delete", method=RequestMethod.POST)
-    private String deleteTask(@ModelAttribute TaskKey key, HttpServletRequest request){
-    	projectService.deleteTask(key);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-
-	@RequestMapping(value="/project/role/delete", method=RequestMethod.POST)
-    private String deleteRole(@ModelAttribute RoleKey key, HttpServletRequest request){
-    	projectService.deleteRole(key);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-
-	@RequestMapping(value="/project/server/delete", method=RequestMethod.POST)
-    private String deleteServer(@ModelAttribute ServerKey key, HttpServletRequest request){
-    	projectService.deleteServer(key);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-
-	@RequestMapping(value="/project/environment/delete", method=RequestMethod.POST)
-    private String deleteEnvironment(@ModelAttribute EnvironmentKey key, HttpServletRequest request){
-    	projectService.deleteEnvironment(key);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-
-	@RequestMapping(value="/project/git/commit", method=RequestMethod.POST)
-	private String commitGit(@ModelAttribute GitForm form, HttpServletRequest request) throws Exception{
-		projectService.commitGit(form);
+    @RequestMapping("/apply/view")
+	private String viewApply(
+			@RequestParam(value = "projectName", required = true) String projectName,
+			@RequestParam(value = "environmentName", required = true) String environmentName,
+			@RequestParam(value = "groupName", required = true) String groupName,
+			Model model){
 		
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-	}
-
-	@RequestMapping(value="/project/jenkins/build", method=RequestMethod.POST)
-	private String build(@ModelAttribute BuildForm form, HttpServletRequest request) throws Exception{
-		projectService.build(form);
+		ServiceGroupKey serviceGroupKey = new ServiceGroupKey();
+		serviceGroupKey.setProjectName(projectName);
+		serviceGroupKey.setEnvironmentName(environmentName);
+		serviceGroupKey.setGroupName(groupName);
+				
+		BuildForm buildForm = new BuildForm(serviceGroupKey);
+		model.addAttribute("buildForm", buildForm);
 		
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-	}
-
-	@RequestMapping(value="/project/jenkins/regist", method=RequestMethod.POST)
-	private String registJenkins(@ModelAttribute JenkinsInfoForm form, HttpServletRequest request){
-		projectService.registJenkinsInfo(form);
+		List<Group> groupList = getGroupList(serviceGroupKey);
+		model.addAttribute("groupList", groupList);
 		
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-	}
-
-	@RequestMapping(value="/project/jenkins/rebuild", method=RequestMethod.POST)
-	private String build(@ModelAttribute RebuildForm form, HttpServletRequest request) throws Exception{
-		projectService.rebuild(form);
-		
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
+	    return "project/apply/top";
 	}
 }
