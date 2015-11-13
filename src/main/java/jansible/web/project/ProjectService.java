@@ -21,7 +21,6 @@ import jansible.model.common.ServerKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.TaskKey;
 import jansible.model.database.DbApplyHistory;
-import jansible.model.database.DbEnvironment;
 import jansible.model.database.DbFile;
 import jansible.model.database.DbProject;
 import jansible.model.database.DbRoleRelation;
@@ -32,7 +31,6 @@ import jansible.model.database.DbTaskDetail;
 import jansible.model.database.DbTemplate;
 import jansible.web.project.group.RoleRelationForm;
 import jansible.web.project.group.ServiceGroupForm;
-import jansible.web.project.project.EnvironmentForm;
 import jansible.web.project.project.JenkinsInfoForm;
 import jansible.web.project.role.UploadForm;
 import jansible.web.project.server.ServerForm;
@@ -101,30 +99,6 @@ public class ProjectService {
 		return projectMapper.selectProject(projectKey);
 	}
 
-	public List<DbEnvironment> getEnvironmentList(ProjectKey projectKey){
-		return environmentMapper.selectEnvironmentList(projectKey);
-	}
-
-	public void registEnvironment(EnvironmentForm form) {
-		DbEnvironment dbEnvironment = new DbEnvironment(form);
-		environmentMapper.insertEnvironment(dbEnvironment);;
-	}
-
-	public void deleteEnvironment(EnvironmentKey environmentKey){
-		environmentMapper.deleteEnvironment(environmentKey);
-		serviceGroupMapper.deleteServiceGroupByEnvironment(environmentKey);
-		serviceGroupMapper.deleteDbRoleRelationByEnvironment(environmentKey);
-		serverMapper.deleteServerByEnvironment(environmentKey);
-		variableMapper.deleteDbEnvironmentVariableByEnvironment(environmentKey);
-		variableMapper.deleteDbServerVariableByEnvironment(environmentKey);
-		variableMapper.deleteDbServiceGroupVariableByEnvironment(environmentKey);
-		
-		List<DbServiceGroup> dbServiceGroupList = serviceGroupMapper.selectServiceGroupList(environmentKey);
-		for(DbServiceGroup dbServiceGroup : dbServiceGroupList){
-			jansibleFiler.deleteGroupVariableYaml(dbServiceGroup);
-		}
-	}
-
 	public void registServiceGroup(ServiceGroupForm form) {
 		DbServiceGroup dbServiceGroup = new DbServiceGroup(form);
 		serviceGroupMapper.insertServiceGroup(dbServiceGroup);
@@ -151,13 +125,6 @@ public class ProjectService {
 		return serviceGroupMapper.selectDbRoleRelationList(serviceGroupKey);
 	}
 
-	public void registServer(ServerForm form) {
-		DbServer dbServer = new DbServer(form);
-		serverMapper.insertServer(dbServer);
-		
-		fileService.outputHostsData(form);
-	}
-
 	public void registRoleRelationDetail(RoleRelationForm form) {
 		DbRoleRelation dbRoleRelation = createDbRoleRelation(form);
 		serviceGroupMapper.insertDbRoleRelation(dbRoleRelation);
@@ -167,6 +134,13 @@ public class ProjectService {
 
 	public List<DbServer> getServerList(ServiceGroupKey serviceGroupKey){
 		return serverMapper.selectServerList(serviceGroupKey);
+	}
+
+	public void registServer(ServerForm form) {
+		DbServer dbServer = new DbServer(form);
+		serverMapper.insertServer(dbServer);
+		
+		fileService.outputHostsData(form);
 	}
 
 	public void deleteServer(ServerKey serverKey){

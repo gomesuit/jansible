@@ -14,6 +14,7 @@ import jansible.model.database.DbProject;
 import jansible.model.database.DbServiceGroup;
 import jansible.util.YamlDumper;
 import jansible.web.module.ModuleService;
+import jansible.web.project.EnvironmentService;
 import jansible.web.project.GitService;
 import jansible.web.project.JenkinsBuildService;
 import jansible.web.project.ProjectService;
@@ -41,6 +42,8 @@ public class ProjectController {
 	private GitService gitService;
 	@Autowired
 	private RoleService roleService;
+	@Autowired
+	private EnvironmentService environmentService;
     
     @RequestMapping("/project/view")
 	private String viewProject(
@@ -51,7 +54,7 @@ public class ProjectController {
     	
 		EnvironmentForm environmentForm = new EnvironmentForm(projectKey);
 		model.addAttribute("environmentForm", environmentForm);
-		model.addAttribute("environmentList", projectService.getEnvironmentList(projectKey));
+		model.addAttribute("environmentList", environmentService.getEnvironmentList(projectKey));
 		
 		EnvironmentKey environmentKey = new EnvironmentKey(projectKey);
 		model.addAttribute("environmentKey", environmentKey);
@@ -104,7 +107,7 @@ public class ProjectController {
 
 	@RequestMapping(value="/project/environment/regist", method=RequestMethod.POST)
 	private String registEnvironment(@ModelAttribute EnvironmentForm form, HttpServletRequest request){
-		projectService.registEnvironment(form);
+		environmentService.registEnvironment(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
@@ -112,7 +115,7 @@ public class ProjectController {
 
 	@RequestMapping(value="/project/environment/delete", method=RequestMethod.POST)
 	private String deleteEnvironment(@ModelAttribute EnvironmentKey key, HttpServletRequest request){
-		projectService.deleteEnvironment(key);
+		environmentService.deleteEnvironment(key);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
@@ -145,7 +148,7 @@ public class ProjectController {
 	private List<Group> getGroupList(ProjectKey projectKey) {
 		List<Group> groupList = new ArrayList<>();
 		
-		List<DbEnvironment> dbEnvironmentList = projectService.getEnvironmentList(projectKey);
+		List<DbEnvironment> dbEnvironmentList = environmentService.getEnvironmentList(projectKey);
 		
 		for(DbEnvironment dbEnvironment : dbEnvironmentList){
 			List<DbServiceGroup> dbServiceGroupList = projectService.getServiceGroupList(dbEnvironment);
