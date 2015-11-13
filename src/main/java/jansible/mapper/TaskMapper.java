@@ -28,4 +28,5 @@ public interface TaskMapper {
 	void insertDbTaskConditional(DbTaskConditional dbTaskConditional);
 	List<DbTaskConditional> selectDbTaskConditionalList(TaskKey taskKey);
 	DbTaskConditional selectDbTaskConditional(TaskConditionalKey taskConditionalKey);
+	void deleteTaskConditional(TaskConditionalKey taskConditionalKey);
 }

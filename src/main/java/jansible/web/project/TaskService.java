@@ -2,9 +2,12 @@ package jansible.web.project;
 
 import jansible.mapper.TaskMapper;
 import jansible.model.common.RoleKey;
+import jansible.model.common.TaskConditionalKey;
 import jansible.model.common.TaskKey;
 import jansible.model.database.DbTask;
+import jansible.model.database.DbTaskConditional;
 import jansible.model.database.DbTaskDetail;
+import jansible.web.project.task.TaskConditionalForm;
 import jansible.web.project.task.TaskDetailForm;
 import jansible.web.project.task.TaskForm;
 import jansible.web.project.task.TaskParameter;
@@ -22,6 +25,11 @@ public class TaskService {
 	@Autowired
 	private FileService fileService;
 
+	public void registTask(TaskForm form) {
+		DbTask dbTask = createDbTask(form);
+		taskMapper.insertTask(dbTask);
+	}
+
 	public void deleteTask(TaskKey taskKey){
 		taskMapper.deleteTask(taskKey);
 		taskMapper.deleteTaskDetail(taskKey);
@@ -34,11 +42,6 @@ public class TaskService {
 		registTaskDetail(form);
 		
 		fileService.outputTaskData(form);
-	}
-
-	public void registTask(TaskForm form) {
-		DbTask dbTask = createDbTask(form);
-		taskMapper.insertTask(dbTask);
 	}
 
 	public List<DbTask> getTaskList(RoleKey roleKey){
@@ -58,6 +61,24 @@ public class TaskService {
 
 	public List<DbTaskDetail> getTaskDetailList(TaskKey taskKey){
 		return taskMapper.selectTaskDetailList(taskKey);
+	}
+	
+	public void registTaskConditional(TaskConditionalForm form) {
+		DbTaskConditional dbTaskConditional = new DbTaskConditional(form);
+		dbTaskConditional.setConditionalValue(form.getConditionalValue());
+		taskMapper.insertDbTaskConditional(dbTaskConditional);
+	}
+	
+	public List<DbTaskConditional> getTaskConditionalList(TaskKey taskKey){
+		return taskMapper.selectDbTaskConditionalList(taskKey);
+	}
+	
+	public DbTaskConditional getTaskConditional(TaskConditionalKey taskConditionalKey){
+		return taskMapper.selectDbTaskConditional(taskConditionalKey);
+	}
+	
+	public void deleteTaskConditional(TaskConditionalKey taskConditionalKey){
+		taskMapper.deleteTaskConditional(taskConditionalKey);
 	}
 
 	private List<DbTaskDetail> createDbTaskDetailList(TaskDetailForm form) {

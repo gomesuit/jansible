@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import jansible.model.common.TaskConditionalKey;
 import jansible.model.common.TaskKey;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
@@ -68,15 +69,43 @@ public class TaskController {
 		form.setTaskParameterList(taskParameterList);
 		model.addAttribute("form", form);
 		
-		model.addAttribute("variableList", variableService.getDbRoleVariableList(taskKey));
-		
+		TaskConditionalForm taskConditionalForm = new TaskConditionalForm(taskKey);
+		model.addAttribute("taskConditionalForm", taskConditionalForm);
+		model.addAttribute("taskConditionalList", taskService.getTaskConditionalList(taskKey));
+		model.addAttribute("taskConditionalKey", new TaskConditionalKey(taskKey));
 	
 		List<DbTask> dbTaskList = new ArrayList<>();
 		dbTaskList.add(dbTask);
 		List<YamlModule> modules = yamlService.createYamlModuleList(dbTaskList);
 		model.addAttribute("yaskYaml", yamlDumper.dump(modules).replaceAll("\n", "<br />"));
 		
+		model.addAttribute("variableList", variableService.getDbRoleVariableList(taskKey));
+		
 	    return "project/task/top";
+	}
+
+	@RequestMapping(value="/project/taskdetail/regist", method=RequestMethod.POST)
+	private String registTaskDetail(@ModelAttribute TaskDetailForm form, HttpServletRequest request){
+		taskService.updateTask(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/taskConditional/regist", method=RequestMethod.POST)
+	private String registTaskConditional(@ModelAttribute TaskConditionalForm form, HttpServletRequest request){
+		taskService.registTaskConditional(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/taskConditional/delete", method=RequestMethod.POST)
+	private String deleteTaskConditional(@ModelAttribute TaskConditionalKey key, HttpServletRequest request){
+		taskService.deleteTaskConditional(key);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 
 	private void mergeParameterList(List<TaskParameter> taskParameterList, List<DbTaskDetail> dbTaskDetailList) {
@@ -94,23 +123,20 @@ public class TaskController {
 	private List<TaskParameter> createBlankTaskParameterList(HtmlModule module) {
 		List<TaskParameter> taskParameterList = new ArrayList<>();
 		for(HtmlParameter htmlParameter : module.getParameterList()){
-			TaskParameter taskParameter = new TaskParameter();
-			taskParameter.setParameterName(htmlParameter.getName());
-			taskParameter.setAddedVersion(htmlParameter.getAddedVersion());
-			taskParameter.setRequired(htmlParameter.isRequired());
-			taskParameter.setDefaultValue(htmlParameter.getDefaultValue());
-			taskParameter.setChoices(htmlParameter.getChoices());
-			taskParameter.setDescription(htmlParameter.getDescription());
+			TaskParameter taskParameter = createTaskParameter(htmlParameter);
 			taskParameterList.add(taskParameter);
 		}
 		return taskParameterList;
 	}
-
-	@RequestMapping(value="/project/taskdetail/regist", method=RequestMethod.POST)
-	private String registTaskDetail(@ModelAttribute TaskDetailForm form, HttpServletRequest request){
-		taskService.updateTask(form);
-		
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
+	
+	private TaskParameter createTaskParameter(HtmlParameter htmlParameter){
+		TaskParameter taskParameter = new TaskParameter();
+		taskParameter.setParameterName(htmlParameter.getName());
+		taskParameter.setAddedVersion(htmlParameter.getAddedVersion());
+		taskParameter.setRequired(htmlParameter.isRequired());
+		taskParameter.setDefaultValue(htmlParameter.getDefaultValue());
+		taskParameter.setChoices(htmlParameter.getChoices());
+		taskParameter.setDescription(htmlParameter.getDescription());
+		return taskParameter;
 	}
 }

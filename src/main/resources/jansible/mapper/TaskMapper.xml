@@ -202,4 +202,14 @@
 			conditional_name = #{conditionalName}
 	</select>
 	
+	<delete id="deleteTaskConditional">
+		DELETE FROM
+			task_conditional
+		WHERE
+			project_name = #{projectName} AND
+			role_name = #{roleName} AND
+			task_id = #{taskId} AND
+			conditional_name = #{conditionalName}
+	</delete>
+	
 </mapper>

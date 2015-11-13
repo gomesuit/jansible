@@ -42,6 +42,44 @@
 		<input type="submit" value="Submit" />
 	</form>
 	
+	<div>Conditional</div>
+	<div>登録</div>
+	<form action="#" th:action="@{/project/taskConditional/regist}" th:object="${taskConditionalForm}" method="post">
+		<input type="hidden" th:field="*{taskId}" />
+		<input type="hidden" th:field="*{projectName}" />
+		<input type="hidden" th:field="*{roleName}" />
+		<table border="1" rules="all">
+			<tr>
+				<td>conditionalName</td>
+				<td>conditionalValue</td>
+			</tr>
+			<tr>
+				<td><input type="text" th:field="*{conditionalName}" /></td>
+				<td><input type="text" th:field="*{conditionalValue}" /></td>
+			</tr>
+		</table>
+		<input type="submit" value="Submit" />
+	</form>
+	<div>一覧</div>
+	<table border="1" rules="all">
+		<tr>
+			<td>conditionalName</td>
+			<td>conditionalValue</td>
+			<td>Delete</td>
+		</tr>
+		<tr th:each="taskConditional : ${taskConditionalList}">
+			<td th:text="${taskConditional.conditionalName}" />
+			<td th:text="${taskConditional.conditionalValue}" />
+			<form method="POST" th:action="@{/project/taskConditional/delete}" th:object="${taskConditionalKey}">
+				<input type="hidden" th:field="*{taskId}" />
+				<input type="hidden" th:field="*{projectName}" />
+				<input type="hidden" th:field="*{roleName}" />
+				<input type="hidden" name="conditionalName" th:value="${taskConditional.conditionalName}" />
+				<td><input type="submit" value="Delete" /></td>
+			</form>
+		</tr>
+	</table>
+	
 	<br /><hr /><br />
 	<div>プレビュー</div>
 	<pre th:utext="${yaskYaml}" />
