@@ -95,6 +95,14 @@ public class GroupController {
 		return "redirect:" + referer;
 	}
 
+	@RequestMapping(value="/project/roleRelation/delete", method=RequestMethod.POST)
+	private String deleteRoleRelation(@ModelAttribute RoleRelationKey key, HttpServletRequest request){
+		groupService.deleteRoleRelation(key);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
 	@RequestMapping(value="/project/serviceGroupVariable/regist", method=RequestMethod.POST)
 	private String registServiceGroupVariable(@ModelAttribute ServiceGroupVariableForm form, HttpServletRequest request){
 		variableService.registServiceGroupVariable(form);
