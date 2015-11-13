@@ -194,9 +194,6 @@ public class ProjectController {
 		BuildForm buildForm = new BuildForm(serviceGroupKey);
 		model.addAttribute("buildForm", buildForm);
 		
-		List<Group> groupList = getGroupList(serviceGroupKey);
-		model.addAttribute("groupList", groupList);
-		
 	    return "project/apply/top";
 	}
 }
