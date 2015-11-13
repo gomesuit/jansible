@@ -2,6 +2,7 @@ package jansible.web.project;
 
 import jansible.git.JansibleGitter;
 import jansible.web.project.project.GitForm;
+import jansible.web.project.top.ProjectForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,5 +17,9 @@ public class GitService {
 	public void commitGit(GitForm form) throws Exception {
 		fileService.reOutputAllData(form);
 		jansibleGitter.commitAndPush(form, form.getUserName(), form.getPassword(), form.getComment());
+	}
+	
+	public void cloneRepository(ProjectForm form) throws Exception {
+		jansibleGitter.cloneRepository(form, form.getRepositoryUrl());
 	}
 }

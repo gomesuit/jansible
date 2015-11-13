@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jansible.file.JansibleFiler;
-import jansible.file.JansibleHostsDumper;
-import jansible.git.JansibleGitter;
-import jansible.jenkins.JenkinsBuilder;
 import jansible.mapper.ApplyHistoryMapper;
 import jansible.mapper.EnvironmentMapper;
 import jansible.mapper.ProjectMapper;
@@ -44,7 +41,6 @@ import jansible.model.database.DbServiceGroupVariable;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.database.DbTemplate;
-import jansible.util.YamlDumper;
 import jansible.web.project.environment.EnvironmentVariableForm;
 import jansible.web.project.group.RoleRelationForm;
 import jansible.web.project.group.ServiceGroupForm;
@@ -87,13 +83,7 @@ public class ProjectService {
 	@Autowired
 	private JansibleFiler jansibleFiler;
 	@Autowired
-	private YamlDumper yamlDumper;
-	@Autowired
-	private JansibleGitter jansibleGitter;
-	@Autowired
-	private JansibleHostsDumper jansibleHostsDumper;
-	@Autowired
-	private JenkinsBuilder jenkinsBuilder;
+	private GitService gitService;
 	@Autowired
 	private FileService fileService;
 	
@@ -116,7 +106,7 @@ public class ProjectService {
 	public void registProject(ProjectForm form) throws Exception {
 		DbProject dbProject = new DbProject(form, form.getRepositoryUrl());
 		projectMapper.insertProject(dbProject);
-		jansibleGitter.cloneRepository(form, form.getRepositoryUrl());
+		gitService.cloneRepository(form);
 		fileService.outputProjectData(dbProject);
 	}
 
