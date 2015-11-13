@@ -32,7 +32,7 @@ public class ApplyController {
 		serviceGroupKey.setProjectName(projectName);
 		serviceGroupKey.setEnvironmentName(environmentName);
 		serviceGroupKey.setGroupName(groupName);
-				
+		
 		BuildForm buildForm = new BuildForm(serviceGroupKey);
 		model.addAttribute("buildForm", buildForm);
 		

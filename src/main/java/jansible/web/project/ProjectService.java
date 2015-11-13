@@ -57,7 +57,6 @@ import jansible.web.project.group.RoleRelationForm;
 import jansible.web.project.group.ServiceGroupForm;
 import jansible.web.project.group.ServiceGroupVariableForm;
 import jansible.web.project.project.EnvironmentForm;
-import jansible.web.project.project.GitForm;
 import jansible.web.project.project.JenkinsInfoForm;
 import jansible.web.project.project.RoleForm;
 import jansible.web.project.role.GeneralFileForm;
@@ -596,10 +595,5 @@ public class ProjectService {
 			yamlVariableList.add(new YamlVariable(dbVariable.getVariableName(), dbVariable.getValue()));
 		}
 		return yamlVariableList;
-	}
-	
-	public void commitGit(GitForm form) throws Exception {
-		reOutputAllData(form);
-		jansibleGitter.commitAndPush(form, form.getUserName(), form.getPassword(), form.getComment());
 	}
 }
