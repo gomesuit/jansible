@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import jansible.model.common.EnvironmentKey;
 import jansible.model.common.EnvironmentVariableKey;
 import jansible.model.common.ServiceGroupKey;
+import jansible.web.project.GroupService;
 import jansible.web.project.ProjectService;
 import jansible.web.project.VariableService;
 import jansible.web.project.environment.EnvironmentVariableForm;
@@ -24,6 +25,8 @@ public class EnvironmentController {
 	private ProjectService projectService;
 	@Autowired
 	private VariableService variableService;
+	@Autowired
+	private GroupService groupService;
 
 	@RequestMapping("/environment/view")
 	private String viewEnvironment(
@@ -37,7 +40,7 @@ public class EnvironmentController {
 		ServiceGroupForm serviceGroupForm = new ServiceGroupForm(environmentKey);
 		
 		model.addAttribute("form", serviceGroupForm);
-		model.addAttribute("serviceGroupList", projectService.getServiceGroupList(environmentKey));
+		model.addAttribute("serviceGroupList", groupService.getServiceGroupList(environmentKey));
 		
 		ServiceGroupKey serviceGroupKey = new ServiceGroupKey(environmentKey);
 		model.addAttribute("serviceGroupKey", serviceGroupKey);
@@ -56,7 +59,7 @@ public class EnvironmentController {
 
 	@RequestMapping(value="/project/group/regist", method=RequestMethod.POST)
     private String registServiceGroup(@ModelAttribute ServiceGroupForm form, HttpServletRequest request){
-    	projectService.registServiceGroup(form);
+		groupService.registServiceGroup(form);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
@@ -80,7 +83,7 @@ public class EnvironmentController {
 
 	@RequestMapping(value="/project/serviceGroup/delete", method=RequestMethod.POST)
     private String deleteServiceGroup(@ModelAttribute ServiceGroupKey key, HttpServletRequest request){
-    	projectService.deleteServiceGroup(key);
+		groupService.deleteServiceGroup(key);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

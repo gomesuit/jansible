@@ -16,6 +16,7 @@ import jansible.util.YamlDumper;
 import jansible.web.module.ModuleService;
 import jansible.web.project.EnvironmentService;
 import jansible.web.project.GitService;
+import jansible.web.project.GroupService;
 import jansible.web.project.JenkinsBuildService;
 import jansible.web.project.ProjectService;
 import jansible.web.project.RoleService;
@@ -44,6 +45,8 @@ public class ProjectController {
 	private RoleService roleService;
 	@Autowired
 	private EnvironmentService environmentService;
+	@Autowired
+	private GroupService groupService;
     
     @RequestMapping("/project/view")
 	private String viewProject(
@@ -151,7 +154,7 @@ public class ProjectController {
 		List<DbEnvironment> dbEnvironmentList = environmentService.getEnvironmentList(projectKey);
 		
 		for(DbEnvironment dbEnvironment : dbEnvironmentList){
-			List<DbServiceGroup> dbServiceGroupList = projectService.getServiceGroupList(dbEnvironment);
+			List<DbServiceGroup> dbServiceGroupList = groupService.getServiceGroupList(dbEnvironment);
 			for(DbServiceGroup dbServiceGroup : dbServiceGroupList){
 				Group group = new Group(dbServiceGroup.getEnvironmentName(), dbServiceGroup.getGroupName());
 				groupList.add(group);

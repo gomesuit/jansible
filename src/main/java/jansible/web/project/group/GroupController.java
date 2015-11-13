@@ -6,6 +6,7 @@ import jansible.model.common.RoleRelationKey;
 import jansible.model.common.ServerKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.ServiceGroupVariableKey;
+import jansible.web.project.GroupService;
 import jansible.web.project.ProjectService;
 import jansible.web.project.RoleService;
 import jansible.web.project.VariableService;
@@ -29,6 +30,8 @@ public class GroupController {
 	private RoleService roleService;
 	@Autowired
 	private VariableService variableService;
+	@Autowired
+	private GroupService groupService;
     
     @RequestMapping("/serviceGroup/view")
 	private String viewServiceGroup(
@@ -51,7 +54,7 @@ public class GroupController {
 		RoleRelationForm roleRelationForm = new RoleRelationForm(serviceGroupKey);
 		model.addAttribute("roleRelationForm", roleRelationForm);
     	model.addAttribute("roleList", roleService.getRoleList(serviceGroupKey));
-		model.addAttribute("roleRelationList", projectService.getRoleRelationList(serviceGroupKey));
+		model.addAttribute("roleRelationList", groupService.getRoleRelationList(serviceGroupKey));
 		
 		RoleRelationKey roleRelationKey = new RoleRelationKey(serviceGroupKey);
     	model.addAttribute("roleRelationKey", roleRelationKey);
@@ -86,7 +89,7 @@ public class GroupController {
 
 	@RequestMapping(value="/project/roleRelation/regist", method=RequestMethod.POST)
 	private String registRoleRelation(@ModelAttribute RoleRelationForm form, HttpServletRequest request){
-		projectService.registRoleRelationDetail(form);
+		groupService.registRoleRelationDetail(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

@@ -13,24 +13,18 @@ import jansible.mapper.ServiceGroupMapper;
 import jansible.mapper.TaskMapper;
 import jansible.mapper.VariableMapper;
 import jansible.model.common.ApplyHistoryKey;
-import jansible.model.common.EnvironmentKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
-import jansible.model.common.RoleRelationKey;
 import jansible.model.common.ServerKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.TaskKey;
 import jansible.model.database.DbApplyHistory;
 import jansible.model.database.DbFile;
 import jansible.model.database.DbProject;
-import jansible.model.database.DbRoleRelation;
 import jansible.model.database.DbServer;
-import jansible.model.database.DbServiceGroup;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.database.DbTemplate;
-import jansible.web.project.group.RoleRelationForm;
-import jansible.web.project.group.ServiceGroupForm;
 import jansible.web.project.project.JenkinsInfoForm;
 import jansible.web.project.role.UploadForm;
 import jansible.web.project.server.ServerForm;
@@ -97,39 +91,6 @@ public class ProjectService {
 
 	public DbProject getProject(ProjectKey projectKey){
 		return projectMapper.selectProject(projectKey);
-	}
-
-	public void registServiceGroup(ServiceGroupForm form) {
-		DbServiceGroup dbServiceGroup = new DbServiceGroup(form);
-		serviceGroupMapper.insertServiceGroup(dbServiceGroup);
-	}
-
-	public void deleteServiceGroup(ServiceGroupKey serviceGroupKey){
-		serviceGroupMapper.deleteServiceGroup(serviceGroupKey);
-		serviceGroupMapper.deleteDbRoleRelationByServiceGroup(serviceGroupKey);
-		serverMapper.deleteServerByServiceGroup(serviceGroupKey);
-		variableMapper.deleteDbServiceGroupVariableByServiceGroup(serviceGroupKey);
-		variableMapper.deleteDbServerVariableByServiceGroup(serviceGroupKey);
-		jansibleFiler.deleteGroupVariableYaml(serviceGroupKey);
-	}
-
-	public List<DbServiceGroup> getServiceGroupList(EnvironmentKey environmentKey){
-		return serviceGroupMapper.selectServiceGroupList(environmentKey);
-	}
-
-	public void deleteRoleRelation(RoleRelationKey roleRelationKey){
-		serviceGroupMapper.deleteDbRoleRelation(roleRelationKey);
-	}
-
-	public List<DbRoleRelation> getRoleRelationList(ServiceGroupKey serviceGroupKey){
-		return serviceGroupMapper.selectDbRoleRelationList(serviceGroupKey);
-	}
-
-	public void registRoleRelationDetail(RoleRelationForm form) {
-		DbRoleRelation dbRoleRelation = createDbRoleRelation(form);
-		serviceGroupMapper.insertDbRoleRelation(dbRoleRelation);
-		
-		fileService.outputRoleRelationData(form);
 	}
 
 	public List<DbServer> getServerList(ServiceGroupKey serviceGroupKey){
@@ -200,12 +161,6 @@ public class ProjectService {
 		return taskMapper.selectTaskDetailList(taskKey);
 	}
 	
-	private DbRoleRelation createDbRoleRelation(RoleRelationForm form) {
-		DbRoleRelation dbRoleRelation = new DbRoleRelation(form);
-		dbRoleRelation.setSort(form.getSort());
-		return dbRoleRelation;
-	}
-
 	private List<DbTaskDetail> createDbTaskDetailList(TaskDetailForm form) {
 			List<DbTaskDetail> dbTaskDetailList = new ArrayList<>();
 			List<TaskParameter> taskParameterList = form.getTaskParameterList();

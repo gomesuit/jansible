@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import jansible.model.common.RoleRelationKey;
 import jansible.model.common.ServerKey;
 import jansible.model.common.ServerVariableKey;
+import jansible.web.project.GroupService;
 import jansible.web.project.ProjectService;
 import jansible.web.project.VariableService;
 import jansible.web.project.server.ServerVariableForm;
@@ -23,6 +24,8 @@ public class ServerController {
 	private ProjectService projectService;
 	@Autowired
 	private VariableService variableService;
+	@Autowired
+	private GroupService groupService;
     
     @RequestMapping("/server/view")
 	private String viewServer(
@@ -52,7 +55,7 @@ public class ServerController {
 
 	@RequestMapping(value="/project/roleRelation/delete", method=RequestMethod.POST)
     private String deleteRoleRelation(@ModelAttribute RoleRelationKey key, HttpServletRequest request){
-    	projectService.deleteRoleRelation(key);
+		groupService.deleteRoleRelation(key);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
