@@ -1,4 +1,4 @@
-package jansible.web.project.form;
+package jansible.web.project.group;
 
 import jansible.model.common.RoleRelationKey;
 import jansible.model.common.ServiceGroupKey;

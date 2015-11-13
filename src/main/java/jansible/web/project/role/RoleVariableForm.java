@@ -1,7 +1,8 @@
-package jansible.web.project.form;
+package jansible.web.project.role;
 
 import jansible.model.common.RoleKey;
 import jansible.model.common.RoleVariableKey;
+import jansible.web.project.project.form.InterfaceVariable;
 
 public class RoleVariableForm extends RoleVariableKey implements InterfaceVariable{
 	private String value;

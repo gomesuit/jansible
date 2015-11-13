@@ -1,4 +1,4 @@
-package jansible.web.project.form;
+package jansible.web.project.server;
 
 import jansible.model.common.ServerKey;
 import jansible.model.common.ServiceGroupKey;

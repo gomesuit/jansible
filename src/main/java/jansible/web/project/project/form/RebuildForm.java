@@ -1,4 +1,4 @@
-package jansible.web.project.form;
+package jansible.web.project.project.form;
 
 import jansible.model.common.ApplyHistoryKey;
 import jansible.model.common.ProjectKey;

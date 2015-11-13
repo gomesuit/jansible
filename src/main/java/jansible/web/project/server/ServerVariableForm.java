@@ -1,7 +1,8 @@
-package jansible.web.project.form;
+package jansible.web.project.server;
 
 import jansible.model.common.ServerKey;
 import jansible.model.common.ServerVariableKey;
+import jansible.web.project.project.form.InterfaceVariable;
 
 public class ServerVariableForm extends ServerVariableKey implements InterfaceVariable{
 	private String value;

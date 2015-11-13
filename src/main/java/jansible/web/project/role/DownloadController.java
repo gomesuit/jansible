@@ -1,11 +1,10 @@
-package jansible.web.project;
+package jansible.web.project.role;
 
 import javax.servlet.http.HttpServletResponse;
 
 import jansible.file.JansibleFiler;
 import jansible.model.common.FileKey;
 import jansible.model.common.TemplateKey;
-import jansible.web.project.form.GeneralFileForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;

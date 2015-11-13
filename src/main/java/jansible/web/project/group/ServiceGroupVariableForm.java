@@ -1,7 +1,8 @@
-package jansible.web.project.form;
+package jansible.web.project.group;
 
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.ServiceGroupVariableKey;
+import jansible.web.project.project.form.InterfaceVariable;
 
 public class ServiceGroupVariableForm extends ServiceGroupVariableKey implements InterfaceVariable{
 	private String value;

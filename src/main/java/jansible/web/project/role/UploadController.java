@@ -1,7 +1,6 @@
-package jansible.web.project;
+package jansible.web.project.role;
 
-import jansible.web.project.form.GeneralFileForm;
-import jansible.web.project.form.UploadForm;
+import jansible.web.project.ProjectService;
 
 import javax.servlet.http.HttpServletRequest;
 
