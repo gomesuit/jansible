@@ -15,19 +15,15 @@ import jansible.mapper.VariableMapper;
 import jansible.model.common.ApplyHistoryKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
-import jansible.model.common.ServerKey;
-import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.TaskKey;
 import jansible.model.database.DbApplyHistory;
 import jansible.model.database.DbFile;
 import jansible.model.database.DbProject;
-import jansible.model.database.DbServer;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.database.DbTemplate;
 import jansible.web.project.project.JenkinsInfoForm;
 import jansible.web.project.role.UploadForm;
-import jansible.web.project.server.ServerForm;
 import jansible.web.project.task.TaskDetailForm;
 import jansible.web.project.task.TaskForm;
 import jansible.web.project.task.TaskParameter;
@@ -91,23 +87,6 @@ public class ProjectService {
 
 	public DbProject getProject(ProjectKey projectKey){
 		return projectMapper.selectProject(projectKey);
-	}
-
-	public List<DbServer> getServerList(ServiceGroupKey serviceGroupKey){
-		return serverMapper.selectServerList(serviceGroupKey);
-	}
-
-	public void registServer(ServerForm form) {
-		DbServer dbServer = new DbServer(form);
-		serverMapper.insertServer(dbServer);
-		
-		fileService.outputHostsData(form);
-	}
-
-	public void deleteServer(ServerKey serverKey){
-		serverMapper.deleteServer(serverKey);
-		variableMapper.deleteDbServerVariableByServer(serverKey);
-		jansibleFiler.deleteHostVariableYaml(serverKey);
 	}
 
 	public void registTemplate(UploadForm form) {

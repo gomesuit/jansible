@@ -9,6 +9,7 @@ import jansible.model.common.ServiceGroupVariableKey;
 import jansible.web.project.GroupService;
 import jansible.web.project.ProjectService;
 import jansible.web.project.RoleService;
+import jansible.web.project.ServerService;
 import jansible.web.project.VariableService;
 import jansible.web.project.group.RoleRelationForm;
 import jansible.web.project.group.ServiceGroupVariableForm;
@@ -32,6 +33,8 @@ public class GroupController {
 	private VariableService variableService;
 	@Autowired
 	private GroupService groupService;
+	@Autowired
+	private ServerService serverService;
     
     @RequestMapping("/serviceGroup/view")
 	private String viewServiceGroup(
@@ -46,7 +49,7 @@ public class GroupController {
     	
 		ServerForm serverForm = new ServerForm(serviceGroupKey);
 		model.addAttribute("serverForm", serverForm);
-		model.addAttribute("serverList", projectService.getServerList(serviceGroupKey));
+		model.addAttribute("serverList", serverService.getServerList(serviceGroupKey));
 		
 		ServerKey serverKey = new ServerKey(serviceGroupKey);
 		model.addAttribute("serverKey", serverKey);
@@ -73,7 +76,7 @@ public class GroupController {
 
     @RequestMapping(value="/project/server/regist", method=RequestMethod.POST)
 	private String registServer(@ModelAttribute ServerForm form, HttpServletRequest request){
-		projectService.registServer(form);
+    	serverService.registServer(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
@@ -81,7 +84,7 @@ public class GroupController {
 
 	@RequestMapping(value="/project/server/delete", method=RequestMethod.POST)
 	private String deleteServer(@ModelAttribute ServerKey key, HttpServletRequest request){
-		projectService.deleteServer(key);
+		serverService.deleteServer(key);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
