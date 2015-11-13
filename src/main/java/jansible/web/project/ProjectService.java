@@ -1,6 +1,5 @@
 package jansible.web.project;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -55,6 +54,7 @@ import jansible.model.yamldump.YamlModule;
 import jansible.model.yamldump.YamlParameter;
 import jansible.model.yamldump.YamlParameters;
 import jansible.model.yamldump.YamlVariable;
+import jansible.util.DateFormatter;
 import jansible.util.YamlDumper;
 import jansible.web.project.form.BuildForm;
 import jansible.web.project.form.EnvironmentForm;
@@ -171,14 +171,9 @@ public class ProjectService {
 		applyHistoryMapper.insertDbApplyHistory(dbApplyHistory);
 	}
 	
-	private String getDateString(){
-		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-		return format.format(new Date());
-	}
-	
 	private String getTagName(ServiceGroupKey serviceGroupKey){
 		String groupName = jansibleFiler.getGroupName(serviceGroupKey);
-		String dateString = getDateString();
+		String dateString = DateFormatter.getDateString(new Date());
 		return groupName + dateString;
 	}
 	
