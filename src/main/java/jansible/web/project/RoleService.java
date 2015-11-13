@@ -86,4 +86,12 @@ public class RoleService {
 		dbTemplate.setTemplateName(form.getFileName());
 		return dbTemplate;
 	}
+
+	public List<DbFile> getDbFileList(RoleKey roleKey){
+		return roleMapper.selectDbFileList(roleKey);
+	}
+
+	public List<DbTemplate> getDbTemplateList(RoleKey roleKey){
+		return roleMapper.selectDbTemplateList(roleKey);
+	}
 }

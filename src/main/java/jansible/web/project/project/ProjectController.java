@@ -14,6 +14,7 @@ import jansible.model.database.DbProject;
 import jansible.model.database.DbServiceGroup;
 import jansible.util.YamlDumper;
 import jansible.web.module.ModuleService;
+import jansible.web.project.ApplyService;
 import jansible.web.project.EnvironmentService;
 import jansible.web.project.GitService;
 import jansible.web.project.GroupService;
@@ -47,6 +48,8 @@ public class ProjectController {
 	private EnvironmentService environmentService;
 	@Autowired
 	private GroupService groupService;
+	@Autowired
+	private ApplyService applyService;
     
     @RequestMapping("/project/view")
 	private String viewProject(
@@ -84,7 +87,7 @@ public class ProjectController {
 		jenkinsInfoForm.setJenkinsJobName(dbProject.getJenkinsJobName());
 		model.addAttribute("jenkinsInfoForm", jenkinsInfoForm);
 
-		model.addAttribute("applyHistoryList", projectService.getDbApplyHistoryList(projectKey));
+		model.addAttribute("applyHistoryList", applyService.getDbApplyHistoryList(projectKey));
 		
 		RebuildForm rebuildForm = new RebuildForm(projectKey);
 		model.addAttribute("rebuildForm", rebuildForm);

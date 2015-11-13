@@ -71,8 +71,8 @@ public class RoleController {
 		UploadForm uploadForm = new UploadForm(roleKey);
 		model.addAttribute("uploadForm", uploadForm);
 	
-		model.addAttribute("templateList", projectService.getDbTemplateList(roleKey));
-		model.addAttribute("fileList", projectService.getDbFileList(roleKey));
+		model.addAttribute("templateList", roleService.getDbTemplateList(roleKey));
+		model.addAttribute("fileList", roleService.getDbFileList(roleKey));
 		
 		GeneralFileForm fileForm = new GeneralFileForm(roleKey);
 		model.addAttribute("fileForm", fileForm);
