@@ -15,7 +15,6 @@ import jansible.mapper.VariableMapper;
 import jansible.model.common.ApplyHistoryKey;
 import jansible.model.common.EnvironmentKey;
 import jansible.model.common.EnvironmentVariableKey;
-import jansible.model.common.FileKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
 import jansible.model.common.RoleRelationKey;
@@ -25,15 +24,12 @@ import jansible.model.common.ServerVariableKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.ServiceGroupVariableKey;
 import jansible.model.common.TaskKey;
-import jansible.model.common.TemplateKey;
 import jansible.model.database.DbApplyHistory;
 import jansible.model.database.DbEnvironment;
 import jansible.model.database.DbEnvironmentVariable;
 import jansible.model.database.DbFile;
 import jansible.model.database.DbProject;
-import jansible.model.database.DbRole;
 import jansible.model.database.DbRoleRelation;
-import jansible.model.database.DbRoleVariable;
 import jansible.model.database.DbServer;
 import jansible.model.database.DbServerVariable;
 import jansible.model.database.DbServiceGroup;
@@ -47,9 +43,6 @@ import jansible.web.project.group.ServiceGroupForm;
 import jansible.web.project.group.ServiceGroupVariableForm;
 import jansible.web.project.project.EnvironmentForm;
 import jansible.web.project.project.JenkinsInfoForm;
-import jansible.web.project.project.RoleForm;
-import jansible.web.project.role.GeneralFileForm;
-import jansible.web.project.role.RoleVariableForm;
 import jansible.web.project.role.UploadForm;
 import jansible.web.project.server.ServerForm;
 import jansible.web.project.server.ServerVariableForm;
@@ -195,6 +188,13 @@ public class ProjectService {
 		return variableMapper.selectDbServiceGroupVariableList(serviceGroupKey);
 	}
 
+	public void registRoleRelationDetail(RoleRelationForm form) {
+		DbRoleRelation dbRoleRelation = createDbRoleRelation(form);
+		serviceGroupMapper.insertDbRoleRelation(dbRoleRelation);
+		
+		fileService.outputRoleRelationData(form);
+	}
+
 	public List<DbServer> getServerList(ServiceGroupKey serviceGroupKey){
 		return serverMapper.selectServerList(serviceGroupKey);
 	}
@@ -215,61 +215,6 @@ public class ProjectService {
 		serverMapper.deleteServer(serverKey);
 		variableMapper.deleteDbServerVariableByServer(serverKey);
 		jansibleFiler.deleteHostVariableYaml(serverKey);
-	}
-
-	public void registRole(RoleForm form) {
-		DbRole dbRole = new DbRole(form);
-		roleMapper.insertRole(dbRole);
-		fileService.outputRoleData(dbRole);
-	}
-
-	public List<DbRole> getRoleList(ProjectKey projectKey){
-		return roleMapper.selectRoleList(projectKey);
-	}
-	
-	public void deleteRole(RoleKey roleKey){
-		roleMapper.deleteRole(roleKey);
-		roleMapper.deleteDbFileByRole(roleKey);
-		roleMapper.deleteDbTemplateByRole(roleKey);
-		taskMapper.deleteTaskByRole(roleKey);
-		taskMapper.deleteTaskDetailByRole(roleKey);
-		variableMapper.deleteDbRoleVariableByRole(roleKey);
-		jansibleFiler.deleteRoleDir(roleKey);
-	}
-
-	public List<DbRoleVariable> getDbRoleVariableList(RoleKey roleKey){
-		return variableMapper.selectDbRoleVariableList(roleKey);
-	}
-
-	public void registFile(UploadForm form) {
-		DbFile dbFile = createDbFile(form);
-		roleMapper.insertDbFile(dbFile);
-	}
-
-	public void deleteFile(GeneralFileForm form){
-		FileKey fileKey = new FileKey(form);
-		fileKey.setFileName(form.getFileName());
-		roleMapper.deleteDbFile(fileKey);
-	}
-
-	public void deleteTemplate(GeneralFileForm form){
-		TemplateKey templateKey = new TemplateKey(form);
-		templateKey.setTemplateName(form.getFileName());
-		roleMapper.deleteDbTemplate(templateKey);
-	}
-
-	public void registRoleVariable(RoleVariableForm form) {
-		DbRoleVariable dbRoleVariable = createDbRoleVariable(form);
-		variableMapper.insertDbRoleVariable(dbRoleVariable);
-		
-		fileService.outputRoleVariableData(form);
-	}
-
-	public void registRoleRelationDetail(RoleRelationForm form) {
-		DbRoleRelation dbRoleRelation = createDbRoleRelation(form);
-		serviceGroupMapper.insertDbRoleRelation(dbRoleRelation);
-		
-		fileService.outputRoleRelationData(form);
 	}
 
 	public void registTemplate(UploadForm form) {
@@ -388,12 +333,6 @@ public class ProjectService {
 		return dbTask;
 	}
 
-	private DbFile createDbFile(UploadForm form) {
-		DbFile dbFile = new DbFile(form);
-		dbFile.setFileName(form.getFileName());
-		return dbFile;
-	}
-
 	private DbTemplate createDbTemplate(UploadForm form) {
 		DbTemplate dbTemplate = new DbTemplate(form);
 		dbTemplate.setTemplateName(form.getFileName());
@@ -416,11 +355,5 @@ public class ProjectService {
 		DbServiceGroupVariable dbServiceGroupVariable = new DbServiceGroupVariable(form);
 		dbServiceGroupVariable.setValue(form.getValue());
 		return dbServiceGroupVariable;
-	}
-
-	private DbRoleVariable createDbRoleVariable(RoleVariableForm form) {
-		DbRoleVariable dbRoleVariable = new DbRoleVariable(form);
-		dbRoleVariable.setValue(form.getValue());
-		return dbRoleVariable;
 	}
 }
