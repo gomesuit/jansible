@@ -14,6 +14,7 @@ import jansible.model.yamldump.YamlModule;
 import jansible.util.YamlDumper;
 import jansible.web.module.ModuleService;
 import jansible.web.project.ProjectService;
+import jansible.web.project.RoleService;
 import jansible.web.project.YamlService;
 import jansible.web.project.task.TaskDetailForm;
 import jansible.web.project.task.TaskParameter;
@@ -36,6 +37,8 @@ public class TaskController {
 	private YamlDumper yamlDumper;
 	@Autowired
 	private YamlService yamlService;
+	@Autowired
+	private RoleService roleService;
     
     @RequestMapping("/task/view")
 	private String viewTask(
@@ -62,7 +65,7 @@ public class TaskController {
 		form.setTaskParameterList(taskParameterList);
 		model.addAttribute("form", form);
 		
-		model.addAttribute("variableList", projectService.getDbRoleVariableList(taskKey));
+		model.addAttribute("variableList", roleService.getDbRoleVariableList(taskKey));
 		
 	
 		List<DbTask> dbTaskList = new ArrayList<>();

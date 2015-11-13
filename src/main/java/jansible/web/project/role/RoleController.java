@@ -13,6 +13,7 @@ import jansible.model.database.DbTaskDetail;
 import jansible.model.yamldump.YamlModule;
 import jansible.web.module.ModuleService;
 import jansible.web.project.ProjectService;
+import jansible.web.project.RoleService;
 import jansible.web.project.YamlService;
 import jansible.web.project.role.GeneralFileForm;
 import jansible.web.project.role.RoleVariableForm;
@@ -36,6 +37,8 @@ public class RoleController {
 	private ModuleService moduleService;
 	@Autowired
 	private YamlService yamlService;
+	@Autowired
+	private RoleService roleService;
     
     @RequestMapping("/role/view")
 	private String viewRole(
@@ -74,14 +77,14 @@ public class RoleController {
 		RoleVariableKey roleVariableKey = new RoleVariableKey(roleKey);
 		model.addAttribute("roleVariableKey", roleVariableKey);
 		
-		model.addAttribute("variableList", projectService.getDbRoleVariableList(roleKey));
+		model.addAttribute("variableList", roleService.getDbRoleVariableList(roleKey));
 		
 	    return "project/role/top";
 	}
 
 	@RequestMapping(value="/project/roleVariable/regist", method=RequestMethod.POST)
 	private String registRoleVariable(@ModelAttribute RoleVariableForm form, HttpServletRequest request){
-		projectService.registRoleVariable(form);
+		roleService.registRoleVariable(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

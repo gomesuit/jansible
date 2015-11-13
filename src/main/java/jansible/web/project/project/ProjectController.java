@@ -17,6 +17,7 @@ import jansible.web.module.ModuleService;
 import jansible.web.project.GitService;
 import jansible.web.project.JenkinsBuildService;
 import jansible.web.project.ProjectService;
+import jansible.web.project.RoleService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,6 +39,8 @@ public class ProjectController {
 	private JenkinsBuildService jenkinsBuildService;
 	@Autowired
 	private GitService gitService;
+	@Autowired
+	private RoleService roleService;
     
     @RequestMapping("/project/view")
 	private String viewProject(
@@ -55,7 +58,7 @@ public class ProjectController {
 		
 		RoleForm roleForm = new RoleForm(projectKey);
 		model.addAttribute("roleForm", roleForm);
-		model.addAttribute("roleList", projectService.getRoleList(projectKey));
+		model.addAttribute("roleList", roleService.getRoleList(projectKey));
 	
 		RoleKey roleKey = new RoleKey(projectKey);
 		model.addAttribute("roleKey", roleKey);
@@ -85,7 +88,7 @@ public class ProjectController {
 
     @RequestMapping(value="/project/role/regist", method=RequestMethod.POST)
 	private String registRole(@ModelAttribute RoleForm form, HttpServletRequest request){
-		projectService.registRole(form);
+    	roleService.registRole(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
@@ -93,7 +96,7 @@ public class ProjectController {
 
 	@RequestMapping(value="/project/role/delete", method=RequestMethod.POST)
 	private String deleteRole(@ModelAttribute RoleKey key, HttpServletRequest request){
-		projectService.deleteRole(key);
+		roleService.deleteRole(key);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

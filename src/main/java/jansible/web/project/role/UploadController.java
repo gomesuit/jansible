@@ -1,6 +1,7 @@
 package jansible.web.project.role;
 
 import jansible.web.project.ProjectService;
+import jansible.web.project.RoleService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,6 +17,8 @@ public class UploadController {
 	private UploadService uploadService;
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	private RoleService roleService;
 	
 	@RequestMapping(value="/project/template/upload", method=RequestMethod.POST)
     private String uploadTemplate(@ModelAttribute UploadForm form, HttpServletRequest request){
@@ -29,7 +32,7 @@ public class UploadController {
 	@RequestMapping(value="/project/file/upload", method=RequestMethod.POST)
     private String uploadFile(@ModelAttribute UploadForm form, HttpServletRequest request){
 		uploadService.fileUpload(form);
-		projectService.registFile(form);
+		roleService.registFile(form);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
@@ -38,7 +41,7 @@ public class UploadController {
 	@RequestMapping(value="/project/template/delete", method=RequestMethod.POST)
     private String deleteTemplate(@ModelAttribute GeneralFileForm form, HttpServletRequest request){
 		uploadService.deleteTemplate(form);
-		projectService.deleteTemplate(form);
+		roleService.deleteTemplate(form);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
@@ -47,7 +50,7 @@ public class UploadController {
 	@RequestMapping(value="/project/file/delete", method=RequestMethod.POST)
     private String deleteFile(@ModelAttribute GeneralFileForm form, HttpServletRequest request){
 		uploadService.deleteFile(form);
-		projectService.deleteFile(form);
+		roleService.deleteFile(form);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

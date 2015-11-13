@@ -7,6 +7,7 @@ import jansible.model.common.ServerKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.ServiceGroupVariableKey;
 import jansible.web.project.ProjectService;
+import jansible.web.project.RoleService;
 import jansible.web.project.group.RoleRelationForm;
 import jansible.web.project.group.ServiceGroupVariableForm;
 import jansible.web.project.server.ServerForm;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class GroupController {
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	private RoleService roleService;
     
     @RequestMapping("/serviceGroup/view")
 	private String viewServiceGroup(
@@ -44,7 +47,7 @@ public class GroupController {
 		
 		RoleRelationForm roleRelationForm = new RoleRelationForm(serviceGroupKey);
 		model.addAttribute("roleRelationForm", roleRelationForm);
-    	model.addAttribute("roleList", projectService.getRoleList(serviceGroupKey));
+    	model.addAttribute("roleList", roleService.getRoleList(serviceGroupKey));
 		model.addAttribute("roleRelationList", projectService.getRoleRelationList(serviceGroupKey));
 		
 		RoleRelationKey roleRelationKey = new RoleRelationKey(serviceGroupKey);
