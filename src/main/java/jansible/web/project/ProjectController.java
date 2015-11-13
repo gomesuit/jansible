@@ -9,14 +9,12 @@ import jansible.model.common.EnvironmentKey;
 import jansible.model.common.Group;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
-import jansible.model.common.ServiceGroupKey;
 import jansible.model.database.DbEnvironment;
 import jansible.model.database.DbProject;
 import jansible.model.database.DbServiceGroup;
 import jansible.util.YamlDumper;
 import jansible.web.module.ModuleService;
 import jansible.web.project.environment.EnvironmentForm;
-import jansible.web.project.project.BuildForm;
 import jansible.web.project.project.GitForm;
 import jansible.web.project.project.JenkinsInfoForm;
 import jansible.web.project.project.ProjectForm;
@@ -147,14 +145,6 @@ public class ProjectController {
 		return "redirect:" + referer;
 	}
 
-	@RequestMapping(value="/project/jenkins/build", method=RequestMethod.POST)
-	private String build(@ModelAttribute BuildForm form, HttpServletRequest request) throws Exception{
-		projectService.build(form);
-		
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-	}
-
 	@RequestMapping(value="/project/jenkins/rebuild", method=RequestMethod.POST)
 	private String rebuild(@ModelAttribute RebuildForm form, HttpServletRequest request) throws Exception{
 		projectService.rebuild(form);
@@ -177,23 +167,5 @@ public class ProjectController {
 		}
 		
 		return groupList;
-	}
-
-	@RequestMapping("/apply/view")
-	private String viewApply(
-			@RequestParam(value = "projectName", required = true) String projectName,
-			@RequestParam(value = "environmentName", required = true) String environmentName,
-			@RequestParam(value = "groupName", required = true) String groupName,
-			Model model){
-		
-		ServiceGroupKey serviceGroupKey = new ServiceGroupKey();
-		serviceGroupKey.setProjectName(projectName);
-		serviceGroupKey.setEnvironmentName(environmentName);
-		serviceGroupKey.setGroupName(groupName);
-				
-		BuildForm buildForm = new BuildForm(serviceGroupKey);
-		model.addAttribute("buildForm", buildForm);
-		
-	    return "project/apply/top";
 	}
 }
