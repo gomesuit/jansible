@@ -13,6 +13,7 @@ import jansible.model.database.DbTaskDetail;
 import jansible.model.yamldump.YamlModule;
 import jansible.web.module.ModuleService;
 import jansible.web.project.ProjectService;
+import jansible.web.project.YamlService;
 import jansible.web.project.role.GeneralFileForm;
 import jansible.web.project.role.RoleVariableForm;
 import jansible.web.project.role.UploadForm;
@@ -33,6 +34,8 @@ public class RoleController {
 	private ProjectService projectService;
 	@Autowired
 	private ModuleService moduleService;
+	@Autowired
+	private YamlService yamlService;
     
     @RequestMapping("/role/view")
 	private String viewRole(
@@ -98,7 +101,7 @@ public class RoleController {
 		taskView.setModuleName(dbTask.getModuleName());
 		taskView.setDescription(dbTask.getDescription());
 		List<DbTaskDetail> dbTaskDetailList = projectService.getTaskDetailList(dbTask);
-		YamlModule yamlModule = new YamlModule(dbTask.getModuleName(), projectService.createParameters(dbTaskDetailList));
+		YamlModule yamlModule = new YamlModule(dbTask.getModuleName(), yamlService.createParameters(dbTaskDetailList));
 		yamlModule.setDescription(dbTask.getDescription());
 		taskView.setParametersValue(yamlModule.getParameters().toString());
 		return taskView;

@@ -14,6 +14,7 @@ import jansible.model.yamldump.YamlModule;
 import jansible.util.YamlDumper;
 import jansible.web.module.ModuleService;
 import jansible.web.project.ProjectService;
+import jansible.web.project.YamlService;
 import jansible.web.project.task.TaskDetailForm;
 import jansible.web.project.task.TaskParameter;
 
@@ -33,6 +34,8 @@ public class TaskController {
 	private ModuleService moduleService;
 	@Autowired
 	private YamlDumper yamlDumper;
+	@Autowired
+	private YamlService yamlService;
     
     @RequestMapping("/task/view")
 	private String viewTask(
@@ -64,7 +67,7 @@ public class TaskController {
 	
 		List<DbTask> dbTaskList = new ArrayList<>();
 		dbTaskList.add(dbTask);
-		List<YamlModule> modules = projectService.createYamlModuleList(dbTaskList);
+		List<YamlModule> modules = yamlService.createYamlModuleList(dbTaskList);
 		model.addAttribute("yaskYaml", yamlDumper.dump(modules).replaceAll("\n", "<br />"));
 		
 	    return "project/task/top";
