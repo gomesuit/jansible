@@ -1,6 +1,5 @@
 package jansible.web.project.role;
 
-import jansible.web.project.ProjectService;
 import jansible.web.project.RoleService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,14 +15,12 @@ public class UploadController {
 	@Autowired
 	private UploadService uploadService;
 	@Autowired
-	private ProjectService projectService;
-	@Autowired
 	private RoleService roleService;
 	
 	@RequestMapping(value="/project/template/upload", method=RequestMethod.POST)
     private String uploadTemplate(@ModelAttribute UploadForm form, HttpServletRequest request){
 		uploadService.templateUpload(form);
-		projectService.registTemplate(form);
+		roleService.registTemplate(form);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

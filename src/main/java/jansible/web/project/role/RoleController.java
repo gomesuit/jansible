@@ -14,6 +14,7 @@ import jansible.model.yamldump.YamlModule;
 import jansible.web.module.ModuleService;
 import jansible.web.project.ProjectService;
 import jansible.web.project.RoleService;
+import jansible.web.project.TaskService;
 import jansible.web.project.VariableService;
 import jansible.web.project.YamlService;
 import jansible.web.project.role.GeneralFileForm;
@@ -42,6 +43,8 @@ public class RoleController {
 	private RoleService roleService;
 	@Autowired
 	private VariableService variableService;
+	@Autowired
+	private TaskService taskService;
     
     @RequestMapping("/role/view")
 	private String viewRole(
@@ -55,7 +58,7 @@ public class RoleController {
 		TaskForm form = new TaskForm(roleKey);
 		
 		model.addAttribute("form", form);
-		List<DbTask> dbTaskList = projectService.getTaskList(roleKey);
+		List<DbTask> dbTaskList = taskService.getTaskList(roleKey);
 		List<TaskView> taskViewList = createTaskViewList(dbTaskList);
 		model.addAttribute("taskList", taskViewList);
 		
@@ -106,7 +109,7 @@ public class RoleController {
 		taskView.setTaskId(dbTask.getTaskId());
 		taskView.setModuleName(dbTask.getModuleName());
 		taskView.setDescription(dbTask.getDescription());
-		List<DbTaskDetail> dbTaskDetailList = projectService.getTaskDetailList(dbTask);
+		List<DbTaskDetail> dbTaskDetailList = taskService.getTaskDetailList(dbTask);
 		YamlModule yamlModule = new YamlModule(dbTask.getModuleName(), yamlService.createParameters(dbTaskDetailList));
 		yamlModule.setDescription(dbTask.getDescription());
 		taskView.setParametersValue(yamlModule.getParameters().toString());
@@ -124,7 +127,7 @@ public class RoleController {
 
 	@RequestMapping(value="/project/task/regist", method=RequestMethod.POST)
 	private String registTask(@ModelAttribute TaskForm form, HttpServletRequest request){
-		projectService.registTask(form);
+		taskService.registTask(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
@@ -132,7 +135,7 @@ public class RoleController {
 
 	@RequestMapping(value="/project/task/delete", method=RequestMethod.POST)
 	private String deleteTask(@ModelAttribute TaskKey key, HttpServletRequest request){
-		projectService.deleteTask(key);
+		taskService.deleteTask(key);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

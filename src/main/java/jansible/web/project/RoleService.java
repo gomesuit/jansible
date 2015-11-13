@@ -10,6 +10,7 @@ import jansible.model.common.RoleKey;
 import jansible.model.common.TemplateKey;
 import jansible.model.database.DbFile;
 import jansible.model.database.DbRole;
+import jansible.model.database.DbTemplate;
 import jansible.web.project.project.RoleForm;
 import jansible.web.project.role.GeneralFileForm;
 import jansible.web.project.role.UploadForm;
@@ -73,5 +74,16 @@ public class RoleService {
 		DbFile dbFile = new DbFile(form);
 		dbFile.setFileName(form.getFileName());
 		return dbFile;
+	}
+
+	public void registTemplate(UploadForm form) {
+		DbTemplate dbTemplate = createDbTemplate(form);
+		roleMapper.insertDbTemplate(dbTemplate);
+	}
+
+	private DbTemplate createDbTemplate(UploadForm form) {
+		DbTemplate dbTemplate = new DbTemplate(form);
+		dbTemplate.setTemplateName(form.getFileName());
+		return dbTemplate;
 	}
 }

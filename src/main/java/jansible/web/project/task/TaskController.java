@@ -13,8 +13,8 @@ import jansible.model.gethtml.HtmlParameter;
 import jansible.model.yamldump.YamlModule;
 import jansible.util.YamlDumper;
 import jansible.web.module.ModuleService;
-import jansible.web.project.ProjectService;
 import jansible.web.project.RoleService;
+import jansible.web.project.TaskService;
 import jansible.web.project.VariableService;
 import jansible.web.project.YamlService;
 import jansible.web.project.task.TaskDetailForm;
@@ -31,8 +31,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class TaskController {
 	@Autowired
-	private ProjectService projectService;
-	@Autowired
 	private ModuleService moduleService;
 	@Autowired
 	private YamlDumper yamlDumper;
@@ -42,6 +40,8 @@ public class TaskController {
 	private RoleService roleService;
 	@Autowired
 	private VariableService variableService;
+	@Autowired
+	private TaskService taskService;
     
     @RequestMapping("/task/view")
 	private String viewTask(
@@ -54,7 +54,7 @@ public class TaskController {
 		taskKey.setRoleName(roleName);
 		taskKey.setTaskId(taskId);
 		
-		DbTask dbTask = projectService.getTask(taskKey);
+		DbTask dbTask = taskService.getTask(taskKey);
 		String moduleName = dbTask.getModuleName();
 		model.addAttribute("moduleName", moduleName);
 		
@@ -63,7 +63,7 @@ public class TaskController {
 		TaskDetailForm form = new TaskDetailForm(taskKey);
 		form.setDescription(dbTask.getDescription());
 		List<TaskParameter> taskParameterList = createBlankTaskParameterList(module);
-		List<DbTaskDetail> dbTaskDetailList = projectService.getTaskDetailList(taskKey);
+		List<DbTaskDetail> dbTaskDetailList = taskService.getTaskDetailList(taskKey);
 		mergeParameterList(taskParameterList, dbTaskDetailList);
 		form.setTaskParameterList(taskParameterList);
 		model.addAttribute("form", form);
@@ -108,7 +108,7 @@ public class TaskController {
 
 	@RequestMapping(value="/project/taskdetail/regist", method=RequestMethod.POST)
 	private String registTaskDetail(@ModelAttribute TaskDetailForm form, HttpServletRequest request){
-		projectService.updateTask(form);
+		taskService.updateTask(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
