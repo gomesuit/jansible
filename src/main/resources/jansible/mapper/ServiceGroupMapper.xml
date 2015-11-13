@@ -65,6 +65,8 @@
 				#{roleName},
 				#{sort}
 			)
+		ON DUPLICATE KEY UPDATE
+			sort = #{sort}
 	</insert>
 	
 	<select id="selectDbRoleRelationList" resultType="DbRoleRelation">
@@ -80,6 +82,8 @@
 			project_name = #{projectName} AND
 			environment_name = #{environmentName} AND
 			group_name = #{groupName}
+		ORDER BY
+			sort
 	</select>
 	
 	<delete id="deleteDbRoleRelation">

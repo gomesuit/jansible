@@ -50,6 +50,9 @@ public class GroupService {
 
 	public void deleteRoleRelation(RoleRelationKey roleRelationKey){
 		serviceGroupMapper.deleteDbRoleRelation(roleRelationKey);
+		
+		List<DbRoleRelation> dbRoleRelationList = serviceGroupMapper.selectDbRoleRelationList(roleRelationKey);
+		sortRoleRelation(dbRoleRelationList);
 	}
 
 	public List<DbRoleRelation> getRoleRelationList(ServiceGroupKey serviceGroupKey){
@@ -58,6 +61,7 @@ public class GroupService {
 
 	public void registRoleRelationDetail(RoleRelationForm form) {
 		DbRoleRelation dbRoleRelation = createDbRoleRelation(form);
+		dbRoleRelation.setSort(serviceGroupMapper.selectDbRoleRelationList(form).size() + 1);
 		serviceGroupMapper.insertDbRoleRelation(dbRoleRelation);
 		
 		fileService.outputRoleRelationData(form);
@@ -67,5 +71,36 @@ public class GroupService {
 		DbRoleRelation dbRoleRelation = new DbRoleRelation(form);
 		dbRoleRelation.setSort(form.getSort());
 		return dbRoleRelation;
+	}
+
+	public void modifyRoleRelationSort(RoleRelationKey roleRelationKey) {
+		List<DbRoleRelation> dbRoleRelationList = serviceGroupMapper.selectDbRoleRelationList(roleRelationKey);
+		int tagetIndex = 0;
+		DbRoleRelation targetDbRoleRelation = null;
+		
+		for(int i = 0; i < dbRoleRelationList.size(); i++){
+			DbRoleRelation dbRoleRelation = dbRoleRelationList.get(i);
+			RoleRelationKey aaa = dbRoleRelation;
+			if(aaa.equals(roleRelationKey)){
+				tagetIndex = i + 1;
+				targetDbRoleRelation = dbRoleRelation;
+				break;
+			}
+		}
+		
+		dbRoleRelationList.remove(tagetIndex);
+		dbRoleRelationList.add(tagetIndex - 1, targetDbRoleRelation);
+		
+		sortRoleRelation(dbRoleRelationList);
+		
+		fileService.outputRoleRelationData(roleRelationKey);
+	}
+	
+	private void sortRoleRelation(List<DbRoleRelation> dbRoleRelationList){
+		for(int i = 0; i < dbRoleRelationList.size(); i++){
+			DbRoleRelation dbRoleRelation = dbRoleRelationList.get(i);
+			dbRoleRelation.setSort(i + 1);
+			serviceGroupMapper.insertDbRoleRelation(dbRoleRelation);
+		}
 	}
 }
