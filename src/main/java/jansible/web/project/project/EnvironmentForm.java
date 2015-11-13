@@ -1,4 +1,4 @@
-package jansible.web.project.environment;
+package jansible.web.project.project;
 
 import jansible.model.common.EnvironmentKey;
 import jansible.model.common.ProjectKey;

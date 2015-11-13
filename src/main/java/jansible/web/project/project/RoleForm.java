@@ -1,4 +1,4 @@
-package jansible.web.project.role;
+package jansible.web.project.project;
 
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;

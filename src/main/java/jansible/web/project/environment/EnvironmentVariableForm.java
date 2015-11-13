@@ -2,7 +2,7 @@ package jansible.web.project.environment;
 
 import jansible.model.common.EnvironmentKey;
 import jansible.model.common.EnvironmentVariableKey;
-import jansible.web.project.project.InterfaceVariable;
+import jansible.web.project.variable.InterfaceVariable;
 
 public class EnvironmentVariableForm extends EnvironmentVariableKey implements InterfaceVariable{
 	private String value;

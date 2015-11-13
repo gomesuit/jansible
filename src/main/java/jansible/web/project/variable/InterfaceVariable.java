@@ -1,4 +1,4 @@
-package jansible.web.project.project;
+package jansible.web.project.variable;
 
 import jansible.model.common.InterfaceVariableKey;
 
