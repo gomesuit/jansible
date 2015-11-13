@@ -7,7 +7,6 @@ import jansible.model.common.ServerKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.ServiceGroupVariableKey;
 import jansible.web.project.GroupService;
-import jansible.web.project.ProjectService;
 import jansible.web.project.RoleService;
 import jansible.web.project.ServerService;
 import jansible.web.project.VariableService;
@@ -25,8 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class GroupController {
-	@Autowired
-	private ProjectService projectService;
 	@Autowired
 	private RoleService roleService;
 	@Autowired

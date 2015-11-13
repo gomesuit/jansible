@@ -6,7 +6,6 @@ import jansible.model.common.EnvironmentKey;
 import jansible.model.common.EnvironmentVariableKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.web.project.GroupService;
-import jansible.web.project.ProjectService;
 import jansible.web.project.VariableService;
 import jansible.web.project.environment.EnvironmentVariableForm;
 import jansible.web.project.group.ServiceGroupForm;
@@ -21,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class EnvironmentController {
-	@Autowired
-	private ProjectService projectService;
 	@Autowired
 	private VariableService variableService;
 	@Autowired

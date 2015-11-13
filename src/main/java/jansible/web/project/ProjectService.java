@@ -2,15 +2,7 @@ package jansible.web.project;
 
 import java.util.List;
 
-import jansible.file.JansibleFiler;
-import jansible.mapper.ApplyHistoryMapper;
-import jansible.mapper.EnvironmentMapper;
 import jansible.mapper.ProjectMapper;
-import jansible.mapper.RoleMapper;
-import jansible.mapper.ServerMapper;
-import jansible.mapper.ServiceGroupMapper;
-import jansible.mapper.TaskMapper;
-import jansible.mapper.VariableMapper;
 import jansible.model.common.ProjectKey;
 import jansible.model.database.DbProject;
 import jansible.web.project.project.JenkinsInfoForm;
@@ -23,23 +15,6 @@ import org.springframework.stereotype.Service;
 public class ProjectService {
 	@Autowired
 	private ProjectMapper projectMapper;
-	@Autowired
-	private EnvironmentMapper environmentMapper;
-	@Autowired
-	private ServiceGroupMapper serviceGroupMapper;
-	@Autowired
-	private RoleMapper roleMapper;
-	@Autowired
-	private ServerMapper serverMapper;
-	@Autowired
-	private TaskMapper taskMapper;
-	@Autowired
-	private VariableMapper variableMapper;
-	@Autowired
-	private ApplyHistoryMapper applyHistoryMapper;
-	
-	@Autowired
-	private JansibleFiler jansibleFiler;
 	@Autowired
 	private GitService gitService;
 	@Autowired

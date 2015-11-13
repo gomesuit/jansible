@@ -12,7 +12,6 @@ import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.yamldump.YamlModule;
 import jansible.web.module.ModuleService;
-import jansible.web.project.ProjectService;
 import jansible.web.project.RoleService;
 import jansible.web.project.TaskService;
 import jansible.web.project.VariableService;
@@ -33,8 +32,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class RoleController {
-	@Autowired
-	private ProjectService projectService;
 	@Autowired
 	private ModuleService moduleService;
 	@Autowired

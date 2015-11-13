@@ -12,8 +12,6 @@ import jansible.model.common.RoleKey;
 import jansible.model.database.DbEnvironment;
 import jansible.model.database.DbProject;
 import jansible.model.database.DbServiceGroup;
-import jansible.util.YamlDumper;
-import jansible.web.module.ModuleService;
 import jansible.web.project.ApplyService;
 import jansible.web.project.EnvironmentService;
 import jansible.web.project.GitService;
@@ -34,10 +32,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ProjectController {
 	@Autowired
 	private ProjectService projectService;
-	@Autowired
-	private ModuleService moduleService;
-	@Autowired
-	private YamlDumper yamlDumper;
 	@Autowired
 	private JenkinsBuildService jenkinsBuildService;
 	@Autowired
