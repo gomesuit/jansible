@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS apply_history;
 DROP TABLE IF EXISTS choice;
 DROP TABLE IF EXISTS environment_variable;
 DROP TABLE IF EXISTS role_relation;
+DROP TABLE IF EXISTS server_parameter;
 DROP TABLE IF EXISTS server_variable;
 DROP TABLE IF EXISTS server;
 DROP TABLE IF EXISTS service_group_variable;
@@ -145,6 +146,18 @@ CREATE TABLE server
 	group_name varchar(80) NOT NULL,
 	server_name varchar(80) NOT NULL,
 	PRIMARY KEY (project_name, environment_name, group_name, server_name)
+);
+
+
+CREATE TABLE server_parameter
+(
+	project_name varchar(50) NOT NULL,
+	environment_name varchar(80) NOT NULL,
+	group_name varchar(80) NOT NULL,
+	server_name varchar(80) NOT NULL,
+	parameter_name varchar(80) NOT NULL,
+	parameter_value varchar(256),
+	PRIMARY KEY (project_name, environment_name, group_name, server_name, parameter_name)
 );
 
 
