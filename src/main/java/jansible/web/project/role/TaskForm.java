@@ -1,4 +1,4 @@
-package jansible.web.project.task;
+package jansible.web.project.role;
 
 import jansible.model.common.RoleKey;
 import jansible.model.common.TaskKey;

@@ -14,7 +14,8 @@ public interface TaskMapper {
 	void insertTask(DbTask dbTask);
 	List<DbTask> selectTaskList(RoleKey roleKey);
 	DbTask selectTask(TaskKey taskKey);
-	void updateTask(DbTask dbTask);
+	void updateTaskDescription(DbTask dbTask);
+	void updateTaskOrder(DbTask dbTask);
 	void deleteTask(TaskKey taskKey);
 	void deleteTaskByRole(RoleKey roleKey);
 	void deleteTaskByProject(ProjectKey projectKey);

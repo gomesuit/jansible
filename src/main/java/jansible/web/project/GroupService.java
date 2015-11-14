@@ -98,7 +98,7 @@ public class GroupService {
 
 			dbRoleRelationList.remove(tagetIndex);
 			dbRoleRelationList.add(tagetIndex - 1, targetDbRoleRelation);
-		}else{
+		}else if(roleRelationOrderForm.getOrderType() == RoleRelationOrderType.DOWN){
 			if(tagetIndex + 1 >= dbRoleRelationList.size()){
 				return;
 			}

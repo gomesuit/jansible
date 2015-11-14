@@ -39,6 +39,7 @@
 			<td>task</td>
 			<td>description</td>
 			<td>parameter</td>
+			<td>order</td>
 			<td>Delete</td>
 		</tr>
 		<tr th:each="task : ${taskList}">
@@ -48,12 +49,32 @@
 			</td>
 			<td th:text="${task.description}" />
 			<td th:text="${task.parametersValue}" />
-			<form method="POST" th:action="@{/project/task/delete}" th:object="${taskKey}">
-				<input type="hidden" th:field="*{projectName}" />
-				<input type="hidden" th:field="*{roleName}" />
-				<input type="hidden" name="taskId" th:value="${task.taskId}" />
-				<td><input type="submit" value="Delete" /></td>
-			</form>
+			<td>
+				<div style="display:inline-flex">
+				<form method="POST" th:action="@{/project/task/order}" th:object="${taskOrderForm}">
+					<input type="hidden" th:field="*{projectName}" />
+					<input type="hidden" th:field="*{roleName}" />
+					<input type="hidden" name="taskId" th:value="${task.taskId}" />
+					<input type="hidden" name="orderType" value="UP" />
+					<input type="submit" value="↑" />
+				</form>
+				<form method="POST" th:action="@{/project/task/order}" th:object="${taskOrderForm}">
+					<input type="hidden" th:field="*{projectName}" />
+					<input type="hidden" th:field="*{roleName}" />
+					<input type="hidden" name="taskId" th:value="${task.taskId}" />
+					<input type="hidden" name="orderType" value="DOWN" />
+					<input type="submit" value="↓" />
+				</form>
+				</div>
+			</td>
+			<td>
+				<form method="POST" th:action="@{/project/task/delete}" th:object="${taskKey}">
+					<input type="hidden" th:field="*{projectName}" />
+					<input type="hidden" th:field="*{roleName}" />
+					<input type="hidden" name="taskId" th:value="${task.taskId}" />
+					<input type="submit" value="Delete" />
+				</form>
+			</td>
 		</tr>
 	</table>
 	

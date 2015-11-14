@@ -1,4 +1,4 @@
-package jansible.web.project.task;
+package jansible.web.project.role;
 
 public class TaskView {
 	private Integer taskId;

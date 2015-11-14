@@ -19,8 +19,6 @@ import jansible.web.project.YamlService;
 import jansible.web.project.role.GeneralFileForm;
 import jansible.web.project.role.RoleVariableForm;
 import jansible.web.project.role.UploadForm;
-import jansible.web.project.task.TaskForm;
-import jansible.web.project.task.TaskView;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -61,6 +59,9 @@ public class RoleController {
 		
 		TaskKey taskKey = new TaskKey(roleKey);
 		model.addAttribute("taskKey", taskKey);
+
+		TaskOrderForm taskOrderForm = new TaskOrderForm(roleKey);
+		model.addAttribute("taskOrderForm", taskOrderForm);
 		
 		// module名リスト
 		model.addAttribute("moduleNameList", moduleService.getModuleNameList());
@@ -133,6 +134,14 @@ public class RoleController {
 	@RequestMapping(value="/project/task/delete", method=RequestMethod.POST)
 	private String deleteTask(@ModelAttribute TaskKey key, HttpServletRequest request){
 		taskService.deleteTask(key);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/task/order", method=RequestMethod.POST)
+	private String orderTask(@ModelAttribute TaskOrderForm form, HttpServletRequest request){
+		taskService.modifyTaskOrder(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

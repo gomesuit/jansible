@@ -7,9 +7,11 @@ import jansible.model.common.TaskKey;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskConditional;
 import jansible.model.database.DbTaskDetail;
+import jansible.web.project.role.TaskForm;
+import jansible.web.project.role.TaskOrderForm;
+import jansible.web.project.role.TaskOrderType;
 import jansible.web.project.task.TaskConditionalForm;
 import jansible.web.project.task.TaskDetailForm;
-import jansible.web.project.task.TaskForm;
 import jansible.web.project.task.TaskParameter;
 
 import java.util.ArrayList;
@@ -34,11 +36,16 @@ public class TaskService {
 		taskMapper.deleteTask(taskKey);
 		taskMapper.deleteTaskDetail(taskKey);
 		taskMapper.deleteTaskConditionalByTask(taskKey);
+		
+		List<DbTask> dbTaskList = taskMapper.selectTaskList(taskKey);
+		sortTask(dbTaskList);
+		
+		fileService.outputTaskData(taskKey);
 	}
 
 	public void updateTask(TaskDetailForm form) {
 		DbTask dbTask = createDbTask(form);
-		taskMapper.updateTask(dbTask);
+		taskMapper.updateTaskDescription(dbTask);
 		
 		registTaskDetail(form);
 		
@@ -103,7 +110,7 @@ public class TaskService {
 		DbTask dbTask = new DbTask(form);
 		dbTask.setModuleName(form.getModuleName());
 		dbTask.setDescription(form.getDescription());
-		dbTask.setSort(form.getSort());
+		dbTask.setSort(taskMapper.selectTaskList(form).size() + 1);
 		return dbTask;
 	}
 
@@ -121,5 +128,50 @@ public class TaskService {
 		dbTaskDetail.setParameterName(taskParameter.getParameterName());
 		dbTaskDetail.setParameterValue(taskParameter.getParameterValue());
 		return dbTaskDetail;
+	}
+	
+	private void sortTask(List<DbTask> dbTaskList){
+		for(int i = 0; i < dbTaskList.size(); i++){
+			DbTask dbTask = dbTaskList.get(i);
+			dbTask.setSort(i + 1);
+			taskMapper.updateTaskOrder(dbTask);
+		}
+	}
+	
+	public void modifyTaskOrder(TaskOrderForm taskOrderForm){
+		List<DbTask> dbTaskList = taskMapper.selectTaskList(taskOrderForm);
+		int targetIndex = 0;
+		DbTask targetdbTask = null;
+		
+		for(int i = 0; i < dbTaskList.size(); i++){
+			DbTask dbTask = dbTaskList.get(i);
+			TaskKey comparisonTaskKey = new TaskKey(dbTask, dbTask.getTaskId());
+			TaskKey targetTaskKey = new TaskKey(taskOrderForm, taskOrderForm.getTaskId());
+			if(comparisonTaskKey.equals(targetTaskKey)){
+				targetIndex = i;
+				targetdbTask = dbTask;
+				break;
+			}
+		}
+		
+		if(taskOrderForm.getOrderType() == TaskOrderType.UP){
+			if(targetIndex - 1 < 0){
+				return;
+			}
+
+			dbTaskList.remove(targetIndex);
+			dbTaskList.add(targetIndex - 1, targetdbTask);
+		}else if((taskOrderForm.getOrderType() == TaskOrderType.DOWN)){
+			if(targetIndex + 1 >= dbTaskList.size()){
+				return;
+			}
+			
+			dbTaskList.remove(targetIndex);
+			dbTaskList.add(targetIndex + 1, targetdbTask);
+		}
+		
+		sortTask(dbTaskList);
+		
+		fileService.outputTaskData(taskOrderForm);
 	}
 }

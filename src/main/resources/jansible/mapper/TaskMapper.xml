@@ -23,11 +23,22 @@
 			)
 	</insert>
 	
-	<update id="updateTask" parameterType="DbTask">
+	<update id="updateTaskDescription" parameterType="DbTask">
 		UPDATE
 			task
 		SET
 			description = #{description}
+		WHERE
+			task_id = #{taskId} AND
+			project_name = #{projectName} AND
+			role_name = #{roleName}
+	</update>
+	
+	<update id="updateTaskOrder" parameterType="DbTask">
+		UPDATE
+			task
+		SET
+			sort = #{sort}
 		WHERE
 			task_id = #{taskId} AND
 			project_name = #{projectName} AND
