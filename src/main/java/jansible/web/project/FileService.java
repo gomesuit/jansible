@@ -1,5 +1,6 @@
 package jansible.web.project;
 
+import jansible.file.Host;
 import jansible.file.HostGroup;
 import jansible.file.JansibleFiler;
 import jansible.file.JansibleHostsDumper;
@@ -19,6 +20,7 @@ import jansible.model.database.DbEnvironmentVariable;
 import jansible.model.database.DbRoleRelation;
 import jansible.model.database.DbRoleVariable;
 import jansible.model.database.DbServer;
+import jansible.model.database.DbServerParameter;
 import jansible.model.database.DbServerVariable;
 import jansible.model.database.DbServiceGroup;
 import jansible.model.database.DbServiceGroupVariable;
@@ -155,9 +157,21 @@ public class FileService {
 		hostGroup.setGroupName(jansibleFiler.getGroupName(serviceGroupKey));
 		List<DbServer> dbServerList = serverMapper.selectServerList(serviceGroupKey);
 		for(DbServer server : dbServerList){
-			hostGroup.addHost(server.getServerName());
+			List<DbServerParameter> dbServerParameterList = serverMapper.selectServerParameterList(server);
+			hostGroup.addHost(createHost(server.getServerName(), dbServerParameterList));
 		}
 		return hostGroup;
+	}
+
+	private Host createHost(String serverName, List<DbServerParameter> dbServerParameterList) {
+		Host host = new Host();
+		host.setServerName(serverName);
+		
+		for(DbServerParameter dbServerParameter : dbServerParameterList){
+			host.addParameter(dbServerParameter.getParameterName(), dbServerParameter.getParameterValue());
+		}
+		
+		return host;
 	}
 
 	public void reOutputAllData(ProjectKey projectKey){

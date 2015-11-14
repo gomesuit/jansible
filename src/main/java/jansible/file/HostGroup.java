@@ -5,9 +5,9 @@ import java.util.List;
 
 public class HostGroup {
 	private String groupName;
-	private List<String> hostList = new ArrayList<>();
+	private List<Host> hostList = new ArrayList<>();
 	
-	public void addHost(String host){
+	public void addHost(Host host){
 		hostList.add(host);
 	}
 	
@@ -17,10 +17,10 @@ public class HostGroup {
 	public void setGroupName(String groupName) {
 		this.groupName = groupName;
 	}
-	public List<String> getHostList() {
+	public List<Host> getHostList() {
 		return hostList;
 	}
-	public void setHostList(List<String> hostList) {
+	public void setHostList(List<Host> hostList) {
 		this.hostList = hostList;
 	}
 }

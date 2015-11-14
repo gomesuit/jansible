@@ -28,12 +28,32 @@ public class JansibleHostsDumper {
 		return "[" + groupName + "]";
 	}
 	
-	private String getHostListString(List<String> hostList){
+	private String getHostListString(List<Host> hostList){
 		StringBuffer stringBuffer = new StringBuffer();
-		for(String host : hostList){
-			stringBuffer.append(host);
+		for(Host host : hostList){
+			stringBuffer.append(host.getServerName());
+			stringBuffer.append(" ");
+			stringBuffer.append(getHostString(host));
 			stringBuffer.append(System.lineSeparator());
 		}
+		
+		return stringBuffer.toString();
+	}
+	
+	private String getHostString(Host host){
+		StringBuffer stringBuffer = new StringBuffer();
+		for(Parameter parameter : host.getParameterList()){
+			stringBuffer.append(getParameterString(parameter));
+		}
+		
+		return stringBuffer.toString();
+	}
+	
+	private String getParameterString(Parameter parameter){
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append(parameter.getParameterName());
+		stringBuffer.append("=");
+		stringBuffer.append(parameter.getParameterValue());
 		
 		return stringBuffer.toString();
 	}
