@@ -71,12 +71,13 @@
 	<table border="1" rules="all">
 		<tr>
 			<td>role</td>
-			<td>sort</td>
+			<td>order</td>
 			<td>解除</td>
 		</tr>
 		<tr th:each="roleRelation : ${roleRelationList}">
 			<td th:text="${roleRelation.roleName}" />
 			<td>
+				<div style="display:inline-flex">
 				<form method="POST" th:action="@{/project/roleRelation/sort}" th:object="${roleRelationOrderForm}">
 					<input type="hidden" th:field="*{projectName}" />
 					<input type="hidden" th:field="*{environmentName}" />
@@ -93,6 +94,7 @@
 					<input type="hidden" name="roleName" th:value="${roleRelation.roleName}" />
 					<input type="submit" value="↓" />
 				</form>
+				</div>
 			</td>
 			<form method="POST" th:action="@{/project/roleRelation/delete}" th:object="${roleRelationKey}">
 				<input type="hidden" th:field="*{projectName}" />
