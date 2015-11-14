@@ -3,8 +3,10 @@ package jansible.web.project.server;
 import javax.servlet.http.HttpServletRequest;
 
 import jansible.model.common.ServerKey;
+import jansible.model.common.ServerParameterKey;
 import jansible.model.common.ServerVariableKey;
 import jansible.web.project.GroupService;
+import jansible.web.project.ServerService;
 import jansible.web.project.VariableService;
 import jansible.web.project.server.ServerVariableForm;
 
@@ -22,6 +24,8 @@ public class ServerController {
 	private VariableService variableService;
 	@Autowired
 	private GroupService groupService;
+	@Autowired
+	private ServerService serverService;
     
     @RequestMapping("/server/view")
 	private String viewServer(
@@ -36,6 +40,10 @@ public class ServerController {
     	serverKey.setEnvironmentName(environmentName);
     	serverKey.setGroupName(groupName);
     	serverKey.setServerName(serverName);
+    	
+		model.addAttribute("serverParameterForm", new ServerParameterForm(serverKey));
+		model.addAttribute("serverParameterList", serverService.getServerParameterList(serverKey));
+		model.addAttribute("serverParameterKey", new ServerParameterKey(serverKey));
 
     	ServerVariableForm variableForm = new ServerVariableForm(serverKey);
 		model.addAttribute("variableForm", variableForm);
@@ -60,6 +68,22 @@ public class ServerController {
     @RequestMapping(value="/project/serverVariable/delete", method=RequestMethod.POST)
     private String deleteServerVariable(@ModelAttribute ServerVariableKey key, HttpServletRequest request){
     	variableService.deleteServerVariable(key);
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+    }
+
+	@RequestMapping(value="/project/serverParameter/regist", method=RequestMethod.POST)
+    private String registServerParameter(@ModelAttribute ServerParameterForm form, HttpServletRequest request){
+		serverService.registServerParameter(form);
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+    }
+
+    @RequestMapping(value="/project/serverParameter/delete", method=RequestMethod.POST)
+    private String deleteServerParameter(@ModelAttribute ServerParameterKey key, HttpServletRequest request){
+    	serverService.deleteServerParameter(key);
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

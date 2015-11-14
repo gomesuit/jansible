@@ -9,6 +9,71 @@
 	<div>サーバの画面です</div>
 	
 	<br /><hr /><br />
+	<div>【パラメータ登録】</div>
+	<form method="POST" enctype="multipart/form-data" th:action="@{/project/serverParameter/regist}" th:object="${serverParameterForm}">
+		<input type="hidden" th:field="*{projectName}" />
+		<input type="hidden" th:field="*{environmentName}" />
+		<input type="hidden" th:field="*{groupName}" />
+		<input type="hidden" th:field="*{serverName}" />
+		<table border="1" rules="all">
+			<tr>
+				<td>parameterName</td>
+				<td>parameterValue</td>
+			</tr>
+			<tr>
+				<td>
+					<select size="1" th:field="*{parameterName}">
+						<option value="ansible_connection" label="ansible_connection" />
+						<option value="ansible_host" label="ansible_host" />
+						<option value="ansible_user" label="ansible_user" />
+						<option value="ansible_ssh_pass" label="ansible_ssh_pass" />
+						<option value="ansible_ssh_private_key_file" label="ansible_ssh_private_key_file" />
+						<option value="ansible_ssh_common_args" label="ansible_ssh_common_args" />
+						<option value="ansible_sftp_extra_args" label="ansible_sftp_extra_args" />
+						<option value="ansible_scp_extra_args" label="ansible_scp_extra_args" />
+						<option value="ansible_ssh_extra_args" label="ansible_ssh_extra_args" />
+						<option value="ansible_ssh_pipelining" label="ansible_ssh_pipelining" />
+						<option value="ansible_become" label="ansible_become" />
+						<option value="ansible_become_method" label="ansible_become_method" />
+						<option value="ansible_become_user" label="ansible_become_user" />
+						<option value="ansible_become_pass" label="ansible_become_pass" />
+						<option value="ansible_shell_type" label="ansible_shell_type" />
+						<option value="ansible_python_interpreter" label="ansible_python_interpreter" />
+						<option value="ansible_ruby_interpreter" label="ansible_ruby_interpreter" />
+						<option value="ansible_perl_interpreter" label="ansible_perl_interpreter" />
+					</select>
+				</td>
+				<td><input type="text" th:field="*{parameterValue}" /></td>
+			</tr>
+		</table>
+		<input type="submit" value="Submit" />
+	</form>
+	
+	<br />
+	<div>【パラメータ一覧】</div>
+	<table border="1" rules="all">
+		<tr>
+			<td>parameterName</td>
+			<td>parameterValue</td>
+			<td>Delete</td>
+		</tr>
+		<tr th:each="serverParameter : ${serverParameterList}">
+			<td th:text="${serverParameter.parameterName}" />
+			<td th:text="${serverParameter.parameterValue}" />
+			<td>
+				<form method="POST" th:action="@{/project/serverParameter/delete}" th:object="${serverParameterKey}">
+					<input type="hidden" th:field="*{projectName}" />
+					<input type="hidden" th:field="*{environmentName}" />
+					<input type="hidden" th:field="*{groupName}" />
+					<input type="hidden" th:field="*{serverName}" />
+					<input type="hidden" name="parameterName" th:value="${serverParameter.parameterName}" />
+					<input type="submit" value="Delete" />
+				</form>
+			</td>
+		</tr>
+	</table>
+	
+	<br /><hr /><br />
 	<div>【変数登録】</div>
 	<form method="POST" enctype="multipart/form-data" th:action="@{/project/serverVariable/regist}" th:object="${variableForm}">
 		<input type="hidden" th:field="*{projectName}" />
