@@ -108,7 +108,6 @@ public class ModuleController {
 
 	private YamlParameters createParameter(ModuleForm form) {
 		YamlParameters parameters = new YamlParameters();
-		parameters.setFreeForm(form.getFreeForm());
 		for(FormParameter formParameter : form.getParameterList()){
 			parameters.addParameter(new YamlParameter(formParameter.getKey(), formParameter.getValue()));
 		}

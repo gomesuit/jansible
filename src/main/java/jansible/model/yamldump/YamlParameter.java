@@ -19,6 +19,10 @@ public class YamlParameter {
 	
 	@Override
 	public String toString() {
-		return key + "=" + value;
+		if(key.equals("free_form")){
+			return value;
+		}else{
+			return key + "=" + value;
+		}
 	}
 }
