@@ -21,11 +21,13 @@ public class UploadService {
 	}
 	
 	public void templateUpload(UploadForm form){
+		jansibleFiler.mkRoleTemplateDir(form);
 		String templateDir = jansibleFiler.getTemplateDirName(form);
 		upload(form, templateDir);
 	}
 	
 	public void fileUpload(UploadForm form){
+		jansibleFiler.mkRoleFileDir(form);
 		String fileDir = jansibleFiler.getFileDirName(form);
 		upload(form, fileDir);
 	}
