@@ -162,7 +162,7 @@
 		<input type="submit" value="Submit" />
 	</form>
 	
-	<div>タスク適用（グループ）</div>
+	<div>タスク適用（グループ別適用）</div>
 	<table border="1" rules="all">
 		<tr>
 			<td>environment</td>
@@ -178,14 +178,14 @@
 			</td>
 		</tr>
 	</table>
-	<div>タスク適用（サーバ）</div>
+	<div>タスク適用（サーバ別適用）</div>
 	<table border="1" rules="all">
 		<tr>
 			<td>environment</td>
 			<td>group</td>
 			<td>server</td>
 			<td>Build</td>
-		</tr>
+		</tr>	
 		<tr th:each="server : ${serverbuildList}">
 			<td><div th:text="${server.environmentName}" /></td>
 			<td><div th:text="${server.groupName}" /></td>
@@ -202,6 +202,7 @@
 		<tr>
 			<td>environment</td>
 			<td>group</td>
+			<td>server</td>
 			<td>tagName</td>
 			<td>tagComment</td>
 			<td>applyTime</td>
@@ -210,6 +211,7 @@
 		<tr th:each="applyHistory : ${applyHistoryList}">
 			<td><div th:text="${applyHistory.environmentName}" /></td>
 			<td><div th:text="${applyHistory.groupName}" /></td>
+			<td><div th:text="${applyHistory.serverName}" /></td>
 			<td><div th:text="${applyHistory.tagName}" /></td>
 			<td><div th:text="${applyHistory.tagComment}" /></td>
 			<td><div th:text="${#dates.format(applyHistory.applyTime, 'yyyy/MM/dd HH:mm:ss')}" /></td>

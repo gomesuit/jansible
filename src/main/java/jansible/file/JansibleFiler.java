@@ -88,7 +88,7 @@ public class JansibleFiler {
 	}
 	
 	public String getGroupName(String environmentName, String groupName) {
-		return "E_" + environmentName + "_G_" + groupName;
+		return "E-" + environmentName + "_G-" + groupName;
 	}
 	
 	public String getServerStartYamlName(ServerRelationKey key){
@@ -99,7 +99,7 @@ public class JansibleFiler {
 	}
 	
 	public String getServerStartYamlName(String environmentName, String groupName, String ServerName){
-		return getGroupName(environmentName, groupName) + "_S_" + ServerName;
+		return getGroupName(environmentName, groupName) + "_S-" + ServerName;
 	}
 
 	private void writeFile(String filePath, String content){

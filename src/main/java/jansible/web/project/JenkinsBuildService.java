@@ -97,7 +97,7 @@ public class JenkinsBuildService {
 	private String getTagName(ServiceGroupKey serviceGroupKey){
 		String groupName = jansibleFiler.getGroupName(serviceGroupKey);
 		String dateString = DateFormatter.getDateString(new Date());
-		return groupName + dateString;
+		return groupName + "_" + dateString;
 	}
 
 	public void buildforServer(ServerBuildForm form) throws Exception{
@@ -130,6 +130,6 @@ public class JenkinsBuildService {
 	private String getTagNameForServer(ServerRelationKey key){
 		String groupName = jansibleFiler.getServerStartYamlName(key);
 		String dateString = DateFormatter.getDateString(new Date());
-		return groupName + dateString;
+		return groupName + "_" + dateString;
 	}
 }
