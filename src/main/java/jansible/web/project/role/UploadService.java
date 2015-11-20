@@ -13,29 +13,36 @@ public class UploadService {
 	@Autowired
 	private JansibleFiler jansibleFiler;
 	
-	private void upload(UploadForm form, String dirName){
+	private void upload(UploadForm form, String filePath){
+		MultipartFile file = form.getFile();
+		jansibleFiler.uploadFile(file, filePath);
+	}
+	
+	private String getOriginalFilename(UploadForm form){
 		MultipartFile file = form.getFile();
 		String name = file.getOriginalFilename();
-		String filePath = dirName + "/" + name;
-		jansibleFiler.uploadFile(file, filePath);
+		return name;
 	}
 	
 	public void templateUpload(UploadForm form){
 		jansibleFiler.mkRoleTemplateDir(form);
 		String templateDir = jansibleFiler.getTemplateDirName(form);
-		upload(form, templateDir);
+		String templatePath = templateDir + "/" + getOriginalFilename(form) + ".j2";
+		upload(form, templatePath);
 	}
 	
 	public void fileUpload(UploadForm form){
 		jansibleFiler.mkRoleFileDir(form);
 		String fileDir = jansibleFiler.getFileDirName(form);
-		upload(form, fileDir);
+		String filePath = fileDir + "/" + getOriginalFilename(form);
+		upload(form, filePath);
 	}
 	
 	public void deleteTemplate(GeneralFileForm form){
 		TemplateKey templateKey = new TemplateKey(form);
-		templateKey.setRoleName(form.getFileName());
+		templateKey.setTemplateName(form.getFileName());
 		String filePath = jansibleFiler.getTemplatePath(templateKey);
+		System.out.println(filePath);
 		jansibleFiler.deleteFile(filePath);
 	}
 	

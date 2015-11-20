@@ -269,6 +269,7 @@ public class JansibleFiler {
 		String templateDirName = getTemplateDirName(templateKey);
 		templateDirName += PATH_SEPARATOR;
 		templateDirName += templateKey.getTemplateName();
+		templateDirName += ".j2";
 		return templateDirName;
 	}
 	
