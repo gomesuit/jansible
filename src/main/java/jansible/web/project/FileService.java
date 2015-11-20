@@ -155,7 +155,7 @@ public class FileService {
 	private HostGroup createHostGroup(ServiceGroupKey serviceGroupKey){
 		HostGroup hostGroup = new HostGroup();
 		hostGroup.setGroupName(jansibleFiler.getGroupName(serviceGroupKey));
-		List<DbServer> dbServerList = serverMapper.selectServerList(serviceGroupKey);
+		List<DbServer> dbServerList = serverMapper.selectServerListByServiceGroup(serviceGroupKey);
 		for(DbServer server : dbServerList){
 			List<DbServerParameter> dbServerParameterList = serverMapper.selectServerParameterList(server);
 			hostGroup.addHost(createHost(server.getServerName(), dbServerParameterList));

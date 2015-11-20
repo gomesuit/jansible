@@ -42,6 +42,28 @@
 			environment_name = #{environmentName}
 	</select>
 	
+	<select id="selectServerListByServiceGroup" resultType="DbServer">
+		SELECT
+			s.project_name as projectName,
+			s.server_name as serverName,
+			s.environment_name as environmentName
+		FROM
+			server s
+		WHERE
+			EXISTS
+				(
+					SELECT
+						1
+					FROM
+						server_relation r
+					WHERE
+						r.project_name = s.project_name AND
+						r.environment_name = #{environmentName} AND
+						r.group_name = #{groupName} AND
+						r.server_name = s.server_name
+				)
+	</select>
+	
 	<delete id="deleteServer">
 	    DELETE FROM
 	    	server
