@@ -113,4 +113,62 @@
 			environment_name = #{environmentName}
 	</delete>
 	
+	<insert id="insertDbServerRelation" parameterType="DbServerRelation">
+		INSERT INTO server_relation
+			(
+				project_name,
+				environment_name,
+				group_name,
+				server_name
+			)
+		VALUES
+			(
+				#{projectName},
+				#{environmentName},
+				#{groupName},
+				#{serverName}
+			)
+	</insert>
+	
+	<select id="selectDbServerRelationList" resultType="DbServerRelation">
+		SELECT
+			project_name as projectName,
+			environment_name as environmentName,
+			group_name as groupName,
+			server_name as serverName
+		FROM
+			server_relation
+		WHERE
+			project_name = #{projectName} AND
+			environment_name = #{environmentName} AND
+			group_name = #{groupName}
+	</select>
+	
+	<delete id="deleteDbServerRelation">
+	    DELETE FROM
+	    	server_relation
+	    WHERE
+			project_name = #{projectName} AND
+			environment_name = #{environmentName} AND
+			group_name = #{groupName} AND
+			server_name = #{serverName}
+	</delete>
+	
+	<delete id="deleteDbServerRelationByServiceGroup">
+	    DELETE FROM
+	    	server_relation
+	    WHERE
+			project_name = #{projectName} AND
+			environment_name = #{environmentName} AND
+			group_name = #{groupName}
+	</delete>
+	
+	<delete id="deleteDbServerRelationByEnvironment">
+	    DELETE FROM
+	    	server_relation
+	    WHERE
+			project_name = #{projectName} AND
+			environment_name = #{environmentName}
+	</delete>
+	
 </mapper>

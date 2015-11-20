@@ -3,9 +3,10 @@ package jansible.web.project;
 import jansible.file.JansibleFiler;
 import jansible.mapper.ServerMapper;
 import jansible.mapper.VariableMapper;
+import jansible.model.common.EnvironmentKey;
+import jansible.model.common.ProjectKey;
 import jansible.model.common.ServerKey;
 import jansible.model.common.ServerParameterKey;
-import jansible.model.common.ServiceGroupKey;
 import jansible.model.database.DbServer;
 import jansible.model.database.DbServerParameter;
 import jansible.web.project.server.ServerForm;
@@ -27,12 +28,17 @@ public class ServerService {
 	@Autowired
 	private JansibleFiler jansibleFiler;
 
-	public List<DbServer> getServerList(ServiceGroupKey serviceGroupKey){
-		return serverMapper.selectServerList(serviceGroupKey);
+	public List<DbServer> getServerList(ProjectKey projectKey){
+		return serverMapper.selectServerList(projectKey);
+	}
+	
+	public List<DbServer> getServerListByEnvironment(EnvironmentKey environmentKey){
+		return serverMapper.selectServerListByEnvironment(environmentKey);
 	}
 
 	public void registServer(ServerForm form) {
 		DbServer dbServer = new DbServer(form);
+		dbServer.setEnvironmentName(form.getEnvironmentName());
 		serverMapper.insertServer(dbServer);
 		
 		fileService.outputHostsData(form);

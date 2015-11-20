@@ -12,8 +12,6 @@
 	<div>【パラメータ登録】</div>
 	<form method="POST" enctype="multipart/form-data" th:action="@{/project/serverParameter/regist}" th:object="${serverParameterForm}">
 		<input type="hidden" th:field="*{projectName}" />
-		<input type="hidden" th:field="*{environmentName}" />
-		<input type="hidden" th:field="*{groupName}" />
 		<input type="hidden" th:field="*{serverName}" />
 		<table border="1" rules="all">
 			<tr>
@@ -63,8 +61,6 @@
 			<td>
 				<form method="POST" th:action="@{/project/serverParameter/delete}" th:object="${serverParameterKey}">
 					<input type="hidden" th:field="*{projectName}" />
-					<input type="hidden" th:field="*{environmentName}" />
-					<input type="hidden" th:field="*{groupName}" />
 					<input type="hidden" th:field="*{serverName}" />
 					<input type="hidden" name="parameterName" th:value="${serverParameter.parameterName}" />
 					<input type="submit" value="Delete" />
@@ -77,8 +73,6 @@
 	<div>【変数登録】</div>
 	<form method="POST" enctype="multipart/form-data" th:action="@{/project/serverVariable/regist}" th:object="${variableForm}">
 		<input type="hidden" th:field="*{projectName}" />
-		<input type="hidden" th:field="*{environmentName}" />
-		<input type="hidden" th:field="*{groupName}" />
 		<input type="hidden" th:field="*{serverName}" />
 		<table border="1" rules="all">
 			<tr>
@@ -110,8 +104,6 @@
 			<td th:text="${variable.value}" />
 			<form method="POST" th:action="@{/project/serverVariable/delete}" th:object="${serverVariableKey}">
 				<input type="hidden" th:field="*{projectName}" />
-				<input type="hidden" th:field="*{environmentName}" />
-				<input type="hidden" th:field="*{groupName}" />
 				<input type="hidden" th:field="*{serverName}" />
 				<input type="hidden" name="variableName" th:value="${variable.variableName}" />
 				<td><input type="submit" value="Delete" /></td>
@@ -120,7 +112,7 @@
 	</table>
 	
 	<br /><hr />
-	<a th:href="@{/serviceGroup/view/(projectName=${variableForm.projectName}, environmentName=${variableForm.environmentName}, groupName=${variableForm.groupName})}" >戻る</a>
+	<a th:href="@{/project/view/(projectName=${variableForm.projectName})}" >戻る</a>
 	<a th:href="@{/}" >トップ</a>
 </body>
 </html>

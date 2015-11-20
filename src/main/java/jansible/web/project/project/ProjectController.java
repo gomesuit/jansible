@@ -9,6 +9,7 @@ import jansible.model.common.EnvironmentKey;
 import jansible.model.common.Group;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
+import jansible.model.common.ServerKey;
 import jansible.model.database.DbEnvironment;
 import jansible.model.database.DbProject;
 import jansible.model.database.DbServiceGroup;
@@ -19,6 +20,8 @@ import jansible.web.project.GroupService;
 import jansible.web.project.JenkinsBuildService;
 import jansible.web.project.ProjectService;
 import jansible.web.project.RoleService;
+import jansible.web.project.ServerService;
+import jansible.web.project.server.ServerForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,6 +47,8 @@ public class ProjectController {
 	private GroupService groupService;
 	@Autowired
 	private ApplyService applyService;
+	@Autowired
+	private ServerService serverService;
     
     @RequestMapping("/project/view")
 	private String viewProject(
@@ -85,6 +90,12 @@ public class ProjectController {
 		
 		RebuildForm rebuildForm = new RebuildForm(projectKey);
 		model.addAttribute("rebuildForm", rebuildForm);
+		
+		ServerForm serverForm = new ServerForm(projectKey);
+		model.addAttribute("serverForm", serverForm);
+		model.addAttribute("serverList", serverService.getServerList(projectKey));
+		ServerKey serverKey = new ServerKey(projectKey);
+		model.addAttribute("serverKey", serverKey);
 		
 	    return "project/project/top";
 	}

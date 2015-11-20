@@ -43,6 +43,50 @@
 	</table>
 	
 	<br /><hr /><br />
+	<div>サーバ登録</div>
+	<form action="#" th:action="@{/project/server/regist}" th:object="${serverForm}" method="post">
+		<input type="hidden" th:field="*{projectName}" />
+		<table border="1" rules="all">
+			<tr>
+				<td>server</td>
+				<td>environment</td>
+			</tr>
+			<tr>
+				<td><input type="text" th:field="*{serverName}" /></td>
+				<td>
+					<select size="1" th:field="*{environmentName}">
+						<option th:each="environment : ${environmentList}" th:value="${environment.environmentName}" th:label="${environment.environmentName}" />
+					</select>
+				</td>
+			</tr>
+		</table>
+		<input type="submit" value="Submit" />
+	</form>
+	
+	<div>サーバ一覧</div>
+	<table border="1" rules="all">
+		<tr>
+			<td>server</td>
+			<td>environment</td>
+			<td>Delete</td>
+		</tr>
+		<tr th:each="server : ${serverList}">
+			<td>
+				<a th:href="@{/server/view(projectName=${server.projectName}, serverName=${server.serverName})}"
+				th:text="${server.serverName}" />
+			</td>
+			<td>
+				<div th:text="${server.environmentName}"/>
+			</td>
+			<form method="POST" th:action="@{/project/server/delete}" th:object="${serverKey}">
+				<input type="hidden" th:field="*{projectName}" />
+				<input type="hidden" name="serverName" th:value="${server.serverName}" />
+				<td><input type="submit" value="Delete" /></td>
+			</form>
+		</tr>
+	</table>
+	
+	<br /><hr /><br />
 	<div>ロール登録</div>
 	<form action="#" th:action="@{/project/role/regist}" th:object="${roleForm}" method="post">
 		<input type="hidden" th:field="*{projectName}" />

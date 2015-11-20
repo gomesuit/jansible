@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import jansible.model.common.RoleRelationKey;
 import jansible.model.common.ServerKey;
+import jansible.model.common.ServerRelationKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.ServiceGroupVariableKey;
 import jansible.web.project.GroupService;
@@ -43,21 +44,16 @@ public class GroupController {
     	serviceGroupKey.setProjectName(projectName);
     	serviceGroupKey.setEnvironmentName(environmentName);
     	serviceGroupKey.setGroupName(groupName);
-    	
-		ServerForm serverForm = new ServerForm(serviceGroupKey);
-		model.addAttribute("serverForm", serverForm);
-		model.addAttribute("serverList", serverService.getServerList(serviceGroupKey));
 		
-		ServerKey serverKey = new ServerKey(serviceGroupKey);
-		model.addAttribute("serverKey", serverKey);
+		model.addAttribute("serverRelationForm", new ServerRelationForm(serviceGroupKey));
+    	model.addAttribute("serverList", serverService.getServerListByEnvironment(serviceGroupKey));
+		model.addAttribute("serverRelationList", groupService.getServerRelationList(serviceGroupKey));
+    	model.addAttribute("serverRelationKey", new ServerRelationKey(serviceGroupKey));
 		
-		RoleRelationForm roleRelationForm = new RoleRelationForm(serviceGroupKey);
-		model.addAttribute("roleRelationForm", roleRelationForm);
+		model.addAttribute("roleRelationForm", new RoleRelationForm(serviceGroupKey));
     	model.addAttribute("roleList", roleService.getRoleList(serviceGroupKey));
 		model.addAttribute("roleRelationList", groupService.getRoleRelationList(serviceGroupKey));
-		
-		RoleRelationKey roleRelationKey = new RoleRelationKey(serviceGroupKey);
-    	model.addAttribute("roleRelationKey", roleRelationKey);
+    	model.addAttribute("roleRelationKey", new RoleRelationKey(serviceGroupKey));
 		
 		RoleRelationOrderForm roleRelationOrderForm = new RoleRelationOrderForm(serviceGroupKey);
     	model.addAttribute("roleRelationOrderForm", roleRelationOrderForm);
@@ -126,6 +122,22 @@ public class GroupController {
 	@RequestMapping(value="/project/serviceGroupVariable/delete", method=RequestMethod.POST)
 	private String deleteServiceGroupVariable(@ModelAttribute ServiceGroupVariableKey key, HttpServletRequest request){
 		variableService.deleteServiceGroupVariable(key);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+	
+	@RequestMapping(value="/project/serverRelation/regist", method=RequestMethod.POST)
+	private String registServerRelation(@ModelAttribute ServerRelationForm form, HttpServletRequest request){
+		groupService.registServerRelationDetail(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/serverRelation/delete", method=RequestMethod.POST)
+	private String deleteServerRelation(@ModelAttribute ServerRelationKey key, HttpServletRequest request){
+		groupService.deleteServerRelation(key);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

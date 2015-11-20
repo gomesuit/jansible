@@ -44,8 +44,6 @@
 	<select id="selectDbServerVariableList" resultType="DbServerVariable">
 		SELECT
 			project_name as projectName,
-			environment_name as environmentName,
-			group_name as groupName,
 			server_name as serverName,
 			variable_name as variableName,
 			value as value
@@ -53,8 +51,6 @@
 			server_variable
 		WHERE
 			project_name = #{projectName} AND
-			environment_name = #{environmentName} AND
-			group_name = #{groupName} AND
 			server_name = #{serverName}
 	</select>
 	
@@ -115,8 +111,6 @@
 		INSERT INTO server_variable
 			(
 				project_name,
-				environment_name,
-				group_name,
 				server_name,
 				variable_name,
 				value
@@ -124,8 +118,6 @@
 		VALUES
 			(
 				#{projectName},
-				#{environmentName},
-				#{groupName},
 				#{serverName},
 				#{variableName},
 				#{value}
@@ -202,8 +194,6 @@
 	    	server_variable
 	    WHERE
 			project_name = #{projectName} AND
-			environment_name = #{environmentName} AND
-			group_name = #{groupName} AND
 			server_name = #{serverName} AND
 			variable_name = #{variableName}
 	</delete>
@@ -213,26 +203,7 @@
 	    	server_variable
 	    WHERE
 			project_name = #{projectName} AND
-			environment_name = #{environmentName} AND
-			group_name = #{groupName} AND
 			server_name = #{serverName}
-	</delete>
-	
-	<delete id="deleteDbServerVariableByServiceGroup">
-	    DELETE FROM
-	    	server_variable
-	    WHERE
-			project_name = #{projectName} AND
-			environment_name = #{environmentName} AND
-			group_name = #{groupName}
-	</delete>
-	
-	<delete id="deleteDbServerVariableByEnvironment">
-	    DELETE FROM
-	    	server_variable
-	    WHERE
-			project_name = #{projectName} AND
-			environment_name = #{environmentName}
 	</delete>
 	
 	<delete id="deleteDbRoleVariable">

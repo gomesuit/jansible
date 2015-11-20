@@ -9,38 +9,39 @@
 	<div>グループの画面です</div>
 	
 	<br /><hr /><br />
-	<div>サーバ登録</div>
-	<form action="#" th:action="@{/project/server/regist}" th:object="${serverForm}" method="post">
+	<div>所属サーバ登録</div>
+	<form action="#" th:action="@{/project/serverRelation/regist}" th:object="${serverRelationForm}" method="post">
 		<input type="hidden" th:field="*{projectName}" />
 		<input type="hidden" th:field="*{environmentName}" />
 		<input type="hidden" th:field="*{groupName}" />
 		<table border="1" rules="all">
 			<tr>
-				<td>server</td>
+				<td>serverRelation</td>
 			</tr>
 			<tr>
-				<td><input type="text" th:field="*{serverName}" /></td>
+				<td>
+					<select size="1" th:field="*{serverName}">
+						<option th:each="server : ${serverList}" th:value="${server.serverName}" th:label="${server.serverName}" />
+					</select>
+				</td>
 			</tr>
+
 		</table>
 		<input type="submit" value="Submit" />
 	</form>
-	
-	<div>サーバ一覧</div>
+	<div>所属サーバ一覧</div>
 	<table border="1" rules="all">
 		<tr>
 			<td>server</td>
-			<td>Delete</td>
+			<td>解除</td>
 		</tr>
-		<tr th:each="server : ${serverList}">
-			<td>
-				<a th:href="@{/server/view(projectName=${server.projectName}, environmentName=${server.environmentName}, groupName=${server.groupName}, serverName=${server.serverName})}"
-				th:text="${server.serverName}" />
-			</td>
-			<form method="POST" th:action="@{/project/server/delete}" th:object="${serverKey}">
+		<tr th:each="serverRelation : ${serverRelationList}">
+			<td th:text="${serverRelation.serverName}" />
+			<form method="POST" th:action="@{/project/serverRelation/delete}" th:object="${serverRelationKey}">
 				<input type="hidden" th:field="*{projectName}" />
 				<input type="hidden" th:field="*{environmentName}" />
 				<input type="hidden" th:field="*{groupName}" />
-				<input type="hidden" name="serverName" th:value="${server.serverName}" />
+				<input type="hidden" name="serverName" th:value="${serverRelation.serverName}" />
 				<td><input type="submit" value="Delete" /></td>
 			</form>
 		</tr>
@@ -151,7 +152,7 @@
 	</table>
 	
 	<br /><hr />
-	<a th:href="@{/environment/view/(projectName=${serverForm.projectName}, environmentName=${serverForm.environmentName})}" >戻る</a>
+	<a th:href="@{/environment/view/(projectName=${roleRelationForm.projectName}, environmentName=${roleRelationForm.environmentName})}" >戻る</a>
 	<a th:href="@{/}" >トップ</a>
 </body>
 </html>

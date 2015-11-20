@@ -43,9 +43,8 @@ public class EnvironmentService {
 		environmentMapper.deleteEnvironment(environmentKey);
 		serviceGroupMapper.deleteServiceGroupByEnvironment(environmentKey);
 		serviceGroupMapper.deleteDbRoleRelationByEnvironment(environmentKey);
-		serverMapper.deleteServerByEnvironment(environmentKey);
+		serviceGroupMapper.deleteDbServerRelationByEnvironment(environmentKey);
 		variableMapper.deleteDbEnvironmentVariableByEnvironment(environmentKey);
-		variableMapper.deleteDbServerVariableByEnvironment(environmentKey);
 		variableMapper.deleteDbServiceGroupVariableByEnvironment(environmentKey);
 		
 		List<DbServiceGroup> dbServiceGroupList = serviceGroupMapper.selectServiceGroupList(environmentKey);

@@ -1,16 +1,16 @@
 package jansible.model.common;
 
-public class ServerKey extends ServiceGroupKey{
+public class ServerKey extends ProjectKey{
 	private String serverName;
 	
 	public ServerKey(){}
 
-	public ServerKey(ServiceGroupKey serviceGroupKey){
-		super(serviceGroupKey, serviceGroupKey.getGroupName());
+	public ServerKey(ProjectKey projectKey){
+		super(projectKey.getProjectName());
 	}
 	
-	public ServerKey(ServiceGroupKey serviceGroupKey, String serverName){
-		super(serviceGroupKey, serviceGroupKey.getGroupName());
+	public ServerKey(ProjectKey projectKey, String serverName){
+		this(projectKey);
 		this.serverName = serverName;
 	}
 

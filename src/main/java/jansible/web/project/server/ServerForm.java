@@ -1,16 +1,26 @@
 package jansible.web.project.server;
 
+import jansible.model.common.ProjectKey;
 import jansible.model.common.ServerKey;
-import jansible.model.common.ServiceGroupKey;
 
 public class ServerForm extends ServerKey{
+	private String environmentName;
+	
 	public ServerForm(){}
 	
-	public ServerForm(ServiceGroupKey serviceGroupKey) {
-		super(serviceGroupKey);
+	public ServerForm(ProjectKey projectKey) {
+		super(projectKey);
 	}
 	
 	public ServerForm(ServerKey serverKey) {
 		super(serverKey, serverKey.getServerName());
+	}
+
+	public String getEnvironmentName() {
+		return environmentName;
+	}
+
+	public void setEnvironmentName(String environmentName) {
+		this.environmentName = environmentName;
 	}
 }

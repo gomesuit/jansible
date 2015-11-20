@@ -6,9 +6,7 @@ DROP TABLE IF EXISTS apply_history;
 DROP TABLE IF EXISTS choice;
 DROP TABLE IF EXISTS environment_variable;
 DROP TABLE IF EXISTS role_relation;
-DROP TABLE IF EXISTS server_parameter;
-DROP TABLE IF EXISTS server_variable;
-DROP TABLE IF EXISTS server;
+DROP TABLE IF EXISTS server_relation;
 DROP TABLE IF EXISTS service_group_variable;
 DROP TABLE IF EXISTS service_group;
 DROP TABLE IF EXISTS environment;
@@ -21,6 +19,9 @@ DROP TABLE IF EXISTS module;
 DROP TABLE IF EXISTS role_variable;
 DROP TABLE IF EXISTS template;
 DROP TABLE IF EXISTS role;
+DROP TABLE IF EXISTS server_parameter;
+DROP TABLE IF EXISTS server_variable;
+DROP TABLE IF EXISTS server;
 DROP TABLE IF EXISTS project;
 
 
@@ -142,6 +143,25 @@ CREATE TABLE role_variable
 CREATE TABLE server
 (
 	project_name varchar(50) NOT NULL,
+	server_name varchar(80) NOT NULL,
+	environment_name varchar(80) NOT NULL,
+	PRIMARY KEY (project_name, server_name)
+);
+
+
+CREATE TABLE server_parameter
+(
+	server_name varchar(80) NOT NULL,
+	project_name varchar(50) NOT NULL,
+	parameter_name varchar(80) NOT NULL,
+	parameter_value varchar(256),
+	PRIMARY KEY (server_name, project_name, parameter_name)
+);
+
+
+CREATE TABLE server_relation
+(
+	project_name varchar(50) NOT NULL,
 	environment_name varchar(80) NOT NULL,
 	group_name varchar(80) NOT NULL,
 	server_name varchar(80) NOT NULL,
@@ -149,27 +169,13 @@ CREATE TABLE server
 );
 
 
-CREATE TABLE server_parameter
-(
-	project_name varchar(50) NOT NULL,
-	environment_name varchar(80) NOT NULL,
-	group_name varchar(80) NOT NULL,
-	server_name varchar(80) NOT NULL,
-	parameter_name varchar(80) NOT NULL,
-	parameter_value varchar(256),
-	PRIMARY KEY (project_name, environment_name, group_name, server_name, parameter_name)
-);
-
-
 CREATE TABLE server_variable
 (
-	project_name varchar(50) NOT NULL,
-	environment_name varchar(80) NOT NULL,
-	group_name varchar(80) NOT NULL,
 	server_name varchar(80) NOT NULL,
+	project_name varchar(50) NOT NULL,
 	variable_name varchar(80) NOT NULL,
 	value varchar(80),
-	PRIMARY KEY (project_name, environment_name, group_name, server_name, variable_name)
+	PRIMARY KEY (server_name, project_name, variable_name)
 );
 
 

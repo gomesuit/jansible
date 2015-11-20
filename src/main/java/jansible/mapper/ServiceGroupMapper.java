@@ -2,8 +2,10 @@ package jansible.mapper;
 
 import jansible.model.common.EnvironmentKey;
 import jansible.model.common.RoleRelationKey;
+import jansible.model.common.ServerRelationKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.database.DbRoleRelation;
+import jansible.model.database.DbServerRelation;
 import jansible.model.database.DbServiceGroup;
 
 import java.util.List;
@@ -19,4 +21,10 @@ public interface ServiceGroupMapper {
 	void deleteDbRoleRelation(RoleRelationKey roleRelationKey);
 	void deleteDbRoleRelationByServiceGroup(ServiceGroupKey serviceGroupKey);
 	void deleteDbRoleRelationByEnvironment(EnvironmentKey environmentKey);
+	
+	void insertDbServerRelation(DbServerRelation dbServerRelation);
+	List<DbRoleRelation> selectDbServerRelationList(ServiceGroupKey serviceGroupKey);
+	void deleteDbServerRelation(ServerRelationKey serverRelationKey);
+	void deleteDbServerRelationByServiceGroup(ServiceGroupKey serviceGroupKey);
+	void deleteDbServerRelationByEnvironment(EnvironmentKey environmentKey);
 }

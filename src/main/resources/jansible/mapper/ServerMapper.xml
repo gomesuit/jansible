@@ -8,31 +8,38 @@
 		INSERT INTO server
 			(
 				project_name,
-				environment_name,
-				group_name,
-				server_name
+				server_name,
+				environment_name
 			)
 		VALUES
 			(
 				#{projectName},
-				#{environmentName},
-				#{groupName},
-				#{serverName}
+				#{serverName},
+				#{environmentName}
 			)
 	</insert>
 	
 	<select id="selectServerList" resultType="DbServer">
 		SELECT
 			project_name as projectName,
-			environment_name as environmentName,
-			group_name as groupName,
-			server_name as serverName
+			server_name as serverName,
+			environment_name as environmentName
+		FROM
+			server
+		WHERE
+			project_name = #{projectName}
+	</select>
+	
+	<select id="selectServerListByEnvironment" resultType="DbServer">
+		SELECT
+			project_name as projectName,
+			server_name as serverName,
+			environment_name as environmentName
 		FROM
 			server
 		WHERE
 			project_name = #{projectName} AND
-			environment_name = #{environmentName} AND
-			group_name = #{groupName}
+			environment_name = #{environmentName}
 	</select>
 	
 	<delete id="deleteServer">
@@ -40,34 +47,13 @@
 	    	server
 	    WHERE
 			project_name = #{projectName} AND
-			environment_name = #{environmentName} AND
-			group_name = #{groupName} AND
 			server_name = #{serverName}
-	</delete>
-	
-	<delete id="deleteServerByServiceGroup">
-	    DELETE FROM
-	    	server
-	    WHERE
-			project_name = #{projectName} AND
-			environment_name = #{environmentName} AND
-			group_name = #{groupName}
-	</delete>
-	
-	<delete id="deleteServerByEnvironment">
-	    DELETE FROM
-	    	server
-	    WHERE
-			project_name = #{projectName} AND
-			environment_name = #{environmentName}
 	</delete>
 	
 	<insert id="insertServerParameter" parameterType="DbServerParameter">
 		INSERT INTO server_parameter
 			(
 				project_name,
-				environment_name,
-				group_name,
 				server_name,
 				parameter_name,
 				parameter_value
@@ -75,8 +61,6 @@
 		VALUES
 			(
 				#{projectName},
-				#{environmentName},
-				#{groupName},
 				#{serverName},
 				#{parameterName},
 				#{parameterValue}
@@ -86,8 +70,6 @@
 	<select id="selectServerParameterList" resultType="DbServerParameter">
 		SELECT
 			project_name as projectName,
-			environment_name as environmentName,
-			group_name as groupName,
 			server_name as serverName,
 			parameter_name as parameterName,
 			parameter_value as parameterValue
@@ -95,8 +77,6 @@
 			server_parameter
 		WHERE
 			project_name = #{projectName} AND
-			environment_name = #{environmentName} AND
-			group_name = #{groupName} AND
 			server_name = #{serverName}
 	</select>
 	
@@ -105,8 +85,6 @@
 	    	server_parameter
 	    WHERE
 			project_name = #{projectName} AND
-			environment_name = #{environmentName} AND
-			group_name = #{groupName} AND
 			server_name = #{serverName} AND
 			parameter_name = #{parameterName}
 	</delete>
@@ -116,26 +94,7 @@
 	    	server_parameter
 	    WHERE
 			project_name = #{projectName} AND
-			environment_name = #{environmentName} AND
-			group_name = #{groupName} AND
 			server_name = #{serverName}
-	</delete>
-	
-	<delete id="deleteServerParameterByServiceGroup">
-	    DELETE FROM
-	    	server_parameter
-	    WHERE
-			project_name = #{projectName} AND
-			environment_name = #{environmentName} AND
-			group_name = #{groupName}
-	</delete>
-	
-	<delete id="deleteServerParameterByEnvironment">
-	    DELETE FROM
-	    	server_parameter
-	    WHERE
-			project_name = #{projectName} AND
-			environment_name = #{environmentName}
 	</delete>
 	
 </mapper>

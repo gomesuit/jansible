@@ -30,15 +30,11 @@ public class ServerController {
     @RequestMapping("/server/view")
 	private String viewServer(
     		@RequestParam(value = "projectName", required = true) String projectName,
-    		@RequestParam(value = "environmentName", required = true) String environmentName,
-    		@RequestParam(value = "groupName", required = true) String groupName,
     		@RequestParam(value = "serverName", required = true) String serverName,
 			Model model) {
     	
     	ServerKey serverKey = new ServerKey();
     	serverKey.setProjectName(projectName);
-    	serverKey.setEnvironmentName(environmentName);
-    	serverKey.setGroupName(groupName);
     	serverKey.setServerName(serverName);
     	
 		model.addAttribute("serverParameterForm", new ServerParameterForm(serverKey));

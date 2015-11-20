@@ -38,8 +38,6 @@ public interface VariableMapper {
 	
 	void deleteDbServerVariable(ServerVariableKey serverVariableKey);
 	void deleteDbServerVariableByServer(ServerKey serverKey);
-	void deleteDbServerVariableByServiceGroup(ServiceGroupKey serviceGroupKey);
-	void deleteDbServerVariableByEnvironment(EnvironmentKey environmentKey);
 	
 	void deleteDbRoleVariable(RoleVariableKey roleVariableKey);
 	void deleteDbRoleVariableByRole(RoleKey roleKey);

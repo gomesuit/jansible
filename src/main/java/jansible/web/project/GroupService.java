@@ -6,12 +6,15 @@ import jansible.mapper.ServiceGroupMapper;
 import jansible.mapper.VariableMapper;
 import jansible.model.common.EnvironmentKey;
 import jansible.model.common.RoleRelationKey;
+import jansible.model.common.ServerRelationKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.database.DbRoleRelation;
+import jansible.model.database.DbServerRelation;
 import jansible.model.database.DbServiceGroup;
 import jansible.web.project.group.RoleRelationForm;
 import jansible.web.project.group.RoleRelationOrderForm;
 import jansible.web.project.group.RoleRelationOrderType;
+import jansible.web.project.group.ServerRelationForm;
 import jansible.web.project.group.ServiceGroupForm;
 
 import java.util.List;
@@ -40,14 +43,21 @@ public class GroupService {
 	public void deleteServiceGroup(ServiceGroupKey serviceGroupKey){
 		serviceGroupMapper.deleteServiceGroup(serviceGroupKey);
 		serviceGroupMapper.deleteDbRoleRelationByServiceGroup(serviceGroupKey);
-		serverMapper.deleteServerByServiceGroup(serviceGroupKey);
+		serviceGroupMapper.deleteDbServerRelationByServiceGroup(serviceGroupKey);
 		variableMapper.deleteDbServiceGroupVariableByServiceGroup(serviceGroupKey);
-		variableMapper.deleteDbServerVariableByServiceGroup(serviceGroupKey);
 		jansibleFiler.deleteGroupVariableYaml(serviceGroupKey);
 	}
 
 	public List<DbServiceGroup> getServiceGroupList(EnvironmentKey environmentKey){
 		return serviceGroupMapper.selectServiceGroupList(environmentKey);
+	}
+
+	public void registRoleRelationDetail(RoleRelationForm form) {
+		DbRoleRelation dbRoleRelation = createDbRoleRelation(form);
+		dbRoleRelation.setSort(serviceGroupMapper.selectDbRoleRelationList(form).size() + 1);
+		serviceGroupMapper.insertDbRoleRelation(dbRoleRelation);
+		
+		fileService.outputRoleRelationData(form);
 	}
 
 	public void deleteRoleRelation(RoleRelationKey roleRelationKey){
@@ -59,20 +69,6 @@ public class GroupService {
 
 	public List<DbRoleRelation> getRoleRelationList(ServiceGroupKey serviceGroupKey){
 		return serviceGroupMapper.selectDbRoleRelationList(serviceGroupKey);
-	}
-
-	public void registRoleRelationDetail(RoleRelationForm form) {
-		DbRoleRelation dbRoleRelation = createDbRoleRelation(form);
-		dbRoleRelation.setSort(serviceGroupMapper.selectDbRoleRelationList(form).size() + 1);
-		serviceGroupMapper.insertDbRoleRelation(dbRoleRelation);
-		
-		fileService.outputRoleRelationData(form);
-	}
-
-	private DbRoleRelation createDbRoleRelation(RoleRelationForm form) {
-		DbRoleRelation dbRoleRelation = new DbRoleRelation(form);
-		dbRoleRelation.setSort(form.getSort());
-		return dbRoleRelation;
 	}
 
 	public void modifyRoleRelationOrder(RoleRelationOrderForm roleRelationOrderForm) {
@@ -95,7 +91,7 @@ public class GroupService {
 			if(tagetIndex - 1 < 0){
 				return;
 			}
-
+	
 			dbRoleRelationList.remove(tagetIndex);
 			dbRoleRelationList.add(tagetIndex - 1, targetDbRoleRelation);
 		}else if(roleRelationOrderForm.getOrderType() == RoleRelationOrderType.DOWN){
@@ -111,12 +107,33 @@ public class GroupService {
 		
 		fileService.outputRoleRelationData(roleRelationOrderForm);
 	}
-	
+
+	private DbRoleRelation createDbRoleRelation(RoleRelationForm form) {
+		DbRoleRelation dbRoleRelation = new DbRoleRelation(form);
+		dbRoleRelation.setSort(form.getSort());
+		return dbRoleRelation;
+	}
+
 	private void sortRoleRelation(List<DbRoleRelation> dbRoleRelationList){
 		for(int i = 0; i < dbRoleRelationList.size(); i++){
 			DbRoleRelation dbRoleRelation = dbRoleRelationList.get(i);
 			dbRoleRelation.setSort(i + 1);
 			serviceGroupMapper.insertDbRoleRelation(dbRoleRelation);
 		}
+	}
+
+	public void registServerRelationDetail(ServerRelationForm form) {
+		DbServerRelation dbServerRelation = new DbServerRelation(form);;
+		serviceGroupMapper.insertDbServerRelation(dbServerRelation);
+		
+		fileService.outputHostsData(form);
+	}
+
+	public void deleteServerRelation(ServerRelationKey key){
+		serviceGroupMapper.deleteDbServerRelation(key);
+	}
+
+	public List<DbRoleRelation> getServerRelationList(ServiceGroupKey key){
+		return serviceGroupMapper.selectDbServerRelationList(key);
 	}
 }
