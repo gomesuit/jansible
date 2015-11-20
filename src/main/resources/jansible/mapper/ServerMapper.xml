@@ -28,6 +28,9 @@
 			server
 		WHERE
 			project_name = #{projectName}
+		ORDER BY
+			environment_name,
+			server_name
 	</select>
 	
 	<select id="selectServerListByEnvironment" resultType="DbServer">

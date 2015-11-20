@@ -48,16 +48,16 @@
 		<input type="hidden" th:field="*{projectName}" />
 		<table border="1" rules="all">
 			<tr>
-				<td>server</td>
 				<td>environment</td>
+				<td>server</td>
 			</tr>
 			<tr>
-				<td><input type="text" th:field="*{serverName}" /></td>
 				<td>
 					<select size="1" th:field="*{environmentName}">
 						<option th:each="environment : ${environmentList}" th:value="${environment.environmentName}" th:label="${environment.environmentName}" />
 					</select>
 				</td>
+				<td><input type="text" th:field="*{serverName}" /></td>
 			</tr>
 		</table>
 		<input type="submit" value="Submit" />
@@ -66,17 +66,17 @@
 	<div>サーバ一覧</div>
 	<table border="1" rules="all">
 		<tr>
-			<td>server</td>
 			<td>environment</td>
+			<td>server</td>
 			<td>Delete</td>
 		</tr>
 		<tr th:each="server : ${serverList}">
 			<td>
-				<a th:href="@{/server/view(projectName=${server.projectName}, serverName=${server.serverName})}"
-				th:text="${server.serverName}" />
+				<div th:text="${server.environmentName}"/>
 			</td>
 			<td>
-				<div th:text="${server.environmentName}"/>
+				<a th:href="@{/server/view(projectName=${server.projectName}, serverName=${server.serverName})}"
+				th:text="${server.serverName}" />
 			</td>
 			<form method="POST" th:action="@{/project/server/delete}" th:object="${serverKey}">
 				<input type="hidden" th:field="*{projectName}" />
