@@ -57,27 +57,22 @@ public class ProjectController {
     	
     	ProjectKey projectKey = new ProjectKey(projectName);
     	
-		EnvironmentForm environmentForm = new EnvironmentForm(projectKey);
-		model.addAttribute("environmentForm", environmentForm);
+		model.addAttribute("environmentForm", new EnvironmentForm(projectKey));
 		model.addAttribute("environmentList", environmentService.getEnvironmentList(projectKey));
 		
-		EnvironmentKey environmentKey = new EnvironmentKey(projectKey);
-		model.addAttribute("environmentKey", environmentKey);
+		model.addAttribute("environmentKey", new EnvironmentKey(projectKey));
 		
-		RoleForm roleForm = new RoleForm(projectKey);
-		model.addAttribute("roleForm", roleForm);
+		model.addAttribute("roleForm", new RoleForm(projectKey));
 		model.addAttribute("roleList", roleService.getRoleList(projectKey));
 	
-		RoleKey roleKey = new RoleKey(projectKey);
-		model.addAttribute("roleKey", roleKey);
+		model.addAttribute("roleKey", new RoleKey(projectKey));
 
 		model.addAttribute("project", projectService.getProject(projectKey));
 		
-		GitForm gitForm = new GitForm(projectKey);
-		model.addAttribute("gitForm", gitForm);
+		model.addAttribute("gitForm", new GitForm(projectKey));
 		
-		List<Group> groupList = getGroupList(projectKey);
-		model.addAttribute("groupList", groupList);
+		model.addAttribute("groupList", getGroupList(projectKey));
+		model.addAttribute("serverbuildList", groupService.getAllDbServerRelationList(projectKey));
 		
 		DbProject dbProject = projectService.getProject(projectKey);
 		JenkinsInfoForm jenkinsInfoForm = new JenkinsInfoForm(dbProject);

@@ -5,6 +5,7 @@ import jansible.model.common.Group;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
 import jansible.model.common.ServerKey;
+import jansible.model.common.ServerRelationKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.TemplateKey;
 
@@ -88,6 +89,17 @@ public class JansibleFiler {
 	
 	public String getGroupName(String environmentName, String groupName) {
 		return "E_" + environmentName + "_G_" + groupName;
+	}
+	
+	public String getServerStartYamlName(ServerRelationKey key){
+		String environmentName = key.getEnvironmentName();
+		String groupName = key.getGroupName();
+		String serverName = key.getServerName();
+		return getServerStartYamlName(environmentName, groupName, serverName);
+	}
+	
+	public String getServerStartYamlName(String environmentName, String groupName, String ServerName){
+		return getGroupName(environmentName, groupName) + "_S_" + ServerName;
 	}
 
 	private void writeFile(String filePath, String content){
@@ -293,8 +305,19 @@ public class JansibleFiler {
 		return filePath;
 	}
 	
+	private String getServerStartYamlPath(ServerRelationKey key){
+		String dirName = getProjectDirName(key);
+		String filePath = dirName + PATH_SEPARATOR + getServerStartYamlName(key) + ".yml";
+		return filePath;
+	}
+	
 	public void writeStartYaml(ServiceGroupKey serviceGroupKey, String fileContent){
 		String filePath = getStartYamlPath(serviceGroupKey);
+		writeFile(filePath, fileContent);
+	}
+	
+	public void writeServerStartYaml(ServerRelationKey key, String fileContent){
+		String filePath = getServerStartYamlPath(key);
 		writeFile(filePath, fileContent);
 	}
 	

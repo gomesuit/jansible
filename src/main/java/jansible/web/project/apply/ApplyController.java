@@ -39,9 +39,35 @@ public class ApplyController {
 	    return "project/apply/top";
 	}
 
+	@RequestMapping("/applyServer/view")
+	private String viewApply(
+			@RequestParam(value = "projectName", required = true) String projectName,
+			@RequestParam(value = "environmentName", required = true) String environmentName,
+			@RequestParam(value = "groupName", required = true) String groupName,
+			@RequestParam(value = "serverName", required = true) String serverName,
+			Model model){
+		
+		ServerBuildForm buildForm = new ServerBuildForm();
+		buildForm.setProjectName(projectName);
+		buildForm.setEnvironmentName(environmentName);
+		buildForm.setGroupName(groupName);
+		buildForm.setServerName(serverName);
+		model.addAttribute("buildForm", buildForm);
+		
+	    return "project/apply/server";
+	}
+
 	@RequestMapping(value="/project/jenkins/build", method=RequestMethod.POST)
 	private String build(@ModelAttribute BuildForm form, HttpServletRequest request) throws Exception{
 		jenkinsBuildService.build(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/jenkins/serverBuild", method=RequestMethod.POST)
+	private String serverBuild(@ModelAttribute ServerBuildForm form, HttpServletRequest request) throws Exception{
+		jenkinsBuildService.buildforServer(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

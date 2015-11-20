@@ -79,9 +79,9 @@ public class JansibleGitter {
 		return new UsernamePasswordCredentialsProvider(name, pass);
 	}
 	
-	public void tagAndPush(ProjectKey projectKey, String name, String pass, String tagName, String message) throws Exception{
+	public void tagAndPush(ProjectKey projectKey, GitOperationInfo gitOperationInfo, String tagName) throws Exception{
 		String projectDirName = jansibleFiler.getProjectDirName(projectKey);
-		tagAndPush(projectDirName, name, pass, tagName, message);
+		tagAndPush(projectDirName, gitOperationInfo.getUserName(), gitOperationInfo.getPassword(), tagName, gitOperationInfo.getComment());
 	}
 	
 	private void tagAndPush(String localPath, String name, String pass, String tagName, String message) throws Exception {

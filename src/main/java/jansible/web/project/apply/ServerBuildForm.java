@@ -1,16 +1,17 @@
 package jansible.web.project.apply;
 
 import jansible.git.GitOperationInfo;
+import jansible.model.common.ServerRelationKey;
 import jansible.model.common.ServiceGroupKey;
 
-public class BuildForm extends ServiceGroupKey implements GitOperationInfo{
+public class ServerBuildForm extends ServerRelationKey implements GitOperationInfo{
 	private String userName;
 	private String password;
 	private String comment;
 	
-	public BuildForm(){}
+	public ServerBuildForm(){}
 	
-	public BuildForm(ServiceGroupKey serviceGroupKey){
+	public ServerBuildForm(ServiceGroupKey serviceGroupKey){
 		super(serviceGroupKey, serviceGroupKey.getGroupName());
 	}
 

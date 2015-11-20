@@ -13,6 +13,7 @@ import jansible.model.common.EnvironmentKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
 import jansible.model.common.ServerKey;
+import jansible.model.common.ServerRelationKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.TaskKey;
 import jansible.model.database.DbEnvironment;
@@ -21,6 +22,7 @@ import jansible.model.database.DbRoleRelation;
 import jansible.model.database.DbRoleVariable;
 import jansible.model.database.DbServer;
 import jansible.model.database.DbServerParameter;
+import jansible.model.database.DbServerRelation;
 import jansible.model.database.DbServerVariable;
 import jansible.model.database.DbServiceGroup;
 import jansible.model.database.DbServiceGroupVariable;
@@ -123,6 +125,18 @@ public class FileService {
 		jansibleFiler.writeStartYaml(serviceGroupKey, yamlContent);
 	}
 
+	public void outputServerRelationData(ServerRelationKey key){
+		StartYaml startYaml = new StartYaml();
+		startYaml.setHosts(key.getServerName());
+		
+		List<DbRoleRelation> dbRoleRelationList = serviceGroupMapper.selectDbRoleRelationList(key);
+		for(DbRoleRelation roleRelation : dbRoleRelationList){
+			startYaml.addRole(roleRelation.getRoleName());
+		}
+		String yamlContent = yamlDumper.dumpStartYaml(startYaml);
+		jansibleFiler.writeServerStartYaml(key, yamlContent);
+	}
+
 	public void outputTaskData(TaskKey taskKey){
 		List<DbTask> dbTaskList = taskMapper.selectTaskList(taskKey);
 		List<YamlModule> modules = yamlService.createYamlModuleList(dbTaskList);
@@ -187,11 +201,15 @@ public class FileService {
 			for(DbServiceGroup dbServiceGroup : dbServiceGroupList){
 				outputServiceGroupVariableData(dbServiceGroup);
 				outputRoleRelationData(dbServiceGroup);
-				List<DbServer> dbServerList = serverMapper.selectServerList(dbServiceGroup);
-				for(DbServer dbServer : dbServerList){
-					outputServerVariableData(dbServer);
+				List<DbServerRelation> dbServerRelationList = serviceGroupMapper.selectDbServerRelationList(dbServiceGroup);
+				for(DbServerRelation dbServerRelation : dbServerRelationList){
+					outputServerRelationData(dbServerRelation);
 				}
 			}
+		}
+		List<DbServer> dbServerList = serverMapper.selectServerList(projectKey);
+		for(DbServer dbServer : dbServerList){
+			outputServerVariableData(dbServer);
 		}
 	}
 }

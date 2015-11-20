@@ -10,11 +10,13 @@ import jansible.jenkins.JenkinsParameter;
 import jansible.mapper.ApplyHistoryMapper;
 import jansible.mapper.ProjectMapper;
 import jansible.model.common.ProjectKey;
+import jansible.model.common.ServerRelationKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.database.DbApplyHistory;
 import jansible.model.database.DbProject;
 import jansible.util.DateFormatter;
 import jansible.web.project.apply.BuildForm;
+import jansible.web.project.apply.ServerBuildForm;
 import jansible.web.project.project.RebuildForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +70,7 @@ public class JenkinsBuildService {
 
 	public void build(BuildForm form) throws Exception{
 		String tagName = getTagName(form);
-		jansibleGitter.tagAndPush(form, form.getUserName(), form.getPassword(), tagName, form.getComment());
+		jansibleGitter.tagAndPush(form, form, tagName);
 		
 		DbProject project = projectMapper.selectProject(form);
 		JenkinsParameter jenkinsParameter = new JenkinsParameter();
@@ -94,6 +96,39 @@ public class JenkinsBuildService {
 	
 	private String getTagName(ServiceGroupKey serviceGroupKey){
 		String groupName = jansibleFiler.getGroupName(serviceGroupKey);
+		String dateString = DateFormatter.getDateString(new Date());
+		return groupName + dateString;
+	}
+
+	public void buildforServer(ServerBuildForm form) throws Exception{
+		String tagName = getTagNameForServer(form);
+		jansibleGitter.tagAndPush(form, form, tagName);
+		
+		DbProject project = projectMapper.selectProject(form);
+		JenkinsParameter jenkinsParameter = new JenkinsParameter();
+		jenkinsParameter.setProjectName(form.getProjectName());
+		jenkinsParameter.setGroupName(jansibleFiler.getServerStartYamlName(form));
+		jenkinsParameter.setRepositoryUrl(project.getRepositoryUrl());
+		jenkinsParameter.setTagName(tagName);
+
+		JenkinsInfo jenkinsInfo = createJenkinsInfo(form);
+		
+		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
+		
+		DbApplyHistory dbApplyHistory = new DbApplyHistory();
+		dbApplyHistory.setProjectName(form.getProjectName());
+		dbApplyHistory.setEnvironmentName(form.getEnvironmentName());
+		dbApplyHistory.setGroupName(form.getGroupName());
+		dbApplyHistory.setServerName(form.getServerName());
+		dbApplyHistory.setTagName(tagName);
+		dbApplyHistory.setTagComment(form.getComment());
+		dbApplyHistory.setApplyTime(new Date());
+		
+		applyHistoryMapper.insertDbApplyHistory(dbApplyHistory);
+	}
+	
+	private String getTagNameForServer(ServerRelationKey key){
+		String groupName = jansibleFiler.getServerStartYamlName(key);
 		String dateString = DateFormatter.getDateString(new Date());
 		return groupName + dateString;
 	}

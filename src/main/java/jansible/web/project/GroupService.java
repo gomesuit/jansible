@@ -5,6 +5,7 @@ import jansible.mapper.ServerMapper;
 import jansible.mapper.ServiceGroupMapper;
 import jansible.mapper.VariableMapper;
 import jansible.model.common.EnvironmentKey;
+import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleRelationKey;
 import jansible.model.common.ServerRelationKey;
 import jansible.model.common.ServiceGroupKey;
@@ -127,13 +128,18 @@ public class GroupService {
 		serviceGroupMapper.insertDbServerRelation(dbServerRelation);
 		
 		fileService.outputHostsData(form);
+		fileService.outputServerRelationData(form);
 	}
 
 	public void deleteServerRelation(ServerRelationKey key){
 		serviceGroupMapper.deleteDbServerRelation(key);
 	}
 
-	public List<DbRoleRelation> getServerRelationList(ServiceGroupKey key){
+	public List<DbServerRelation> getServerRelationList(ServiceGroupKey key){
 		return serviceGroupMapper.selectDbServerRelationList(key);
+	}
+
+	public List<DbServerRelation> getAllDbServerRelationList(ProjectKey key){
+		return serviceGroupMapper.selectAllDbServerRelationList(key);
 	}
 }

@@ -162,7 +162,7 @@
 		<input type="submit" value="Submit" />
 	</form>
 	
-	<div>タスク適用</div>
+	<div>タスク適用（グループ）</div>
 	<table border="1" rules="all">
 		<tr>
 			<td>environment</td>
@@ -174,6 +174,24 @@
 			<td><div th:text="${group.groupName}" /></td>
 			<td>
 				<a th:href="@{/apply/view(projectName=${project.projectName}, environmentName=${group.environmentName}, groupName=${group.groupName})}"
+				th:text="Build" />
+			</td>
+		</tr>
+	</table>
+	<div>タスク適用（サーバ）</div>
+	<table border="1" rules="all">
+		<tr>
+			<td>environment</td>
+			<td>group</td>
+			<td>server</td>
+			<td>Build</td>
+		</tr>
+		<tr th:each="server : ${serverbuildList}">
+			<td><div th:text="${server.environmentName}" /></td>
+			<td><div th:text="${server.groupName}" /></td>
+			<td><div th:text="${server.serverName}" /></td>
+			<td>
+				<a th:href="@{/applyServer/view(projectName=${server.projectName}, environmentName=${server.environmentName}, groupName=${server.groupName}, serverName=${server.serverName})}"
 				th:text="Build" />
 			</td>
 		</tr>

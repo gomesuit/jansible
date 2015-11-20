@@ -1,6 +1,7 @@
 package jansible.mapper;
 
 import jansible.model.common.EnvironmentKey;
+import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleRelationKey;
 import jansible.model.common.ServerRelationKey;
 import jansible.model.common.ServiceGroupKey;
@@ -23,7 +24,8 @@ public interface ServiceGroupMapper {
 	void deleteDbRoleRelationByEnvironment(EnvironmentKey environmentKey);
 	
 	void insertDbServerRelation(DbServerRelation dbServerRelation);
-	List<DbRoleRelation> selectDbServerRelationList(ServiceGroupKey serviceGroupKey);
+	List<DbServerRelation> selectDbServerRelationList(ServiceGroupKey serviceGroupKey);
+	List<DbServerRelation> selectAllDbServerRelationList(ProjectKey projectKey);
 	void deleteDbServerRelation(ServerRelationKey serverRelationKey);
 	void deleteDbServerRelationByServiceGroup(ServiceGroupKey serviceGroupKey);
 	void deleteDbServerRelationByEnvironment(EnvironmentKey environmentKey);
