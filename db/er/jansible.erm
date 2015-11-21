@@ -159,7 +159,7 @@
 			</connections>
 			<display>false</display>
 			<creation_date>2015-10-26 23:11:31</creation_date>
-			<updated_date>2015-11-20 12:33:28</updated_date>
+			<updated_date>2015-11-22 00:02:13</updated_date>
 			<model_property>
 				<name>プロジェクト名</name>
 				<value></value>
@@ -450,7 +450,7 @@
 			<description></description>
 			<logical_name>jenkins_job_name</logical_name>
 			<physical_name>jenkins_job_name</physical_name>
-			<type>varbinary(n)</type>
+			<type>varchar(n)</type>
 		</word>
 		<word>
 			<id>16</id>
@@ -466,7 +466,7 @@
 			<description></description>
 			<logical_name>jenkins_port</logical_name>
 			<physical_name>jenkins_port</physical_name>
-			<type>varbinary(n)</type>
+			<type>varchar(n)</type>
 		</word>
 		<word>
 			<id>17</id>
@@ -942,7 +942,7 @@
 					</sequence>
 				</normal_column>
 				<normal_column>
-					<word_id>9</word_id>
+					<word_id>7</word_id>
 					<id>4</id>
 					<description></description>
 					<unique_key_name></unique_key_name>
@@ -1544,7 +1544,7 @@
 					</sequence>
 				</normal_column>
 				<normal_column>
-					<word_id>26</word_id>
+					<word_id>25</word_id>
 					<id>15</id>
 					<description></description>
 					<unique_key_name></unique_key_name>
@@ -2066,7 +2066,7 @@
 					</sequence>
 				</normal_column>
 				<normal_column>
-					<word_id>7</word_id>
+					<word_id>9</word_id>
 					<id>25</id>
 					<description></description>
 					<unique_key_name></unique_key_name>
@@ -2099,7 +2099,7 @@
 					</sequence>
 				</normal_column>
 				<normal_column>
-					<word_id>25</word_id>
+					<word_id>26</word_id>
 					<id>26</id>
 					<description></description>
 					<unique_key_name></unique_key_name>
@@ -2191,124 +2191,6 @@
 				<normal_column>
 					<id>27</id>
 					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
-					<relation>8</relation>
 					<relation>8</relation>
 					<description></description>
 					<unique_key_name></unique_key_name>
@@ -2433,10 +2315,6 @@
 				<normal_column>
 					<id>29</id>
 					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<referenced_column>47</referenced_column>
-					<relation>9</relation>
-					<relation>9</relation>
 					<relation>9</relation>
 					<description></description>
 					<unique_key_name></unique_key_name>
@@ -3407,7 +3285,7 @@
 					<unique_key_name></unique_key_name>
 					<logical_name></logical_name>
 					<physical_name></physical_name>
-					<type>varbinary(n)</type>
+					<type>varchar(n)</type>
 					<constraint></constraint>
 					<default_value></default_value>
 					<auto_increment>false</auto_increment>
@@ -3440,7 +3318,7 @@
 					<unique_key_name></unique_key_name>
 					<logical_name></logical_name>
 					<physical_name></physical_name>
-					<type>varbinary(n)</type>
+					<type>varchar(n)</type>
 					<constraint></constraint>
 					<default_value></default_value>
 					<auto_increment>false</auto_increment>

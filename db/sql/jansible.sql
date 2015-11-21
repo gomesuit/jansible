@@ -105,8 +105,8 @@ CREATE TABLE project
 	project_name varchar(50) NOT NULL,
 	repository_url varchar(100) NOT NULL,
 	jenkins_ip_address varchar(50),
-	jenkins_port varbinary(10),
-	jenkins_job_name varbinary(20),
+	jenkins_port varchar(10),
+	jenkins_job_name varchar(20),
 	PRIMARY KEY (project_name)
 );
 
