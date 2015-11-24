@@ -103,7 +103,7 @@ public class TaskService {
 	//				continue;
 	//			}
 				
-				DbTaskDetail dbTaskDetail = createDbTaskDetail(form.getTaskId(), form.getProjectName(), form.getRoleName(), taskParameter);
+				DbTaskDetail dbTaskDetail = createDbTaskDetail(form, taskParameter);
 				dbTaskDetailList.add(dbTaskDetail);
 			}
 			return dbTaskDetailList;
@@ -123,11 +123,8 @@ public class TaskService {
 		return dbTask;
 	}
 
-	private DbTaskDetail createDbTaskDetail(Integer taskId, String projectName, String roleName, TaskParameter taskParameter) {
-		DbTaskDetail dbTaskDetail = new DbTaskDetail();
-		dbTaskDetail.setTaskId(taskId);
-		dbTaskDetail.setProjectName(projectName);
-		dbTaskDetail.setRoleName(roleName);
+	private DbTaskDetail createDbTaskDetail(TaskDetailForm form, TaskParameter taskParameter) {
+		DbTaskDetail dbTaskDetail = new DbTaskDetail(form);
 		dbTaskDetail.setParameterName(taskParameter.getParameterName());
 		dbTaskDetail.setParameterValue(taskParameter.getParameterValue());
 		return dbTaskDetail;
