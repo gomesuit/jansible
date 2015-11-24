@@ -5,6 +5,7 @@ import jansible.file.HostGroup;
 import jansible.file.JansibleFiler;
 import jansible.file.JansibleHostsDumper;
 import jansible.mapper.EnvironmentMapper;
+import jansible.mapper.RoleMapper;
 import jansible.mapper.ServerMapper;
 import jansible.mapper.ServiceGroupMapper;
 import jansible.mapper.TaskMapper;
@@ -15,9 +16,9 @@ import jansible.model.common.RoleKey;
 import jansible.model.common.ServerKey;
 import jansible.model.common.ServerRelationKey;
 import jansible.model.common.ServiceGroupKey;
-import jansible.model.common.TaskKey;
 import jansible.model.database.DbEnvironment;
 import jansible.model.database.DbEnvironmentVariable;
+import jansible.model.database.DbRole;
 import jansible.model.database.DbRoleRelation;
 import jansible.model.database.DbRoleVariable;
 import jansible.model.database.DbServer;
@@ -49,6 +50,8 @@ public class FileService {
 	private EnvironmentMapper environmentMapper;
 	@Autowired
 	private ServerMapper serverMapper;
+	@Autowired
+	private RoleMapper roleMapper;
 	@Autowired
 	private TaskMapper taskMapper;
 	@Autowired
@@ -140,9 +143,9 @@ public class FileService {
 		jansibleFiler.writeServerStartYaml(key, yamlContent);
 	}
 
-	public void outputTaskData(TaskKey taskKey){
-		List<DbTask> dbTaskList = taskMapper.selectTaskList(taskKey);
-		jansibleFiler.writeRoleYaml(taskKey, yamlService.createYaml(dbTaskList));
+	public void outputTaskData(RoleKey roleKey){
+		List<DbTask> dbTaskList = taskMapper.selectTaskList(roleKey);
+		jansibleFiler.writeRoleYaml(roleKey, yamlService.createYaml(dbTaskList));
 	}
 
 	public void outputHostsData(ProjectKey projectKey){
@@ -213,5 +216,13 @@ public class FileService {
 		for(DbServer dbServer : dbServerList){
 			outputServerVariableData(dbServer);
 		}
+
+		jansibleFiler.deleteRolesDir(projectKey);
+		List<DbRole> dbRoleList = roleMapper.selectRoleList(projectKey);
+		for(DbRole dbRole : dbRoleList){
+			outputRoleData(dbRole);
+			outputTaskData(dbRole);
+		}
+		
 	}
 }

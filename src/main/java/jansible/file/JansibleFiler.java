@@ -126,6 +126,11 @@ public class JansibleFiler {
 		deleteDirByRecursive(dirName);
 	}
 	
+	public void deleteRolesDir(ProjectKey projectKey){
+		String dirName = getRolesDirName(projectKey);
+		deleteDirByRecursive(dirName);
+	}
+	
 	public void deleteAllStartYamlfile(ProjectKey projectKey){
 		deleteAllStartYamlfile(getProjectDirName(projectKey));
 	}
@@ -227,11 +232,16 @@ public class JansibleFiler {
 	}
 	
 	private String getRoleDirName(RoleKey roleKey) {
-		String dirName = getProjectDirName(roleKey);
-		dirName += PATH_SEPARATOR;
-		dirName += "roles";
+		String dirName = getRolesDirName(roleKey);
 		dirName += PATH_SEPARATOR;
 		dirName += roleKey.getRoleName();
+		return dirName;
+	}
+	
+	private String getRolesDirName(ProjectKey projectKey){
+		String dirName = getProjectDirName(projectKey);
+		dirName += PATH_SEPARATOR;
+		dirName += "roles";
 		return dirName;
 	}
 	
