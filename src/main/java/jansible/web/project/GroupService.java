@@ -12,12 +12,14 @@ import jansible.model.common.ServiceGroupKey;
 import jansible.model.database.DbRoleRelation;
 import jansible.model.database.DbServerRelation;
 import jansible.model.database.DbServiceGroup;
+import jansible.util.DbCommonUtils;
 import jansible.web.project.group.RoleRelationForm;
 import jansible.web.project.group.RoleRelationOrderForm;
 import jansible.web.project.group.RoleRelationOrderType;
 import jansible.web.project.group.ServerRelationForm;
 import jansible.web.project.group.ServiceGroupForm;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,48 +67,44 @@ public class GroupService {
 		serviceGroupMapper.deleteDbRoleRelation(roleRelationKey);
 		
 		List<DbRoleRelation> dbRoleRelationList = serviceGroupMapper.selectDbRoleRelationList(roleRelationKey);
-		sortRoleRelation(dbRoleRelationList);
+		DbCommonUtils.sortRoleRelation(dbRoleRelationList);
+		modifyRoleRelationList(dbRoleRelationList);
 	}
 
 	public List<DbRoleRelation> getRoleRelationList(ServiceGroupKey serviceGroupKey){
 		return serviceGroupMapper.selectDbRoleRelationList(serviceGroupKey);
 	}
 
-	public void modifyRoleRelationOrder(RoleRelationOrderForm roleRelationOrderForm) {
-		List<DbRoleRelation> dbRoleRelationList = serviceGroupMapper.selectDbRoleRelationList(roleRelationOrderForm);
-		int tagetIndex = 0;
-		DbRoleRelation targetDbRoleRelation = null;
+	public void modifyRoleRelationOrder(RoleRelationOrderForm form) {
+		List<DbRoleRelation> dbRoleRelationList = getOrderRoleRelationList(form);
 		
-		for(int i = 0; i < dbRoleRelationList.size(); i++){
-			DbRoleRelation dbRoleRelation = dbRoleRelationList.get(i);
-			RoleRelationKey comparisonRoleRelationKey = new RoleRelationKey(dbRoleRelation, dbRoleRelation.getRoleName());
-			RoleRelationKey targetRoleRelationKey = new RoleRelationKey(roleRelationOrderForm, roleRelationOrderForm.getRoleName());
-			if(comparisonRoleRelationKey.equals(targetRoleRelationKey)){
-				tagetIndex = i;
-				targetDbRoleRelation = dbRoleRelation;
-				break;
-			}
+		if(dbRoleRelationList != null){
+			modifyRoleRelationList(dbRoleRelationList);
+			fileService.outputRoleRelationData(form);
 		}
-		
-		if(roleRelationOrderForm.getOrderType() == RoleRelationOrderType.UP){
-			if(tagetIndex - 1 < 0){
-				return;
-			}
+	}
 	
-			dbRoleRelationList.remove(tagetIndex);
-			dbRoleRelationList.add(tagetIndex - 1, targetDbRoleRelation);
-		}else if(roleRelationOrderForm.getOrderType() == RoleRelationOrderType.DOWN){
-			if(tagetIndex + 1 >= dbRoleRelationList.size()){
-				return;
+	private List<DbRoleRelation> getOrderRoleRelationList(RoleRelationOrderForm form){
+		List<DbRoleRelation> dbRoleRelationList = serviceGroupMapper.selectDbRoleRelationList(form);
+		int targetIndex = dbRoleRelationList.indexOf(new DbRoleRelation(form));
+		
+		if(form.getOrderType() == RoleRelationOrderType.UP){
+			if(targetIndex - 1 < 0){
+				return null;
 			}
-			
-			dbRoleRelationList.remove(tagetIndex);
-			dbRoleRelationList.add(tagetIndex + 1, targetDbRoleRelation);
+			Collections.swap(dbRoleRelationList, targetIndex, targetIndex - 1);
+		}else if(form.getOrderType() == RoleRelationOrderType.DOWN){
+			if(targetIndex + 1 >= dbRoleRelationList.size()){
+				return null;
+			}
+			Collections.swap(dbRoleRelationList, targetIndex, targetIndex + 1);
+		}else{
+			return null;
 		}
 		
-		sortRoleRelation(dbRoleRelationList);
+		DbCommonUtils.sortRoleRelation(dbRoleRelationList);
 		
-		fileService.outputRoleRelationData(roleRelationOrderForm);
+		return dbRoleRelationList;
 	}
 
 	private DbRoleRelation createDbRoleRelation(RoleRelationForm form) {
@@ -114,11 +112,9 @@ public class GroupService {
 		dbRoleRelation.setSort(form.getSort());
 		return dbRoleRelation;
 	}
-
-	private void sortRoleRelation(List<DbRoleRelation> dbRoleRelationList){
-		for(int i = 0; i < dbRoleRelationList.size(); i++){
-			DbRoleRelation dbRoleRelation = dbRoleRelationList.get(i);
-			dbRoleRelation.setSort(i + 1);
+	
+	private void modifyRoleRelationList(List<DbRoleRelation> dbRoleRelationList){
+		for(DbRoleRelation dbRoleRelation : dbRoleRelationList){
 			serviceGroupMapper.insertDbRoleRelation(dbRoleRelation);
 		}
 	}

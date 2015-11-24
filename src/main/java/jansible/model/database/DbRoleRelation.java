@@ -2,7 +2,7 @@ package jansible.model.database;
 
 import jansible.model.common.RoleRelationKey;
 
-public class DbRoleRelation extends RoleRelationKey{
+public class DbRoleRelation extends RoleRelationKey implements InterfaceDbSort{
 	private int sort;
 	
 	public DbRoleRelation(){}

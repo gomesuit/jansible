@@ -7,6 +7,7 @@ import jansible.model.common.TaskKey;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskConditional;
 import jansible.model.database.DbTaskDetail;
+import jansible.util.DbCommonUtils;
 import jansible.web.project.role.TaskForm;
 import jansible.web.project.role.TaskOrderForm;
 import jansible.web.project.role.TaskOrderType;
@@ -15,6 +16,7 @@ import jansible.web.project.task.TaskDetailForm;
 import jansible.web.project.task.TaskParameter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +40,8 @@ public class TaskService {
 		taskMapper.deleteTaskConditionalByTask(taskKey);
 		
 		List<DbTask> dbTaskList = taskMapper.selectTaskList(taskKey);
-		sortTask(dbTaskList);
+		DbCommonUtils.sortRoleRelation(dbTaskList);
+		registTaskList(dbTaskList);
 		
 		fileService.outputTaskData(taskKey);
 	}
@@ -129,49 +132,42 @@ public class TaskService {
 		dbTaskDetail.setParameterValue(taskParameter.getParameterValue());
 		return dbTaskDetail;
 	}
-	
-	private void sortTask(List<DbTask> dbTaskList){
-		for(int i = 0; i < dbTaskList.size(); i++){
-			DbTask dbTask = dbTaskList.get(i);
-			dbTask.setSort(i + 1);
+
+	private void registTaskList(List<DbTask> dbTaskList){
+		for(DbTask dbTask : dbTaskList){
 			taskMapper.updateTaskOrder(dbTask);
 		}
 	}
 	
-	public void modifyTaskOrder(TaskOrderForm taskOrderForm){
-		List<DbTask> dbTaskList = taskMapper.selectTaskList(taskOrderForm);
-		int targetIndex = 0;
-		DbTask targetdbTask = null;
+	public void modifyTaskOrder(TaskOrderForm form){
+		List<DbTask> dbTaskList = getOrderDbTaskList(form);
 		
-		for(int i = 0; i < dbTaskList.size(); i++){
-			DbTask dbTask = dbTaskList.get(i);
-			TaskKey comparisonTaskKey = new TaskKey(dbTask, dbTask.getTaskId());
-			TaskKey targetTaskKey = new TaskKey(taskOrderForm, taskOrderForm.getTaskId());
-			if(comparisonTaskKey.equals(targetTaskKey)){
-				targetIndex = i;
-				targetdbTask = dbTask;
-				break;
-			}
+		if(dbTaskList != null){
+			registTaskList(dbTaskList);
+			fileService.outputTaskData(form);
 		}
-		
-		if(taskOrderForm.getOrderType() == TaskOrderType.UP){
-			if(targetIndex - 1 < 0){
-				return;
-			}
+	}
 
-			dbTaskList.remove(targetIndex);
-			dbTaskList.add(targetIndex - 1, targetdbTask);
-		}else if((taskOrderForm.getOrderType() == TaskOrderType.DOWN)){
-			if(targetIndex + 1 >= dbTaskList.size()){
-				return;
+	private List<DbTask> getOrderDbTaskList(TaskOrderForm form){
+		List<DbTask> dbTaskList = taskMapper.selectTaskList(form);
+		int targetIndex = dbTaskList.indexOf(new DbTask(form));
+		
+		if(form.getOrderType() == TaskOrderType.UP){
+			if(targetIndex - 1 < 0){
+				return null;
 			}
-			
-			dbTaskList.remove(targetIndex);
-			dbTaskList.add(targetIndex + 1, targetdbTask);
+			Collections.swap(dbTaskList, targetIndex, targetIndex - 1);
+		}else if((form.getOrderType() == TaskOrderType.DOWN)){
+			if(targetIndex + 1 >= dbTaskList.size()){
+				return null;
+			}
+			Collections.swap(dbTaskList, targetIndex, targetIndex + 1);
+		}else{
+			return null;
 		}
+
+		DbCommonUtils.sortRoleRelation(dbTaskList);
 		
-		sortTask(dbTaskList);
-		
-		fileService.outputTaskData(taskOrderForm);
+		return dbTaskList;
 	}
 }

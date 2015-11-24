@@ -2,7 +2,7 @@ package jansible.model.database;
 
 import jansible.model.common.TaskKey;
 
-public class DbTask extends TaskKey{
+public class DbTask extends TaskKey implements InterfaceDbSort{
 	private String moduleName;
 	private String description;
 	private int sort;
