@@ -1,6 +1,5 @@
 package jansible.web.project;
 
-import jansible.file.JansibleFiler;
 import jansible.mapper.ServerMapper;
 import jansible.mapper.ServiceGroupMapper;
 import jansible.mapper.VariableMapper;
@@ -34,8 +33,6 @@ public class GroupService {
 	@Autowired
 	private VariableMapper variableMapper;
 	@Autowired
-	private JansibleFiler jansibleFiler;
-	@Autowired
 	private FileService fileService;
 
 	public void registServiceGroup(ServiceGroupForm form) {
@@ -48,7 +45,7 @@ public class GroupService {
 		serviceGroupMapper.deleteDbRoleRelationByServiceGroup(serviceGroupKey);
 		serviceGroupMapper.deleteDbServerRelationByServiceGroup(serviceGroupKey);
 		variableMapper.deleteDbServiceGroupVariableByServiceGroup(serviceGroupKey);
-		jansibleFiler.deleteGroupVariableYaml(serviceGroupKey);
+		fileService.deleteGroupVariableYaml(serviceGroupKey);
 	}
 
 	public List<DbServiceGroup> getServiceGroupList(EnvironmentKey environmentKey){

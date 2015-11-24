@@ -1,6 +1,5 @@
 package jansible.web.project;
 
-import jansible.file.JansibleFiler;
 import jansible.mapper.RoleMapper;
 import jansible.mapper.TaskMapper;
 import jansible.mapper.VariableMapper;
@@ -30,8 +29,6 @@ public class RoleService {
 	private TaskMapper taskMapper;
 	@Autowired
 	private VariableMapper variableMapper;
-	@Autowired
-	private JansibleFiler jansibleFiler;
 
 	public void registRole(RoleForm form) {
 		DbRole dbRole = new DbRole(form);
@@ -51,7 +48,7 @@ public class RoleService {
 		taskMapper.deleteTaskDetailByRole(roleKey);
 		taskMapper.deleteTaskConditionalByRole(roleKey);
 		variableMapper.deleteDbRoleVariableByRole(roleKey);
-		jansibleFiler.deleteRoleDir(roleKey);
+		fileService.deleteRoleDir(roleKey);
 	}
 
 	public void registFile(UploadForm form) {

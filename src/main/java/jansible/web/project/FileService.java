@@ -53,6 +53,19 @@ public class FileService {
 	private TaskMapper taskMapper;
 	@Autowired
 	private YamlService yamlService;
+	
+	
+	public void deleteHostVariableYaml(ServerKey serverKey){
+		jansibleFiler.deleteHostVariableYaml(serverKey);
+	}
+	
+	public void deleteGroupVariableYaml(ServiceGroupKey serviceGroupKey){
+		jansibleFiler.deleteGroupVariableYaml(serviceGroupKey);
+	}
+	
+	public void deleteRoleDir(RoleKey roleKey){
+		jansibleFiler.deleteRoleDir(roleKey);
+	}
 
 	public void outputProjectData(ProjectKey projectKey){
 		jansibleFiler.mkHostVariableDir(projectKey);

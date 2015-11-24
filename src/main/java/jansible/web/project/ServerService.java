@@ -1,6 +1,5 @@
 package jansible.web.project;
 
-import jansible.file.JansibleFiler;
 import jansible.mapper.ServerMapper;
 import jansible.mapper.VariableMapper;
 import jansible.model.common.EnvironmentKey;
@@ -25,8 +24,6 @@ public class ServerService {
 	private VariableMapper variableMapper;
 	@Autowired
 	private FileService fileService;
-	@Autowired
-	private JansibleFiler jansibleFiler;
 
 	public List<DbServer> getServerList(ProjectKey projectKey){
 		return serverMapper.selectServerList(projectKey);
@@ -48,7 +45,7 @@ public class ServerService {
 		serverMapper.deleteServer(serverKey);
 		serverMapper.deleteServerParameterByServer(serverKey);
 		variableMapper.deleteDbServerVariableByServer(serverKey);
-		jansibleFiler.deleteHostVariableYaml(serverKey);
+		fileService.deleteHostVariableYaml(serverKey);
 	}
 	
 	public List<DbServerParameter> getServerParameterList(ServerKey serverKey){
