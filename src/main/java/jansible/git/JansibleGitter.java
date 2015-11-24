@@ -131,7 +131,7 @@ public class JansibleGitter {
 		CloneCommand cmd = Git.cloneRepository();
 		cmd.setURI(url);
 		cmd.setDirectory(new File(localPath));
-		cmd.call();
+		try(Git git = cmd.call()){}
 	}
 
 	private File getGitDir(String localPath){
