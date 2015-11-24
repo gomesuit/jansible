@@ -11,8 +11,6 @@ import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.gethtml.HtmlModule;
 import jansible.model.gethtml.HtmlParameter;
-import jansible.model.yamldump.YamlDumper;
-import jansible.model.yamldump.YamlModule;
 import jansible.web.module.ModuleService;
 import jansible.web.project.RoleService;
 import jansible.web.project.TaskService;
@@ -33,8 +31,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class TaskController {
 	@Autowired
 	private ModuleService moduleService;
-	@Autowired
-	private YamlDumper yamlDumper;
 	@Autowired
 	private YamlService yamlService;
 	@Autowired
@@ -75,10 +71,7 @@ public class TaskController {
 		model.addAttribute("taskConditionalKey", new TaskConditionalKey(taskKey));
 		
 		// yamlプレビュー
-		List<DbTask> dbTaskList = new ArrayList<>();
-		dbTaskList.add(dbTask);
-		List<YamlModule> modules = yamlService.createYamlModuleList(dbTaskList);
-		model.addAttribute("taskYaml", yamlDumper.dump(modules).replaceAll("\n", "<br />"));
+		model.addAttribute("taskPreview", yamlService.createTaskPreview(dbTask));
 		
 		// 変数一覧
 		model.addAttribute("variableList", variableService.getDbRoleVariableList(taskKey));

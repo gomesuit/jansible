@@ -1,10 +1,13 @@
 package jansible.web.project;
 
 import jansible.mapper.TaskMapper;
+import jansible.model.database.DbRoleRelation;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskConditional;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.database.InterfaceDbVariable;
+import jansible.model.yamldump.StartYaml;
+import jansible.model.yamldump.YamlDumper;
 import jansible.model.yamldump.YamlModule;
 import jansible.model.yamldump.YamlParameter;
 import jansible.model.yamldump.YamlParameters;
@@ -21,8 +24,10 @@ import org.springframework.stereotype.Service;
 public class YamlService {
 	@Autowired
 	private TaskMapper taskMapper;
+	@Autowired
+	private YamlDumper yamlDumper;
 
-	public List<YamlModule> createYamlModuleList(List<DbTask> dbTaskList){
+	private List<YamlModule> createYamlModuleList(List<DbTask> dbTaskList){
 		List<YamlModule> modules = new ArrayList<>();
 		for(DbTask dbTask : dbTaskList){
 			List<DbTaskDetail> dbTaskDetailList = taskMapper.selectTaskDetailList(dbTask);
@@ -36,8 +41,13 @@ public class YamlService {
 		}
 		return modules;
 	}
+	
+	public String createYaml(List<DbTask> dbTaskList){
+		List<YamlModule> modules = createYamlModuleList(dbTaskList);
+		return yamlDumper.dump(modules);
+	}
 
-	public YamlParameters createParameters(List<DbTaskDetail> dbTaskDetailList) {
+	private YamlParameters createParameters(List<DbTaskDetail> dbTaskDetailList) {
 		YamlParameters yamlParameters = new YamlParameters();
 		for(DbTaskDetail dbTaskDetail : dbTaskDetailList){
 			if(StringUtils.isBlank(dbTaskDetail.getParameterValue())){
@@ -55,5 +65,32 @@ public class YamlService {
 			yamlVariableList.add(new YamlVariable(dbVariable.getVariableName(), dbVariable.getValue()));
 		}
 		return yamlVariableList;
+	}
+	
+	public String dumpVariable(List<YamlVariable> yamlVariableList){
+		return yamlDumper.dumpVariable(yamlVariableList);
+	}
+	
+	public String dumpStartYaml(String groupName, List<DbRoleRelation> dbRoleRelationList){
+		StartYaml startYaml = new StartYaml();
+		startYaml.setHosts(groupName);
+		
+		for(DbRoleRelation roleRelation : dbRoleRelationList){
+			startYaml.addRole(roleRelation.getRoleName());
+		}
+
+		return yamlDumper.dumpStartYaml(startYaml);
+	}
+	
+	public String createTaskPreview(DbTask dbTask){
+		List<DbTask> dbTaskList = new ArrayList<>();
+		dbTaskList.add(dbTask);
+		List<YamlModule> modules = createYamlModuleList(dbTaskList);
+		return yamlDumper.dump(modules).replaceAll("\n", "<br />");
+	}
+	
+	public String createTaskParametersValue(String moduleName, List<DbTaskDetail> dbTaskDetailList){
+		YamlModule yamlModule = new YamlModule(moduleName, createParameters(dbTaskDetailList));
+		return yamlModule.getParameters().toString();
 	}
 }

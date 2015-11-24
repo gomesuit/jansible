@@ -10,7 +10,6 @@ import jansible.model.common.RoleVariableKey;
 import jansible.model.common.TaskKey;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
-import jansible.model.yamldump.YamlModule;
 import jansible.web.module.ModuleService;
 import jansible.web.project.RoleService;
 import jansible.web.project.TaskService;
@@ -100,9 +99,8 @@ public class RoleController {
 		taskView.setModuleName(dbTask.getModuleName());
 		taskView.setDescription(dbTask.getDescription());
 		List<DbTaskDetail> dbTaskDetailList = taskService.getTaskDetailList(dbTask);
-		YamlModule yamlModule = new YamlModule(dbTask.getModuleName(), yamlService.createParameters(dbTaskDetailList));
-		yamlModule.setDescription(dbTask.getDescription());
-		taskView.setParametersValue(yamlModule.getParameters().toString());
+		String parametersValue = yamlService.createTaskParametersValue(dbTask.getModuleName(), dbTaskDetailList);
+		taskView.setParametersValue(parametersValue);
 		return taskView;
 	}
 

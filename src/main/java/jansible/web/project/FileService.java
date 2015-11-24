@@ -27,9 +27,6 @@ import jansible.model.database.DbServerVariable;
 import jansible.model.database.DbServiceGroup;
 import jansible.model.database.DbServiceGroupVariable;
 import jansible.model.database.DbTask;
-import jansible.model.yamldump.StartYaml;
-import jansible.model.yamldump.YamlDumper;
-import jansible.model.yamldump.YamlModule;
 import jansible.model.yamldump.YamlVariable;
 
 import java.util.ArrayList;
@@ -42,8 +39,6 @@ import org.springframework.stereotype.Service;
 public class FileService {
 	@Autowired
 	private JansibleFiler jansibleFiler;
-	@Autowired
-	private YamlDumper yamlDumper;
 	@Autowired
 	private VariableMapper variableMapper;
 	@Autowired
@@ -67,8 +62,11 @@ public class FileService {
 	public void outputRoleVariableData(RoleKey roleKey){
 		List<DbRoleVariable> dbRoleVariableList = variableMapper.selectDbRoleVariableList(roleKey);
 		List<YamlVariable> yamlVariableList = yamlService.createYamlVariableList(dbRoleVariableList);
-		String yamlContent = yamlDumper.dumpVariable(yamlVariableList);
-		jansibleFiler.writeRoleVariableYaml(roleKey, yamlContent);
+		
+		if(!yamlVariableList.isEmpty()){
+			String yamlContent = yamlService.dumpVariable(yamlVariableList);
+			jansibleFiler.writeRoleVariableYaml(roleKey, yamlContent);
+		}
 	}
 
 	public void outputEnvironmentVariableData(EnvironmentKey environmentKey){
@@ -89,7 +87,7 @@ public class FileService {
 		envYamlVariableList.addAll(groupVamlVariableList);
 		
 		if(!envYamlVariableList.isEmpty()){
-			String yamlContent = yamlDumper.dumpVariable(envYamlVariableList);
+			String yamlContent = yamlService.dumpVariable(envYamlVariableList);
 			jansibleFiler.writeGroupVariableYaml(serviceGroupKey, yamlContent);
 		}
 	}
@@ -99,7 +97,7 @@ public class FileService {
 		List<YamlVariable> yamlVariableList = yamlService.createYamlVariableList(dbServerVariableList);
 		
 		if(!yamlVariableList.isEmpty()){
-			String yamlContent = yamlDumper.dumpVariable(yamlVariableList);
+			String yamlContent = yamlService.dumpVariable(yamlVariableList);
 			jansibleFiler.writeHostVariableYaml(serverKey, yamlContent);
 		}
 	}
@@ -114,33 +112,24 @@ public class FileService {
 	}
 
 	public void outputRoleRelationData(ServiceGroupKey serviceGroupKey){
-		StartYaml startYaml = new StartYaml();
-		startYaml.setHosts(jansibleFiler.getGroupName(serviceGroupKey));
-		
+		String groupName = jansibleFiler.getGroupName(serviceGroupKey);
 		List<DbRoleRelation> dbRoleRelationList = serviceGroupMapper.selectDbRoleRelationList(serviceGroupKey);
-		for(DbRoleRelation roleRelation : dbRoleRelationList){
-			startYaml.addRole(roleRelation.getRoleName());
-		}
-		String yamlContent = yamlDumper.dumpStartYaml(startYaml);
+		
+		String yamlContent = yamlService.dumpStartYaml(groupName, dbRoleRelationList);
 		jansibleFiler.writeStartYaml(serviceGroupKey, yamlContent);
 	}
 
 	public void outputServerRelationData(ServerRelationKey key){
-		StartYaml startYaml = new StartYaml();
-		startYaml.setHosts(key.getServerName());
-		
+		String groupName = key.getServerName();
 		List<DbRoleRelation> dbRoleRelationList = serviceGroupMapper.selectDbRoleRelationList(key);
-		for(DbRoleRelation roleRelation : dbRoleRelationList){
-			startYaml.addRole(roleRelation.getRoleName());
-		}
-		String yamlContent = yamlDumper.dumpStartYaml(startYaml);
+		
+		String yamlContent = yamlService.dumpStartYaml(groupName, dbRoleRelationList);
 		jansibleFiler.writeServerStartYaml(key, yamlContent);
 	}
 
 	public void outputTaskData(TaskKey taskKey){
 		List<DbTask> dbTaskList = taskMapper.selectTaskList(taskKey);
-		List<YamlModule> modules = yamlService.createYamlModuleList(dbTaskList);
-		jansibleFiler.writeRoleYaml(taskKey, yamlDumper.dump(modules));
+		jansibleFiler.writeRoleYaml(taskKey, yamlService.createYaml(dbTaskList));
 	}
 
 	public void outputHostsData(ProjectKey projectKey){
