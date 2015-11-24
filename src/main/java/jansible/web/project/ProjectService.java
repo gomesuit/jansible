@@ -16,7 +16,11 @@ import jansible.web.project.project.JenkinsInfoForm;
 import jansible.web.project.top.ProjectForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 @Service
 public class ProjectService {
@@ -40,6 +44,9 @@ public class ProjectService {
 	private GitService gitService;
 	@Autowired
 	private FileService fileService;
+
+	@Autowired
+	private DataSourceTransactionManager transactionManager;
 	
 	public void registJenkinsInfo(JenkinsInfoForm form){
 		DbProject dbProject = new DbProject(form);
@@ -50,10 +57,20 @@ public class ProjectService {
 	}
 
 	public void registProject(ProjectForm form) throws Exception {
-		DbProject dbProject = new DbProject(form, form.getRepositoryUrl());
-		projectMapper.insertProject(dbProject);
-		gitService.cloneRepository(form);
-		fileService.outputProjectData(dbProject);
+    	DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    	TransactionStatus status = transactionManager.getTransaction(def);
+
+		try {
+			DbProject dbProject = new DbProject(form, form.getRepositoryUrl());
+			projectMapper.insertProject(dbProject);
+			gitService.cloneRepository(form);
+			fileService.outputProjectData(dbProject);
+		} catch (Exception e) {
+			transactionManager.rollback(status);
+			fileService.deleteProjectDir(form);
+			throw e;
+		}
 	}
 
 	public List<DbProject> getProjectList(){
@@ -65,22 +82,32 @@ public class ProjectService {
 	}
 	
 	public void deleteProject(ProjectKey projectKey){
-		projectMapper.deleteProject(projectKey);
-		environmentMapper.deleteEnvironmentByProject(projectKey);
-		applyHistoryMapper.deleteApplyHistoryByProject(projectKey);
-		roleMapper.deleteDbFileByProject(projectKey);
-		roleMapper.deleteDbTemplateByProject(projectKey);
-		roleMapper.deleteRoleByProject(projectKey);
-		serverMapper.deleteServerByProject(projectKey);
-		serviceGroupMapper.deleteDbRoleRelationByProject(projectKey);
-		serviceGroupMapper.deleteDbServerRelationByProject(projectKey);
-		serviceGroupMapper.deleteServiceGroupByProject(projectKey);
-		taskMapper.deleteTaskByProject(projectKey);
-		taskMapper.deleteTaskDetailByProject(projectKey);
-		variableMapper.deleteDbEnvironmentVariableByProject(projectKey);
-		variableMapper.deleteDbRoleVariableByProject(projectKey);
-		variableMapper.deleteDbServerVariableByProject(projectKey);
-		variableMapper.deleteDbServiceGroupVariableByProject(projectKey);
-		fileService.deleteProjectDir(projectKey);
+    	DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    	TransactionStatus status = transactionManager.getTransaction(def);
+
+		try {
+			transactionManager.commit(status);
+			projectMapper.deleteProject(projectKey);
+			environmentMapper.deleteEnvironmentByProject(projectKey);
+			applyHistoryMapper.deleteApplyHistoryByProject(projectKey);
+			roleMapper.deleteDbFileByProject(projectKey);
+			roleMapper.deleteDbTemplateByProject(projectKey);
+			roleMapper.deleteRoleByProject(projectKey);
+			serverMapper.deleteServerByProject(projectKey);
+			serviceGroupMapper.deleteDbRoleRelationByProject(projectKey);
+			serviceGroupMapper.deleteDbServerRelationByProject(projectKey);
+			serviceGroupMapper.deleteServiceGroupByProject(projectKey);
+			taskMapper.deleteTaskByProject(projectKey);
+			taskMapper.deleteTaskDetailByProject(projectKey);
+			variableMapper.deleteDbEnvironmentVariableByProject(projectKey);
+			variableMapper.deleteDbRoleVariableByProject(projectKey);
+			variableMapper.deleteDbServerVariableByProject(projectKey);
+			variableMapper.deleteDbServiceGroupVariableByProject(projectKey);
+			fileService.deleteProjectDir(projectKey);
+		} catch (Exception e) {
+			transactionManager.rollback(status);
+			throw e;
+		}
 	}
 }
