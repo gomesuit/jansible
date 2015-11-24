@@ -162,6 +162,13 @@
 			environment_name = #{environmentName}
 	</delete>
 	
+	<delete id="deleteDbEnvironmentVariableByProject">
+	    DELETE FROM
+	    	environment_variable
+	    WHERE
+			project_name = #{projectName}
+	</delete>
+	
 	<delete id="deleteDbServiceGroupVariable">
 	    DELETE FROM
 	    	service_group_variable
@@ -189,6 +196,13 @@
 			environment_name = #{environmentName}
 	</delete>
 	
+	<delete id="deleteDbServiceGroupVariableByProject">
+	    DELETE FROM
+	    	service_group_variable
+	    WHERE
+			project_name = #{projectName}
+	</delete>
+	
 	<delete id="deleteDbServerVariable">
 	    DELETE FROM
 	    	server_variable
@@ -206,6 +220,13 @@
 			server_name = #{serverName}
 	</delete>
 	
+	<delete id="deleteDbServerVariableByProject">
+	    DELETE FROM
+	    	server_variable
+	    WHERE
+			project_name = #{projectName}
+	</delete>
+	
 	<delete id="deleteDbRoleVariable">
 	    DELETE FROM
 	    	role_variable
@@ -221,6 +242,13 @@
 	    WHERE
 			project_name = #{projectName} AND
 			role_name = #{roleName}
+	</delete>
+	
+	<delete id="deleteDbRoleVariableByProject">
+	    DELETE FROM
+	    	role_variable
+	    WHERE
+			project_name = #{projectName}
 	</delete>
 	
 </mapper>

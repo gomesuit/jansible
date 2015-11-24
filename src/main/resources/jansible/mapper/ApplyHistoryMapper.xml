@@ -62,4 +62,11 @@
 			apply_histroy_id = #{applyHistroyId}
 	</select>
 	
+	<delete id="deleteApplyHistoryByProject">
+	    DELETE FROM
+	    	apply_history
+	    WHERE
+			project_name = #{projectName}
+	</delete>
+	
 </mapper>

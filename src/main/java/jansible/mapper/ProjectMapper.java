@@ -11,4 +11,5 @@ public interface ProjectMapper {
 	DbProject selectProject(ProjectKey projectKey);
 	
 	void updateJenkinsInfo(DbProject dbProject);
+	void deleteProject(ProjectKey projectKey);
 }

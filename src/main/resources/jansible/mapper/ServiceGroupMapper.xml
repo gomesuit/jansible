@@ -48,6 +48,13 @@
 			environment_name = #{environmentName}
 	</delete>
 	
+	<delete id="deleteServiceGroupByProject">
+	    DELETE FROM
+	    	service_group
+	    WHERE
+			project_name = #{projectName}
+	</delete>
+	
 	<insert id="insertDbRoleRelation" parameterType="DbRoleRelation">
 		INSERT INTO role_relation
 			(
@@ -111,6 +118,13 @@
 	    WHERE
 			project_name = #{projectName} AND
 			environment_name = #{environmentName}
+	</delete>
+	
+	<delete id="deleteDbRoleRelationByProject">
+	    DELETE FROM
+	    	role_relation
+	    WHERE
+			project_name = #{projectName}
 	</delete>
 	
 	<insert id="insertDbServerRelation" parameterType="DbServerRelation">
@@ -181,6 +195,13 @@
 	    WHERE
 			project_name = #{projectName} AND
 			environment_name = #{environmentName}
+	</delete>
+	
+	<delete id="deleteDbServerRelationByProject">
+	    DELETE FROM
+	    	server_relation
+	    WHERE
+			project_name = #{projectName}
 	</delete>
 	
 </mapper>

@@ -10,4 +10,5 @@ public interface EnvironmentMapper {
 	void insertEnvironment(DbEnvironment dbEnvironment);
 	List<DbEnvironment> selectEnvironmentList(ProjectKey projectKey);
 	void deleteEnvironment(EnvironmentKey environmentKey);
+	void deleteEnvironmentByProject(ProjectKey projectKey);
 }

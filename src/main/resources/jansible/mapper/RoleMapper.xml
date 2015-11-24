@@ -35,6 +35,13 @@
 			role_name = #{roleName}
 	</delete>
 	
+	<delete id="deleteRoleByProject">
+		DELETE FROM
+			role
+		WHERE
+			project_name = #{projectName}
+	</delete>
+	
 	<insert id="insertDbFile" parameterType="DbFile">
 		INSERT INTO file
 			(
@@ -106,6 +113,13 @@
 			role_name = #{roleName}
 	</delete>
 	
+	<delete id="deleteDbFileByProject">
+	    DELETE FROM
+	    	file
+	    WHERE
+			project_name = #{projectName}
+	</delete>
+	
 	<delete id="deleteDbTemplate" parameterType="TemplateKey">
 	    DELETE FROM
 	    	template
@@ -121,6 +135,13 @@
 	    WHERE
 			project_name = #{projectName} AND
 			role_name = #{roleName}
+	</delete>
+	
+	<delete id="deleteDbTemplateByProject">
+	    DELETE FROM
+	    	template
+	    WHERE
+			project_name = #{projectName}
 	</delete>
 	
 </mapper>

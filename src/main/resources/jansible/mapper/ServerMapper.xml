@@ -75,6 +75,13 @@
 			server_name = #{serverName}
 	</delete>
 	
+	<delete id="deleteServerByProject">
+	    DELETE FROM
+	    	server
+	    WHERE
+			project_name = #{projectName}
+	</delete>
+	
 	<insert id="insertServerParameter" parameterType="DbServerParameter">
 		INSERT INTO server_parameter
 			(
@@ -120,6 +127,13 @@
 	    WHERE
 			project_name = #{projectName} AND
 			server_name = #{serverName}
+	</delete>
+	
+	<delete id="deleteServerParameterByProject">
+	    DELETE FROM
+	    	server_parameter
+	    WHERE
+			project_name = #{projectName}
 	</delete>
 	
 </mapper>

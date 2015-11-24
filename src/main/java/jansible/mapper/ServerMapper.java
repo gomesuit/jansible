@@ -16,9 +16,11 @@ public interface ServerMapper {
 	List<DbServer> selectServerListByEnvironment(EnvironmentKey environmentKey);
 	List<DbServer> selectServerListByServiceGroup(ServiceGroupKey serviceGroupKey);
 	void deleteServer(ServerKey serverKey);
+	void deleteServerByProject(ProjectKey projectKey);
 
 	void insertServerParameter(DbServerParameter abServerParameter);
 	List<DbServerParameter> selectServerParameterList(ServerKey serverKey);
 	void deleteServerParameter(ServerParameterKey serverParameterKey);
 	void deleteServerParameterByServer(ServerKey serverKey);
+	void deleteServerParameterByProject(ProjectKey projectKey);
 }

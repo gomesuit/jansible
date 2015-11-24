@@ -31,14 +31,18 @@ public interface VariableMapper {
 	
 	void deleteDbEnvironmentVariable(EnvironmentVariableKey environmentVariableKey);
 	void deleteDbEnvironmentVariableByEnvironment(EnvironmentKey environmentKey);
+	void deleteDbEnvironmentVariableByProject(ProjectKey projectKey);
 	
 	void deleteDbServiceGroupVariable(ServiceGroupVariableKey serviceGroupVariableKey);
 	void deleteDbServiceGroupVariableByServiceGroup(ServiceGroupKey serviceGroupKey);
 	void deleteDbServiceGroupVariableByEnvironment(EnvironmentKey environmentKey);
+	void deleteDbServiceGroupVariableByProject(ProjectKey projectKey);
 	
 	void deleteDbServerVariable(ServerVariableKey serverVariableKey);
 	void deleteDbServerVariableByServer(ServerKey serverKey);
+	void deleteDbServerVariableByProject(ProjectKey projectKey);
 	
 	void deleteDbRoleVariable(RoleVariableKey roleVariableKey);
 	void deleteDbRoleVariableByRole(RoleKey roleKey);
+	void deleteDbRoleVariableByProject(ProjectKey projectKey);
 }

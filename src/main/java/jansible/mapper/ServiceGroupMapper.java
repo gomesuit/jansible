@@ -16,12 +16,14 @@ public interface ServiceGroupMapper {
 	List<DbServiceGroup> selectServiceGroupList(EnvironmentKey environmentKey);
 	void deleteServiceGroup(ServiceGroupKey serviceGroupKey);
 	void deleteServiceGroupByEnvironment(EnvironmentKey environmentKey);
+	void deleteServiceGroupByProject(ProjectKey projectKey);
 	
 	void insertDbRoleRelation(DbRoleRelation dbRoleRelation);
 	List<DbRoleRelation> selectDbRoleRelationList(ServiceGroupKey serviceGroupKey);
 	void deleteDbRoleRelation(RoleRelationKey roleRelationKey);
 	void deleteDbRoleRelationByServiceGroup(ServiceGroupKey serviceGroupKey);
 	void deleteDbRoleRelationByEnvironment(EnvironmentKey environmentKey);
+	void deleteDbRoleRelationByProject(ProjectKey projectKey);
 	
 	void insertDbServerRelation(DbServerRelation dbServerRelation);
 	List<DbServerRelation> selectDbServerRelationList(ServiceGroupKey serviceGroupKey);
@@ -29,4 +31,5 @@ public interface ServiceGroupMapper {
 	void deleteDbServerRelation(ServerRelationKey serverRelationKey);
 	void deleteDbServerRelationByServiceGroup(ServiceGroupKey serviceGroupKey);
 	void deleteDbServerRelationByEnvironment(EnvironmentKey environmentKey);
+	void deleteDbServerRelationByProject(ProjectKey projectKey);
 }

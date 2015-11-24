@@ -35,4 +35,11 @@
 			environment_name = #{environmentName}
 	</delete>
 	
+	<delete id="deleteApplyHistoryByProject">
+	    DELETE FROM
+	    	environment
+	    WHERE
+			project_name = #{projectName}
+	</delete>
+	
 </mapper>

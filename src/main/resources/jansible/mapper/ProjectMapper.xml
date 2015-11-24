@@ -49,4 +49,11 @@
 			project_name = #{projectName}
 	</update>
 	
+	<delete id="deleteProject">
+	    DELETE FROM
+	    	project
+	    WHERE
+			project_name = #{projectName}
+	</delete>
+	
 </mapper>
