@@ -36,7 +36,7 @@ public class ApplyController {
 		BuildForm buildForm = new BuildForm(serviceGroupKey);
 		model.addAttribute("buildForm", buildForm);
 		
-	    return "project/apply/top";
+	    return "project/apply/group";
 	}
 
 	@RequestMapping("/applyServer/view")
