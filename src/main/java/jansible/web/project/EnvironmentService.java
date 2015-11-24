@@ -14,7 +14,11 @@ import jansible.model.database.DbServiceGroup;
 import jansible.web.project.project.EnvironmentForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 @Service
 public class EnvironmentService {
@@ -30,6 +34,9 @@ public class EnvironmentService {
 	@Autowired
 	private JansibleFiler jansibleFiler;
 
+	@Autowired
+	private DataSourceTransactionManager transactionManager;
+
 	public List<DbEnvironment> getEnvironmentList(ProjectKey projectKey){
 		return environmentMapper.selectEnvironmentList(projectKey);
 	}
@@ -40,16 +47,25 @@ public class EnvironmentService {
 	}
 
 	public void deleteEnvironment(EnvironmentKey environmentKey){
-		environmentMapper.deleteEnvironment(environmentKey);
-		serviceGroupMapper.deleteServiceGroupByEnvironment(environmentKey);
-		serviceGroupMapper.deleteDbRoleRelationByEnvironment(environmentKey);
-		serviceGroupMapper.deleteDbServerRelationByEnvironment(environmentKey);
-		variableMapper.deleteDbEnvironmentVariableByEnvironment(environmentKey);
-		variableMapper.deleteDbServiceGroupVariableByEnvironment(environmentKey);
+    	DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    	TransactionStatus status = transactionManager.getTransaction(def);
 		
-		List<DbServiceGroup> dbServiceGroupList = serviceGroupMapper.selectServiceGroupList(environmentKey);
-		for(DbServiceGroup dbServiceGroup : dbServiceGroupList){
-			jansibleFiler.deleteGroupVariableYaml(dbServiceGroup);
+		try {
+			environmentMapper.deleteEnvironment(environmentKey);
+			serviceGroupMapper.deleteServiceGroupByEnvironment(environmentKey);
+			serviceGroupMapper.deleteDbRoleRelationByEnvironment(environmentKey);
+			serviceGroupMapper.deleteDbServerRelationByEnvironment(environmentKey);
+			variableMapper.deleteDbEnvironmentVariableByEnvironment(environmentKey);
+			variableMapper.deleteDbServiceGroupVariableByEnvironment(environmentKey);
+			List<DbServiceGroup> dbServiceGroupList = serviceGroupMapper.selectServiceGroupList(environmentKey);
+			for (DbServiceGroup dbServiceGroup : dbServiceGroupList) {
+				jansibleFiler.deleteGroupVariableYaml(dbServiceGroup);
+			}
+		} catch (Exception e) {
+			transactionManager.rollback(status);
+			throw e;
 		}
+		transactionManager.commit(status);
 	}
 }
