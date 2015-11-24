@@ -126,6 +126,11 @@ public class JansibleFiler {
 		deleteDirByRecursive(dirName);
 	}
 	
+	public void deleteProjectDir(ProjectKey projectKey){
+		String dirName = getProjectDirName(projectKey);
+		deleteDirByRecursive(dirName);
+	}
+	
 	public void deleteRolesDir(ProjectKey projectKey){
 		String dirName = getRolesDirName(projectKey);
 		deleteDirByRecursive(dirName);

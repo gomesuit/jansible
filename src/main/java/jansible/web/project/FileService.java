@@ -69,6 +69,10 @@ public class FileService {
 	public void deleteRoleDir(RoleKey roleKey){
 		jansibleFiler.deleteRoleDir(roleKey);
 	}
+	
+	public void deleteProjectDir(ProjectKey projectKey){
+		jansibleFiler.deleteProjectDir(projectKey);
+	}
 
 	public void outputProjectData(ProjectKey projectKey){
 		jansibleFiler.mkHostVariableDir(projectKey);
@@ -216,13 +220,11 @@ public class FileService {
 		for(DbServer dbServer : dbServerList){
 			outputServerVariableData(dbServer);
 		}
-
-		jansibleFiler.deleteRolesDir(projectKey);
+		
 		List<DbRole> dbRoleList = roleMapper.selectRoleList(projectKey);
 		for(DbRole dbRole : dbRoleList){
 			outputRoleData(dbRole);
 			outputTaskData(dbRole);
 		}
-		
 	}
 }
