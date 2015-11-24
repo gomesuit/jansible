@@ -71,6 +71,7 @@ public class ProjectService {
 			fileService.deleteProjectDir(form);
 			throw e;
 		}
+		transactionManager.commit(status);
 	}
 
 	public List<DbProject> getProjectList(){
@@ -87,7 +88,6 @@ public class ProjectService {
     	TransactionStatus status = transactionManager.getTransaction(def);
 
 		try {
-			transactionManager.commit(status);
 			projectMapper.deleteProject(projectKey);
 			environmentMapper.deleteEnvironmentByProject(projectKey);
 			applyHistoryMapper.deleteApplyHistoryByProject(projectKey);
@@ -109,5 +109,6 @@ public class ProjectService {
 			transactionManager.rollback(status);
 			throw e;
 		}
+		transactionManager.commit(status);
 	}
 }
