@@ -15,6 +15,10 @@ public class ServerBuildForm extends ServerRelationKey implements GitOperationIn
 		super(serviceGroupKey, serviceGroupKey.getGroupName());
 	}
 
+	public ServerBuildForm(ServerRelationKey serverRelationKey){
+		super(serverRelationKey, serverRelationKey.getServerName());
+	}
+
 	public String getUserName() {
 		return userName;
 	}

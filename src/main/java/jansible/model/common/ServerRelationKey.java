@@ -10,7 +10,7 @@ public class ServerRelationKey extends ServiceGroupKey{
 	}
 	
 	public ServerRelationKey(ServiceGroupKey serviceGroupKey, String serverName){
-		super(serviceGroupKey, serviceGroupKey.getGroupName());
+		this(serviceGroupKey);
 		this.serverName = serverName;
 	}
 

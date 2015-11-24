@@ -68,7 +68,7 @@ public class JenkinsBuildService {
 		applyHistoryMapper.insertDbApplyHistory(dbApplyHistory);
 	}
 
-	public void build(BuildForm form) throws Exception{
+	public void groupBuild(BuildForm form) throws Exception{
 		String tagName = getTagName(form);
 		jansibleGitter.tagAndPush(form, form, tagName);
 		

@@ -26,6 +26,34 @@
 		</table>
 		
 		<br />
+		<div>対象サーバ</div>
+		<table border="1" rules="all">
+			<tr>
+				<td>serverName</td>
+			</tr>
+			<tr th:each="server : ${serverList}">
+				<td>
+					<a th:href="@{/server/view(projectName=${server.projectName}, serverName=${server.serverName})}"
+					th:text="${server.serverName}" />
+				</td>
+			</tr>
+		</table>
+		
+		<br />
+		<div>適用ロール</div>
+		<table border="1" rules="all">
+			<tr>
+				<td>roleName</td>
+			</tr>
+			<tr th:each="role : ${roleList}">
+				<td>
+					<a th:href="@{/role/view(projectName=${role.projectName}, roleName=${role.roleName})}"
+					th:text="${role.roleName}" />
+				</td>
+			</tr>
+		</table>
+		
+		<br />
 		<table border="1" rules="all">
 			<tr>
 				<td>userName</td>

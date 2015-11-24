@@ -2,9 +2,13 @@ package jansible.web.project.apply;
 
 import javax.servlet.http.HttpServletRequest;
 
+import jansible.model.common.ServerRelationKey;
 import jansible.model.common.ServiceGroupKey;
+import jansible.web.project.GroupService;
 import jansible.web.project.JenkinsBuildService;
 import jansible.web.project.ProjectService;
+import jansible.web.project.RoleService;
+import jansible.web.project.ServerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +24,12 @@ public class ApplyController {
 	private ProjectService projectService;
 	@Autowired
 	private JenkinsBuildService jenkinsBuildService;
+	@Autowired
+	private ServerService serverService;
+	@Autowired
+	private GroupService groupService;
+	@Autowired
+	private RoleService roleService;
 
 	@RequestMapping("/apply/view")
 	private String viewApply(
@@ -33,8 +43,10 @@ public class ApplyController {
 		serviceGroupKey.setEnvironmentName(environmentName);
 		serviceGroupKey.setGroupName(groupName);
 		
-		BuildForm buildForm = new BuildForm(serviceGroupKey);
-		model.addAttribute("buildForm", buildForm);
+		model.addAttribute("buildForm", new BuildForm(serviceGroupKey));
+
+		model.addAttribute("serverList", groupService.getServerRelationList(serviceGroupKey));
+		model.addAttribute("roleList", groupService.getRoleRelationList(serviceGroupKey));
 		
 	    return "project/apply/group";
 	}
@@ -47,19 +59,22 @@ public class ApplyController {
 			@RequestParam(value = "serverName", required = true) String serverName,
 			Model model){
 		
-		ServerBuildForm buildForm = new ServerBuildForm();
-		buildForm.setProjectName(projectName);
-		buildForm.setEnvironmentName(environmentName);
-		buildForm.setGroupName(groupName);
-		buildForm.setServerName(serverName);
-		model.addAttribute("buildForm", buildForm);
+		ServerRelationKey serverRelationKey = new ServerRelationKey();
+		serverRelationKey.setProjectName(projectName);
+		serverRelationKey.setEnvironmentName(environmentName);
+		serverRelationKey.setGroupName(groupName);
+		serverRelationKey.setServerName(serverName);
+		
+		model.addAttribute("buildForm", new ServerBuildForm(serverRelationKey));
+
+		model.addAttribute("roleList", groupService.getRoleRelationList(serverRelationKey));
 		
 	    return "project/apply/server";
 	}
 
 	@RequestMapping(value="/project/jenkins/build", method=RequestMethod.POST)
-	private String build(@ModelAttribute BuildForm form, HttpServletRequest request) throws Exception{
-		jenkinsBuildService.build(form);
+	private String groupBuild(@ModelAttribute BuildForm form, HttpServletRequest request) throws Exception{
+		jenkinsBuildService.groupBuild(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
