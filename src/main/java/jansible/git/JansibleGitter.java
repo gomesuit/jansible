@@ -37,11 +37,7 @@ public class JansibleGitter {
 	
 	public void cloneRepository(ProjectKey projectKey, String url) throws Exception {
 		String projectDirName = jansibleFiler.getProjectDirName(projectKey);
-		cloneRepository(url, projectDirName);
-	}
-	
-	private void cloneRepository(String url, String localPath) throws Exception {
-		callClone(url, localPath);
+		callClone(url, projectDirName);
 	}
 	
 	public void commitAndPush(ProjectKey projectKey, String name, String pass, String comment) throws Exception{

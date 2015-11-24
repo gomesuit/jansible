@@ -1,4 +1,4 @@
-package jansible.util;
+package jansible.model.yamldump;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -9,11 +9,6 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
-
-import jansible.model.yamldump.Conditional;
-import jansible.model.yamldump.StartYaml;
-import jansible.model.yamldump.YamlModule;
-import jansible.model.yamldump.YamlVariable;
 
 @Service
 public class YamlDumper {

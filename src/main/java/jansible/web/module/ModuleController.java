@@ -6,10 +6,10 @@ import java.util.List;
 
 import jansible.model.gethtml.HtmlModule;
 import jansible.model.gethtml.HtmlParameter;
+import jansible.model.yamldump.YamlDumper;
 import jansible.model.yamldump.YamlModule;
 import jansible.model.yamldump.YamlParameter;
 import jansible.model.yamldump.YamlParameters;
-import jansible.util.YamlDumper;
 import jansible.web.module.form.FormParameter;
 import jansible.web.module.form.ModuleForm;
 import jansible.webget.ModuleGetter;

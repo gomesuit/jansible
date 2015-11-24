@@ -28,9 +28,9 @@ import jansible.model.database.DbServiceGroup;
 import jansible.model.database.DbServiceGroupVariable;
 import jansible.model.database.DbTask;
 import jansible.model.yamldump.StartYaml;
+import jansible.model.yamldump.YamlDumper;
 import jansible.model.yamldump.YamlModule;
 import jansible.model.yamldump.YamlVariable;
-import jansible.util.YamlDumper;
 
 import java.util.ArrayList;
 import java.util.List;
