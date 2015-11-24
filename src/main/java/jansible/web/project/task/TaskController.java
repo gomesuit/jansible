@@ -59,26 +59,28 @@ public class TaskController {
 		String moduleName = dbTask.getModuleName();
 		model.addAttribute("moduleName", moduleName);
 		
-		HtmlModule module = moduleService.getModule(moduleName);
-	
+		// タスク詳細
 		TaskDetailForm form = new TaskDetailForm(taskKey);
 		form.setDescription(dbTask.getDescription());
+		HtmlModule module = moduleService.getModule(moduleName);
 		List<TaskParameter> taskParameterList = createBlankTaskParameterList(module);
 		List<DbTaskDetail> dbTaskDetailList = taskService.getTaskDetailList(taskKey);
 		mergeParameterList(taskParameterList, dbTaskDetailList);
 		form.setTaskParameterList(taskParameterList);
 		model.addAttribute("form", form);
 		
-		TaskConditionalForm taskConditionalForm = new TaskConditionalForm(taskKey);
-		model.addAttribute("taskConditionalForm", taskConditionalForm);
+		// Conditional関連
+		model.addAttribute("taskConditionalForm", new TaskConditionalForm(taskKey));
 		model.addAttribute("taskConditionalList", taskService.getTaskConditionalList(taskKey));
 		model.addAttribute("taskConditionalKey", new TaskConditionalKey(taskKey));
-	
+		
+		// yamlプレビュー
 		List<DbTask> dbTaskList = new ArrayList<>();
 		dbTaskList.add(dbTask);
 		List<YamlModule> modules = yamlService.createYamlModuleList(dbTaskList);
 		model.addAttribute("taskYaml", yamlDumper.dump(modules).replaceAll("\n", "<br />"));
 		
+		// 変数一覧
 		model.addAttribute("variableList", variableService.getDbRoleVariableList(taskKey));
 		
 	    return "project/task/top";

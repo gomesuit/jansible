@@ -45,28 +45,26 @@ public class GroupController {
     	serviceGroupKey.setEnvironmentName(environmentName);
     	serviceGroupKey.setGroupName(groupName);
 		
+    	//サーバ関連
 		model.addAttribute("serverRelationForm", new ServerRelationForm(serviceGroupKey));
     	model.addAttribute("serverList", serverService.getServerListByEnvironment(serviceGroupKey));
 		model.addAttribute("serverRelationList", groupService.getServerRelationList(serviceGroupKey));
     	model.addAttribute("serverRelationKey", new ServerRelationKey(serviceGroupKey));
-		
-		model.addAttribute("roleRelationForm", new RoleRelationForm(serviceGroupKey));
+    	
+    	//ロール一覧
     	model.addAttribute("roleList", roleService.getRoleList(serviceGroupKey));
+    	
+    	//ロール関連
+		model.addAttribute("roleRelationForm", new RoleRelationForm(serviceGroupKey));
 		model.addAttribute("roleRelationList", groupService.getRoleRelationList(serviceGroupKey));
     	model.addAttribute("roleRelationKey", new RoleRelationKey(serviceGroupKey));
-		
-		RoleRelationOrderForm roleRelationOrderForm = new RoleRelationOrderForm(serviceGroupKey);
-    	model.addAttribute("roleRelationOrderForm", roleRelationOrderForm);
+    	model.addAttribute("roleRelationOrderForm", new RoleRelationOrderForm(serviceGroupKey));
     	
-		
-		ServiceGroupVariableForm variableForm = new ServiceGroupVariableForm(serviceGroupKey);
-		model.addAttribute("variableForm", variableForm);
-		
+    	//変数関連
+		model.addAttribute("variableForm", new ServiceGroupVariableForm(serviceGroupKey));
 		model.addAttribute("allVariableNameList", variableService.getAllDbVariableNameList(serviceGroupKey));
 		model.addAttribute("groupVariableList", variableService.getDbServiceGroupVariableList(serviceGroupKey));
-		
-		ServiceGroupVariableKey serviceGroupVariableKey = new ServiceGroupVariableKey(serviceGroupKey);
-		model.addAttribute("serviceGroupVariableKey", serviceGroupVariableKey);
+		model.addAttribute("serviceGroupVariableKey", new ServiceGroupVariableKey(serviceGroupKey));
 		
 	    return "project/service_group/top";
 	}

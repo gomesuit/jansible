@@ -37,18 +37,16 @@ public class ServerController {
     	serverKey.setProjectName(projectName);
     	serverKey.setServerName(serverName);
     	
+    	// サーバパラメータ関連
 		model.addAttribute("serverParameterForm", new ServerParameterForm(serverKey));
 		model.addAttribute("serverParameterList", serverService.getServerParameterList(serverKey));
 		model.addAttribute("serverParameterKey", new ServerParameterKey(serverKey));
-
-    	ServerVariableForm variableForm = new ServerVariableForm(serverKey);
-		model.addAttribute("variableForm", variableForm);
 		
+		// 変数関連
+		model.addAttribute("variableForm", new ServerVariableForm(serverKey));		
 		model.addAttribute("allVariableNameList", variableService.getAllDbVariableNameList(serverKey));
 		model.addAttribute("variableList", variableService.getDbServerVariableList(serverKey));
-		
-		ServerVariableKey serverVariableKey = new ServerVariableKey(serverKey);
-		model.addAttribute("serverVariableKey", serverVariableKey);
+		model.addAttribute("serverVariableKey", new ServerVariableKey(serverKey));
 
 		return "project/server/top";
 	}

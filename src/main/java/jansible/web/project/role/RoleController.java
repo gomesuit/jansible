@@ -50,37 +50,29 @@ public class RoleController {
 		roleKey.setProjectName(projectName);
 		roleKey.setRoleName(roleName);
 		
-		TaskForm form = new TaskForm(roleKey);
-		
-		model.addAttribute("form", form);
+		// タスク関連
+		model.addAttribute("form", new TaskForm(roleKey));
 		List<DbTask> dbTaskList = taskService.getTaskList(roleKey);
 		List<TaskView> taskViewList = createTaskViewList(dbTaskList);
 		model.addAttribute("taskList", taskViewList);
-		
-		TaskKey taskKey = new TaskKey(roleKey);
-		model.addAttribute("taskKey", taskKey);
-
-		TaskOrderForm taskOrderForm = new TaskOrderForm(roleKey);
-		model.addAttribute("taskOrderForm", taskOrderForm);
+		model.addAttribute("taskKey", new TaskKey(roleKey));
+		model.addAttribute("taskOrderForm", new TaskOrderForm(roleKey));
 		
 		// module名リスト
 		model.addAttribute("moduleNameList", moduleService.getModuleNameList());
-		
-		UploadForm uploadForm = new UploadForm(roleKey);
-		model.addAttribute("uploadForm", uploadForm);
-	
+
+		// テンプレート・ファイル アップロード
+		model.addAttribute("uploadForm", new UploadForm(roleKey));
+		// テンプレート一覧
 		model.addAttribute("templateList", roleService.getDbTemplateList(roleKey));
+		// ファイル一覧
 		model.addAttribute("fileList", roleService.getDbFileList(roleKey));
+		// テンプレート・ファイル削除
+		model.addAttribute("fileForm", new GeneralFileForm(roleKey));
 		
-		GeneralFileForm fileForm = new GeneralFileForm(roleKey);
-		model.addAttribute("fileForm", fileForm);
-		
-		RoleVariableForm roleVariableForm = new RoleVariableForm(roleKey);
-		model.addAttribute("variableForm", roleVariableForm);
-	
-		RoleVariableKey roleVariableKey = new RoleVariableKey(roleKey);
-		model.addAttribute("roleVariableKey", roleVariableKey);
-		
+		// 変数関連
+		model.addAttribute("variableForm", new RoleVariableForm(roleKey));
+		model.addAttribute("roleVariableKey", new RoleVariableKey(roleKey));
 		model.addAttribute("variableList", variableService.getDbRoleVariableList(roleKey));
 		
 	    return "project/role/top";

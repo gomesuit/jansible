@@ -57,40 +57,42 @@ public class ProjectController {
     	
     	ProjectKey projectKey = new ProjectKey(projectName);
     	
+    	// 環境
 		model.addAttribute("environmentForm", new EnvironmentForm(projectKey));
 		model.addAttribute("environmentList", environmentService.getEnvironmentList(projectKey));
-		
 		model.addAttribute("environmentKey", new EnvironmentKey(projectKey));
 		
+		// ロール
 		model.addAttribute("roleForm", new RoleForm(projectKey));
 		model.addAttribute("roleList", roleService.getRoleList(projectKey));
-	
 		model.addAttribute("roleKey", new RoleKey(projectKey));
-
+		
+		// Jenkins情報
 		model.addAttribute("project", projectService.getProject(projectKey));
-		
-		model.addAttribute("gitForm", new GitForm(projectKey));
-		
-		model.addAttribute("groupList", getGroupList(projectKey));
-		model.addAttribute("serverbuildList", groupService.getAllDbServerRelationList(projectKey));
-		
 		DbProject dbProject = projectService.getProject(projectKey);
 		JenkinsInfoForm jenkinsInfoForm = new JenkinsInfoForm(dbProject);
 		jenkinsInfoForm.setJenkinsIpAddress(dbProject.getJenkinsIpAddress());
 		jenkinsInfoForm.setJenkinsPort(dbProject.getJenkinsPort());
 		jenkinsInfoForm.setJenkinsJobName(dbProject.getJenkinsJobName());
 		model.addAttribute("jenkinsInfoForm", jenkinsInfoForm);
-
+		
+		// Git commit
+		model.addAttribute("gitForm", new GitForm(projectKey));
+		
+		// 適用対象一覧
+		model.addAttribute("groupList", getGroupList(projectKey));
+		model.addAttribute("serverbuildList", groupService.getAllDbServerRelationList(projectKey));
+		
+		// 適用履歴
 		model.addAttribute("applyHistoryList", applyService.getDbApplyHistoryList(projectKey));
 		
-		RebuildForm rebuildForm = new RebuildForm(projectKey);
-		model.addAttribute("rebuildForm", rebuildForm);
+		// 再実行
+		model.addAttribute("rebuildForm", new RebuildForm(projectKey));
 		
-		ServerForm serverForm = new ServerForm(projectKey);
-		model.addAttribute("serverForm", serverForm);
+		// サーバ関連
+		model.addAttribute("serverForm", new ServerForm(projectKey));
 		model.addAttribute("serverList", serverService.getServerList(projectKey));
-		ServerKey serverKey = new ServerKey(projectKey);
-		model.addAttribute("serverKey", serverKey);
+		model.addAttribute("serverKey", new ServerKey(projectKey));
 		
 	    return "project/project/top";
 	}
