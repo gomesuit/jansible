@@ -28,9 +28,16 @@
 	<table border="1" rules="all">
 		<tr>
 			<td>project</td>
+			<td>Delete</td>
 		</tr>
 		<tr th:each="project : ${projectList}">
 			<td><a th:href="@{/project/view(projectName=${project.projectName})}" th:text="${project.projectName}" /></td>
+			<td>
+				<form method="POST" th:action="@{/project/delete}" th:object="${projectKey}">
+					<input type="hidden" name="projectName" th:value="${project.projectName}" />
+					<input type="submit" value="Delete" />
+				</form>
+			</td>
 		</tr>
 	</table>
 </body>

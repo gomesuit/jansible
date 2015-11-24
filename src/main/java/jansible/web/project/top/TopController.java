@@ -2,6 +2,7 @@ package jansible.web.project.top;
 
 import javax.servlet.http.HttpServletRequest;
 
+import jansible.model.common.ProjectKey;
 import jansible.web.project.ProjectService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,21 @@ public class TopController {
     private String top(Model model){
     	model.addAttribute("form", new ProjectForm());
     	model.addAttribute("projectList", projectService.getProjectList());
+    	model.addAttribute("projectKey", new ProjectKey());
         return "project/top";
     }
 
     @RequestMapping(value="/project/regist", method=RequestMethod.POST)
 	private String registProject(@ModelAttribute ProjectForm form, HttpServletRequest request) throws Exception{
 		projectService.registProject(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+    @RequestMapping(value="/project/delete", method=RequestMethod.POST)
+	private String deleteProject(@ModelAttribute ProjectKey key, HttpServletRequest request) throws Exception{
+		projectService.deleteProject(key);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
