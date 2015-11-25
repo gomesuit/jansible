@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta content="ja" http-equiv="Content-Language" />
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<title>sample page</title>
+</head>
+<body>
+	<div>タスクの画面です</div>
+	
+	<br /><hr /><br />
+	<div th:text="${moduleName}" />
+	<form action="#" th:action="@{/manager/taskdetail/regist}" th:object="${form}" method="post">
+		<input type="hidden" th:field="*{taskId}" />
+		<input type="hidden" th:field="*{roleName}" />
+		description:
+		<input type="text" th:field="*{description}" />
+		<table border="1" rules="all">
+			<tr>
+				<td>parameterName</td>
+				<td>parameterValue</td>
+				<td>addedVersion</td>
+				<td>required</td>
+				<td>defaultValue</td>
+				<td>choices</td>
+				<td>description</td>
+			</tr>
+			<tr th:each="taskParameter,stat : *{taskParameterList}">
+				<td>
+					<div th:text="${taskParameter.parameterName}"/>
+					<input type="hidden" th:field="*{taskParameterList[__${stat.index}__].parameterName}" />
+				</td>
+				<td><input type="text" th:field="*{taskParameterList[__${stat.index}__].parameterValue}" /></td>
+				<td th:text="${taskParameter.addedVersion}" />
+				<td th:text="${taskParameter.required}" />
+				<td th:text="${taskParameter.defaultValue}" />
+				<td th:text="${taskParameter.choices}" />
+				<td th:text="${taskParameter.description}" />
+			</tr>
+		</table>
+		<input type="submit" value="Submit" />
+	</form>
+	
+	<div>Conditional</div>
+	<div>登録</div>
+	<form action="#" th:action="@{/manager/taskConditional/regist}" th:object="${taskConditionalForm}" method="post">
+		<input type="hidden" th:field="*{taskId}" />
+		<input type="hidden" th:field="*{roleName}" />
+		<table border="1" rules="all">
+			<tr>
+				<td>conditionalName</td>
+				<td>conditionalValue</td>
+			</tr>
+			<tr>
+				<td>
+					<select size="1" th:field="*{conditionalName}">
+						<option value="when" label="when" />
+						<option value="register" label="register" />
+						<option value="ignore_errors" label="ignore_errors" />
+					</select>
+				</td>
+				<td><input type="text" th:field="*{conditionalValue}" /></td>
+			</tr>
+		</table>
+		<input type="submit" value="Submit" />
+	</form>
+	<div>一覧</div>
+	<table border="1" rules="all">
+		<tr>
+			<td>conditionalName</td>
+			<td>conditionalValue</td>
+			<td>Delete</td>
+		</tr>
+		<tr th:each="taskConditional : ${taskConditionalList}">
+			<td th:text="${taskConditional.conditionalName}" />
+			<td th:text="${taskConditional.conditionalValue}" />
+			<form method="POST" th:action="@{/manager/taskConditional/delete}" th:object="${taskConditionalKey}">
+				<input type="hidden" th:field="*{taskId}" />
+				<input type="hidden" th:field="*{roleName}" />
+				<input type="hidden" name="conditionalName" th:value="${taskConditional.conditionalName}" />
+				<td><input type="submit" value="Delete" /></td>
+			</form>
+		</tr>
+	</table>
+	
+	<br /><hr /><br />
+	<div>プレビュー</div>
+	<pre th:utext="${taskPreview}" />
+	
+	<br /><hr /><br />
+	<div>【変数一覧】</div>
+	<table border="1" rules="all">
+		<tr>
+			<td>variable</td>
+		</tr>
+		<tr th:each="variable : ${variableList}">
+			<td th:text="${variable.variableName}" />
+		</tr>
+	</table>
+	
+	<br /><hr />
+	<a th:href="@{/manager/role/view(roleName=${form.roleName})}" >戻る</a>
+	<a th:href="@{/manager}" >トップ</a>
+</body>
+</html>
