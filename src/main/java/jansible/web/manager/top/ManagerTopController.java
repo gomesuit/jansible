@@ -8,12 +8,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class TopController {
+public class ManagerTopController {
 	@Autowired
 	private ProjectService projectService;
     
-    @RequestMapping("/manager/top")
+    @RequestMapping("/manager")
     private String top(Model model){
-        return "project/top";
+        return "manager/top";
     }
 }
