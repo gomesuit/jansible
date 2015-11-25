@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jansible.mapper.RoleMapper">
+	
+	<insert id="insertRole" parameterType="DbGlobalRole">
+		INSERT INTO global_role
+			(
+				role_name
+			)
+		VALUES
+			(
+				#{roleName}
+			)
+	</insert>
+	
+	<select id="selectRoleList" resultType="DbGlobalRole">
+		SELECT
+			role_name as roleName
+		FROM
+			global_role
+	</select>
+	
+	<delete id="deleteRole">
+		DELETE FROM
+			global_role
+		WHERE
+			role_name = #{roleName}
+	</delete>
+	
+	<insert id="insertDbFile" parameterType="DbGlobalRoleFile">
+		INSERT INTO global_role_file
+			(
+				role_name,
+				file_name
+			)
+		VALUES
+			(
+				#{roleName},
+				#{fileName}
+			)
+	</insert>
+	
+	<select id="selectDbFileList" resultType="DbGlobalRoleFile">
+		SELECT
+			role_name as roleName,
+			file_name as fileName
+		FROM
+			global_role_file
+		WHERE
+			role_name = #{roleName}
+	</select>
+	
+	<delete id="deleteDbFile">
+	    DELETE FROM
+	    	global_role_file
+	    WHERE
+			role_name = #{roleName} AND
+			file_name = #{fileName}
+	</delete>
+	
+	<delete id="deleteDbFileByRole">
+	    DELETE FROM
+	    	global_role_file
+	    WHERE
+			role_name = #{roleName}
+	</delete>
+	
+	<insert id="insertDbTemplate" parameterType="DbGlobalRoleTemplate">
+		INSERT INTO global_role_template
+			(
+				role_name,
+				template_name
+			)
+		VALUES
+			(
+				#{roleName},
+				#{templateName}
+			)
+	</insert>
+	
+	<select id="selectDbTemplateList" resultType="DbGlobalRoleTemplate">
+		SELECT
+			role_name as roleName,
+			template_name as templateName
+		FROM
+			global_role_template
+		WHERE
+			role_name = #{roleName}
+	</select>
+	
+	<delete id="deleteDbTemplate">
+	    DELETE FROM
+	    	global_role_template
+	    WHERE
+			role_name = #{roleName} AND
+			template_name = #{templateName}
+	</delete>
+	
+	<delete id="deleteDbTemplateByRole">
+	    DELETE FROM
+	    	global_role_template
+	    WHERE
+			role_name = #{roleName}
+	</delete>
+	
+	
+	
+	<insert id="insertDbRoleVariable" parameterType="DbGlobalRoleVariable">
+		INSERT INTO global_role_variable
+			(
+				role_name,
+				variable_name,
+				value
+			)
+		VALUES
+			(
+				#{roleName},
+				#{variableName},
+				#{value}
+			)
+		ON DUPLICATE KEY UPDATE
+			value = #{value}
+	</insert>
+	
+	<select id="selectDbRoleVariableList" resultType="DbGlobalRoleVariable">
+		SELECT
+			role_name as roleName,
+			variable_name as variableName,
+			value as value
+		FROM
+			global_role_variable
+		WHERE
+			role_name = #{roleName}
+	</select>
+	
+	<delete id="deleteDbRoleVariable">
+	    DELETE FROM
+	    	global_role_variable
+	    WHERE
+			role_name = #{roleName} AND
+			variable_name = #{variableName}
+	</delete>
+	
+	<delete id="deleteDbRoleVariableByRole">
+	    DELETE FROM
+	    	global_role_variable
+	    WHERE
+			role_name = #{roleName}
+	</delete>
+	
+</mapper>

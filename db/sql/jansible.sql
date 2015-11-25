@@ -11,6 +11,13 @@ DROP TABLE IF EXISTS service_group_variable;
 DROP TABLE IF EXISTS service_group;
 DROP TABLE IF EXISTS environment;
 DROP TABLE IF EXISTS file;
+DROP TABLE IF EXISTS global_role_file;
+DROP TABLE IF EXISTS global_role_template;
+DROP TABLE IF EXISTS global_role_variable;
+DROP TABLE IF EXISTS global_task_conditional;
+DROP TABLE IF EXISTS global_task_detail;
+DROP TABLE IF EXISTS global_task;
+DROP TABLE IF EXISTS global_role;
 DROP TABLE IF EXISTS parameter;
 DROP TABLE IF EXISTS task_conditional;
 DROP TABLE IF EXISTS task_detail;
@@ -76,6 +83,69 @@ CREATE TABLE file
 	role_name varchar(30) NOT NULL,
 	file_name varchar(128) NOT NULL,
 	PRIMARY KEY (project_name, role_name, file_name)
+);
+
+
+CREATE TABLE global_role
+(
+	role_name varchar(30) NOT NULL,
+	PRIMARY KEY (role_name)
+);
+
+
+CREATE TABLE global_role_file
+(
+	role_name varchar(30) NOT NULL,
+	file_name varchar(128) NOT NULL,
+	PRIMARY KEY (role_name, file_name)
+);
+
+
+CREATE TABLE global_role_template
+(
+	role_name varchar(30) NOT NULL,
+	template_name varchar(128) NOT NULL,
+	PRIMARY KEY (role_name, template_name)
+);
+
+
+CREATE TABLE global_role_variable
+(
+	role_name varchar(30) NOT NULL,
+	variable_name varchar(80) NOT NULL,
+	value varchar(80),
+	PRIMARY KEY (role_name, variable_name)
+);
+
+
+CREATE TABLE global_task
+(
+	task_id int NOT NULL AUTO_INCREMENT,
+	role_name varchar(30) NOT NULL,
+	module_name varchar(80) NOT NULL,
+	description varchar(512),
+	sort int NOT NULL,
+	PRIMARY KEY (task_id, role_name)
+);
+
+
+CREATE TABLE global_task_conditional
+(
+	task_id int NOT NULL,
+	role_name varchar(30) NOT NULL,
+	conditional_name varchar(80) NOT NULL,
+	conditional_value varchar(256) NOT NULL,
+	PRIMARY KEY (task_id, role_name, conditional_name)
+);
+
+
+CREATE TABLE global_task_detail
+(
+	task_id int NOT NULL,
+	role_name varchar(30) NOT NULL,
+	parameter_name varchar(80) NOT NULL,
+	parameter_value varchar(256),
+	PRIMARY KEY (task_id, role_name, parameter_name)
 );
 
 
