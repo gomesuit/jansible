@@ -39,7 +39,7 @@ public class ProjectService {
 	@Autowired
 	private TaskMapper taskMapper;
 	@Autowired
-	private VariableMapper variableMapper;
+	private VariableMapper variableMapper;	
 	@Autowired
 	private GitService gitService;
 	@Autowired

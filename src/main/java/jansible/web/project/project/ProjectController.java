@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import jansible.model.common.EnvironmentKey;
+import jansible.model.common.GlobalRoleRelationKey;
 import jansible.model.common.Group;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
@@ -16,6 +17,7 @@ import jansible.model.database.DbServiceGroup;
 import jansible.web.project.ApplyService;
 import jansible.web.project.EnvironmentService;
 import jansible.web.project.GitService;
+import jansible.web.project.GlobalRoleRelationService;
 import jansible.web.project.GroupService;
 import jansible.web.project.JenkinsBuildService;
 import jansible.web.project.ProjectService;
@@ -49,6 +51,8 @@ public class ProjectController {
 	private ApplyService applyService;
 	@Autowired
 	private ServerService serverService;
+	@Autowired
+	private GlobalRoleRelationService globalRoleRelationService;
     
     @RequestMapping("/project/view")
 	private String viewProject(
@@ -93,6 +97,12 @@ public class ProjectController {
 		model.addAttribute("serverForm", new ServerForm(projectKey));
 		model.addAttribute("serverList", serverService.getServerList(projectKey));
 		model.addAttribute("serverKey", new ServerKey(projectKey));
+		
+		// global role
+		model.addAttribute("globalRoleList", globalRoleRelationService.getGlobalRoleList());
+		model.addAttribute("globalRoleRelationForm", new GlobalRoleRelationForm(projectKey));
+		model.addAttribute("globalRoleRelationList", globalRoleRelationService.getGlobalRoleRelationList(projectKey));
+		model.addAttribute("globalRoleRelationKey", new GlobalRoleRelationKey(projectKey));
 		
 	    return "project/project/top";
 	}
@@ -167,5 +177,21 @@ public class ProjectController {
 		}
 		
 		return groupList;
+	}
+
+    @RequestMapping(value="/project/globalRole/regist", method=RequestMethod.POST)
+	private String registGlobalRoleRelation(@ModelAttribute GlobalRoleRelationForm form, HttpServletRequest request){
+    	globalRoleRelationService.registGlobalRoleRelation(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/globalRole/delete", method=RequestMethod.POST)
+	private String deleteGlobalRoleRelation(@ModelAttribute GlobalRoleRelationKey key, HttpServletRequest request){
+		globalRoleRelationService.deleteGlobalRoleRelation(key);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 }

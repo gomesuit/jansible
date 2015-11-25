@@ -121,6 +121,47 @@
 	</table>
 	
 	<br /><hr /><br />
+	<div>グローバルロール登録</div>
+	<form action="#" th:action="@{/project/globalRole/regist}" th:object="${globalRoleRelationForm}" method="post">
+		<input type="hidden" th:field="*{projectName}" />
+		<table border="1" rules="all">
+			<tr>
+				<td>role</td>
+			</tr>
+			<tr>
+				<td>
+					<select size="1" th:field="*{roleName}">
+						<option th:each="globalRole : ${globalRoleList}" th:value="${globalRole.roleName}" th:label="${globalRole.roleName}" />
+					</select>
+				</td>
+			</tr>
+		</table>
+		<input type="submit" value="Submit" />
+	</form>
+	
+	<div>グローバルロール一覧</div>
+	<table border="1" rules="all">
+		<tr>
+			<td>role</td>
+			<td>tagName</td>
+			<td>Delete</td>
+		</tr>
+		<tr th:each="globalRoleRelation : ${globalRoleRelationList}">
+			<td>
+				<div th:text="${globalRoleRelation.roleName}" />
+			</td>
+			<td>
+				<div th:text="${globalRoleRelation.tagName}" />
+			</td>
+			<form method="POST" th:action="@{/project/globalRole/delete}" th:object="${globalRoleRelationKey}">
+				<input type="hidden" th:field="*{projectName}" />
+				<input type="hidden" name="roleName" th:value="${globalRoleRelation.roleName}" />
+				<td><input type="submit" value="Delete" /></td>
+			</form>
+		</tr>
+	</table>
+	
+	<br /><hr /><br />
 	<div>Git</div>
 	レポジトリ：<span th:text="${project.repositoryUrl}" />
 	<div>コミット</div>
