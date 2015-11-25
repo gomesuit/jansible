@@ -1,20 +1,20 @@
 package jansible.web.manager.role;
 
-import jansible.model.common.RoleKey;
-import jansible.model.common.TaskKey;
+import jansible.model.common.GlobalRoleKey;
+import jansible.model.common.GlobalTaskKey;
 
-public class TaskForm extends TaskKey{
+public class TaskForm extends GlobalTaskKey{
 	private String moduleName;
 	private String description;
 	
 	public TaskForm(){}
 
-	public TaskForm(RoleKey roleKey){
-		super(roleKey);
+	public TaskForm(GlobalRoleKey key){
+		super(key);
 	}
 
-	public TaskForm(TaskKey taskKey){
-		super(taskKey, taskKey.getTaskId());
+	public TaskForm(GlobalTaskKey key){
+		super(key, key.getTaskId());
 	}
 
 	public String getModuleName() {

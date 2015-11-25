@@ -2,16 +2,16 @@ package jansible.web.manager.task;
 
 import java.util.List;
 
-import jansible.model.common.TaskKey;
+import jansible.model.common.GlobalTaskKey;
 
-public class TaskDetailForm extends TaskKey{
+public class TaskDetailForm extends GlobalTaskKey{
 	private String description;
 	private List<TaskParameter> taskParameterList;
 	
 	public TaskDetailForm(){}
 	
-	public TaskDetailForm(TaskKey taskKey){
-		super(taskKey, taskKey.getTaskId());
+	public TaskDetailForm(GlobalTaskKey key){
+		super(key, key.getTaskId());
 	}
 
 	public List<TaskParameter> getTaskParameterList() {

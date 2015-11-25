@@ -1,7 +1,9 @@
 package jansible.file;
 
 import jansible.model.common.FileKey;
+import jansible.model.common.GlobalRoleFileKey;
 import jansible.model.common.GlobalRoleKey;
+import jansible.model.common.GlobalRoleTemplateKey;
 import jansible.model.common.Group;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
@@ -308,14 +310,14 @@ public class JansibleFiler {
 		return roleDirName;
 	}
 
-	private String getGlobalRoleTemplateDirName(GlobalRoleKey key) {
+	public String getGlobalRoleTemplateDirName(GlobalRoleKey key) {
 		String roleDirName = getGlobalRoleDirName(key);
 		roleDirName += PATH_SEPARATOR;
 		roleDirName += "templates";
 		return roleDirName;
 	}
 
-	private String getGlobalRoleFileDirName(GlobalRoleKey key) {
+	public String getGlobalRoleFileDirName(GlobalRoleKey key) {
 		String roleDirName = getGlobalRoleDirName(key);
 		roleDirName += PATH_SEPARATOR;
 		roleDirName += "files";
@@ -386,10 +388,25 @@ public class JansibleFiler {
 		return templateDirName;
 	}
 	
+	public String getGlobalRoleTemplatePath(GlobalRoleTemplateKey key) {
+		String templateDirName = getGlobalRoleTemplateDirName(key);
+		templateDirName += PATH_SEPARATOR;
+		templateDirName += key.getTemplateName();
+		templateDirName += ".j2";
+		return templateDirName;
+	}
+
 	public String getFilePath(FileKey fileKey) {
 		String fileDirName = getFileDirName(fileKey);
 		fileDirName += PATH_SEPARATOR;
 		fileDirName += fileKey.getFileName();
+		return fileDirName;
+	}
+	
+	public String getGlobalRoleFilePath(GlobalRoleFileKey key) {
+		String fileDirName = getGlobalRoleFileDirName(key);
+		fileDirName += PATH_SEPARATOR;
+		fileDirName += key.getFileName();
 		return fileDirName;
 	}
 	

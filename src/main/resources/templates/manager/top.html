@@ -31,7 +31,7 @@
 			<td>Delete</td>
 		</tr>
 		<tr th:each="role : ${roleList}">
-			<td><a th:href="@{/project/view(projectName=${role.roleName})}" th:text="${role.roleName}" /></td>
+			<td><a th:href="@{/manager/role/view(roleName=${role.roleName})}" th:text="${role.roleName}" /></td>
 			<td>
 				<form method="POST" th:action="@{/manager/role/delete}" th:object="${roleKey}">
 					<input type="hidden" name="roleName" th:value="${role.roleName}" />

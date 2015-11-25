@@ -5,10 +5,13 @@ import jansible.mapper.GlobalTaskMapper;
 import jansible.model.common.GlobalRoleFileKey;
 import jansible.model.common.GlobalRoleKey;
 import jansible.model.common.GlobalRoleTemplateKey;
+import jansible.model.common.GlobalRoleVariableKey;
 import jansible.model.database.DbGlobalRole;
 import jansible.model.database.DbGlobalRoleFile;
 import jansible.model.database.DbGlobalRoleTemplate;
+import jansible.model.database.DbGlobalRoleVariable;
 import jansible.web.manager.role.GeneralFileForm;
+import jansible.web.manager.role.RoleVariableForm;
 import jansible.web.manager.role.UploadForm;
 import jansible.web.manager.top.GlobalRoleForm;
 
@@ -88,5 +91,26 @@ public class GlobalRoleService {
 	
 	public List<DbGlobalRoleTemplate> getDbTemplateList(GlobalRoleKey key){
 		return roleMapper.selectDbTemplateList(key);
+	}
+	
+	public void registRoleVariable(RoleVariableForm form) {
+		DbGlobalRoleVariable dbRoleVariable = createDbRoleVariable(form);
+		roleMapper.insertDbRoleVariable(dbRoleVariable);
+		
+		fileService.outputRoleVariableData(form);
+	}
+	
+	private DbGlobalRoleVariable createDbRoleVariable(RoleVariableForm form) {
+		DbGlobalRoleVariable dbRoleVariable = new DbGlobalRoleVariable(form);
+		dbRoleVariable.setValue(form.getValue());
+		return dbRoleVariable;
+	}
+
+	public List<DbGlobalRoleVariable> getDbRoleVariableList(GlobalRoleKey roleKey){
+		return roleMapper.selectDbRoleVariableList(roleKey);
+	}
+
+	public void deleteRoleVariable(GlobalRoleVariableKey roleVariableKey){
+		roleMapper.deleteDbRoleVariable(roleVariableKey);
 	}
 }

@@ -1,19 +1,19 @@
 package jansible.web.manager.role;
 
-import jansible.model.common.RoleKey;
-import jansible.model.common.TaskKey;
+import jansible.model.common.GlobalRoleKey;
+import jansible.model.common.GlobalTaskKey;
 
-public class TaskOrderForm extends TaskKey{
+public class TaskOrderForm extends GlobalTaskKey{
 	private TaskOrderType orderType;
 	
 	public TaskOrderForm(){}
 
-	public TaskOrderForm(RoleKey roleKey){
-		super(roleKey);
+	public TaskOrderForm(GlobalRoleKey key){
+		super(key);
 	}
 
-	public TaskOrderForm(TaskKey taskKey){
-		super(taskKey, taskKey.getTaskId());
+	public TaskOrderForm(GlobalTaskKey key){
+		super(key, key.getTaskId());
 	}
 
 	public TaskOrderType getOrderType() {

@@ -1,19 +1,19 @@
 package jansible.web.manager.task;
 
-import jansible.model.common.TaskConditionalKey;
-import jansible.model.common.TaskKey;
+import jansible.model.common.GlobalTaskConditionalKey;
+import jansible.model.common.GlobalTaskKey;
 
-public class TaskConditionalForm extends TaskConditionalKey{
+public class TaskConditionalForm extends GlobalTaskConditionalKey{
 	private String conditionalValue;
 	
 	public TaskConditionalForm(){}
 
-	public TaskConditionalForm(TaskKey taskKey){
-		super(taskKey);
+	public TaskConditionalForm(GlobalTaskKey key){
+		super(key);
 	}
 
-	public TaskConditionalForm(TaskConditionalKey taskConditionalKey){
-		super(taskConditionalKey, taskConditionalKey.getConditionalName());
+	public TaskConditionalForm(GlobalTaskConditionalKey key){
+		super(key, key.getConditionalName());
 	}
 
 	public String getConditionalValue() {
