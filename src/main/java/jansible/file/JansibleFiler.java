@@ -1,6 +1,7 @@
 package jansible.file;
 
 import jansible.model.common.FileKey;
+import jansible.model.common.GlobalRoleKey;
 import jansible.model.common.Group;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
@@ -24,9 +25,20 @@ public class JansibleFiler {
 	
 	@Value("${jansible.root.path}")
 	private String ROOT_PATH;
+	private String PROJECT_PATH_PREFIX = "project";
+	private String GLOBAL_PATH_PREFIX = "global";
 	private final String PATH_SEPARATOR = "/";
 	private final String DEFAULT_YAML_NAME = "main.yml";
 	
+	public void writeGlobalRoleYaml(GlobalRoleKey key) {
+		writeGlobalRoleYaml(key, "Hello");
+	}
+
+	public void writeGlobalRoleYaml(GlobalRoleKey key, String yaml) {
+		String filePath = getGlobalTaskYamlPath(key);
+		writeFile(filePath, yaml);
+	}
+
 	public void writeRoleYaml(RoleKey roleKey){
 		writeRoleYaml(roleKey, "Hello");
 	}
@@ -41,6 +53,11 @@ public class JansibleFiler {
 		writeFile(filePath, yaml);
 	}
 	
+	public void writeGlobalRoleVariableYaml(GlobalRoleKey key, String yaml) {
+		String filePath = getGlobalRoleVariableYamlPath(key);
+		writeFile(filePath, yaml);
+	}
+
 	public void writeHostVariableYaml(ServerKey serverKey, String yaml){
 		String filePath = getHostVariableYamlPath(serverKey);
 		writeFile(filePath, yaml);
@@ -57,12 +74,24 @@ public class JansibleFiler {
 		return filePath;
 	}
 	
+	private String getGlobalTaskYamlPath(GlobalRoleKey key) {
+		String taskDirName = getGlobalRoleTaskDirName(key);
+		String filePath = taskDirName + PATH_SEPARATOR + DEFAULT_YAML_NAME;
+		return filePath;
+	}
+
 	private String getRoleVariableYamlPath(RoleKey roleKey){
 		String dirName = getRoleVariableDirName(roleKey);
 		String filePath = dirName + PATH_SEPARATOR + DEFAULT_YAML_NAME;
 		return filePath;
 	}
 	
+	private String getGlobalRoleVariableYamlPath(GlobalRoleKey key) {
+		String dirName = getGlobalRoleVariableDirName(key);
+		String filePath = dirName + PATH_SEPARATOR + DEFAULT_YAML_NAME;
+		return filePath;
+	}
+
 	private String getHostVariableYamlPath(ServerKey serverKey){
 		String dirName = getHostVariableDirName(serverKey);
 		String filePath = dirName + PATH_SEPARATOR + serverKey.getServerName();
@@ -126,6 +155,11 @@ public class JansibleFiler {
 		deleteDirByRecursive(dirName);
 	}
 	
+	public void deleteGlobelRoleDir(GlobalRoleKey key) {
+		String dirName = getGlobalRoleDirName(key);
+		deleteDirByRecursive(dirName);
+	}
+
 	public void deleteProjectDir(ProjectKey projectKey){
 		String dirName = getProjectDirName(projectKey);
 		deleteDirByRecursive(dirName);
@@ -212,6 +246,10 @@ public class JansibleFiler {
 		mkDir(getRoleDirName(roleKey));
 	}
 
+	public void mkGlobalRoleDir(GlobalRoleKey key){
+		mkDir(getGlobalRoleDirName(key));
+	}
+
 	public void mkRoleFileDir(RoleKey roleKey){
 		String dirName = getFileDirName(roleKey);
 		mkDir(dirName);
@@ -227,13 +265,29 @@ public class JansibleFiler {
 		mkDir(dirName);
 	}
 
+	public void mkGlobalRoleTaskDir(GlobalRoleKey key) {
+		mkDir(getGlobalRoleTaskDirName(key));
+	}
+
+	public void mkGlobalRoleTemplateDir(GlobalRoleKey key) {
+		mkDir(getGlobalRoleTemplateDirName(key));
+	}
+
+	public void mkGlobalRoleFileDir(GlobalRoleKey key) {
+		mkDir(getGlobalRoleFileDirName(key));
+	}
+
+	public void mkGlobalRoleVariableDir(GlobalRoleKey key) {
+		mkDir(getGlobalRoleVariableDirName(key));
+	}
+
 	public void mkRoleVariableDir(RoleKey roleKey){
 		String dirName = getRoleVariableDirName(roleKey);
 		mkDir(dirName);
 	}
 
 	public String getProjectDirName(ProjectKey projectKey) {
-		return ROOT_PATH + projectKey.getProjectName();
+		return ROOT_PATH + PROJECT_PATH_PREFIX + PATH_SEPARATOR + projectKey.getProjectName();
 	}
 	
 	private String getRoleDirName(RoleKey roleKey) {
@@ -243,6 +297,38 @@ public class JansibleFiler {
 		return dirName;
 	}
 	
+	private String getGlobalRoleDirName(GlobalRoleKey key) {
+		return ROOT_PATH + GLOBAL_PATH_PREFIX + PATH_SEPARATOR + key.getRoleName();
+	}
+	
+	private String getGlobalRoleTaskDirName(GlobalRoleKey key) {
+		String roleDirName = getGlobalRoleDirName(key);
+		roleDirName += PATH_SEPARATOR;
+		roleDirName += "tasks";
+		return roleDirName;
+	}
+
+	private String getGlobalRoleTemplateDirName(GlobalRoleKey key) {
+		String roleDirName = getGlobalRoleDirName(key);
+		roleDirName += PATH_SEPARATOR;
+		roleDirName += "templates";
+		return roleDirName;
+	}
+
+	private String getGlobalRoleFileDirName(GlobalRoleKey key) {
+		String roleDirName = getGlobalRoleDirName(key);
+		roleDirName += PATH_SEPARATOR;
+		roleDirName += "files";
+		return roleDirName;
+	}
+
+	private String getGlobalRoleVariableDirName(GlobalRoleKey key) {
+		String roleDirName = getGlobalRoleDirName(key);
+		roleDirName += PATH_SEPARATOR;
+		roleDirName += "vars";
+		return roleDirName;
+	}
+
 	private String getRolesDirName(ProjectKey projectKey){
 		String dirName = getProjectDirName(projectKey);
 		dirName += PATH_SEPARATOR;

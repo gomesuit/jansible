@@ -8,7 +8,6 @@ import jansible.model.database.DbGlobalRole;
 import jansible.model.database.DbGlobalRoleFile;
 import jansible.model.database.DbGlobalRoleTemplate;
 import jansible.model.database.DbGlobalRoleVariable;
-import jansible.model.database.DbTemplate;
 
 import java.util.List;
 
@@ -23,7 +22,7 @@ public interface GlobalRoleMapper {
 	void deleteDbFileByRole(GlobalRoleKey globalRoleKey);
 	
 	void insertDbTemplate(DbGlobalRoleTemplate dbGlobalRoleTemplate);
-	List<DbTemplate> selectDbTemplateList(GlobalRoleKey globalRoleKey);
+	List<DbGlobalRoleTemplate> selectDbTemplateList(GlobalRoleKey globalRoleKey);
 	void deleteDbTemplate(GlobalRoleTemplateKey globalRoleTemplateKey);
 	void deleteDbTemplateByRole(GlobalRoleKey globalRoleKey);
 

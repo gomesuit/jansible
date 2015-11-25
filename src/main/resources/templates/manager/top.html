@@ -10,31 +10,31 @@
 	
 	<br /><hr /><br />
 	<div>ロール登録</div>
-	<form action="#" th:action="@{/project/regist}" th:object="${form}" method="post">
+	<form action="#" th:action="@{/manager/role/regist}" th:object="${form}" method="post">
 		<table border="1" rules="all">
 			<tr>
-				<td>project</td>
+				<td>role</td>
 				<td>repositoryUrl</td>
 			</tr>
 			<tr>
-				<td><input type="text" th:field="*{projectName}" /></td>
+				<td><input type="text" th:field="*{roleName}" /></td>
 				<td><input type="text" th:field="*{repositoryUrl}" /></td>
 			</tr>
 		</table>
 		<input type="submit" value="Submit" />
 	</form>
 	
-	<div>プロジェクト一覧</div>
+	<div>ロール一覧</div>
 	<table border="1" rules="all">
 		<tr>
-			<td>project</td>
+			<td>role</td>
 			<td>Delete</td>
 		</tr>
-		<tr th:each="project : ${projectList}">
-			<td><a th:href="@{/project/view(projectName=${project.projectName})}" th:text="${project.projectName}" /></td>
+		<tr th:each="role : ${roleList}">
+			<td><a th:href="@{/project/view(projectName=${role.roleName})}" th:text="${role.roleName}" /></td>
 			<td>
-				<form method="POST" th:action="@{/project/delete}" th:object="${projectKey}">
-					<input type="hidden" name="projectName" th:value="${project.projectName}" />
+				<form method="POST" th:action="@{/manager/role/delete}" th:object="${roleKey}">
+					<input type="hidden" name="roleName" th:value="${role.roleName}" />
 					<input type="submit" value="Delete" />
 				</form>
 			</td>
