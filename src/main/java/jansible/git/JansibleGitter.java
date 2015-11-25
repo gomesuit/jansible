@@ -91,6 +91,11 @@ public class JansibleGitter {
 		tagAndPush(projectDirName, gitOperationInfo.getUserName(), gitOperationInfo.getPassword(), tagName, gitOperationInfo.getComment());
 	}
 	
+	public void tagAndPush(GlobalRoleKey key, GitOperationInfo gitOperationInfo, String tagName) throws Exception{
+		String dirName = jansibleFiler.getGlobalRoleDirName(key);
+		tagAndPush(dirName, gitOperationInfo.getUserName(), gitOperationInfo.getPassword(), tagName, gitOperationInfo.getComment());
+	}
+	
 	private void tagAndPush(String localPath, String name, String pass, String tagName, String message) throws Exception {
 		File gitDir = getGitDir(localPath);
 		FileRepositoryBuilder builder = createBuilder(gitDir);

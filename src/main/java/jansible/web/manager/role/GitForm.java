@@ -1,8 +1,9 @@
 package jansible.web.manager.role;
 
+import jansible.git.GitOperationInfo;
 import jansible.model.common.GlobalRoleKey;
 
-public class GitForm extends GlobalRoleKey{
+public class GitForm extends GlobalRoleKey implements GitOperationInfo{
 	private String userName;
 	private String password;
 	private String comment;

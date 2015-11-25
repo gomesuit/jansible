@@ -143,4 +143,12 @@ public class GlobalRoleController {
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
+
+	@RequestMapping(value="/manager/git/tagging", method=RequestMethod.POST)
+	private String taggingGit(@ModelAttribute GitForm form, HttpServletRequest request) throws Exception{
+		gitService.tagAndPush(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
 }

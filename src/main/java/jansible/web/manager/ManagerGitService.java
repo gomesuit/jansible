@@ -1,6 +1,9 @@
 package jansible.web.manager;
 
+import java.util.Date;
+
 import jansible.git.JansibleGitter;
+import jansible.util.DateFormatter;
 import jansible.web.manager.role.GitForm;
 import jansible.web.manager.top.GlobalRoleForm;
 
@@ -22,4 +25,15 @@ public class ManagerGitService {
 	public void cloneRepository(GlobalRoleForm form) throws Exception {
 		jansibleGitter.cloneRoleRepository(form, form.getRepositoryUrl());
 	}
+	
+	public void tagAndPush(GitForm form) throws Exception{
+		String tagName = getTagName();
+		jansibleGitter.tagAndPush(form, form, tagName);
+	}
+	
+	private String getTagName(){
+		String dateString = DateFormatter.getDateString(new Date());
+		return "VER" + dateString;
+	}
+
 }
