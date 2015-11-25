@@ -2,6 +2,7 @@ package jansible.web.project;
 
 import jansible.git.JansibleGitter;
 import jansible.web.project.project.GitForm;
+import jansible.web.project.project.GlobalRoleRelationForm;
 import jansible.web.project.top.ProjectForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,5 +22,9 @@ public class GitService {
 	
 	public void cloneRepository(ProjectForm form) throws Exception {
 		jansibleGitter.cloneRepository(form, form.getRepositoryUrl());
+	}
+	
+	public void addSubmodule(GlobalRoleRelationForm form, String uri, String path, String tagName) throws Exception{
+		jansibleGitter.addSubmodule(form, uri, path, tagName);
 	}
 }

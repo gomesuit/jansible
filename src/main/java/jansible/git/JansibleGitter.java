@@ -8,10 +8,13 @@ import java.io.File;
 import java.util.Iterator;
 
 import org.eclipse.jgit.api.AddCommand;
+import org.eclipse.jgit.api.CheckoutCommand;
+import org.eclipse.jgit.api.CheckoutCommand.Stage;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PushCommand;
+import org.eclipse.jgit.api.SubmoduleAddCommand;
 import org.eclipse.jgit.api.TagCommand;
 import org.eclipse.jgit.api.errors.AbortedByHookException;
 import org.eclipse.jgit.api.errors.ConcurrentRefUpdateException;
@@ -24,6 +27,7 @@ import org.eclipse.jgit.api.errors.NoMessageException;
 import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.api.errors.UnmergedPathsException;
 import org.eclipse.jgit.api.errors.WrongRepositoryStateException;
+import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.PushResult;
@@ -54,6 +58,25 @@ public class JansibleGitter {
 	public void commitAndPush(GlobalRoleKey key, String name, String pass, String comment) throws Exception{
 		String dirName = jansibleFiler.getGlobalRoleDirName(key);
 		commitAndPush(dirName, name, pass, comment);
+	}
+	
+	public void addSubmodule(ProjectKey projectKey, String uri, String path, String tagName) throws Exception{
+		String dirName = jansibleFiler.getProjectDirName(projectKey);
+		addSubmodule(dirName, uri, path, tagName);
+	}
+	
+	private void addSubmodule(String localPath, String uri, String path, String tagName) throws Exception{
+		File gitDir = getGitDir(localPath);
+		FileRepositoryBuilder builder = createBuilder(gitDir);
+		
+		try(Git git = new Git(builder.build())){
+			callSubmodule(git, uri, path, tagName);
+	        
+		} catch (GitAPIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
 	}
 	
 	private void commitAndPush(String localPath, String name, String pass, String comment) throws Exception {
@@ -156,5 +179,22 @@ public class JansibleGitter {
 	
 	private String getGitDirName(String localPath){
 		return localPath + "/.git";
+	}
+	
+	private void callSubmodule(Git git, String uri, String path, String tagName) throws GitAPIException {
+		SubmoduleAddCommand command = git.submoduleAdd();
+		command.setURI(uri);
+		command.setPath(path);
+		//command.call();
+
+		try(Git git2 = new Git(command.call())){
+			CheckoutCommand aaa = git2.checkout();
+			aaa.setName(tagName);
+			aaa.call();
+		} catch (GitAPIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
 	}
 }

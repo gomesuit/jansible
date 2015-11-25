@@ -18,6 +18,9 @@ public class GlobalRoleRelationService {
 	@Autowired
 	private GlobalRoleRelationMapper globalRoleRelationMapper;
 
+	@Autowired
+	private GitService gitService;
+
 	public List<DbGlobalRoleRelation> getGlobalRoleRelationList(ProjectKey key){
 		return globalRoleRelationMapper.selectRoleRelationList(key);
 	}
@@ -36,6 +39,13 @@ public class GlobalRoleRelationService {
 		dbGlobalRoleRelation.setTagName(tagName);
 		
 		globalRoleRelationMapper.insertRoleRelation(dbGlobalRoleRelation);
+		
+		try {
+			gitService.addSubmodule(form, globalRoleRelationMapper.selectUri(form.getRoleName()), "roles/" + form.getRoleName(), tagName);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void deleteGlobalRoleRelation(GlobalRoleRelationKey key){

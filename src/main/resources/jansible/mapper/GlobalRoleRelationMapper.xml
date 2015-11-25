@@ -71,4 +71,14 @@
 		LIMIT 1
 	</select>
 	
+	
+	<select id="selectUri" resultType="java.lang.String">
+		SELECT
+			repository_url
+		FROM
+			global_role
+		WHERE
+			role_name = #{roleName}
+	</select>
+	
 </mapper>

@@ -15,4 +15,5 @@ public interface GlobalRoleRelationMapper {
 
 	List<DbGlobalRole> selectRoleList();
 	String selectNewestTagName(String roleName);
+	String selectUri(String roleName);
 }
