@@ -7,19 +7,32 @@
 	<insert id="insertRole" parameterType="DbGlobalRole">
 		INSERT INTO global_role
 			(
-				role_name
+				role_name,
+				repository_url
 			)
 		VALUES
 			(
-				#{roleName}
+				#{roleName},
+				#{repositoryUrl}
 			)
 	</insert>
 	
 	<select id="selectRoleList" resultType="DbGlobalRole">
 		SELECT
-			role_name as roleName
+			role_name as roleName,
+			repository_url as repositoryUrl
 		FROM
 			global_role
+	</select>
+	
+	<select id="selectRole" resultType="DbGlobalRole">
+		SELECT
+			role_name as roleName,
+			repository_url as repositoryUrl
+		FROM
+			global_role
+		WHERE
+			role_name = #{roleName}
 	</select>
 	
 	<delete id="deleteRole">

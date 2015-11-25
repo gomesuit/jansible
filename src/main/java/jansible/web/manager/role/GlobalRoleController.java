@@ -12,6 +12,7 @@ import jansible.model.database.DbGlobalTask;
 import jansible.model.database.DbGlobalTaskDetail;
 import jansible.web.manager.GlobalRoleService;
 import jansible.web.manager.GlobalTaskService;
+import jansible.web.manager.ManagerGitService;
 import jansible.web.manager.ManagerYamlService;
 import jansible.web.module.ModuleService;
 
@@ -33,6 +34,8 @@ public class GlobalRoleController {
 	private GlobalRoleService roleService;
 	@Autowired
 	private GlobalTaskService taskService;
+	@Autowired
+	private ManagerGitService gitService;
     
     @RequestMapping("/manager/role/view")
 	private String viewRole(
@@ -65,6 +68,10 @@ public class GlobalRoleController {
 		model.addAttribute("variableForm", new RoleVariableForm(roleKey));
 		model.addAttribute("roleVariableKey", new GlobalRoleVariableKey(roleKey));
 		model.addAttribute("variableList", roleService.getDbRoleVariableList(roleKey));
+		
+		// Git
+		model.addAttribute("gitForm", new GitForm(roleKey));
+		model.addAttribute("role", roleService.getRole(roleKey));
 		
 	    return "manager/role/top";
 	}
@@ -124,6 +131,14 @@ public class GlobalRoleController {
 	@RequestMapping(value="/manager/task/order", method=RequestMethod.POST)
 	private String orderTask(@ModelAttribute TaskOrderForm form, HttpServletRequest request){
 		taskService.modifyTaskOrder(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/manager/git/commit", method=RequestMethod.POST)
+	private String commitGit(@ModelAttribute GitForm form, HttpServletRequest request) throws Exception{
+		gitService.commitGit(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

@@ -299,7 +299,7 @@ public class JansibleFiler {
 		return dirName;
 	}
 	
-	private String getGlobalRoleDirName(GlobalRoleKey key) {
+	public String getGlobalRoleDirName(GlobalRoleKey key) {
 		return ROOT_PATH + GLOBAL_PATH_PREFIX + PATH_SEPARATOR + key.getRoleName();
 	}
 	

@@ -1,6 +1,7 @@
 package jansible.git;
 
 import jansible.file.JansibleFiler;
+import jansible.model.common.GlobalRoleKey;
 import jansible.model.common.ProjectKey;
 
 import java.io.File;
@@ -39,10 +40,20 @@ public class JansibleGitter {
 		String projectDirName = jansibleFiler.getProjectDirName(projectKey);
 		callClone(url, projectDirName);
 	}
+
+	public void cloneRoleRepository(GlobalRoleKey key, String url) throws Exception {
+		String dirName = jansibleFiler.getGlobalRoleDirName(key);
+		callClone(url, dirName);
+	}
 	
 	public void commitAndPush(ProjectKey projectKey, String name, String pass, String comment) throws Exception{
 		String projectDirName = jansibleFiler.getProjectDirName(projectKey);
 		commitAndPush(projectDirName, name, pass, comment);
+	}
+	
+	public void commitAndPush(GlobalRoleKey key, String name, String pass, String comment) throws Exception{
+		String dirName = jansibleFiler.getGlobalRoleDirName(key);
+		commitAndPush(dirName, name, pass, comment);
 	}
 	
 	private void commitAndPush(String localPath, String name, String pass, String comment) throws Exception {

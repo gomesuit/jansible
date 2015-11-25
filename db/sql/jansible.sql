@@ -61,19 +61,19 @@ CREATE TABLE choice
 
 CREATE TABLE environment
 (
-	project_name varchar(50) NOT NULL,
+	jenkins_port varchar(10) NOT NULL,
 	environment_name varchar(80) NOT NULL,
-	PRIMARY KEY (project_name, environment_name)
+	PRIMARY KEY (jenkins_port, environment_name)
 );
 
 
 CREATE TABLE environment_variable
 (
-	project_name varchar(50) NOT NULL,
+	jenkins_port varchar(10) NOT NULL,
 	environment_name varchar(80) NOT NULL,
 	variable_name varchar(80) NOT NULL,
 	value varchar(80),
-	PRIMARY KEY (project_name, environment_name, variable_name)
+	PRIMARY KEY (jenkins_port, environment_name, variable_name)
 );
 
 
@@ -89,6 +89,7 @@ CREATE TABLE file
 CREATE TABLE global_role
 (
 	role_name varchar(30) NOT NULL,
+	repository_url varchar(100) NOT NULL,
 	PRIMARY KEY (role_name)
 );
 
@@ -231,11 +232,11 @@ CREATE TABLE server_parameter
 
 CREATE TABLE server_relation
 (
-	project_name varchar(50) NOT NULL,
+	jenkins_port varchar(10) NOT NULL,
 	environment_name varchar(80) NOT NULL,
 	group_name varchar(80) NOT NULL,
 	server_name varchar(80) NOT NULL,
-	PRIMARY KEY (project_name, environment_name, group_name, server_name)
+	PRIMARY KEY (jenkins_port, environment_name, group_name, server_name)
 );
 
 
@@ -251,21 +252,21 @@ CREATE TABLE server_variable
 
 CREATE TABLE service_group
 (
-	project_name varchar(50) NOT NULL,
+	jenkins_port varchar(10) NOT NULL,
 	environment_name varchar(80) NOT NULL,
 	group_name varchar(80) NOT NULL,
-	PRIMARY KEY (project_name, environment_name, group_name)
+	PRIMARY KEY (jenkins_port, environment_name, group_name)
 );
 
 
 CREATE TABLE service_group_variable
 (
-	project_name varchar(50) NOT NULL,
+	jenkins_port varchar(10) NOT NULL,
 	environment_name varchar(80) NOT NULL,
 	group_name varchar(80) NOT NULL,
 	variable_name varchar(80) NOT NULL,
 	value varchar(80),
-	PRIMARY KEY (project_name, environment_name, group_name, variable_name)
+	PRIMARY KEY (jenkins_port, environment_name, group_name, variable_name)
 );
 
 

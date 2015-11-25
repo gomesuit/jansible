@@ -14,6 +14,7 @@ import java.util.List;
 public interface GlobalRoleMapper {
 	void insertRole(DbGlobalRole dbGlobalRole);
 	List<DbGlobalRole> selectRoleList();
+	DbGlobalRole selectRole(GlobalRoleKey globalRoleKey);
 	void deleteRole(GlobalRoleKey globalRoleKey);
 	
 	void insertDbFile(DbGlobalRoleFile dbGlobalRoleFile);

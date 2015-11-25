@@ -8,6 +8,7 @@ import jansible.model.common.RoleKey;
 import jansible.model.database.DbGlobalRoleVariable;
 import jansible.model.database.DbGlobalTask;
 import jansible.model.yamldump.YamlVariable;
+import jansible.web.manager.role.GitForm;
 
 import java.util.List;
 
@@ -55,5 +56,11 @@ public class ManagerFileService {
 
 	public void deleteRoleDir(GlobalRoleKey key) {
 		jansibleFiler.deleteGlobelRoleDir(key);
+	}
+
+	public void reOutputAllData(GitForm form) {
+		outputRoleData(form);
+		outputRoleVariableData(form);
+		outputTaskData(form);
 	}
 }

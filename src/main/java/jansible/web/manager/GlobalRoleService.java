@@ -18,7 +18,11 @@ import jansible.web.manager.top.GlobalRoleForm;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 @Service
 public class GlobalRoleService {
@@ -29,15 +33,37 @@ public class GlobalRoleService {
 	
 	@Autowired
 	private ManagerFileService fileService;
+	@Autowired
+	private ManagerGitService gitService;
 
-	public void registRole(GlobalRoleForm form) {
-		DbGlobalRole dbGlobalRole = new DbGlobalRole(form);
-		roleMapper.insertRole(dbGlobalRole);
-		fileService.outputRoleData(dbGlobalRole);
+	@Autowired
+	private DataSourceTransactionManager transactionManager;
+
+	public void registRole(GlobalRoleForm form) throws Exception {
+    	DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    	TransactionStatus status = transactionManager.getTransaction(def);
+
+		try {	    	
+			DbGlobalRole dbGlobalRole = new DbGlobalRole(form);
+			dbGlobalRole.setRepositoryUrl(form.getRepositoryUrl());
+			roleMapper.insertRole(dbGlobalRole);
+			gitService.cloneRepository(form);
+			fileService.outputRoleData(dbGlobalRole);
+		} catch (Exception e) {
+			transactionManager.rollback(status);
+			fileService.deleteRoleDir(form);
+			throw e;
+		}
+		transactionManager.commit(status);
 	}
 
 	public List<DbGlobalRole> getRoleList(){
 		return roleMapper.selectRoleList();
+	}
+
+	public DbGlobalRole getRole(GlobalRoleKey key){
+		return roleMapper.selectRole(key);
 	}
 
 	public void deleteRole(GlobalRoleKey key){

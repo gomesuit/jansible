@@ -224,6 +224,7 @@ public class FileService {
 		List<DbRole> dbRoleList = roleMapper.selectRoleList(projectKey);
 		for(DbRole dbRole : dbRoleList){
 			outputRoleData(dbRole);
+			outputRoleVariableData(dbRole);
 			outputTaskData(dbRole);
 		}
 	}
