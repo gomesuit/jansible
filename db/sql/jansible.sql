@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS service_group;
 DROP TABLE IF EXISTS environment;
 DROP TABLE IF EXISTS file;
 DROP TABLE IF EXISTS global_role_file;
+DROP TABLE IF EXISTS global_role_relation;
 DROP TABLE IF EXISTS global_role_tag;
 DROP TABLE IF EXISTS global_role_template;
 DROP TABLE IF EXISTS global_role_variable;
@@ -100,6 +101,15 @@ CREATE TABLE global_role_file
 	role_name varchar(30) NOT NULL,
 	file_name varchar(128) NOT NULL,
 	PRIMARY KEY (role_name, file_name)
+);
+
+
+CREATE TABLE global_role_relation
+(
+	project_name varchar(50) NOT NULL,
+	role_name varchar(30) NOT NULL,
+	tag_name varchar(120) NOT NULL,
+	PRIMARY KEY (project_name, role_name)
 );
 
 
