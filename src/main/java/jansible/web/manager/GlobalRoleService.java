@@ -8,9 +8,11 @@ import jansible.model.common.GlobalRoleTemplateKey;
 import jansible.model.common.GlobalRoleVariableKey;
 import jansible.model.database.DbGlobalRole;
 import jansible.model.database.DbGlobalRoleFile;
+import jansible.model.database.DbGlobalRoleTag;
 import jansible.model.database.DbGlobalRoleTemplate;
 import jansible.model.database.DbGlobalRoleVariable;
 import jansible.web.manager.role.GeneralFileForm;
+import jansible.web.manager.role.GitForm;
 import jansible.web.manager.role.RoleVariableForm;
 import jansible.web.manager.role.UploadForm;
 import jansible.web.manager.top.GlobalRoleForm;
@@ -56,6 +58,17 @@ public class GlobalRoleService {
 			throw e;
 		}
 		transactionManager.commit(status);
+	}
+	
+	public void registRoleTag(GitForm form, String tagName){
+		DbGlobalRoleTag dbGlobalRoleTag = new DbGlobalRoleTag(form);
+		dbGlobalRoleTag.setTagName(tagName);
+		dbGlobalRoleTag.setTagComment(form.getComment());
+		roleMapper.insertRoleTag(dbGlobalRoleTag);
+	}
+
+	public List<DbGlobalRoleTag> getRoleTagList(GlobalRoleKey key){
+		return roleMapper.selectRoleTagList(key);
 	}
 
 	public List<DbGlobalRole> getRoleList(){

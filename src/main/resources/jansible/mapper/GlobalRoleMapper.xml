@@ -163,4 +163,32 @@
 			role_name = #{roleName}
 	</delete>
 	
+	
+	<insert id="insertRoleTag" parameterType="DbGlobalRoleTag">
+		INSERT INTO global_role_tag
+			(
+				role_name,
+				tag_name,
+				tag_comment
+			)
+		VALUES
+			(
+				#{roleName},
+				#{tagName},
+				#{tagComment}
+			)
+	</insert>
+	
+	<select id="selectRoleTagList" resultType="DbGlobalRoleTag">
+		SELECT
+			role_name as roleName,
+			tag_id as tagId,
+			tag_name as tagName,
+			tag_comment as tagComment
+		FROM
+			global_role_tag
+		WHERE
+			role_name = #{roleName}
+	</select>
+	
 </mapper>

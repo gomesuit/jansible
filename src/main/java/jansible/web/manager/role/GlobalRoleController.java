@@ -72,6 +72,7 @@ public class GlobalRoleController {
 		// Git
 		model.addAttribute("gitForm", new GitForm(roleKey));
 		model.addAttribute("role", roleService.getRole(roleKey));
+		model.addAttribute("tagList", roleService.getRoleTagList(roleKey));
 		
 	    return "manager/role/top";
 	}

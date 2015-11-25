@@ -205,6 +205,17 @@
 		</table>
 		<input type="submit" value="Commit" />
 	</form>
+	<div>タグ一覧</div>
+	<table border="1" rules="all">
+		<tr>
+			<td>tagName</td>
+			<td>Comment</td>
+		</tr>
+		<tr th:each="tag : ${tagList}">
+			<td th:text="${tag.tagName}" />
+			<td th:text="${tag.tagComment}" />
+		</tr>
+	</table>
 	
 	<br /><hr />
 	<a th:href="@{/manager}" >トップ</a>

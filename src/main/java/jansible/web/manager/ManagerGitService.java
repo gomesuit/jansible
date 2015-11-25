@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ManagerGitService {
 	@Autowired
+	private GlobalRoleService roleService;
+	@Autowired
 	private ManagerFileService fileService;
 	@Autowired
 	private JansibleGitter jansibleGitter;
@@ -28,6 +30,7 @@ public class ManagerGitService {
 	
 	public void tagAndPush(GitForm form) throws Exception{
 		String tagName = getTagName();
+		roleService.registRoleTag(form, tagName);
 		jansibleGitter.tagAndPush(form, form, tagName);
 	}
 	
