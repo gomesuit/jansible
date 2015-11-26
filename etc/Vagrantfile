@@ -1,0 +1,27 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby tabstop=2 shiftwidth=2 expandtab :
+
+# Privileged inline script for shell provisioning (root user)
+$provisioning_script = <<SCRIPT
+yum -y install vim
+
+SCRIPT
+
+Vagrant.configure(2) do |config|
+
+  config.vm.box = "opscode-centos-6.5"
+  config.vm.box_url = "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-6.5_chef-provisionerless.box"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "1024"
+  end
+
+  # node buddy1
+  config.vm.define "ansible" do |host|
+    host.vm.hostname = "ansible"
+    host.vm.network "private_network", ip: "192.168.33.10"
+
+    # shell provisioning
+    host.vm.provision "shell", inline: $provisioning_script
+  end
+end
