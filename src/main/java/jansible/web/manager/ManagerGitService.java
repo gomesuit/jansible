@@ -25,7 +25,7 @@ public class ManagerGitService {
 	}
 	
 	public void cloneRepository(GlobalRoleForm form) throws Exception {
-		jansibleGitter.cloneRoleRepository(form, form.getRepositoryUrl());
+		jansibleGitter.cloneRoleRepository(form, form.getRepositoryUrl(), form);
 	}
 	
 	public void tagAndPush(GitForm form) throws Exception{

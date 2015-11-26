@@ -21,7 +21,7 @@ public class GitService {
 	}
 	
 	public void cloneRepository(ProjectForm form) throws Exception {
-		jansibleGitter.cloneRepository(form, form.getRepositoryUrl());
+		jansibleGitter.cloneRepository(form, form.getRepositoryUrl(), form);
 	}
 	
 	public void addSubmodule(ProjectKey projectKey, String uri, String path) throws Exception{

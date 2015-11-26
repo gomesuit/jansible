@@ -21,6 +21,18 @@
 				<td><input type="text" th:field="*{repositoryUrl}" /></td>
 			</tr>
 		</table>
+		<div>レポジトリ認証情報</div>
+		<table border="1" rules="all">
+			<tr>
+				<td>userName</td>
+				<td>password</td>
+			</tr>
+			<tr>
+				<td><input type="text" th:field="*{userName}" /></td>
+				<td><input type="password" th:field="*{password}" /></td>
+			</tr>
+		</table>
+		<input type="submit" value="Submit" />
 		<input type="submit" value="Submit" />
 	</form>
 	

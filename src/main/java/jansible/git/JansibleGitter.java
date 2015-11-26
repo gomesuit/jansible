@@ -49,14 +49,14 @@ public class JansibleGitter {
 	@Autowired
 	private JansibleFiler jansibleFiler;
 	
-	public void cloneRepository(ProjectKey projectKey, String url) throws Exception {
+	public void cloneRepository(ProjectKey projectKey, String url, GitCredentialInfo info) throws Exception {
 		String projectDirName = jansibleFiler.getProjectDirName(projectKey);
-		callClone(url, projectDirName);
+		callClone(url, projectDirName, info);
 	}
 
-	public void cloneRoleRepository(GlobalRoleKey key, String url) throws Exception {
+	public void cloneRoleRepository(GlobalRoleKey key, String url, GitCredentialInfo info) throws Exception {
 		String dirName = jansibleFiler.getGlobalRoleDirName(key);
-		callClone(url, dirName);
+		callClone(url, dirName, info);
 	}
 	
 	public void commitAndPush(ProjectKey projectKey, String name, String pass, String comment) throws Exception{
@@ -174,10 +174,15 @@ public class JansibleGitter {
         commitCommand.call();
 	}
 	
-	private void callClone(String url, String localPath) throws InvalidRemoteException, TransportException, GitAPIException{
+	private void callClone(String url, String localPath, GitCredentialInfo info) throws InvalidRemoteException, TransportException, GitAPIException{
+		callClone(url, localPath, info.getUserName(), info.getPassword());
+	}
+	
+	private void callClone(String url, String localPath, String name, String pass) throws InvalidRemoteException, TransportException, GitAPIException{
 		CloneCommand cmd = Git.cloneRepository();
 		cmd.setURI(url);
 		cmd.setDirectory(new File(localPath));
+		cmd.setCredentialsProvider(getCredentialsProvider(name, pass));
 		try(Git git = cmd.call()){}
 	}
 
