@@ -38,12 +38,6 @@ public class VariableService {
 		fileService.outputRoleVariableData(form);
 	}
 
-	private DbRoleVariable createDbRoleVariable(RoleVariableForm form) {
-		DbRoleVariable dbRoleVariable = new DbRoleVariable(form);
-		dbRoleVariable.setValue(form.getValue());
-		return dbRoleVariable;
-	}
-
 	public List<DbRoleVariable> getDbRoleVariableList(RoleKey roleKey){
 		return variableMapper.selectDbRoleVariableList(roleKey);
 	}
@@ -95,6 +89,12 @@ public class VariableService {
 		variableMapper.insertDbEnvironmentVariable(dbEnvironmentVariable);
 		
 		fileService.outputEnvironmentVariableData(form);
+	}
+
+	private DbRoleVariable createDbRoleVariable(RoleVariableForm form) {
+		DbRoleVariable dbRoleVariable = new DbRoleVariable(form);
+		dbRoleVariable.setValue(form.getValue());
+		return dbRoleVariable;
 	}
 
 	private DbEnvironmentVariable createDbEnvironmentVariable(EnvironmentVariableForm form) {
