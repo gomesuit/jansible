@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS environment;
 DROP TABLE IF EXISTS file;
 DROP TABLE IF EXISTS global_role_file;
 DROP TABLE IF EXISTS global_role_relation;
+DROP TABLE IF EXISTS global_role_tag_variable;
 DROP TABLE IF EXISTS global_role_tag;
 DROP TABLE IF EXISTS global_role_template;
 DROP TABLE IF EXISTS global_role_variable;
@@ -119,6 +120,16 @@ CREATE TABLE global_role_tag
 	tag_name varchar(120) NOT NULL,
 	tag_comment varchar(256),
 	PRIMARY KEY (role_name, tag_name)
+);
+
+
+CREATE TABLE global_role_tag_variable
+(
+	role_name varchar(30) NOT NULL,
+	tag_name varchar(120) NOT NULL,
+	variable_name varchar(80) NOT NULL,
+	value varchar(80),
+	PRIMARY KEY (role_name, tag_name, variable_name)
 );
 
 
