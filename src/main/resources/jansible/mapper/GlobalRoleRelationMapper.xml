@@ -48,7 +48,15 @@
 		DELETE FROM
 			global_role_relation
 		WHERE
+			project_name = #{projectName},
 			role_name = #{roleName}
+	</delete>
+	
+	<delete id="deleteRoleRelationByProject">
+		DELETE FROM
+			global_role_relation
+		WHERE
+			project_name = #{projectName}
 	</delete>
 	
 	

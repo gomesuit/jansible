@@ -52,7 +52,7 @@ public class GlobalRoleRelationService {
 		}
 	}
 
-	public void deleteGlobalRoleRelation(GlobalRoleRelationTagUpdateForm form){
+	public void updateGlobalRoleRelation(GlobalRoleRelationTagUpdateForm form){
 		try {
 			DbGlobalRoleRelation dbGlobalRoleRelation = new DbGlobalRoleRelation(form);
 			dbGlobalRoleRelation.setTagName(form.getTagName());

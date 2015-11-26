@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import jansible.model.common.EnvironmentKey;
-import jansible.model.common.GlobalRoleRelationKey;
 import jansible.model.common.Group;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
@@ -189,7 +188,7 @@ public class ProjectController {
 
 	@RequestMapping(value="/project/globalRole/update", method=RequestMethod.POST)
 	private String deleteGlobalRoleRelation(@ModelAttribute GlobalRoleRelationTagUpdateForm form, HttpServletRequest request){
-		globalRoleRelationService.deleteGlobalRoleRelation(form);
+		globalRoleRelationService.updateGlobalRoleRelation(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

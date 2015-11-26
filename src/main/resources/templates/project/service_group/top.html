@@ -60,7 +60,7 @@
 			<tr>
 				<td>
 					<select size="1" th:field="*{roleName}">
-						<option th:each="role : ${roleList}" th:value="${role.roleName}" th:label="${role.roleName}" />
+						<option th:each="roleName : ${roleNameList}" th:value="${roleName}" th:label="${roleName}" />
 					</select>
 				</td>
 			</tr>

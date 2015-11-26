@@ -1,5 +1,8 @@
 package jansible.web.project;
 
+import jansible.mapper.GlobalRoleMapper;
+import jansible.mapper.GlobalRoleRelationMapper;
+import jansible.mapper.RoleMapper;
 import jansible.mapper.ServerMapper;
 import jansible.mapper.ServiceGroupMapper;
 import jansible.mapper.VariableMapper;
@@ -8,6 +11,9 @@ import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleRelationKey;
 import jansible.model.common.ServerRelationKey;
 import jansible.model.common.ServiceGroupKey;
+import jansible.model.database.DbGlobalRole;
+import jansible.model.database.DbGlobalRoleRelation;
+import jansible.model.database.DbRole;
 import jansible.model.database.DbRoleRelation;
 import jansible.model.database.DbServerRelation;
 import jansible.model.database.DbServiceGroup;
@@ -18,6 +24,7 @@ import jansible.web.project.group.RoleRelationOrderType;
 import jansible.web.project.group.ServerRelationForm;
 import jansible.web.project.group.ServiceGroupForm;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,6 +39,11 @@ public class GroupService {
 	private ServerMapper serverMapper;
 	@Autowired
 	private VariableMapper variableMapper;
+	@Autowired
+	private RoleMapper roleMapper;
+	@Autowired
+	private GlobalRoleRelationMapper globalRoleRelationMapper;
+	
 	@Autowired
 	private FileService fileService;
 
@@ -134,5 +146,18 @@ public class GroupService {
 
 	public List<DbServerRelation> getAllDbServerRelationList(ProjectKey key){
 		return serviceGroupMapper.selectAllDbServerRelationList(key);
+	}
+
+	public List<String> getRoleNameList(ProjectKey key) {
+		List<String> roleNameList = new ArrayList<>();
+		List<DbRole> dbRoleList = roleMapper.selectRoleList(key);
+		for(DbRole dbRole : dbRoleList){
+			roleNameList.add(dbRole.getRoleName());
+		}
+		List<DbGlobalRoleRelation> dbGlobalRoleRelationList = globalRoleRelationMapper.selectRoleRelationList(key);
+		for(DbGlobalRoleRelation dbGlobalRoleRelation : dbGlobalRoleRelationList){
+			roleNameList.add(dbGlobalRoleRelation.getRoleName());
+		}
+		return roleNameList;
 	}
 }

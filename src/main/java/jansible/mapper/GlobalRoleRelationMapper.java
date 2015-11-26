@@ -12,6 +12,7 @@ public interface GlobalRoleRelationMapper {
 	List<DbGlobalRoleRelation> selectRoleRelationList(ProjectKey key);
 	DbGlobalRoleRelation selectRoleRelation(GlobalRoleRelationKey key);
 	void deleteRoleRelation(GlobalRoleRelationKey key);
+	void deleteRoleRelationByProject(ProjectKey key);
 
 	List<DbGlobalRole> selectRoleList();
 	String selectNewestTagName(String roleName);

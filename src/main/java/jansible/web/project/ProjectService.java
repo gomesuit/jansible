@@ -4,6 +4,7 @@ import java.util.List;
 
 import jansible.mapper.ApplyHistoryMapper;
 import jansible.mapper.EnvironmentMapper;
+import jansible.mapper.GlobalRoleRelationMapper;
 import jansible.mapper.ProjectMapper;
 import jansible.mapper.RoleMapper;
 import jansible.mapper.ServerMapper;
@@ -39,7 +40,10 @@ public class ProjectService {
 	@Autowired
 	private TaskMapper taskMapper;
 	@Autowired
-	private VariableMapper variableMapper;	
+	private VariableMapper variableMapper;
+	@Autowired
+	private GlobalRoleRelationMapper globalRoleRelationMapper;
+	
 	@Autowired
 	private GitService gitService;
 	@Autowired
@@ -95,6 +99,7 @@ public class ProjectService {
 			roleMapper.deleteDbTemplateByProject(projectKey);
 			roleMapper.deleteRoleByProject(projectKey);
 			serverMapper.deleteServerByProject(projectKey);
+			serverMapper.deleteServerParameterByProject(projectKey);
 			serviceGroupMapper.deleteDbRoleRelationByProject(projectKey);
 			serviceGroupMapper.deleteDbServerRelationByProject(projectKey);
 			serviceGroupMapper.deleteServiceGroupByProject(projectKey);
@@ -104,6 +109,7 @@ public class ProjectService {
 			variableMapper.deleteDbRoleVariableByProject(projectKey);
 			variableMapper.deleteDbServerVariableByProject(projectKey);
 			variableMapper.deleteDbServiceGroupVariableByProject(projectKey);
+			globalRoleRelationMapper.deleteRoleRelationByProject(projectKey);
 			fileService.deleteProjectDir(projectKey);
 		} catch (Exception e) {
 			transactionManager.rollback(status);
