@@ -9,26 +9,33 @@ import java.util.Iterator;
 
 import org.eclipse.jgit.api.AddCommand;
 import org.eclipse.jgit.api.CheckoutCommand;
-import org.eclipse.jgit.api.CheckoutCommand.Stage;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PushCommand;
 import org.eclipse.jgit.api.SubmoduleAddCommand;
+import org.eclipse.jgit.api.SubmoduleUpdateCommand;
 import org.eclipse.jgit.api.TagCommand;
 import org.eclipse.jgit.api.errors.AbortedByHookException;
+import org.eclipse.jgit.api.errors.CheckoutConflictException;
 import org.eclipse.jgit.api.errors.ConcurrentRefUpdateException;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.InvalidConfigurationException;
+import org.eclipse.jgit.api.errors.InvalidMergeHeadsException;
+import org.eclipse.jgit.api.errors.InvalidRefNameException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.InvalidTagNameException;
 import org.eclipse.jgit.api.errors.NoFilepatternException;
 import org.eclipse.jgit.api.errors.NoHeadException;
 import org.eclipse.jgit.api.errors.NoMessageException;
+import org.eclipse.jgit.api.errors.RefAlreadyExistsException;
+import org.eclipse.jgit.api.errors.RefNotFoundException;
 import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.api.errors.UnmergedPathsException;
 import org.eclipse.jgit.api.errors.WrongRepositoryStateException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.submodule.SubmoduleWalk;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
@@ -60,18 +67,17 @@ public class JansibleGitter {
 		commitAndPush(dirName, name, pass, comment);
 	}
 	
-	public void addSubmodule(ProjectKey projectKey, String uri, String path, String tagName) throws Exception{
+	public void addSubmodule(ProjectKey projectKey, String uri, String path) throws Exception{
 		String dirName = jansibleFiler.getProjectDirName(projectKey);
-		addSubmodule(dirName, uri, path, tagName);
+		addSubmodule(dirName, uri, path);
 	}
 	
-	private void addSubmodule(String localPath, String uri, String path, String tagName) throws Exception{
+	private void addSubmodule(String localPath, String uri, String path) throws Exception{
 		File gitDir = getGitDir(localPath);
 		FileRepositoryBuilder builder = createBuilder(gitDir);
 		
 		try(Git git = new Git(builder.build())){
-			callSubmodule(git, uri, path, tagName);
-	        
+			callSubmodule(git, uri, path);
 		} catch (GitAPIException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -181,20 +187,42 @@ public class JansibleGitter {
 		return localPath + "/.git";
 	}
 	
-	private void callSubmodule(Git git, String uri, String path, String tagName) throws GitAPIException {
+	private void callSubmodule(Git git, String uri, String path) throws GitAPIException {
 		SubmoduleAddCommand command = git.submoduleAdd();
 		command.setURI(uri);
 		command.setPath(path);
-		//command.call();
-
-		try(Git git2 = new Git(command.call())){
-			CheckoutCommand aaa = git2.checkout();
-			aaa.setName(tagName);
-			aaa.call();
+		command.call();
+	}
+	
+	public void checkoutSubmodule(ProjectKey projectKey, String submodulePath, String tagName) throws Exception{
+		String dirName = jansibleFiler.getProjectDirName(projectKey);
+		checkoutSubmodule(dirName, submodulePath, tagName);
+	}
+	
+	private void checkoutSubmodule(String localPath, String submodulePath, String tagName) throws Exception {
+		File gitDir = getGitDir(localPath);
+		FileRepositoryBuilder builder = createBuilder(gitDir);
+		Repository repository = builder.build();
+		Repository subRepo = SubmoduleWalk.getSubmoduleRepository(repository, submodulePath);
+		
+		try(Git git = new Git(subRepo)){
+			callSubmoduleUpdate(git);
+			callCheckout(git, tagName);
 		} catch (GitAPIException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw e;
 		}
+	}
+	
+	private void callCheckout(Git git, String tagName) throws RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException, CheckoutConflictException, GitAPIException{
+		CheckoutCommand command = git.checkout();
+		command.setName(tagName);
+		command.call();
+	}
+	
+	private void callSubmoduleUpdate(Git git) throws InvalidConfigurationException, NoHeadException, ConcurrentRefUpdateException, CheckoutConflictException, InvalidMergeHeadsException, WrongRepositoryStateException, NoMessageException, RefNotFoundException, GitAPIException{
+		SubmoduleUpdateCommand command = git.submoduleUpdate();
+		command.call();
 	}
 }

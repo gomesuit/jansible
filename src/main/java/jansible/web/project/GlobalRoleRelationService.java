@@ -41,7 +41,8 @@ public class GlobalRoleRelationService {
 		globalRoleRelationMapper.insertRoleRelation(dbGlobalRoleRelation);
 		
 		try {
-			gitService.addSubmodule(form, globalRoleRelationMapper.selectUri(form.getRoleName()), "roles/" + form.getRoleName(), tagName);
+			gitService.addSubmodule(form, globalRoleRelationMapper.selectUri(form.getRoleName()), "roles/" + form.getRoleName());
+			gitService.checkoutSubmodule(form, "roles/" + form.getRoleName(), tagName);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

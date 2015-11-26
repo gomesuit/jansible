@@ -1,8 +1,8 @@
 package jansible.web.project;
 
 import jansible.git.JansibleGitter;
+import jansible.model.common.ProjectKey;
 import jansible.web.project.project.GitForm;
-import jansible.web.project.project.GlobalRoleRelationForm;
 import jansible.web.project.top.ProjectForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,11 @@ public class GitService {
 		jansibleGitter.cloneRepository(form, form.getRepositoryUrl());
 	}
 	
-	public void addSubmodule(GlobalRoleRelationForm form, String uri, String path, String tagName) throws Exception{
-		jansibleGitter.addSubmodule(form, uri, path, tagName);
+	public void addSubmodule(ProjectKey projectKey, String uri, String path) throws Exception{
+		jansibleGitter.addSubmodule(projectKey, uri, path);
+	}
+	
+	public void checkoutSubmodule(ProjectKey projectKey, String path, String tagName) throws Exception{
+		jansibleGitter.checkoutSubmodule(projectKey, path, tagName);
 	}
 }
