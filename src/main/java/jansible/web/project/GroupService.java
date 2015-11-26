@@ -1,6 +1,5 @@
 package jansible.web.project;
 
-import jansible.mapper.GlobalRoleMapper;
 import jansible.mapper.GlobalRoleRelationMapper;
 import jansible.mapper.RoleMapper;
 import jansible.mapper.ServerMapper;
@@ -11,7 +10,6 @@ import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleRelationKey;
 import jansible.model.common.ServerRelationKey;
 import jansible.model.common.ServiceGroupKey;
-import jansible.model.database.DbGlobalRole;
 import jansible.model.database.DbGlobalRoleRelation;
 import jansible.model.database.DbRole;
 import jansible.model.database.DbRoleRelation;
