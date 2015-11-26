@@ -50,7 +50,13 @@ public class GlobalRoleRelationService {
 	}
 
 	public void deleteGlobalRoleRelation(GlobalRoleRelationKey key){
-		globalRoleRelationMapper.deleteRoleRelation(key);
+		//globalRoleRelationMapper.deleteRoleRelation(key);
+		try {
+			gitService.checkoutSubmodule(key, "roles/" + key.getRoleName(), "VER20151126122513");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public List<DbGlobalRole> getGlobalRoleList(){
