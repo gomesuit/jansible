@@ -9,6 +9,7 @@ import jansible.model.common.GlobalRoleVariableKey;
 import jansible.model.database.DbGlobalRole;
 import jansible.model.database.DbGlobalRoleFile;
 import jansible.model.database.DbGlobalRoleTag;
+import jansible.model.database.DbGlobalRoleTagVariable;
 import jansible.model.database.DbGlobalRoleTemplate;
 import jansible.model.database.DbGlobalRoleVariable;
 import jansible.web.manager.role.GeneralFileForm;
@@ -17,6 +18,7 @@ import jansible.web.manager.role.RoleVariableForm;
 import jansible.web.manager.role.UploadForm;
 import jansible.web.manager.top.GlobalRoleForm;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +67,25 @@ public class GlobalRoleService {
 		dbGlobalRoleTag.setTagName(tagName);
 		dbGlobalRoleTag.setTagComment(form.getComment());
 		roleMapper.insertRoleTag(dbGlobalRoleTag);
+		
+		List<DbGlobalRoleTagVariable> dbGlobalRoleTagVariableList = createDbGlobalRoleTagVariableList(form, tagName);
+		registDbGlobalRoleTagVariableList(dbGlobalRoleTagVariableList);
+	}
+	
+	private void registDbGlobalRoleTagVariableList(List<DbGlobalRoleTagVariable> dbGlobalRoleTagVariableList){
+		for(DbGlobalRoleTagVariable dbGlobalRoleTagVariable : dbGlobalRoleTagVariableList){
+			roleMapper.insertRoleTagVariable(dbGlobalRoleTagVariable);
+		}
+	}
+	
+	private List<DbGlobalRoleTagVariable> createDbGlobalRoleTagVariableList(GlobalRoleKey key, String tagName){
+		List<DbGlobalRoleTagVariable> dbGlobalRoleTagVariableList = new ArrayList<>();
+		List<DbGlobalRoleVariable> dbGlobalRoleVariableList = roleMapper.selectDbRoleVariableList(key);
+		for(DbGlobalRoleVariable dbGlobalRoleVariable : dbGlobalRoleVariableList){
+			DbGlobalRoleTagVariable dbGlobalRoleTagVariable = new DbGlobalRoleTagVariable(dbGlobalRoleVariable, tagName);
+			dbGlobalRoleTagVariableList.add(dbGlobalRoleTagVariable);
+		}
+		return dbGlobalRoleTagVariableList;
 	}
 
 	public List<DbGlobalRoleTag> getRoleTagList(GlobalRoleKey key){

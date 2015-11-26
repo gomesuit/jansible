@@ -7,6 +7,7 @@ import jansible.model.common.GlobalRoleVariableKey;
 import jansible.model.database.DbGlobalRole;
 import jansible.model.database.DbGlobalRoleFile;
 import jansible.model.database.DbGlobalRoleTag;
+import jansible.model.database.DbGlobalRoleTagVariable;
 import jansible.model.database.DbGlobalRoleTemplate;
 import jansible.model.database.DbGlobalRoleVariable;
 
@@ -35,4 +36,6 @@ public interface GlobalRoleMapper {
 
 	void insertRoleTag(DbGlobalRoleTag dbGlobalRoleTag);
 	List<DbGlobalRoleTag> selectRoleTagList(GlobalRoleKey key);
+
+	void insertRoleTagVariable(DbGlobalRoleTagVariable dbGlobalRoleTagVariable);
 }

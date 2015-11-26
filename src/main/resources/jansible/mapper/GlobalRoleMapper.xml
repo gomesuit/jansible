@@ -190,4 +190,22 @@
 			role_name = #{roleName}
 	</select>
 	
+	
+	<insert id="insertRoleTagVariable" parameterType="DbGlobalRoleTagVariable">
+		INSERT INTO global_role_tag_variable
+			(
+				role_name,
+				tag_name,
+				variable_name,
+				value
+			)
+		VALUES
+			(
+				#{roleName},
+				#{tagName},
+				#{variableName},
+				#{value}
+			)
+	</insert>
+	
 </mapper>
