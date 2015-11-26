@@ -19,6 +19,7 @@ import jansible.web.project.apply.BuildForm;
 import jansible.web.project.apply.ServerBuildForm;
 import jansible.web.project.project.RebuildForm;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +58,14 @@ public class JenkinsBuildService {
 		DbProject project = projectMapper.selectProject(form);
 		JenkinsParameter jenkinsParameter = new JenkinsParameter();
 		jenkinsParameter.setProjectName(form.getProjectName());
-		jenkinsParameter.setGroupName(jansibleFiler.getGroupName(dbApplyHistory.getEnvironmentName(), dbApplyHistory.getGroupName()));
+		
+		String serverName = dbApplyHistory.getServerName();
+		if(StringUtils.isBlank(serverName)){
+			jenkinsParameter.setGroupName(jansibleFiler.getGroupName(dbApplyHistory.getEnvironmentName(), dbApplyHistory.getGroupName()));
+		}else{
+			jenkinsParameter.setGroupName(jansibleFiler.getServerStartYamlName(dbApplyHistory.getEnvironmentName(), dbApplyHistory.getGroupName(), serverName));
+		}
+		
 		jenkinsParameter.setRepositoryUrl(project.getRepositoryUrl());
 		jenkinsParameter.setTagName(dbApplyHistory.getTagName());
 		
