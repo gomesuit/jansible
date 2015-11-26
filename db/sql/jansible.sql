@@ -115,11 +115,10 @@ CREATE TABLE global_role_relation
 
 CREATE TABLE global_role_tag
 (
-	tag_id int NOT NULL AUTO_INCREMENT,
 	role_name varchar(30) NOT NULL,
 	tag_name varchar(120) NOT NULL,
 	tag_comment varchar(256),
-	PRIMARY KEY (tag_id, role_name)
+	PRIMARY KEY (role_name, tag_name)
 );
 
 

@@ -182,7 +182,6 @@
 	<select id="selectRoleTagList" resultType="DbGlobalRoleTag">
 		SELECT
 			role_name as roleName,
-			tag_id as tagId,
 			tag_name as tagName,
 			tag_comment as tagComment
 		FROM

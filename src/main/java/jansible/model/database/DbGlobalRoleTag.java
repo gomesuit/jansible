@@ -4,7 +4,6 @@ import jansible.model.common.GlobalRoleKey;
 import jansible.model.common.GlobalRoleTagKey;
 
 public class DbGlobalRoleTag extends GlobalRoleTagKey{
-	private String tagName;
 	private String tagComment;
 	
 	public DbGlobalRoleTag(){}
@@ -14,15 +13,7 @@ public class DbGlobalRoleTag extends GlobalRoleTagKey{
 	}
 
 	public DbGlobalRoleTag(GlobalRoleTagKey key) {
-		super(key, key.getTagId());
-	}
-
-	public String getTagName() {
-		return tagName;
-	}
-
-	public void setTagName(String tagName) {
-		this.tagName = tagName;
+		super(key, key.getTagName());
 	}
 
 	public String getTagComment() {

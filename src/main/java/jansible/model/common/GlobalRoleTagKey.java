@@ -1,7 +1,7 @@
 package jansible.model.common;
 
 public class GlobalRoleTagKey extends GlobalRoleKey{
-	private int tagId;
+	private String tagName;
 	
 	public GlobalRoleTagKey(){}
 
@@ -9,17 +9,17 @@ public class GlobalRoleTagKey extends GlobalRoleKey{
 		super(key.getRoleName());
 	}
 
-	public GlobalRoleTagKey(GlobalRoleKey key, int tagId) {
+	public GlobalRoleTagKey(GlobalRoleKey key, String tagName) {
 		this(key);
-		this.tagId = tagId;
+		this.tagName = tagName;
 	}
 
-	public int getTagId() {
-		return tagId;
+	public String getTagName() {
+		return tagName;
 	}
 
-	public void setTagId(int tagId) {
-		this.tagId = tagId;
+	public void setTagName(String tagName) {
+		this.tagName = tagName;
 	}
 	
 }

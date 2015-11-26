@@ -77,7 +77,7 @@
 		WHERE
 			role_name = #{roleName}
 		ORDER BY
-			tag_id DESC
+			tag_name DESC
 		LIMIT 1
 	</select>
 	
@@ -100,7 +100,7 @@
 		WHERE
 			role_name = #{roleName}
 		ORDER BY
-			tag_id DESC
+			tag_name DESC
 	</select>
 	
 </mapper>
