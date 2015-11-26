@@ -190,6 +190,13 @@
 			role_name = #{roleName}
 	</select>
 	
+	<delete id="deleteRoleTag">
+	    DELETE FROM
+	    	global_role_tag
+	    WHERE
+			role_name = #{roleName}
+	</delete>
+	
 	
 	<insert id="insertRoleTagVariable" parameterType="DbGlobalRoleTagVariable">
 		INSERT INTO global_role_tag_variable
@@ -207,5 +214,12 @@
 				#{value}
 			)
 	</insert>
+	
+	<delete id="deleteRoleTagVariable">
+	    DELETE FROM
+	    	global_role_tag_variable
+	    WHERE
+			role_name = #{roleName}
+	</delete>
 	
 </mapper>

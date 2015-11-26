@@ -36,6 +36,8 @@ public interface GlobalRoleMapper {
 
 	void insertRoleTag(DbGlobalRoleTag dbGlobalRoleTag);
 	List<DbGlobalRoleTag> selectRoleTagList(GlobalRoleKey key);
+	void deleteRoleTag(GlobalRoleKey globalRoleKey);
 
 	void insertRoleTagVariable(DbGlobalRoleTagVariable dbGlobalRoleTagVariable);
+	void deleteRoleTagVariable(GlobalRoleKey globalRoleKey);
 }

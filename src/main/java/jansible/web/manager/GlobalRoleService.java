@@ -108,6 +108,8 @@ public class GlobalRoleService {
 		taskMapper.deleteTaskDetailByRole(key);
 		taskMapper.deleteTaskConditionalByRole(key);
 		roleMapper.deleteDbRoleVariableByRole(key);
+		roleMapper.deleteRoleTag(key);
+		roleMapper.deleteRoleTagVariable(key);
 		fileService.deleteRoleDir(key);
 	}
 
