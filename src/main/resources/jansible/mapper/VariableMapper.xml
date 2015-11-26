@@ -15,15 +15,20 @@
 		UNION
 		
 		SELECT DISTINCT
-			GV.variable_name as variableName
+			GTV.variable_name as variableName
 		FROM
 			global_role_relation GR
 				INNER JOIN
 			global_role G ON
 				GR.role_name = G.role_name
 				INNER JOIN
-			global_role_variable GV ON
-				G.role_name = GV.role_name
+			global_role_tag GT ON
+				GT.role_name = G.role_name AND
+				GT.tag_name = GR.tag_name
+				INNER JOIN
+			global_role_tag_variable GTV ON
+				GTV.role_name = GT.role_name AND
+				GTV.tag_name = GT.tag_name
 		WHERE
 			GR.project_name = #{projectName}
 	</select>
