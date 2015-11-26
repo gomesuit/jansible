@@ -17,6 +17,8 @@
 				#{roleName},
 				#{tagName}
 			)
+		ON DUPLICATE KEY UPDATE
+			tag_name = #{tagName}
 	</insert>
 	
 	<select id="selectRoleRelationList" resultType="DbGlobalRoleRelation">
@@ -79,6 +81,18 @@
 			global_role
 		WHERE
 			role_name = #{roleName}
+	</select>
+	
+	
+	<select id="selectTagNameList" resultType="java.lang.String">
+		SELECT
+			tag_name
+		FROM
+			global_role_tag
+		WHERE
+			role_name = #{roleName}
+		ORDER BY
+			tag_id DESC
 	</select>
 	
 </mapper>

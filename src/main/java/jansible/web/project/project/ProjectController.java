@@ -101,8 +101,8 @@ public class ProjectController {
 		// global role
 		model.addAttribute("globalRoleList", globalRoleRelationService.getGlobalRoleList());
 		model.addAttribute("globalRoleRelationForm", new GlobalRoleRelationForm(projectKey));
-		model.addAttribute("globalRoleRelationList", globalRoleRelationService.getGlobalRoleRelationList(projectKey));
-		model.addAttribute("globalRoleRelationKey", new GlobalRoleRelationKey(projectKey));
+		model.addAttribute("globalRoleRelationList", globalRoleRelationService.getGlobalRoleRelationViewList(projectKey));
+		model.addAttribute("globalRoleRelationTagUpdateForm", new GlobalRoleRelationTagUpdateForm(projectKey));
 		
 	    return "project/project/top";
 	}
@@ -187,9 +187,9 @@ public class ProjectController {
 		return "redirect:" + referer;
 	}
 
-	@RequestMapping(value="/project/globalRole/delete", method=RequestMethod.POST)
-	private String deleteGlobalRoleRelation(@ModelAttribute GlobalRoleRelationKey key, HttpServletRequest request){
-		globalRoleRelationService.deleteGlobalRoleRelation(key);
+	@RequestMapping(value="/project/globalRole/update", method=RequestMethod.POST)
+	private String deleteGlobalRoleRelation(@ModelAttribute GlobalRoleRelationTagUpdateForm form, HttpServletRequest request){
+		globalRoleRelationService.deleteGlobalRoleRelation(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

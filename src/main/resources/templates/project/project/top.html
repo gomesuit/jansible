@@ -144,7 +144,8 @@
 		<tr>
 			<td>role</td>
 			<td>tagName</td>
-			<td>Delete</td>
+			<td>changeTagName</td>
+			<td>Update</td>
 		</tr>
 		<tr th:each="globalRoleRelation : ${globalRoleRelationList}">
 			<td>
@@ -153,10 +154,17 @@
 			<td>
 				<div th:text="${globalRoleRelation.tagName}" />
 			</td>
-			<form method="POST" th:action="@{/project/globalRole/delete}" th:object="${globalRoleRelationKey}">
+			<form method="POST" th:action="@{/project/globalRole/update}" th:object="${globalRoleRelationTagUpdateForm}">
 				<input type="hidden" th:field="*{projectName}" />
 				<input type="hidden" name="roleName" th:value="${globalRoleRelation.roleName}" />
-				<td><input type="submit" value="Delete" /></td>
+				<td>
+					<select size="1" th:field="*{tagName}">
+						<option th:each="tag : ${globalRoleRelation.tagList}" th:value="${tag}" th:label="${tag}" />
+					</select>
+				</td>
+				<td>
+					<input type="submit" value="Update" />
+				</td>
 			</form>
 		</tr>
 	</table>
