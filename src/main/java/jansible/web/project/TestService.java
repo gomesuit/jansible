@@ -3,15 +3,19 @@ package jansible.web.project;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import jansible.file.Host;
 import jansible.file.HostGroup;
 import jansible.file.JansibleFiler;
 import jansible.file.JansibleHostsDumper;
 import jansible.mapper.ServiceGroupMapper;
+import jansible.model.common.ProjectKey;
 import jansible.model.common.ServerRelationKey;
 import jansible.model.database.DbRoleRelation;
+import jansible.zip.JansibleZip;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +26,39 @@ public class TestService {
 	@Autowired
 	private YamlService yamlService;
 	@Autowired
+	private VagrantService vagrantService;
+	@Autowired
 	private ServiceGroupMapper serviceGroupMapper;
 	@Autowired
 	private JansibleHostsDumper jansibleHostsDumper;
 	
 	private static final String TEST_YAML_FILENAME = "TEST";
+	private static final String TEMP_PATH_PREFIX = "temp";
+	
+	public File getTestZipFile(ServerRelationKey key) throws Exception{
+		File srcDir = new File(jansibleFiler.getProjectDirName(key));
+		String tempDir = getTempDirPathName(key);
+    	File destDir = new File(tempDir, key.getProjectName());
+    	
+    	FileUtils.copyDirectory(srcDir, destDir);
+    	
+    	vagrantService.saveVagrantFile(destDir.getPath());
+    	outputTestYaml(destDir.getPath(), key);
+    	outputTestHostsData(destDir.getPath(), key);
+
+    	File zipfile = new File(tempDir, key.getProjectName() + ".zip");
+    	JansibleZip.zip(zipfile, destDir);
+    	
+    	return zipfile;
+	}
+	
+	public String getTempDirPathName(ProjectKey key){
+		String systemRootDir = jansibleFiler.getSystemDirName();
+    	String uuid = UUID.randomUUID().toString();
+    	String tempDirPathName = systemRootDir + File.separator + TEMP_PATH_PREFIX + File.separator + uuid;
+    	
+		return tempDirPathName;
+	}
 
 	public void outputTestYaml(String outputDir, ServerRelationKey key){
 		String serverName = key.getServerName();

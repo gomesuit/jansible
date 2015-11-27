@@ -272,6 +272,29 @@
 		</tr>
 	</table>
 	
+	<br /><hr /><br />
+	<div>テストデータダウンロード</div>
+	<table border="1" rules="all">
+		<tr>
+			<td>environment</td>
+			<td>group</td>
+			<td>server</td>
+			<td>Download</td>
+		</tr>	
+		<tr th:each="server : ${serverbuildList}">
+			<td><div th:text="${server.environmentName}" /></td>
+			<td><div th:text="${server.groupName}" /></td>
+			<td><div th:text="${server.serverName}" /></td>
+			<form method="POST" enctype="multipart/form-data" th:action="@{/project/testZip}" th:object="${serverRelationKey}">
+				<input type="hidden" th:field="*{projectName}" />
+				<input type="hidden" name="environmentName" th:value="${server.environmentName}" />
+				<input type="hidden" name="groupName" th:value="${server.groupName}" />
+				<input type="hidden" name="serverName" th:value="${server.serverName}" />
+				<td><input type="submit" value="Download" /></td>
+			</form>
+		</tr>
+	</table>
+	
 	<br /><hr />
 	<a th:href="@{/}" >トップ</a>
 </body>

@@ -12,6 +12,7 @@ import jansible.model.common.Group;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
 import jansible.model.common.ServerKey;
+import jansible.model.common.ServerRelationKey;
 import jansible.model.database.DbEnvironment;
 import jansible.model.database.DbProject;
 import jansible.model.database.DbServiceGroup;
@@ -20,14 +21,14 @@ import jansible.web.project.EnvironmentService;
 import jansible.web.project.GitService;
 import jansible.web.project.GlobalRoleRelationService;
 import jansible.web.project.GroupService;
+import jansible.web.project.TestService;
 import jansible.web.project.JenkinsBuildService;
 import jansible.web.project.ProjectService;
 import jansible.web.project.RoleService;
 import jansible.web.project.ServerService;
 import jansible.web.project.server.ServerForm;
-import jansible.zip.JansibleZip;
 
-import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.FileSystemResource;
@@ -64,61 +65,8 @@ public class ProjectController {
 	@Autowired
 	private GlobalRoleRelationService globalRoleRelationService;
 	
-
-    @RequestMapping("/project/zip")
-    @ResponseBody
-	private Resource zipProject(
-			@RequestParam(value = "projectName", required = true) String projectName,
-			Model model, HttpServletResponse response, HttpServletRequest request) throws Exception{
-    	
-    	File zipfile = new File("D:/temp/project/jansibletest.zip");
-    	File srcfile = new File("D:/temp/project", "jansibletest");
-    	
-    	JansibleZip.zip(zipfile, srcfile);
-    	
-		response.setHeader("Content-Disposition","attachment; filename=\"" + zipfile.getName() +"\"");
-		
-		FileUtils.forceDeleteOnExit(zipfile);
-		
-		request.setAttribute("test", zipfile);
-		
-    	return new FileSystemResource(zipfile);
-    }
-    
-    @Bean
-    public MappedInterceptor interceptor() {
-        return new MappedInterceptor(new String[]{"/project/zip"}, new AAA());
-    }
-    
-    private class AAA implements HandlerInterceptor{
-
-		@Override
-		public boolean preHandle(HttpServletRequest request,
-				HttpServletResponse response, Object handler) throws Exception {
-			// TODO Auto-generated method stub
-			System.out.println(request.getRequestURI());
-			return true;
-		}
-
-		@Override
-		public void postHandle(HttpServletRequest request,
-				HttpServletResponse response, Object handler,
-				ModelAndView modelAndView) throws Exception {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void afterCompletion(HttpServletRequest request,
-				HttpServletResponse response, Object handler, Exception ex)
-				throws Exception {
-			// TODO Auto-generated method stub
-			File aaa = (File) request.getAttribute("test");
-			System.out.println(aaa.getPath());
-			aaa.delete();
-		}
-    	
-    }
+	@Autowired
+	private TestService testService;
     
     @RequestMapping("/project/view")
 	private String viewProject(
@@ -169,6 +117,11 @@ public class ProjectController {
 		model.addAttribute("globalRoleRelationForm", new GlobalRoleRelationForm(projectKey));
 		model.addAttribute("globalRoleRelationList", globalRoleRelationService.getGlobalRoleRelationViewList(projectKey));
 		model.addAttribute("globalRoleRelationTagUpdateForm", new GlobalRoleRelationTagUpdateForm(projectKey));
+		
+		// テストデータダウンロード
+		ServerRelationKey serverRelationKey = new ServerRelationKey();
+		serverRelationKey.setProjectName(projectName);
+		model.addAttribute("serverRelationKey", serverRelationKey);
 		
 	    return "project/project/top";
 	}
@@ -260,4 +213,48 @@ public class ProjectController {
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
+
+	
+
+    @RequestMapping("/project/testZip")
+    @ResponseBody
+	private Resource testZip(@ModelAttribute ServerRelationKey key, HttpServletResponse response, HttpServletRequest request) throws Exception{
+    	File zipfile = testService.getTestZipFile(key);
+    	
+		response.setHeader("Content-Disposition","attachment; filename=\"" + zipfile.getName() +"\"");
+		
+		request.setAttribute("tempDir", zipfile.getParent());
+		
+    	return new FileSystemResource(zipfile);
+    }
+    
+    @Bean
+    public MappedInterceptor interceptor() {
+        return new MappedInterceptor(new String[]{"/project/testZip"}, new DeleteTempDirInterceptor());
+    }
+    
+    private class DeleteTempDirInterceptor implements HandlerInterceptor{
+
+		@Override
+		public boolean preHandle(HttpServletRequest request,
+				HttpServletResponse response, Object handler) throws Exception {
+			return true;
+		}
+
+		@Override
+		public void postHandle(HttpServletRequest request,
+				HttpServletResponse response, Object handler,
+				ModelAndView modelAndView) throws Exception {
+		}
+
+		@Override
+		public void afterCompletion(HttpServletRequest request,
+				HttpServletResponse response, Object handler, Exception ex)
+				throws Exception {
+			String tempDir = (String) request.getAttribute("tempDir");
+			File dir = new File(tempDir);
+			FileUtils.deleteDirectory(dir);
+		}
+    	
+    }
 }

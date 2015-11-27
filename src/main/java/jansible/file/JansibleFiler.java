@@ -287,9 +287,13 @@ public class JansibleFiler {
 		String dirName = getRoleVariableDirName(roleKey);
 		mkDir(dirName);
 	}
+	
+	public String getSystemDirName(){
+		return ROOT_PATH;
+	}
 
 	public String getProjectDirName(ProjectKey projectKey) {
-		return ROOT_PATH + PROJECT_PATH_PREFIX + PATH_SEPARATOR + projectKey.getProjectName();
+		return getSystemDirName() + PROJECT_PATH_PREFIX + PATH_SEPARATOR + projectKey.getProjectName();
 	}
 	
 	private String getRoleDirName(RoleKey roleKey) {
