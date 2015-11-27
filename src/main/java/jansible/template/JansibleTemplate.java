@@ -1,6 +1,7 @@
 package jansible.template;
 
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.velocity.Template;
@@ -11,7 +12,12 @@ import org.apache.velocity.app.VelocityEngine;
 public class JansibleTemplate {
 	private static final String TEMPLATE_FILE_PREFIX = "vm/";
 
-	public String main(String fileName, Map<String, String> param) {
+	public static String getString(String fileName) {
+		Map<String, String> param = new HashMap<>();
+		return getString(fileName, param);
+	}
+
+	public static String getString(String fileName, Map<String, String> param) {
 		VelocityEngine velocityEngine = createVelocityEngine();
 		
 		// テンプレートの作成
@@ -28,7 +34,7 @@ public class JansibleTemplate {
 		return stringWriter.toString();
 	}
 	
-	private VelocityContext createVelocityContext(Map<String, String> param){
+	private static VelocityContext createVelocityContext(Map<String, String> param){
 		VelocityContext context = new VelocityContext();
 		for(Map.Entry<String, String> e : param.entrySet()){
 			context.put(e.getKey(), e.getValue());
@@ -36,11 +42,11 @@ public class JansibleTemplate {
 		return context;
 	}
 	
-	private String getTemplatePath(String fileName){
+	private static String getTemplatePath(String fileName){
 		return TEMPLATE_FILE_PREFIX + fileName;
 	}
 	
-	private VelocityEngine createVelocityEngine(){
+	private static VelocityEngine createVelocityEngine(){
 		VelocityEngine velocityEngine = new VelocityEngine();
 		
 		velocityEngine.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");

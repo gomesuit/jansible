@@ -133,7 +133,7 @@ public class JansibleFiler {
 		return getGroupName(environmentName, groupName) + "_S-" + ServerName;
 	}
 
-	private void writeFile(String filePath, String content){
+	public void writeFile(String filePath, String content){
 		File file = new File(filePath);
 		try(FileWriter filewriter = new FileWriter(file)){
 			filewriter.write(content);
