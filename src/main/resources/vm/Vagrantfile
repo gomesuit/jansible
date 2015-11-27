@@ -8,7 +8,7 @@ yum -y install ansible
 cp /vagrant ./provision -r
 cd provision
 chmod -x hosts
-ansible-playbook -i hosts E-alpha_G-ap.yml
+ansible-playbook -i TEST TEST.yml
 
 SCRIPT
 
