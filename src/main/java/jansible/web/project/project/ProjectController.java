@@ -1,9 +1,11 @@
 package jansible.web.project.project;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import jansible.model.common.EnvironmentKey;
 import jansible.model.common.Group;
@@ -23,14 +25,23 @@ import jansible.web.project.ProjectService;
 import jansible.web.project.RoleService;
 import jansible.web.project.ServerService;
 import jansible.web.project.server.ServerForm;
+import jansible.zip.JansibleZip;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.handler.MappedInterceptor;
 
 @Controller
 public class ProjectController {
@@ -52,6 +63,62 @@ public class ProjectController {
 	private ServerService serverService;
 	@Autowired
 	private GlobalRoleRelationService globalRoleRelationService;
+	
+
+    @RequestMapping("/project/zip")
+    @ResponseBody
+	private Resource zipProject(
+			@RequestParam(value = "projectName", required = true) String projectName,
+			Model model, HttpServletResponse response, HttpServletRequest request) throws Exception{
+    	
+    	File zipfile = new File("D:/temp/project/jansibletest.zip");
+    	File srcfile = new File("D:/temp/project", "jansibletest");
+    	
+    	JansibleZip.zip(zipfile, srcfile);
+    	
+		response.setHeader("Content-Disposition","attachment; filename=\"" + zipfile.getName() +"\"");
+		
+		FileUtils.forceDeleteOnExit(zipfile);
+		
+		request.setAttribute("test", zipfile);
+		
+    	return new FileSystemResource(zipfile);
+    }
+    
+    @Bean
+    public MappedInterceptor interceptor() {
+        return new MappedInterceptor(new String[]{"/project/zip"}, new AAA());
+    }
+    
+    private class AAA implements HandlerInterceptor{
+
+		@Override
+		public boolean preHandle(HttpServletRequest request,
+				HttpServletResponse response, Object handler) throws Exception {
+			// TODO Auto-generated method stub
+			System.out.println(request.getRequestURI());
+			return true;
+		}
+
+		@Override
+		public void postHandle(HttpServletRequest request,
+				HttpServletResponse response, Object handler,
+				ModelAndView modelAndView) throws Exception {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void afterCompletion(HttpServletRequest request,
+				HttpServletResponse response, Object handler, Exception ex)
+				throws Exception {
+			// TODO Auto-generated method stub
+			File aaa = (File) request.getAttribute("test");
+			System.out.println(aaa.getPath());
+			aaa.delete();
+		}
+    	
+    }
     
     @RequestMapping("/project/view")
 	private String viewProject(
