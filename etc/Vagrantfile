@@ -5,7 +5,9 @@
 $provisioning_script = <<SCRIPT
 yum -y install epel-release
 yum -y install ansible
-cd /vagrant
+cp /vagrant ./provision -r
+cd provision
+chmod -x hosts
 ansible-playbook -i hosts E-alpha_G-ap.yml
 
 SCRIPT
