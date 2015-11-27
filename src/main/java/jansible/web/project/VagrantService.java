@@ -1,4 +1,4 @@
-package jansible.vagrant;
+package jansible.web.project;
 
 import java.io.File;
 
@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class JansibleVagrant {
+public class VagrantService {
 	@Autowired
 	private JansibleFiler jansibleFiler;
 	
