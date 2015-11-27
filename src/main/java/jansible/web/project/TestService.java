@@ -31,11 +31,15 @@ public class TestService {
 	private ServiceGroupMapper serviceGroupMapper;
 	@Autowired
 	private JansibleHostsDumper jansibleHostsDumper;
+	@Autowired
+	private FileService fileService;
 	
 	private static final String TEST_YAML_FILENAME = "TEST";
 	private static final String TEMP_PATH_PREFIX = "temp";
 	
 	public File getTestZipFile(ServerRelationKey key) throws Exception{
+		fileService.reOutputAllData(key);
+		
 		File srcDir = new File(jansibleFiler.getProjectDirName(key));
 		String tempDir = getTempDirPathName(key);
     	File destDir = new File(tempDir, key.getProjectName());
