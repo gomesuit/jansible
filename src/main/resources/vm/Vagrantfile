@@ -7,7 +7,7 @@ yum -y install epel-release
 yum -y install ansible
 cp /vagrant ./provision -r
 cd provision
-chmod -x hosts
+chmod -x TEST
 ansible-playbook -i TEST TEST.yml
 
 SCRIPT
