@@ -35,7 +35,7 @@ public class JenkinsBuilder {
 		return "http://" + ipAddress + ":" + port + "/job/" + jobName + "/build?delay=0sec";
 	}
 	
-	public void build(String buildUrl, JenkinsParameter jenkinsParameter){		
+	private void build(String buildUrl, JenkinsParameter jenkinsParameter){		
 		String json = getJenkinsJson(jenkinsParameter);
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -50,6 +50,7 @@ public class JenkinsBuilder {
 		jenkinsParameters.addParameter("repositoryUrl", jenkinsParameter.getRepositoryUrl());
 		jenkinsParameters.addParameter("groupName", jenkinsParameter.getGroupName());
 		jenkinsParameters.addParameter("tagName", jenkinsParameter.getTagName());
+		jenkinsParameters.addParameter("applyHistroyId", Integer.toString(jenkinsParameter.getApplyHistroyId()));
 		ObjectMapper mapper = new ObjectMapper();
 		String json = "";
 		try {

@@ -12,3 +12,4 @@ echo $projectName
 echo $repositoryUrl
 echo $groupName
 echo $tagName
+echo $applyHistroyId

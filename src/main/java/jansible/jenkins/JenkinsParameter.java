@@ -5,6 +5,7 @@ public class JenkinsParameter {
 	private String projectName;
 	private String groupName;
 	private String tagName;
+	private int applyHistroyId;
 	
 	public String getRepositoryUrl() {
 		return repositoryUrl;
@@ -29,5 +30,11 @@ public class JenkinsParameter {
 	}
 	public void setTagName(String tagName) {
 		this.tagName = tagName;
+	}
+	public int getApplyHistroyId() {
+		return applyHistroyId;
+	}
+	public void setApplyHistroyId(int applyHistroyId) {
+		this.applyHistroyId = applyHistroyId;
 	}
 }

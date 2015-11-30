@@ -7,7 +7,7 @@ import jansible.model.database.DbApplyHistory;
 import java.util.List;
 
 public interface ApplyHistoryMapper {
-	void insertDbApplyHistory(DbApplyHistory dbApplyHistory);
+	int insertDbApplyHistory(DbApplyHistory dbApplyHistory);
 	List<DbApplyHistory> selectDbApplyHistoryList(ProjectKey projectKey);
 	DbApplyHistory selectDbApplyHistory(ApplyHistoryKey applyHistoryKey);
 	void deleteApplyHistoryByProject(ProjectKey projectKey);

@@ -51,45 +51,31 @@ public class JenkinsBuildService {
 	}
 	
 	public void rebuild(RebuildForm form) throws Exception{
-		JenkinsInfo jenkinsInfo = createJenkinsInfo(form);
-		
 		DbApplyHistory dbApplyHistory = applyHistoryMapper.selectDbApplyHistory(form);
-	
+		
+		dbApplyHistory.setApplyTime(new Date());
+		dbApplyHistory.setTagComment(dbApplyHistory.getTagComment() + "(rebuild)");
+		applyHistoryMapper.insertDbApplyHistory(dbApplyHistory);
+		
 		DbProject project = projectMapper.selectProject(form);
 		JenkinsParameter jenkinsParameter = new JenkinsParameter();
 		jenkinsParameter.setProjectName(form.getProjectName());
-		
 		String serverName = dbApplyHistory.getServerName();
 		if(StringUtils.isBlank(serverName)){
 			jenkinsParameter.setGroupName(jansibleFiler.getGroupName(dbApplyHistory.getEnvironmentName(), dbApplyHistory.getGroupName()));
 		}else{
 			jenkinsParameter.setGroupName(jansibleFiler.getServerStartYamlName(dbApplyHistory.getEnvironmentName(), dbApplyHistory.getGroupName(), serverName));
 		}
-		
 		jenkinsParameter.setRepositoryUrl(project.getRepositoryUrl());
 		jenkinsParameter.setTagName(dbApplyHistory.getTagName());
-		
+		jenkinsParameter.setApplyHistroyId(dbApplyHistory.getApplyHistroyId());
+		JenkinsInfo jenkinsInfo = createJenkinsInfo(form);
 		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
-		
-		dbApplyHistory.setApplyTime(new Date());
-		dbApplyHistory.setTagComment(dbApplyHistory.getTagComment() + "(rebuild)");
-		applyHistoryMapper.insertDbApplyHistory(dbApplyHistory);
 	}
 
 	public void groupBuild(BuildForm form) throws Exception{
 		String tagName = getTagName(form);
 		jansibleGitter.tagAndPush(form, form, tagName);
-		
-		DbProject project = projectMapper.selectProject(form);
-		JenkinsParameter jenkinsParameter = new JenkinsParameter();
-		jenkinsParameter.setProjectName(form.getProjectName());
-		jenkinsParameter.setGroupName(jansibleFiler.getGroupName(form));
-		jenkinsParameter.setRepositoryUrl(project.getRepositoryUrl());
-		jenkinsParameter.setTagName(tagName);
-
-		JenkinsInfo jenkinsInfo = createJenkinsInfo(form);
-		
-		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
 		
 		DbApplyHistory dbApplyHistory = new DbApplyHistory();
 		dbApplyHistory.setProjectName(form.getProjectName());
@@ -98,8 +84,17 @@ public class JenkinsBuildService {
 		dbApplyHistory.setTagName(tagName);
 		dbApplyHistory.setTagComment(form.getComment());
 		dbApplyHistory.setApplyTime(new Date());
-		
 		applyHistoryMapper.insertDbApplyHistory(dbApplyHistory);
+		
+		DbProject project = projectMapper.selectProject(form);
+		JenkinsParameter jenkinsParameter = new JenkinsParameter();
+		jenkinsParameter.setProjectName(form.getProjectName());
+		jenkinsParameter.setGroupName(jansibleFiler.getGroupName(form));
+		jenkinsParameter.setRepositoryUrl(project.getRepositoryUrl());
+		jenkinsParameter.setTagName(tagName);
+		jenkinsParameter.setApplyHistroyId(dbApplyHistory.getApplyHistroyId());
+		JenkinsInfo jenkinsInfo = createJenkinsInfo(form);
+		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
 	}
 	
 	private String getTagName(ServiceGroupKey serviceGroupKey){
@@ -112,17 +107,6 @@ public class JenkinsBuildService {
 		String tagName = getTagNameForServer(form);
 		jansibleGitter.tagAndPush(form, form, tagName);
 		
-		DbProject project = projectMapper.selectProject(form);
-		JenkinsParameter jenkinsParameter = new JenkinsParameter();
-		jenkinsParameter.setProjectName(form.getProjectName());
-		jenkinsParameter.setGroupName(jansibleFiler.getServerStartYamlName(form));
-		jenkinsParameter.setRepositoryUrl(project.getRepositoryUrl());
-		jenkinsParameter.setTagName(tagName);
-
-		JenkinsInfo jenkinsInfo = createJenkinsInfo(form);
-		
-		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
-		
 		DbApplyHistory dbApplyHistory = new DbApplyHistory();
 		dbApplyHistory.setProjectName(form.getProjectName());
 		dbApplyHistory.setEnvironmentName(form.getEnvironmentName());
@@ -131,8 +115,19 @@ public class JenkinsBuildService {
 		dbApplyHistory.setTagName(tagName);
 		dbApplyHistory.setTagComment(form.getComment());
 		dbApplyHistory.setApplyTime(new Date());
-		
 		applyHistoryMapper.insertDbApplyHistory(dbApplyHistory);
+
+		DbProject project = projectMapper.selectProject(form);
+		JenkinsParameter jenkinsParameter = new JenkinsParameter();
+		jenkinsParameter.setProjectName(form.getProjectName());
+		jenkinsParameter.setGroupName(jansibleFiler.getServerStartYamlName(form));
+		jenkinsParameter.setRepositoryUrl(project.getRepositoryUrl());
+		jenkinsParameter.setTagName(tagName);
+		jenkinsParameter.setApplyHistroyId(dbApplyHistory.getApplyHistroyId());
+
+		JenkinsInfo jenkinsInfo = createJenkinsInfo(form);
+		
+		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
 	}
 	
 	private String getTagNameForServer(ServerRelationKey key){
