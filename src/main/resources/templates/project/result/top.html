@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta content="ja" http-equiv="Content-Language" />
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<title>sample page</title>
+</head>
+<body>
+	<div>実行結果の画面です</div>
+	
+	<br /><hr /><br />
+	<div>結果</div>
+	<pre th:utext="${result}" />
+	
+	<br /><hr />
+	<a th:href="@{/project/view/(projectName=${projectKey.projectName})}" >戻る</a>
+	<a th:href="@{/}" >トップ</a>
+</body>
+</html>
