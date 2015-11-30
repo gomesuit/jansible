@@ -1,7 +1,7 @@
 package sample;
 
 import jansible.jenkins.JenkinsInfo;
-import jansible.jenkins.JenkinsReader;
+import jansible.jenkins.result.JenkinsReader;
 
 public class Main2 {
 

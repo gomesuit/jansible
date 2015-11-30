@@ -1,8 +1,8 @@
-package jansible.jenkins;
+package jansible.jenkins.result;
 
-import jansible.jenkins.test.Action;
-import jansible.jenkins.test.Build;
-import jansible.jenkins.test.Result;
+import jansible.jenkins.JenkinsInfo;
+import jansible.jenkins.JenkinsParameter;
+import jansible.jenkins.JenkinsParameterMap;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -19,8 +19,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -111,14 +109,6 @@ public class JenkinsReader {
 			map.put(jenkinsParameterMap.getName(), jenkinsParameterMap.getValue());
 		}
 		return map;
-	}
-
-	public static void main(String args[]) throws JsonParseException, JsonMappingException, IOException{
-		String url = "http://192.168.33.11:8080/job/ansible/api/json?depth=1";
-		String json = executeGet(url);
-		ObjectMapper mapper = new ObjectMapper();
-		Result hoge = mapper.readValue(json, Result.class);
-		System.out.println(hoge);
 	}
 	
 	private String getBuildResultUrl(JenkinsInfo info){

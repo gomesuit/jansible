@@ -1,4 +1,6 @@
-package jansible.jenkins;
+package jansible.jenkins.build;
+
+import jansible.jenkins.JenkinsParameterMap;
 
 import java.util.ArrayList;
 import java.util.List;

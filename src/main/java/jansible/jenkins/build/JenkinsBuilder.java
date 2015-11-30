@@ -1,4 +1,7 @@
-package jansible.jenkins;
+package jansible.jenkins.build;
+
+import jansible.jenkins.JenkinsInfo;
+import jansible.jenkins.JenkinsParameter;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

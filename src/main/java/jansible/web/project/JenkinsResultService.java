@@ -1,7 +1,7 @@
 package jansible.web.project;
 
 import jansible.jenkins.JenkinsInfo;
-import jansible.jenkins.JenkinsReader;
+import jansible.jenkins.result.JenkinsReader;
 import jansible.mapper.ApplyHistoryMapper;
 import jansible.mapper.ProjectMapper;
 import jansible.model.common.ProjectKey;

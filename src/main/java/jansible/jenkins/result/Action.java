@@ -1,4 +1,4 @@
-package jansible.jenkins.test;
+package jansible.jenkins.result;
 
 import jansible.jenkins.JenkinsParameterMap;
 

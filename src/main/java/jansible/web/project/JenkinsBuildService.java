@@ -4,9 +4,9 @@ import java.util.Date;
 
 import jansible.file.JansibleFiler;
 import jansible.git.JansibleGitter;
-import jansible.jenkins.JenkinsBuilder;
 import jansible.jenkins.JenkinsInfo;
 import jansible.jenkins.JenkinsParameter;
+import jansible.jenkins.build.JenkinsBuilder;
 import jansible.mapper.ApplyHistoryMapper;
 import jansible.mapper.ProjectMapper;
 import jansible.model.common.ProjectKey;

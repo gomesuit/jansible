@@ -1,4 +1,6 @@
-package jansible.jenkins;
+package jansible.jenkins.result;
+
+import jansible.jenkins.JenkinsInfo;
 
 public class JenkinsReadInfo extends JenkinsInfo {
 	private int buildNumber;
