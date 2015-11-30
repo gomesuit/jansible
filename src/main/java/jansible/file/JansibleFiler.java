@@ -447,6 +447,10 @@ public class JansibleFiler {
 		String hostsFilePath = getHostsFilePath(projectKey);
 		writeFile(hostsFilePath, hostsFileContent);
 	}
+	
+	public void deleteHostsFile(ProjectKey projectKey){
+		deleteDirByRecursive(getHostsFilePath(projectKey));
+	}
 
 	public void uploadFile(MultipartFile file, String filePath) {
 		if (!file.isEmpty()) {

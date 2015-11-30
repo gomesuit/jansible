@@ -201,6 +201,7 @@ public class FileService {
 		jansibleFiler.deleteAllStartYamlfile(projectKey);
 		jansibleFiler.deleteGroupVariableDir(projectKey);
 		jansibleFiler.deleteHostVariableDir(projectKey);
+		jansibleFiler.deleteHostsFile(projectKey);
 		
 		outputProjectData(projectKey);
 		outputHostsData(projectKey);
