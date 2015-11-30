@@ -104,9 +104,6 @@ public class ProjectController {
 		// 適用履歴
 		model.addAttribute("applyHistoryList", applyService.getDbApplyHistoryList(projectKey));
 		
-		// 再実行
-		model.addAttribute("rebuildForm", new RebuildForm(projectKey));
-		
 		// サーバ関連
 		model.addAttribute("serverForm", new ServerForm(projectKey));
 		model.addAttribute("serverList", serverService.getServerList(projectKey));

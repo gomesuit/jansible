@@ -255,7 +255,6 @@
 			<td>tagName</td>
 			<td>tagComment</td>
 			<td>applyTime</td>
-			<td>Rebuild</td>
 			<td>result</td>
 		</tr>
 		<tr th:each="applyHistory : ${applyHistoryList}">
@@ -265,11 +264,6 @@
 			<td><div th:text="${applyHistory.tagName}" /></td>
 			<td><div th:text="${applyHistory.tagComment}" /></td>
 			<td><div th:text="${#dates.format(applyHistory.applyTime, 'yyyy/MM/dd HH:mm:ss')}" /></td>
-			<form method="POST" th:action="@{/project/jenkins/rebuild}" th:object="${rebuildForm}">
-				<input type="hidden" th:field="*{projectName}" />
-				<input type="hidden" name="applyHistroyId" th:value="${applyHistory.applyHistroyId}" />
-				<td><input type="submit" value="Rebuild" /></td>
-			</form>
 			<td>
 				<a th:href="@{/project/jenkins/result(projectName=${applyHistory.projectName}, applyHistroyId=${applyHistory.applyHistroyId})}"
 				th:text="result" />

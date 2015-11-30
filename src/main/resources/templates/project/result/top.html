@@ -12,6 +12,14 @@
 	<div>結果</div>
 	<pre th:utext="${result}" />
 	
+	<hr /><br />
+	<div>再実行</div>
+	<form method="POST" th:action="@{/project/jenkins/rebuild}" th:object="${rebuildForm}">
+		<input type="hidden" th:field="*{projectName}" />
+		<input type="hidden" th:field="*{applyHistroyId}" />
+		<td><input type="submit" value="Rebuild" /></td>
+	</form>
+	
 	<br /><hr />
 	<a th:href="@{/project/view/(projectName=${projectKey.projectName})}" >戻る</a>
 	<a th:href="@{/}" >トップ</a>
