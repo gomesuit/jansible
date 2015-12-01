@@ -76,6 +76,8 @@ public class FileService {
 	}
 
 	public void outputRoleVariableData(RoleKey roleKey){
+		jansibleFiler.mkRoleVariableDir(roleKey);
+		
 		List<DbRoleVariable> dbRoleVariableList = variableMapper.selectDbRoleVariableList(roleKey);
 		List<YamlVariable> yamlVariableList = yamlService.createYamlVariableList(dbRoleVariableList);
 		
@@ -144,6 +146,7 @@ public class FileService {
 	}
 
 	public void outputTaskData(RoleKey roleKey){
+		jansibleFiler.mkRoleTaskDir(roleKey);
 		List<DbTask> dbTaskList = taskMapper.selectTaskList(roleKey);
 		jansibleFiler.writeRoleYaml(roleKey, yamlService.createYaml(dbTaskList));
 	}

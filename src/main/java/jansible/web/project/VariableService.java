@@ -43,6 +43,7 @@ public class VariableService {
 	}
 
 	public void deleteEnvironmentVariable(EnvironmentVariableKey environmentVariableKey){
+		fileService.outputEnvironmentVariableData(environmentVariableKey);
 		variableMapper.deleteDbEnvironmentVariable(environmentVariableKey);
 	}
 
@@ -51,11 +52,13 @@ public class VariableService {
 	}
 
 	public void deleteServiceGroupVariable(ServiceGroupVariableKey serviceGroupVariableKey){
+		fileService.outputServiceGroupVariableData(serviceGroupVariableKey);
 		variableMapper.deleteDbServiceGroupVariable(serviceGroupVariableKey);
 	}
 
 	public void deleteRoleVariable(RoleVariableKey roleVariableKey){
 		variableMapper.deleteDbRoleVariable(roleVariableKey);
+		fileService.outputRoleVariableData(roleVariableKey);
 	}
 
 	public List<DbServiceGroupVariable> getDbServiceGroupVariableList(ServiceGroupKey serviceGroupKey){
@@ -67,6 +70,7 @@ public class VariableService {
 	}
 
 	public void deleteServerVariable(ServerVariableKey serverVariableKey){
+		fileService.outputServerVariableData(serverVariableKey);
 		variableMapper.deleteDbServerVariable(serverVariableKey);
 	}
 

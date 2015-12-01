@@ -380,7 +380,8 @@ public class JansibleFiler {
 	public String getRoleVariableDirName(RoleKey roleKey) {
 		String roleDirName = getRoleDirName(roleKey);
 		roleDirName += PATH_SEPARATOR;
-		roleDirName += "vars";
+		//roleDirName += "vars";
+		roleDirName += "defaults";
 		return roleDirName;
 	}
 	
