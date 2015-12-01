@@ -1,9 +1,6 @@
 package jansible.web.project;
 
-import jansible.file.Host;
-import jansible.file.HostGroup;
 import jansible.file.JansibleFiler;
-import jansible.file.JansibleHostsDumper;
 import jansible.mapper.EnvironmentMapper;
 import jansible.mapper.RoleMapper;
 import jansible.mapper.ServerMapper;
@@ -22,7 +19,6 @@ import jansible.model.database.DbRole;
 import jansible.model.database.DbRoleRelation;
 import jansible.model.database.DbRoleVariable;
 import jansible.model.database.DbServer;
-import jansible.model.database.DbServerParameter;
 import jansible.model.database.DbServerRelation;
 import jansible.model.database.DbServerVariable;
 import jansible.model.database.DbServiceGroup;
@@ -30,7 +26,6 @@ import jansible.model.database.DbServiceGroupVariable;
 import jansible.model.database.DbTask;
 import jansible.model.yamldump.YamlVariable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +40,6 @@ public class FileService {
 	@Autowired
 	private ServiceGroupMapper serviceGroupMapper;
 	@Autowired
-	private JansibleHostsDumper jansibleHostsDumper;
-	@Autowired
 	private EnvironmentMapper environmentMapper;
 	@Autowired
 	private ServerMapper serverMapper;
@@ -54,8 +47,11 @@ public class FileService {
 	private RoleMapper roleMapper;
 	@Autowired
 	private TaskMapper taskMapper;
+	
 	@Autowired
 	private YamlService yamlService;
+	@Autowired
+	private HostsFileService hostsFileService;
 	
 	
 	public void deleteHostVariableYaml(ServerKey serverKey){
@@ -152,51 +148,6 @@ public class FileService {
 		jansibleFiler.writeRoleYaml(roleKey, yamlService.createYaml(dbTaskList));
 	}
 
-	public void outputHostsData(ProjectKey projectKey){
-		List<HostGroup> hostGroupList = createHostGroupList(projectKey);
-		
-		if(!hostGroupList.isEmpty()){
-			String hostsFileContent = jansibleHostsDumper.getString(hostGroupList);
-			jansibleFiler.writeHostsFile(projectKey, hostsFileContent);
-		}
-	}
-
-	private List<HostGroup> createHostGroupList(ProjectKey projectKey){
-		List<HostGroup> hostGroupList = new ArrayList<>();
-		
-		List<DbEnvironment> dbEnvironmentList = environmentMapper.selectEnvironmentList(projectKey);
-		for(DbEnvironment dbEnvironment : dbEnvironmentList){
-			List<DbServiceGroup> dbServiceGroupList = serviceGroupMapper.selectServiceGroupList(dbEnvironment);
-			for(DbServiceGroup dbServiceGroup : dbServiceGroupList){
-				HostGroup hostGroup = createHostGroup(dbServiceGroup);
-				hostGroupList.add(hostGroup);
-			}
-		}
-		return hostGroupList;
-	}
-
-	private HostGroup createHostGroup(ServiceGroupKey serviceGroupKey){
-		HostGroup hostGroup = new HostGroup();
-		hostGroup.setGroupName(jansibleFiler.getGroupName(serviceGroupKey));
-		List<DbServer> dbServerList = serverMapper.selectServerListByServiceGroup(serviceGroupKey);
-		for(DbServer server : dbServerList){
-			List<DbServerParameter> dbServerParameterList = serverMapper.selectServerParameterList(server);
-			hostGroup.addHost(createHost(server.getServerName(), dbServerParameterList));
-		}
-		return hostGroup;
-	}
-
-	private Host createHost(String serverName, List<DbServerParameter> dbServerParameterList) {
-		Host host = new Host();
-		host.setServerName(serverName);
-		
-		for(DbServerParameter dbServerParameter : dbServerParameterList){
-			host.addParameter(dbServerParameter.getParameterName(), dbServerParameter.getParameterValue());
-		}
-		
-		return host;
-	}
-
 	public void reOutputAllData(ProjectKey projectKey){
 		jansibleFiler.deleteAllStartYamlfile(projectKey);
 		jansibleFiler.deleteGroupVariableDir(projectKey);
@@ -204,7 +155,7 @@ public class FileService {
 		jansibleFiler.deleteHostsFile(projectKey);
 		
 		outputProjectData(projectKey);
-		outputHostsData(projectKey);
+		hostsFileService.outputHostsData(projectKey);
 		List<DbEnvironment> dbEnvironmentList = environmentMapper.selectEnvironmentList(projectKey);
 		for(DbEnvironment dbEnvironment : dbEnvironmentList){
 			List<DbServiceGroup> dbServiceGroupList = serviceGroupMapper.selectServiceGroupList(dbEnvironment);
@@ -228,5 +179,9 @@ public class FileService {
 			outputRoleVariableData(dbRole);
 			outputTaskData(dbRole);
 		}
+	}
+
+	public void outputHostsData(ProjectKey projectKey) {
+		hostsFileService.outputHostsData(projectKey);
 	}
 }
