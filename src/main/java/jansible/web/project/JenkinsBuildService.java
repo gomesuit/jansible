@@ -10,6 +10,7 @@ import jansible.jenkins.build.JenkinsBuilder;
 import jansible.mapper.ApplyHistoryMapper;
 import jansible.mapper.ProjectMapper;
 import jansible.model.common.ProjectKey;
+import jansible.model.common.ServerKey;
 import jansible.model.common.ServerRelationKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.database.DbApplyHistory;
@@ -60,11 +61,14 @@ public class JenkinsBuildService {
 		DbProject project = projectMapper.selectProject(form);
 		JenkinsParameter jenkinsParameter = new JenkinsParameter();
 		jenkinsParameter.setProjectName(form.getProjectName());
+		jenkinsParameter.setGroupName(jansibleFiler.getGroupName(dbApplyHistory.getEnvironmentName(), dbApplyHistory.getGroupName()));
 		String serverName = dbApplyHistory.getServerName();
 		if(StringUtils.isBlank(serverName)){
-			jenkinsParameter.setGroupName(jansibleFiler.getGroupName(dbApplyHistory.getEnvironmentName(), dbApplyHistory.getGroupName()));
+			jenkinsParameter.setHostsFileName(jansibleFiler.getHostsFileName());
 		}else{
-			jenkinsParameter.setGroupName(jansibleFiler.getServerStartYamlName(dbApplyHistory.getEnvironmentName(), dbApplyHistory.getGroupName(), serverName));
+			ServerKey serverKey = new ServerKey(form);
+			serverKey.setServerName(serverName);
+			jenkinsParameter.setHostsFileName(jansibleFiler.getServerHostsFileName(serverKey));
 		}
 		jenkinsParameter.setRepositoryUrl(project.getRepositoryUrl());
 		jenkinsParameter.setTagName(dbApplyHistory.getTagName());
@@ -93,6 +97,7 @@ public class JenkinsBuildService {
 		jenkinsParameter.setRepositoryUrl(project.getRepositoryUrl());
 		jenkinsParameter.setTagName(tagName);
 		jenkinsParameter.setApplyHistroyId(dbApplyHistory.getApplyHistroyId());
+		jenkinsParameter.setHostsFileName(jansibleFiler.getHostsFileName());
 		JenkinsInfo jenkinsInfo = createJenkinsInfo(form);
 		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
 	}
@@ -120,10 +125,13 @@ public class JenkinsBuildService {
 		DbProject project = projectMapper.selectProject(form);
 		JenkinsParameter jenkinsParameter = new JenkinsParameter();
 		jenkinsParameter.setProjectName(form.getProjectName());
-		jenkinsParameter.setGroupName(jansibleFiler.getServerStartYamlName(form));
+		jenkinsParameter.setGroupName(jansibleFiler.getGroupName(form));
 		jenkinsParameter.setRepositoryUrl(project.getRepositoryUrl());
 		jenkinsParameter.setTagName(tagName);
 		jenkinsParameter.setApplyHistroyId(dbApplyHistory.getApplyHistroyId());
+		ServerKey serverKey = new ServerKey(form);
+		serverKey.setServerName(form.getServerName());
+		jenkinsParameter.setHostsFileName(jansibleFiler.getServerHostsFileName(serverKey));
 
 		JenkinsInfo jenkinsInfo = createJenkinsInfo(form);
 		

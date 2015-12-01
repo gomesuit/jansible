@@ -54,6 +54,7 @@ public class JenkinsBuilder {
 		jenkinsParameters.addParameter("groupName", jenkinsParameter.getGroupName());
 		jenkinsParameters.addParameter("tagName", jenkinsParameter.getTagName());
 		jenkinsParameters.addParameter("applyHistroyId", Integer.toString(jenkinsParameter.getApplyHistroyId()));
+		jenkinsParameters.addParameter("hostsFileName", jenkinsParameter.getHostsFileName());
 		ObjectMapper mapper = new ObjectMapper();
 		String json = "";
 		try {

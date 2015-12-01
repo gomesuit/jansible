@@ -6,6 +6,7 @@ public class JenkinsParameter {
 	private String groupName;
 	private String tagName;
 	private int applyHistroyId;
+	private String hostsFileName;
 	
 	public String getRepositoryUrl() {
 		return repositoryUrl;
@@ -36,5 +37,11 @@ public class JenkinsParameter {
 	}
 	public void setApplyHistroyId(int applyHistroyId) {
 		this.applyHistroyId = applyHistroyId;
+	}
+	public String getHostsFileName() {
+		return hostsFileName;
+	}
+	public void setHostsFileName(String hostsFileName) {
+		this.hostsFileName = hostsFileName;
 	}
 }

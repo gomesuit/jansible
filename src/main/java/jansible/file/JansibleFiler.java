@@ -418,15 +418,23 @@ public class JansibleFiler {
 	private String getHostsFilePath(ProjectKey projectKey){
 		String dirName = getProjectDirName(projectKey);
 		dirName += PATH_SEPARATOR;
-		dirName += "hosts";
+		dirName += getHostsFileName();
 		return dirName;
 	}
 	
 	private String getServerHostsFilePath(ServerKey key){
 		String dirName = getProjectDirName(key);
 		dirName += PATH_SEPARATOR;
-		dirName += key.getServerName() + "_hosts";
+		dirName += getServerHostsFileName(key);
 		return dirName;
+	}
+	
+	public String getHostsFileName(){
+		return "hosts";
+	}
+	
+	public String getServerHostsFileName(ServerKey key){
+		return key.getServerName() + "_" + getHostsFileName();
 	}
 	
 	private String getStartYamlPath(ServiceGroupKey serviceGroupKey){
