@@ -204,4 +204,12 @@
 			project_name = #{projectName}
 	</delete>
 	
+	<delete id="deleteDbServerRelationByServer">
+	    DELETE FROM
+	    	server_relation
+	    WHERE
+			project_name = #{projectName} AND
+			server_name = #{serverName}
+	</delete>
+	
 </mapper>

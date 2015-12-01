@@ -1,6 +1,7 @@
 package jansible.web.project;
 
 import jansible.mapper.ServerMapper;
+import jansible.mapper.ServiceGroupMapper;
 import jansible.mapper.VariableMapper;
 import jansible.model.common.EnvironmentKey;
 import jansible.model.common.ProjectKey;
@@ -26,6 +27,9 @@ public class ServerService {
 	private ServerMapper serverMapper;
 	@Autowired
 	private VariableMapper variableMapper;
+	@Autowired
+	private ServiceGroupMapper serviceGroupMapper;
+	
 	@Autowired
 	private FileService fileService;
 	
@@ -55,6 +59,7 @@ public class ServerService {
 			transactionManager.rollback(status);
 			throw e;
 		}
+		transactionManager.commit(status);
 	}
 
 	public void deleteServer(ServerKey serverKey){
@@ -66,6 +71,7 @@ public class ServerService {
 			serverMapper.deleteServer(serverKey);
 			serverMapper.deleteServerParameterByServer(serverKey);
 			variableMapper.deleteDbServerVariableByServer(serverKey);
+			serviceGroupMapper.deleteDbServerRelationByServer(serverKey);
 			fileService.deleteHostVariableYaml(serverKey);
 		} catch (Exception e) {
 			transactionManager.rollback(status);
