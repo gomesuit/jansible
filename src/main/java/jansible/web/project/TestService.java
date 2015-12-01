@@ -65,10 +65,10 @@ public class TestService {
 	}
 
 	public void outputTestYaml(String outputDir, ServerRelationKey key){
-		String serverName = key.getServerName();
+		String groupName = jansibleFiler.getGroupName(key);
 		List<DbRoleRelation> dbRoleRelationList = serviceGroupMapper.selectDbRoleRelationList(key);
 		
-		String yamlContent = yamlService.dumpStartYaml(serverName, dbRoleRelationList);
+		String yamlContent = yamlService.dumpStartYaml(groupName, dbRoleRelationList);
 		
 		ServerRelationKey testKey = new ServerRelationKey(key);
 		testKey.setServerName(TEST_YAML_FILENAME);
