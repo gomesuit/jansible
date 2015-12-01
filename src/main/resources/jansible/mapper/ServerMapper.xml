@@ -61,6 +61,7 @@
 						server_relation r
 					WHERE
 						r.project_name = s.project_name AND
+						r.project_name = #{projectName} AND
 						r.environment_name = #{environmentName} AND
 						r.group_name = #{groupName} AND
 						r.server_name = s.server_name
