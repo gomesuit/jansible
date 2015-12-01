@@ -196,7 +196,7 @@ public class ProjectController {
 	}
 
     @RequestMapping(value="/project/globalRole/regist", method=RequestMethod.POST)
-	private String registGlobalRoleRelation(@ModelAttribute GlobalRoleRelationForm form, HttpServletRequest request){
+	private String registGlobalRoleRelation(@ModelAttribute GlobalRoleRelationForm form, HttpServletRequest request) throws Exception{
     	globalRoleRelationService.registGlobalRoleRelation(form);
 		
 		String referer = request.getHeader("Referer");
@@ -204,7 +204,7 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value="/project/globalRole/update", method=RequestMethod.POST)
-	private String deleteGlobalRoleRelation(@ModelAttribute GlobalRoleRelationTagUpdateForm form, HttpServletRequest request){
+	private String deleteGlobalRoleRelation(@ModelAttribute GlobalRoleRelationTagUpdateForm form, HttpServletRequest request) throws Exception{
 		globalRoleRelationService.updateGlobalRoleRelation(form);
 		
 		String referer = request.getHeader("Referer");

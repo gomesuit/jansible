@@ -20,7 +20,11 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 @Service
 public class TaskService {
@@ -29,30 +33,51 @@ public class TaskService {
 	@Autowired
 	private FileService fileService;
 
+	@Autowired
+	private DataSourceTransactionManager transactionManager;
+
 	public void registTask(TaskForm form) {
 		DbTask dbTask = createDbTask(form);
 		taskMapper.insertTask(dbTask);
 	}
 
 	public void deleteTask(TaskKey taskKey){
-		taskMapper.deleteTask(taskKey);
-		taskMapper.deleteTaskDetail(taskKey);
-		taskMapper.deleteTaskConditionalByTask(taskKey);
-		
-		List<DbTask> dbTaskList = taskMapper.selectTaskList(taskKey);
-		DbCommonUtils.sortRoleRelation(dbTaskList);
-		registTaskList(dbTaskList);
-		
-		fileService.outputTaskData(taskKey);
+    	DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    	TransactionStatus status = transactionManager.getTransaction(def);
+
+		try {
+			taskMapper.deleteTask(taskKey);
+			taskMapper.deleteTaskDetail(taskKey);
+			taskMapper.deleteTaskConditionalByTask(taskKey);
+			
+			List<DbTask> dbTaskList = taskMapper.selectTaskList(taskKey);
+			DbCommonUtils.sortRoleRelation(dbTaskList);
+			registTaskList(dbTaskList);
+			
+			fileService.outputTaskData(taskKey);
+		} catch (Exception e) {
+			transactionManager.rollback(status);
+			throw e;
+		}
 	}
 
 	public void updateTask(TaskDetailForm form) {
-		DbTask dbTask = createDbTask(form);
-		taskMapper.updateTaskDescription(dbTask);
-		
-		registTaskDetail(form);
-		
-		fileService.outputTaskData(form);
+    	DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    	TransactionStatus status = transactionManager.getTransaction(def);
+    	
+		try {	
+			DbTask dbTask = createDbTask(form);
+			taskMapper.updateTaskDescription(dbTask);
+			
+			registTaskDetail(form);
+			
+			fileService.outputTaskData(form);
+		} catch (Exception e) {
+			transactionManager.rollback(status);
+			throw e;
+		}
 	}
 
 	public List<DbTask> getTaskList(RoleKey roleKey){
@@ -96,18 +121,14 @@ public class TaskService {
 	}
 
 	private List<DbTaskDetail> createDbTaskDetailList(TaskDetailForm form) {
-			List<DbTaskDetail> dbTaskDetailList = new ArrayList<>();
-			List<TaskParameter> taskParameterList = form.getTaskParameterList();
-			for(TaskParameter taskParameter : taskParameterList){
-	//			if(StringUtils.isBlank(taskParameter.getParameterValue())){
-	//				continue;
-	//			}
-				
-				DbTaskDetail dbTaskDetail = createDbTaskDetail(form, taskParameter);
-				dbTaskDetailList.add(dbTaskDetail);
-			}
-			return dbTaskDetailList;
+		List<DbTaskDetail> dbTaskDetailList = new ArrayList<>();
+		List<TaskParameter> taskParameterList = form.getTaskParameterList();
+		for(TaskParameter taskParameter : taskParameterList){				
+			DbTaskDetail dbTaskDetail = createDbTaskDetail(form, taskParameter);
+			dbTaskDetailList.add(dbTaskDetail);
 		}
+		return dbTaskDetailList;
+	}
 
 	private DbTask createDbTask(TaskForm form) {
 		DbTask dbTask = new DbTask(form);
@@ -137,11 +158,20 @@ public class TaskService {
 	}
 	
 	public void modifyTaskOrder(TaskOrderForm form){
-		List<DbTask> dbTaskList = getOrderDbTaskList(form);
-		
-		if(dbTaskList != null){
-			registTaskList(dbTaskList);
-			fileService.outputTaskData(form);
+    	DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    	TransactionStatus status = transactionManager.getTransaction(def);
+    	
+		try {
+			List<DbTask> dbTaskList = getOrderDbTaskList(form);
+			
+			if(dbTaskList != null){
+				registTaskList(dbTaskList);
+				fileService.outputTaskData(form);
+			}
+		} catch (Exception e) {
+			transactionManager.rollback(status);
+			throw e;
 		}
 	}
 

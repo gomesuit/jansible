@@ -17,7 +17,11 @@ import jansible.web.project.role.UploadForm;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 @Service
 public class RoleService {
@@ -30,6 +34,9 @@ public class RoleService {
 	@Autowired
 	private VariableMapper variableMapper;
 
+	@Autowired
+	private DataSourceTransactionManager transactionManager;
+
 	public void registRole(RoleForm form) {
 		DbRole dbRole = new DbRole(form);
 		roleMapper.insertRole(dbRole);
@@ -41,14 +48,25 @@ public class RoleService {
 	}
 
 	public void deleteRole(RoleKey roleKey){
-		roleMapper.deleteRole(roleKey);
-		roleMapper.deleteDbFileByRole(roleKey);
-		roleMapper.deleteDbTemplateByRole(roleKey);
-		taskMapper.deleteTaskByRole(roleKey);
-		taskMapper.deleteTaskDetailByRole(roleKey);
-		taskMapper.deleteTaskConditionalByRole(roleKey);
-		variableMapper.deleteDbRoleVariableByRole(roleKey);
-		fileService.deleteRoleDir(roleKey);
+    	DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    	TransactionStatus status = transactionManager.getTransaction(def);
+
+		try {
+			roleMapper.deleteRole(roleKey);
+			roleMapper.deleteDbFileByRole(roleKey);
+			roleMapper.deleteDbTemplateByRole(roleKey);
+			taskMapper.deleteTaskByRole(roleKey);
+			taskMapper.deleteTaskDetailByRole(roleKey);
+			taskMapper.deleteTaskConditionalByRole(roleKey);
+			variableMapper.deleteDbRoleVariableByRole(roleKey);
+			fileService.deleteRoleDir(roleKey);
+		} catch (Exception e) {
+			transactionManager.rollback(status);
+			throw e;
+		}
+		transactionManager.commit(status);
+		
 	}
 
 	public void registFile(UploadForm form) {

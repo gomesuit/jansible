@@ -27,7 +27,11 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 @Service
 public class GroupService {
@@ -45,17 +49,30 @@ public class GroupService {
 	@Autowired
 	private FileService fileService;
 
+	@Autowired
+	private DataSourceTransactionManager transactionManager;
+
 	public void registServiceGroup(ServiceGroupForm form) {
 		DbServiceGroup dbServiceGroup = new DbServiceGroup(form);
 		serviceGroupMapper.insertServiceGroup(dbServiceGroup);
 	}
 
 	public void deleteServiceGroup(ServiceGroupKey serviceGroupKey){
-		serviceGroupMapper.deleteServiceGroup(serviceGroupKey);
-		serviceGroupMapper.deleteDbRoleRelationByServiceGroup(serviceGroupKey);
-		serviceGroupMapper.deleteDbServerRelationByServiceGroup(serviceGroupKey);
-		variableMapper.deleteDbServiceGroupVariableByServiceGroup(serviceGroupKey);
-		fileService.deleteGroupVariableYaml(serviceGroupKey);
+    	DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    	TransactionStatus status = transactionManager.getTransaction(def);
+
+		try {
+			transactionManager.commit(status);
+			serviceGroupMapper.deleteServiceGroup(serviceGroupKey);
+			serviceGroupMapper.deleteDbRoleRelationByServiceGroup(serviceGroupKey);
+			serviceGroupMapper.deleteDbServerRelationByServiceGroup(serviceGroupKey);
+			variableMapper.deleteDbServiceGroupVariableByServiceGroup(serviceGroupKey);
+			fileService.deleteGroupVariableYaml(serviceGroupKey);
+		} catch (Exception e) {
+			transactionManager.rollback(status);
+			throw e;
+		}
 	}
 
 	public List<DbServiceGroup> getServiceGroupList(EnvironmentKey environmentKey){
@@ -63,19 +80,37 @@ public class GroupService {
 	}
 
 	public void registRoleRelationDetail(RoleRelationForm form) {
-		DbRoleRelation dbRoleRelation = createDbRoleRelation(form);
-		dbRoleRelation.setSort(serviceGroupMapper.selectDbRoleRelationList(form).size() + 1);
-		serviceGroupMapper.insertDbRoleRelation(dbRoleRelation);
-		
-		fileService.outputRoleRelationData(form);
+    	DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    	TransactionStatus status = transactionManager.getTransaction(def);
+
+		try {
+			DbRoleRelation dbRoleRelation = createDbRoleRelation(form);
+			dbRoleRelation.setSort(serviceGroupMapper.selectDbRoleRelationList(form).size() + 1);
+			serviceGroupMapper.insertDbRoleRelation(dbRoleRelation);
+			
+			fileService.outputRoleRelationData(form);
+		} catch (Exception e) {
+			transactionManager.rollback(status);
+			throw e;
+		}
 	}
 
 	public void deleteRoleRelation(RoleRelationKey roleRelationKey){
-		serviceGroupMapper.deleteDbRoleRelation(roleRelationKey);
-		
-		List<DbRoleRelation> dbRoleRelationList = serviceGroupMapper.selectDbRoleRelationList(roleRelationKey);
-		DbCommonUtils.sortRoleRelation(dbRoleRelationList);
-		modifyRoleRelationList(dbRoleRelationList);
+    	DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    	TransactionStatus status = transactionManager.getTransaction(def);
+
+		try {
+			serviceGroupMapper.deleteDbRoleRelation(roleRelationKey);
+			
+			List<DbRoleRelation> dbRoleRelationList = serviceGroupMapper.selectDbRoleRelationList(roleRelationKey);
+			DbCommonUtils.sortRoleRelation(dbRoleRelationList);
+			modifyRoleRelationList(dbRoleRelationList);
+		} catch (Exception e) {
+			transactionManager.rollback(status);
+			throw e;
+		}
 	}
 
 	public List<DbRoleRelation> getRoleRelationList(ServiceGroupKey serviceGroupKey){
@@ -83,11 +118,20 @@ public class GroupService {
 	}
 
 	public void modifyRoleRelationOrder(RoleRelationOrderForm form) {
-		List<DbRoleRelation> dbRoleRelationList = getOrderRoleRelationList(form);
-		
-		if(dbRoleRelationList != null){
-			modifyRoleRelationList(dbRoleRelationList);
-			fileService.outputRoleRelationData(form);
+    	DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    	TransactionStatus status = transactionManager.getTransaction(def);
+
+		try {
+			List<DbRoleRelation> dbRoleRelationList = getOrderRoleRelationList(form);
+			
+			if(dbRoleRelationList != null){
+				modifyRoleRelationList(dbRoleRelationList);
+				fileService.outputRoleRelationData(form);
+			}
+		} catch (Exception e) {
+			transactionManager.rollback(status);
+			throw e;
 		}
 	}
 	

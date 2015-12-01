@@ -14,7 +14,11 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 @Service
 public class GlobalRoleRelationService {
@@ -24,6 +28,9 @@ public class GlobalRoleRelationService {
 	@Autowired
 	private GitService gitService;
 
+	@Autowired
+	private DataSourceTransactionManager transactionManager;
+
 	public List<DbGlobalRoleRelation> getGlobalRoleRelationList(ProjectKey key){
 		return globalRoleRelationMapper.selectRoleRelationList(key);
 	}
@@ -32,7 +39,7 @@ public class GlobalRoleRelationService {
 		return globalRoleRelationMapper.selectRoleRelation(key);
 	}
 
-	public void registGlobalRoleRelation(GlobalRoleRelationForm form) {
+	public void registGlobalRoleRelation(GlobalRoleRelationForm form) throws Exception {
 		DbGlobalRoleRelation dbGlobalRoleRelation = new DbGlobalRoleRelation(form);
 		
 		String tagName = form.getTagName();
@@ -41,26 +48,35 @@ public class GlobalRoleRelationService {
 		}
 		dbGlobalRoleRelation.setTagName(tagName);
 		
-		globalRoleRelationMapper.insertRoleRelation(dbGlobalRoleRelation);
-		
+    	DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    	TransactionStatus status = transactionManager.getTransaction(def);
+
 		try {
+			globalRoleRelationMapper.insertRoleRelation(dbGlobalRoleRelation);
 			gitService.addSubmodule(form, globalRoleRelationMapper.selectUri(form.getRoleName()), "roles/" + form.getRoleName());
 			gitService.checkoutSubmodule(form, "roles/" + form.getRoleName(), tagName);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			transactionManager.rollback(status);
+			throw e;
 		}
+		transactionManager.commit(status);
 	}
 
-	public void updateGlobalRoleRelation(GlobalRoleRelationTagUpdateForm form){
+	public void updateGlobalRoleRelation(GlobalRoleRelationTagUpdateForm form) throws Exception{
+    	DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    	TransactionStatus status = transactionManager.getTransaction(def);
+
+		DbGlobalRoleRelation dbGlobalRoleRelation = new DbGlobalRoleRelation(form);
+		dbGlobalRoleRelation.setTagName(form.getTagName());
+		
 		try {
-			DbGlobalRoleRelation dbGlobalRoleRelation = new DbGlobalRoleRelation(form);
-			dbGlobalRoleRelation.setTagName(form.getTagName());
 			globalRoleRelationMapper.insertRoleRelation(dbGlobalRoleRelation);
 			gitService.checkoutSubmodule(form, "roles/" + form.getRoleName(), form.getTagName());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			transactionManager.rollback(status);
+			throw e;
 		}
 	}
 

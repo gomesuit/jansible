@@ -14,7 +14,11 @@ import jansible.web.project.server.ServerParameterForm;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 @Service
 public class ServerService {
@@ -24,6 +28,9 @@ public class ServerService {
 	private VariableMapper variableMapper;
 	@Autowired
 	private FileService fileService;
+	
+	@Autowired
+	private DataSourceTransactionManager transactionManager;
 
 	public List<DbServer> getServerList(ProjectKey projectKey){
 		return serverMapper.selectServerList(projectKey);
@@ -34,18 +41,36 @@ public class ServerService {
 	}
 
 	public void registServer(ServerForm form) {
-		DbServer dbServer = new DbServer(form);
-		dbServer.setEnvironmentName(form.getEnvironmentName());
-		serverMapper.insertServer(dbServer);
-		
-		fileService.outputHostsData(form);
+    	DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    	TransactionStatus status = transactionManager.getTransaction(def);
+
+		try {
+			DbServer dbServer = new DbServer(form);
+			dbServer.setEnvironmentName(form.getEnvironmentName());
+			serverMapper.insertServer(dbServer);
+			
+			fileService.outputHostsData(form);
+		} catch (Exception e) {
+			transactionManager.rollback(status);
+			throw e;
+		}
 	}
 
 	public void deleteServer(ServerKey serverKey){
-		serverMapper.deleteServer(serverKey);
-		serverMapper.deleteServerParameterByServer(serverKey);
-		variableMapper.deleteDbServerVariableByServer(serverKey);
-		fileService.deleteHostVariableYaml(serverKey);
+    	DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+    	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    	TransactionStatus status = transactionManager.getTransaction(def);
+
+		try {
+			serverMapper.deleteServer(serverKey);
+			serverMapper.deleteServerParameterByServer(serverKey);
+			variableMapper.deleteDbServerVariableByServer(serverKey);
+			fileService.deleteHostVariableYaml(serverKey);
+		} catch (Exception e) {
+			transactionManager.rollback(status);
+			throw e;
+		}
 	}
 	
 	public List<DbServerParameter> getServerParameterList(ServerKey serverKey){
