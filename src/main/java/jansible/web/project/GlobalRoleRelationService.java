@@ -78,6 +78,7 @@ public class GlobalRoleRelationService {
 			transactionManager.rollback(status);
 			throw e;
 		}
+		transactionManager.commit(status);
 	}
 
 	public List<DbGlobalRole> getGlobalRoleList(){

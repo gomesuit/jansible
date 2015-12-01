@@ -60,6 +60,7 @@ public class TaskService {
 			transactionManager.rollback(status);
 			throw e;
 		}
+		transactionManager.commit(status);
 	}
 
 	public void updateTask(TaskDetailForm form) {
@@ -78,6 +79,7 @@ public class TaskService {
 			transactionManager.rollback(status);
 			throw e;
 		}
+		transactionManager.commit(status);
 	}
 
 	public List<DbTask> getTaskList(RoleKey roleKey){
@@ -173,6 +175,7 @@ public class TaskService {
 			transactionManager.rollback(status);
 			throw e;
 		}
+		transactionManager.commit(status);
 	}
 
 	private List<DbTask> getOrderDbTaskList(TaskOrderForm form){

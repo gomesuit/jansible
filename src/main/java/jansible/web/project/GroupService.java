@@ -94,6 +94,7 @@ public class GroupService {
 			transactionManager.rollback(status);
 			throw e;
 		}
+		transactionManager.commit(status);
 	}
 
 	public void deleteRoleRelation(RoleRelationKey roleRelationKey){
@@ -111,6 +112,7 @@ public class GroupService {
 			transactionManager.rollback(status);
 			throw e;
 		}
+		transactionManager.commit(status);
 	}
 
 	public List<DbRoleRelation> getRoleRelationList(ServiceGroupKey serviceGroupKey){
@@ -133,6 +135,7 @@ public class GroupService {
 			transactionManager.rollback(status);
 			throw e;
 		}
+		transactionManager.commit(status);
 	}
 	
 	private List<DbRoleRelation> getOrderRoleRelationList(RoleRelationOrderForm form){

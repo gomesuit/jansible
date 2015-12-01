@@ -71,6 +71,7 @@ public class ServerService {
 			transactionManager.rollback(status);
 			throw e;
 		}
+		transactionManager.commit(status);
 	}
 	
 	public List<DbServerParameter> getServerParameterList(ServerKey serverKey){
