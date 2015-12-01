@@ -35,11 +35,16 @@ public class HostsFileService {
 	@Autowired
 	private ServerMapper serverMapper;
 	
-	public void outputServerHostsData(ProjectKey key){
+	public void outputAllServerHostsData(ProjectKey key){
 		List<DbServer> serverList = serverMapper.selectServerList(key);
 		for(DbServer server : serverList){
 			List<HostGroup> hostGroupList = new ArrayList<>();
 			List<DbServerRelation> dbServerRelationList = serviceGroupMapper.selectDbServerRelationListByServer(server);
+			
+			if(dbServerRelationList.isEmpty()){
+				continue;
+			}
+			
 			for(DbServerRelation dbServerRelation : dbServerRelationList){
 				HostGroup hostGroup = createHostGroup(dbServerRelation, server);
 				hostGroupList.add(hostGroup);
@@ -47,6 +52,17 @@ public class HostsFileService {
 			String hostsFileContent = jansibleHostsDumper.getString(hostGroupList);
 			jansibleFiler.writeServerHostsFile(server, hostsFileContent);
 		}
+	}
+	
+	public void outputServerHostsData(ServerKey key){
+		List<HostGroup> hostGroupList = new ArrayList<>();
+		List<DbServerRelation> dbServerRelationList = serviceGroupMapper.selectDbServerRelationListByServer(key);
+		for(DbServerRelation dbServerRelation : dbServerRelationList){
+			HostGroup hostGroup = createHostGroup(dbServerRelation, key);
+			hostGroupList.add(hostGroup);
+		}
+		String hostsFileContent = jansibleHostsDumper.getString(hostGroupList);
+		jansibleFiler.writeServerHostsFile(key, hostsFileContent);
 	}
 	
 	private HostGroup createHostGroup(ServiceGroupKey serviceGroupKey, ServerKey serverKey){

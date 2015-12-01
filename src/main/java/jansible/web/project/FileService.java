@@ -138,11 +138,10 @@ public class FileService {
 	}
 
 	public void outputServerRelationData(ServerRelationKey key){
-		String groupName = key.getServerName();
-		List<DbRoleRelation> dbRoleRelationList = serviceGroupMapper.selectDbRoleRelationList(key);
-		
-		String yamlContent = yamlService.dumpStartYaml(groupName, dbRoleRelationList);
-		jansibleFiler.writeServerStartYaml(key, yamlContent);
+		ServerKey serverKey = new ServerKey();
+		serverKey.setProjectName(key.getProjectName());
+		serverKey.setServerName(key.getServerName());
+		hostsFileService.outputServerHostsData(serverKey);
 	}
 
 	public void outputTaskData(RoleKey roleKey){
@@ -159,7 +158,7 @@ public class FileService {
 		
 		outputProjectData(projectKey);
 		hostsFileService.outputHostsData(projectKey);
-		hostsFileService.outputServerHostsData(projectKey);
+		hostsFileService.outputAllServerHostsData(projectKey);
 		List<DbEnvironment> dbEnvironmentList = environmentMapper.selectEnvironmentList(projectKey);
 		for(DbEnvironment dbEnvironment : dbEnvironmentList){
 			List<DbServiceGroup> dbServiceGroupList = serviceGroupMapper.selectServiceGroupList(dbEnvironment);
@@ -187,6 +186,6 @@ public class FileService {
 
 	public void outputHostsData(ProjectKey projectKey) {
 		hostsFileService.outputHostsData(projectKey);
-		hostsFileService.outputServerHostsData(projectKey);
+		hostsFileService.outputAllServerHostsData(projectKey);
 	}
 }

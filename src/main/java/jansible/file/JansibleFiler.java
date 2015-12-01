@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -433,19 +435,8 @@ public class JansibleFiler {
 		return filePath;
 	}
 	
-	private String getServerStartYamlPath(ServerRelationKey key){
-		String dirName = getProjectDirName(key);
-		String filePath = dirName + PATH_SEPARATOR + getServerStartYamlName(key) + ".yml";
-		return filePath;
-	}
-	
 	public void writeStartYaml(ServiceGroupKey serviceGroupKey, String fileContent){
 		String filePath = getStartYamlPath(serviceGroupKey);
-		writeFile(filePath, fileContent);
-	}
-	
-	public void writeServerStartYaml(ServerRelationKey key, String fileContent){
-		String filePath = getServerStartYamlPath(key);
 		writeFile(filePath, fileContent);
 	}
 	
@@ -455,9 +446,24 @@ public class JansibleFiler {
 	}
 	
 	public void deleteHostsFile(ProjectKey projectKey){
-		deleteDirByRecursive(getHostsFilePath(projectKey));
+		for(File file : getHostsFilePathList(projectKey)){
+			deleteFile(file);
+		}
 	}
 	
+	private List<File> getHostsFilePathList(ProjectKey key) {
+		String dirName = getProjectDirName(key);
+		File file = new File(dirName);
+		
+		List<File> fileList = new ArrayList<>();
+		for(File item : file.listFiles()){
+			if(item.getName().endsWith("hosts")){
+				fileList.add(item);
+			}
+		}
+		return fileList;
+	}
+
 	public void writeServerHostsFile(ServerKey key, String hostsFileContent){
 		String hostsFilePath = getServerHostsFilePath(key);
 		writeFile(hostsFilePath, hostsFileContent);
