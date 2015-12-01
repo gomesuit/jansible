@@ -27,7 +27,7 @@ public class UploadService {
 	public void templateUpload(UploadForm form){
 		jansibleFiler.mkRoleTemplateDir(form);
 		String templateDir = jansibleFiler.getTemplateDirName(form);
-		String templatePath = templateDir + "/" + getOriginalFilename(form) + ".j2";
+		String templatePath = templateDir + "/" + getOriginalFilename(form);
 		upload(form, templatePath);
 	}
 	

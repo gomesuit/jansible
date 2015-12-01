@@ -27,7 +27,7 @@ public class GlobalUploadService {
 	public void templateUpload(UploadForm form){
 		jansibleFiler.mkGlobalRoleTemplateDir(form);
 		String templateDir = jansibleFiler.getGlobalRoleTemplateDirName(form);
-		String templatePath = templateDir + "/" + getOriginalFilename(form) + ".j2";
+		String templatePath = templateDir + "/" + getOriginalFilename(form);
 		upload(form, templatePath);
 	}
 	

@@ -388,7 +388,6 @@ public class JansibleFiler {
 		String templateDirName = getTemplateDirName(templateKey);
 		templateDirName += PATH_SEPARATOR;
 		templateDirName += templateKey.getTemplateName();
-		templateDirName += ".j2";
 		return templateDirName;
 	}
 	
@@ -396,7 +395,6 @@ public class JansibleFiler {
 		String templateDirName = getGlobalRoleTemplateDirName(key);
 		templateDirName += PATH_SEPARATOR;
 		templateDirName += key.getTemplateName();
-		templateDirName += ".j2";
 		return templateDirName;
 	}
 
