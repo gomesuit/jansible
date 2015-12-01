@@ -159,6 +159,7 @@ public class FileService {
 		
 		outputProjectData(projectKey);
 		hostsFileService.outputHostsData(projectKey);
+		hostsFileService.outputServerHostsData(projectKey);
 		List<DbEnvironment> dbEnvironmentList = environmentMapper.selectEnvironmentList(projectKey);
 		for(DbEnvironment dbEnvironment : dbEnvironmentList){
 			List<DbServiceGroup> dbServiceGroupList = serviceGroupMapper.selectServiceGroupList(dbEnvironment);
@@ -186,5 +187,6 @@ public class FileService {
 
 	public void outputHostsData(ProjectKey projectKey) {
 		hostsFileService.outputHostsData(projectKey);
+		hostsFileService.outputServerHostsData(projectKey);
 	}
 }

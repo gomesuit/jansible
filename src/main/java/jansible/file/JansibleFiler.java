@@ -420,6 +420,13 @@ public class JansibleFiler {
 		return dirName;
 	}
 	
+	private String getServerHostsFilePath(ServerKey key){
+		String dirName = getProjectDirName(key);
+		dirName += PATH_SEPARATOR;
+		dirName += key.getServerName() + "_hosts";
+		return dirName;
+	}
+	
 	private String getStartYamlPath(ServiceGroupKey serviceGroupKey){
 		String dirName = getProjectDirName(serviceGroupKey);
 		String filePath = dirName + PATH_SEPARATOR + getGroupName(serviceGroupKey) + ".yml";
@@ -449,6 +456,15 @@ public class JansibleFiler {
 	
 	public void deleteHostsFile(ProjectKey projectKey){
 		deleteDirByRecursive(getHostsFilePath(projectKey));
+	}
+	
+	public void writeServerHostsFile(ServerKey key, String hostsFileContent){
+		String hostsFilePath = getServerHostsFilePath(key);
+		writeFile(hostsFilePath, hostsFileContent);
+	}
+	
+	public void deleteServerHostsFile(ServerKey key){
+		deleteDirByRecursive(getServerHostsFilePath(key));
 	}
 
 	public void uploadFile(MultipartFile file, String filePath) {

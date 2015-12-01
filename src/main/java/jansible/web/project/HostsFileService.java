@@ -8,10 +8,12 @@ import jansible.mapper.EnvironmentMapper;
 import jansible.mapper.ServerMapper;
 import jansible.mapper.ServiceGroupMapper;
 import jansible.model.common.ProjectKey;
+import jansible.model.common.ServerKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.database.DbEnvironment;
 import jansible.model.database.DbServer;
 import jansible.model.database.DbServerParameter;
+import jansible.model.database.DbServerRelation;
 import jansible.model.database.DbServiceGroup;
 
 import java.util.ArrayList;
@@ -32,8 +34,29 @@ public class HostsFileService {
 	private ServiceGroupMapper serviceGroupMapper;
 	@Autowired
 	private ServerMapper serverMapper;
-
-
+	
+	public void outputServerHostsData(ProjectKey key){
+		List<DbServer> serverList = serverMapper.selectServerList(key);
+		for(DbServer server : serverList){
+			List<HostGroup> hostGroupList = new ArrayList<>();
+			List<DbServerRelation> dbServerRelationList = serviceGroupMapper.selectDbServerRelationListByServer(server);
+			for(DbServerRelation dbServerRelation : dbServerRelationList){
+				HostGroup hostGroup = createHostGroup(dbServerRelation, server);
+				hostGroupList.add(hostGroup);
+			}
+			String hostsFileContent = jansibleHostsDumper.getString(hostGroupList);
+			jansibleFiler.writeServerHostsFile(server, hostsFileContent);
+		}
+	}
+	
+	private HostGroup createHostGroup(ServiceGroupKey serviceGroupKey, ServerKey serverKey){
+		HostGroup hostGroup = new HostGroup();
+		hostGroup.setGroupName(jansibleFiler.getGroupName(serviceGroupKey));
+		List<DbServerParameter> dbServerParameterList = serverMapper.selectServerParameterList(serverKey);
+		hostGroup.addHost(createHost(serverKey.getServerName(), dbServerParameterList));
+		return hostGroup;
+	}
+	
 	public void outputHostsData(ProjectKey projectKey){
 		List<HostGroup> hostGroupList = createHostGroupList(projectKey);
 		

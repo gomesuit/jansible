@@ -29,6 +29,7 @@ public interface ServiceGroupMapper {
 	void insertDbServerRelation(DbServerRelation dbServerRelation);
 	List<DbServerRelation> selectDbServerRelationList(ServiceGroupKey serviceGroupKey);
 	List<DbServerRelation> selectAllDbServerRelationList(ProjectKey projectKey);
+	List<DbServerRelation> selectDbServerRelationListByServer(ServerKey key);
 	void deleteDbServerRelation(ServerRelationKey serverRelationKey);
 	void deleteDbServerRelationByServiceGroup(ServiceGroupKey serviceGroupKey);
 	void deleteDbServerRelationByEnvironment(EnvironmentKey environmentKey);

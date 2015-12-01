@@ -170,6 +170,19 @@
 			project_name = #{projectName}
 	</select>
 	
+	<select id="selectDbServerRelationListByServer" resultType="DbServerRelation">
+		SELECT
+			project_name as projectName,
+			environment_name as environmentName,
+			group_name as groupName,
+			server_name as serverName
+		FROM
+			server_relation
+		WHERE
+			project_name = #{projectName} AND
+			server_name = #{serverName}
+	</select>
+	
 	<delete id="deleteDbServerRelation">
 	    DELETE FROM
 	    	server_relation
