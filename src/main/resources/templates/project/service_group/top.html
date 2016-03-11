@@ -33,7 +33,7 @@
 					</td>
 					<td th:text="${serverRelation.serverName}" />
 					<td class="text-center">
-						<form th:action="@{/project/serviceGroup/delete}" th:object="${serverRelationKey}" method="POST">
+						<form th:action="@{/project/serverRelation/delete}" th:object="${serverRelationKey}" method="POST">
 							<input type="hidden" th:field="*{projectName}" />
 							<input type="hidden" th:field="*{environmentName}" />
 							<input type="hidden" th:field="*{groupName}" />

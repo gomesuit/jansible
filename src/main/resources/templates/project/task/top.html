@@ -1,108 +1,137 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-	<meta content="ja" http-equiv="Content-Language" />
-	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-	<title>sample page</title>
-</head>
-<body>
-	<div>タスクの画面です</div>
-	
-	<br /><hr /><br />
-	<div th:text="${moduleName}" />
-	<form action="#" th:action="@{/project/taskdetail/regist}" th:object="${form}" method="post">
-		<input type="hidden" th:field="*{taskId}" />
-		<input type="hidden" th:field="*{projectName}" />
-		<input type="hidden" th:field="*{roleName}" />
-		description:
-		<input type="text" th:field="*{description}" />
-		<table border="1" rules="all">
-			<tr>
-				<td>parameterName</td>
-				<td>parameterValue</td>
-				<td>addedVersion</td>
-				<td>required</td>
-				<td>defaultValue</td>
-				<td>choices</td>
-				<td>description</td>
-			</tr>
-			<tr th:each="taskParameter,stat : *{taskParameterList}">
-				<td>
-					<div th:text="${taskParameter.parameterName}"/>
-					<input type="hidden" th:field="*{taskParameterList[__${stat.index}__].parameterName}" />
-				</td>
-				<td><input type="text" th:field="*{taskParameterList[__${stat.index}__].parameterValue}" /></td>
-				<td th:text="${taskParameter.addedVersion}" />
-				<td th:text="${taskParameter.required}" />
-				<td th:text="${taskParameter.defaultValue}" />
-				<td th:text="${taskParameter.choices}" />
-				<td th:text="${taskParameter.description}" />
-			</tr>
-		</table>
-		<input type="submit" value="Submit" />
-	</form>
-	
-	<div>Conditional</div>
-	<div>登録</div>
-	<form action="#" th:action="@{/project/taskConditional/regist}" th:object="${taskConditionalForm}" method="post">
-		<input type="hidden" th:field="*{taskId}" />
-		<input type="hidden" th:field="*{projectName}" />
-		<input type="hidden" th:field="*{roleName}" />
-		<table border="1" rules="all">
-			<tr>
-				<td>conditionalName</td>
-				<td>conditionalValue</td>
-			</tr>
-			<tr>
-				<td>
-					<select size="1" th:field="*{conditionalName}">
+
+<h1 class="page-header">タスクの画面です</h1>
+
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<div>タスク</div>
+	</div>
+	<div class="panel-body">
+		<form action="#" th:action="@{/project/taskdetail/regist}" th:object="${form}" method="post">
+			<input type="hidden" th:field="*{taskId}" />
+			<input type="hidden" th:field="*{projectName}" />
+			<input type="hidden" th:field="*{roleName}" />
+			<div class="row">
+				<div class="col-md-2">
+					<blockquote class="bg-info"><strong><div th:text="${moduleName}" /></strong></blockquote>
+				</div>
+				<div class="col-md-10">
+					<input type="text" class="form-control" th:field="*{description}" placeholder="Description" />
+				</div>
+			</div>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>parameterName</th>
+						<th>parameterValue</th>
+						<th>addedVersion</th>
+						<th>required</th>
+						<th>defaultValue</th>
+						<th>choices</th>
+						<th>description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="taskParameter,iterStat : *{taskParameterList}">
+						<td>
+							<div class="text-center" th:text="${iterStat.count}" />
+						</td>
+						<td>
+							<div th:text="${taskParameter.parameterName}"/>
+							<input type="hidden" th:field="*{taskParameterList[__${iterStat.index}__].parameterName}" />
+						</td>
+						<td><input type="text" class="form-control" th:field="*{taskParameterList[__${iterStat.index}__].parameterValue}" /></td>
+						<td th:text="${taskParameter.addedVersion}" />
+						<td th:text="${taskParameter.required}" />
+						<td th:text="${taskParameter.defaultValue}" />
+						<td th:text="${taskParameter.choices}" />
+						<td th:text="${taskParameter.description}" />
+					</tr>
+				</tbody>
+			</table>
+			<input type="submit" class="btn btn-primary" value="更新" />
+		</form>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-3">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div>使用可能変数</div>
+			</div>
+			<div class="panel-body">
+				<table class="table table-bordered">
+					<tbody>
+						<tr th:each="variable : ${variableList}">
+							<td th:text="${variable.variableName}" />
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-9">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div>Conditional</div>
+			</div>
+			<div class="panel-body">
+				<form class="form-inline" action="#" th:action="@{/project/taskConditional/regist}" th:object="${taskConditionalForm}" method="post">
+					<input type="hidden" th:field="*{taskId}" />
+					<input type="hidden" th:field="*{projectName}" />
+					<input type="hidden" th:field="*{roleName}" />
+					<select class="form-control" th:field="*{conditionalName}">
 						<option value="when" label="when" />
 						<option value="register" label="register" />
 						<option value="ignore_errors" label="ignore_errors" />
 					</select>
-				</td>
-				<td><input type="text" th:field="*{conditionalValue}" /></td>
-			</tr>
-		</table>
-		<input type="submit" value="Submit" />
-	</form>
-	<div>一覧</div>
-	<table border="1" rules="all">
-		<tr>
-			<td>conditionalName</td>
-			<td>conditionalValue</td>
-			<td>Delete</td>
-		</tr>
-		<tr th:each="taskConditional : ${taskConditionalList}">
-			<td th:text="${taskConditional.conditionalName}" />
-			<td th:text="${taskConditional.conditionalValue}" />
-			<form method="POST" th:action="@{/project/taskConditional/delete}" th:object="${taskConditionalKey}">
-				<input type="hidden" th:field="*{taskId}" />
-				<input type="hidden" th:field="*{projectName}" />
-				<input type="hidden" th:field="*{roleName}" />
-				<input type="hidden" name="conditionalName" th:value="${taskConditional.conditionalName}" />
-				<td><input type="submit" value="Delete" /></td>
-			</form>
-		</tr>
-	</table>
-	
-	<br /><hr /><br />
-	<div>プレビュー</div>
-	<pre th:utext="${taskPreview}" />
-	
-	<br /><hr /><br />
-	<div>【変数一覧】</div>
-	<table border="1" rules="all">
-		<tr>
-			<td>variable</td>
-		</tr>
-		<tr th:each="variable : ${variableList}">
-			<td th:text="${variable.variableName}" />
-		</tr>
-	</table>
-	
-	<br /><hr />
-	<a th:href="@{/role/view(projectName=${form.projectName}, roleName=${form.roleName})}" >戻る</a>
-	<a th:href="@{/}" >トップ</a>
-</body>
-</html>
+					<input type="text" class="form-control" th:field="*{conditionalValue}" placeholder="conditionalValue" />
+					<input type="submit" class="btn btn-primary" value="登録" />
+				</form>
+				
+				<br />		
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>conditionalName</th>
+							<th>conditionalValue</th>
+							<th>Delete</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="taskConditional,iterStat : ${taskConditionalList}">
+							<td>
+								<div class="text-center" th:text="${iterStat.count}" />
+							</td>
+							<td th:text="${taskConditional.conditionalName}" />
+							<td th:text="${taskConditional.conditionalValue}" />
+							<td class="text-center">
+								<form th:action="@{/project/taskConditional/delete}" th:object="${taskConditionalKey}" method="POST">
+								<input type="hidden" th:field="*{taskId}" />
+								<input type="hidden" th:field="*{projectName}" />
+								<input type="hidden" th:field="*{roleName}" />
+								<input type="hidden" name="conditionalName" th:value="${taskConditional.conditionalName}" />
+									<button type="submit" class="btn btn-danger btn-xs">
+										<span class="glyphicon glyphicon-trash" aria-hidden="true" />
+									</button>
+								</form>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<div>プレビュー</div>
+	</div>
+	<div class="panel-body">
+		<pre th:utext="${taskPreview}" />
+	</div>
+</div>
