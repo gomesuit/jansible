@@ -18,11 +18,13 @@ public class TopController {
 	private ProjectService projectService;
     
     @RequestMapping("/")
-    private String top(Model model){
+    private String top(Model model, HttpServletRequest request){
     	model.addAttribute("form", new ProjectForm());
     	model.addAttribute("projectList", projectService.getProjectList());
     	model.addAttribute("projectKey", new ProjectKey());
-        return "project/top";
+
+		request.setAttribute("pageName", "project/top");
+		return "common_frame";
     }
 
     @RequestMapping(value="/project/regist", method=RequestMethod.POST)

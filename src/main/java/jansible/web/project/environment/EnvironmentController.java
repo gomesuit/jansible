@@ -29,7 +29,8 @@ public class EnvironmentController {
 	private String viewEnvironment(
 			@RequestParam(value = "projectName", required = true) String projectName,
 			@RequestParam(value = "environmentName", required = true) String environmentName,
-			Model model){
+			Model model,
+			HttpServletRequest request){
 		EnvironmentKey environmentKey = new EnvironmentKey();
 		environmentKey.setProjectName(projectName);
 		environmentKey.setEnvironmentName(environmentName);
@@ -45,7 +46,8 @@ public class EnvironmentController {
 		model.addAttribute("variableList", variableService.getDbEnvironmentVariableList(environmentKey));
 		model.addAttribute("environmentVariableKey", new EnvironmentVariableKey(environmentKey));
 		
-	    return "project/environment/top";
+		request.setAttribute("pageName", "project/environment/top");
+		return "common_frame";
 	}
 
 	@RequestMapping(value="/project/group/regist", method=RequestMethod.POST)

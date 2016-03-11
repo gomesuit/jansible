@@ -1,0 +1,10 @@
+th {
+	text-align: center;
+	font-weight: 700;
+}
+
+#targetTableID thead tr.filter input {
+	width: 100%;
+	padding: 3px;
+	box-sizing: border-box;
+}

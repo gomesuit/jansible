@@ -31,7 +31,7 @@ public class ServerController {
 	private String viewServer(
     		@RequestParam(value = "projectName", required = true) String projectName,
     		@RequestParam(value = "serverName", required = true) String serverName,
-			Model model) {
+			Model model, HttpServletRequest request) {
     	
     	ServerKey serverKey = new ServerKey();
     	serverKey.setProjectName(projectName);
@@ -47,8 +47,9 @@ public class ServerController {
 		model.addAttribute("allVariableNameList", variableService.getAllDbVariableNameList(serverKey));
 		model.addAttribute("variableList", variableService.getDbServerVariableList(serverKey));
 		model.addAttribute("serverVariableKey", new ServerVariableKey(serverKey));
-
-		return "project/server/top";
+		
+		request.setAttribute("pageName", "project/server/top");
+		return "common_frame";
 	}
 
 	@RequestMapping(value="/project/serverVariable/regist", method=RequestMethod.POST)

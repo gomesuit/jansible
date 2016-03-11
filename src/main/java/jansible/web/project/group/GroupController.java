@@ -39,7 +39,8 @@ public class GroupController {
     		@RequestParam(value = "projectName", required = true) String projectName,
     		@RequestParam(value = "environmentName", required = true) String environmentName,
     		@RequestParam(value = "groupName", required = true) String groupName,
-			Model model){
+			Model model,
+			HttpServletRequest request){
     	ServiceGroupKey serviceGroupKey = new ServiceGroupKey();
     	serviceGroupKey.setProjectName(projectName);
     	serviceGroupKey.setEnvironmentName(environmentName);
@@ -66,7 +67,8 @@ public class GroupController {
 		model.addAttribute("groupVariableList", variableService.getDbServiceGroupVariableList(serviceGroupKey));
 		model.addAttribute("serviceGroupVariableKey", new ServiceGroupVariableKey(serviceGroupKey));
 		
-	    return "project/service_group/top";
+		request.setAttribute("pageName", "project/service_group/top");
+		return "common_frame";
 	}
 
     @RequestMapping(value="/project/server/regist", method=RequestMethod.POST)

@@ -36,7 +36,8 @@ public class ApplyController {
 			@RequestParam(value = "projectName", required = true) String projectName,
 			@RequestParam(value = "environmentName", required = true) String environmentName,
 			@RequestParam(value = "groupName", required = true) String groupName,
-			Model model){
+			Model model,
+			HttpServletRequest request){
 		
 		ServiceGroupKey serviceGroupKey = new ServiceGroupKey();
 		serviceGroupKey.setProjectName(projectName);
@@ -48,7 +49,8 @@ public class ApplyController {
 		model.addAttribute("serverList", groupService.getServerRelationList(serviceGroupKey));
 		model.addAttribute("roleList", groupService.getRoleRelationList(serviceGroupKey));
 		
-	    return "project/apply/group";
+		request.setAttribute("pageName", "project/apply/group");
+		return "common_frame";
 	}
 
 	@RequestMapping("/applyServer/view")
@@ -57,7 +59,8 @@ public class ApplyController {
 			@RequestParam(value = "environmentName", required = true) String environmentName,
 			@RequestParam(value = "groupName", required = true) String groupName,
 			@RequestParam(value = "serverName", required = true) String serverName,
-			Model model){
+			Model model,
+			HttpServletRequest request){
 		
 		ServerRelationKey serverRelationKey = new ServerRelationKey();
 		serverRelationKey.setProjectName(projectName);
@@ -69,7 +72,8 @@ public class ApplyController {
 
 		model.addAttribute("roleList", groupService.getRoleRelationList(serverRelationKey));
 		
-	    return "project/apply/server";
+		request.setAttribute("pageName", "project/apply/server");
+		return "common_frame";
 	}
 
 	@RequestMapping(value="/project/jenkins/build", method=RequestMethod.POST)

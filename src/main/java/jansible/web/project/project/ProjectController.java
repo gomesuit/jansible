@@ -71,7 +71,8 @@ public class ProjectController {
     @RequestMapping("/project/view")
 	private String viewProject(
 			@RequestParam(value = "projectName", required = true) String projectName,
-			Model model){
+			Model model,
+			HttpServletRequest request){
     	
     	ProjectKey projectKey = new ProjectKey(projectName);
     	
@@ -120,7 +121,8 @@ public class ProjectController {
 		serverRelationKey.setProjectName(projectName);
 		model.addAttribute("serverRelationKey", serverRelationKey);
 		
-	    return "project/project/top";
+		request.setAttribute("pageName", "project/project/top");
+		return "common_frame";
 	}
 
     @RequestMapping(value="/project/role/regist", method=RequestMethod.POST)

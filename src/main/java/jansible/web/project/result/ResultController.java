@@ -1,5 +1,7 @@
 package jansible.web.project.result;
 
+import javax.servlet.http.HttpServletRequest;
+
 import jansible.model.common.ProjectKey;
 import jansible.web.project.JenkinsResultService;
 import jansible.web.project.project.RebuildForm;
@@ -19,7 +21,7 @@ public class ResultController {
 	private String rebuild(
 			@RequestParam(value = "projectName", required = true) String projectName,
 			@RequestParam(value = "applyHistroyId", required = true) int applyHistroyId,
-			Model model) throws Exception{
+			Model model, HttpServletRequest request) throws Exception{
 		
 		ProjectKey projectKey = new ProjectKey(projectName);
 		model.addAttribute("projectKey", projectKey);
@@ -32,7 +34,8 @@ public class ResultController {
 		RebuildForm rebuildForm = new RebuildForm(projectKey);
 		rebuildForm.setApplyHistroyId(applyHistroyId);
 		model.addAttribute("rebuildForm", rebuildForm);
-
-	    return "project/result/top";
+		
+		request.setAttribute("pageName", "project/result/top");
+		return "common_frame";
 	}
 }

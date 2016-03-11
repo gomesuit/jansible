@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta content="ja" http-equiv="Content-Language" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>Jansible</title>
+
+<head th:substituteby="common::static" />
+
+</head>
+<body>
+	<div th:substituteby="common::menubar" />
+	
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-1 sidebar">
+				<div th:substituteby="common::sidebar" />
+			</div>
+
+			<div class="col-md-11 col-md-offset-1 main">
+				<div th:substituteby="common::message" />
+				<div th:substituteby="${pageName}" />
+			</div>
+		</div>
+	</div>
+
+	<head th:substituteby="common::footer" />
+</body>
+</html>

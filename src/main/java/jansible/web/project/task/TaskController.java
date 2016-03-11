@@ -45,7 +45,7 @@ public class TaskController {
 			@RequestParam(value = "projectName", required = true) String projectName,
 			@RequestParam(value = "roleName", required = true) String roleName,
 			@RequestParam(value = "taskId", required = true) int taskId,
-			Model model){
+			Model model, HttpServletRequest request){
 		TaskKey taskKey = new TaskKey();
 		taskKey.setProjectName(projectName);
 		taskKey.setRoleName(roleName);
@@ -76,7 +76,8 @@ public class TaskController {
 		// 変数一覧
 		model.addAttribute("variableList", variableService.getDbRoleVariableList(taskKey));
 		
-	    return "project/task/top";
+		request.setAttribute("pageName", "project/task/top");
+		return "common_frame";
 	}
 
 	@RequestMapping(value="/project/taskdetail/regist", method=RequestMethod.POST)

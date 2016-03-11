@@ -44,7 +44,7 @@ public class RoleController {
 	private String viewRole(
 			@RequestParam(value = "projectName", required = true) String projectName,
 			@RequestParam(value = "roleName", required = true) String roleName,
-			Model model){
+			Model model, HttpServletRequest request){
 		RoleKey roleKey = new RoleKey();
 		roleKey.setProjectName(projectName);
 		roleKey.setRoleName(roleName);
@@ -74,7 +74,8 @@ public class RoleController {
 		model.addAttribute("roleVariableKey", new RoleVariableKey(roleKey));
 		model.addAttribute("variableList", variableService.getDbRoleVariableList(roleKey));
 		
-	    return "project/role/top";
+		request.setAttribute("pageName", "project/role/top");
+		return "common_frame";
 	}
 
 	@RequestMapping(value="/project/roleVariable/regist", method=RequestMethod.POST)

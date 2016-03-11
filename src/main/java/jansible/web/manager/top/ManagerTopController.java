@@ -18,11 +18,13 @@ public class ManagerTopController {
 	private GlobalRoleService globalRoleService;
     
     @RequestMapping("/manager")
-    private String top(Model model){
+    private String top(Model model, HttpServletRequest request){
     	model.addAttribute("form", new GlobalRoleForm());
     	model.addAttribute("roleList", globalRoleService.getRoleList());
     	model.addAttribute("roleKey", new GlobalRoleKey());
-        return "manager/top";
+    	
+		request.setAttribute("pageName", "manager/top");
+		return "common_frame";
     }
 
     @RequestMapping(value="/manager/role/regist", method=RequestMethod.POST)
