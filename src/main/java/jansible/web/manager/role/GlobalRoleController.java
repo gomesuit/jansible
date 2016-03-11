@@ -40,7 +40,7 @@ public class GlobalRoleController {
     @RequestMapping("/manager/role/view")
 	private String viewRole(
 			@RequestParam(value = "roleName", required = true) String roleName,
-			Model model){
+			Model model, HttpServletRequest request){
     	GlobalRoleKey roleKey = new GlobalRoleKey();
 		roleKey.setRoleName(roleName);
 		
@@ -74,7 +74,8 @@ public class GlobalRoleController {
 		model.addAttribute("role", roleService.getRole(roleKey));
 		model.addAttribute("tagList", roleService.getRoleTagList(roleKey));
 		
-	    return "manager/role/top";
+		request.setAttribute("pageName", "manager/role/top");
+		return "common_frame";
 	}
 
 	@RequestMapping(value="/manager/roleVariable/regist", method=RequestMethod.POST)

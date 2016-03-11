@@ -39,7 +39,7 @@ public class GlobalTaskController {
 	private String viewTask(
 			@RequestParam(value = "roleName", required = true) String roleName,
 			@RequestParam(value = "taskId", required = true) int taskId,
-			Model model){
+			Model model, HttpServletRequest request){
     	GlobalTaskKey taskKey = new GlobalTaskKey();
 		taskKey.setRoleName(roleName);
 		taskKey.setTaskId(taskId);
@@ -69,7 +69,8 @@ public class GlobalTaskController {
 		// 変数一覧
 		model.addAttribute("variableList", roleService.getDbRoleVariableList(taskKey));
 		
-	    return "manager/task/top";
+		request.setAttribute("pageName", "manager/task/top");
+		return "common_frame";
 	}
 
 	@RequestMapping(value="/manager/taskdetail/regist", method=RequestMethod.POST)
