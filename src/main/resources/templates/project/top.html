@@ -1,55 +1,84 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-	<meta content="ja" http-equiv="Content-Language" />
-	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-	<title>sample page</title>
-</head>
-<body>
-	<div>トップ画面です</div>
-	
-	<br /><hr /><br />
-	<div>プロジェクト登録</div>
-	<form action="#" th:action="@{/project/regist}" th:object="${form}" method="post">
-		<table border="1" rules="all">
-			<tr>
-				<td>project</td>
-				<td>repositoryUrl</td>
-			</tr>
-			<tr>
-				<td><input type="text" th:field="*{projectName}" /></td>
-				<td><input type="text" th:field="*{repositoryUrl}" /></td>
-			</tr>
-		</table>
-		<div>レポジトリ認証情報</div>
-		<table border="1" rules="all">
-			<tr>
-				<td>userName</td>
-				<td>password</td>
-			</tr>
-			<tr>
-				<td><input type="text" th:field="*{userName}" /></td>
-				<td><input type="password" th:field="*{password}" /></td>
-			</tr>
-		</table>
-		<input type="submit" value="Submit" />
-	</form>
-	
-	<div>プロジェクト一覧</div>
-	<table border="1" rules="all">
-		<tr>
-			<td>project</td>
-			<td>Delete</td>
-		</tr>
-		<tr th:each="project : ${projectList}">
-			<td><a th:href="@{/project/view(projectName=${project.projectName})}" th:text="${project.projectName}" /></td>
-			<td>
-				<form method="POST" th:action="@{/project/delete}" th:object="${projectKey}">
-					<input type="hidden" name="projectName" th:value="${project.projectName}" />
-					<input type="submit" value="Delete" />
-				</form>
-			</td>
-		</tr>
-	</table>
-</body>
-</html>
+
+<h1 class="page-header">トップ画面です</h1>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<div>プロジェクト</div>
+	</div>
+	<div class="panel-body">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div>登録</div>
+			</div>
+			<form action="#" th:action="@{/project/regist}" th:object="${form}" method="post">
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-6">
+							<div>プロジェクト情報</div>
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>project</th>
+										<th>repositoryUrl</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><input type="text" class="form-control" th:field="*{projectName}" /></td>
+										<td><input type="text" class="form-control" th:field="*{repositoryUrl}" /></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col-md-6">
+							<div>レポジトリ認証情報（プライベートのみ）</div>
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>userName</th>
+										<th>password</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><input type="text" class="form-control" th:field="*{userName}" /></td>
+										<td><input type="password" class="form-control" th:field="*{password}" /></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<input type="submit" class="btn btn-primary btn-lg" value="登録" />
+				</div>
+			</form>
+		</div>
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div>一覧</div>
+			</div>
+			<div class="panel-body">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>project</th>
+							<th>Delete</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="project : ${projectList}">
+							<td>
+								<a th:href="@{/project/view(projectName=${project.projectName})}" th:text="${project.projectName}" />
+							</td>
+							<td class="text-center">
+								<form method="POST" th:action="@{/project/delete}" th:object="${projectKey}">
+									<input type="hidden" name="projectName" th:value="${project.projectName}" />
+									<input type="submit" class="btn btn-primary" value="Delete" />
+								</form>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
