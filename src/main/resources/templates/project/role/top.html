@@ -1,187 +1,244 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-	<meta content="ja" http-equiv="Content-Language" />
-	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-	<title>sample page</title>
-</head>
-<body>
-	<div>ロールの画面です</div>
-	
-	<br /><hr /><br />
-	<div>【タスク登録】</div>
-	<form action="#" th:action="@{/project/task/regist}" th:object="${form}" method="post">
-		<input type="hidden" th:field="*{projectName}" />
-		<input type="hidden" th:field="*{roleName}" />
-		<table border="1" rules="all">
-			<tr>
-				<td>moduleName</td>
-				<td>description</td>
-			</tr>
-			<tr>
-				<td>
-					<select size="1" th:field="*{moduleName}">
-						<option th:each="moduleName : ${moduleNameList}" th:value="${moduleName}" th:label="${moduleName}" />
-					</select>
-				</td>
-				<td><input type="text" th:field="*{description}" /></td>
-			</tr>
+
+<h1 class="page-header">ロールの画面です</h1>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<div>タスク</div>
+	</div>
+	<div class="panel-body">
+		<form class="form-inline" action="#" th:action="@{/project/task/regist}" th:object="${form}" method="post">
+			<input type="hidden" th:field="*{projectName}" />
+			<input type="hidden" th:field="*{roleName}" />
+			<select class="form-control" th:field="*{moduleName}">
+				<option th:each="moduleName : ${moduleNameList}" th:value="${moduleName}" th:label="${moduleName}" />
+			</select>
+			<input type="submit" class="btn btn-primary" value="登録" />
+		</form>
+		
+		<br />
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>task</th>
+					<th>description</th>
+					<th>parameter</th>
+					<th>order</th>
+					<th>Delete</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="task,iterStat : ${taskList}">
+					<td>
+						<div class="text-center" th:text="${iterStat.count}" />
+					</td>
+					<td>
+						<a th:href="@{/task/view(projectName=${form.projectName}, roleName=${form.roleName}, taskId=${task.taskId})}"
+						th:text="${task.moduleName}" />
+					</td>
+					<td th:text="${task.description}" />
+					<td th:text="${task.parametersValue}" />
+					<td class="text-center">
+						<div style="display:inline-flex">
+						<form method="POST" th:action="@{/project/task/order}" th:object="${taskOrderForm}">
+							<input type="hidden" th:field="*{projectName}" />
+							<input type="hidden" th:field="*{roleName}" />
+							<input type="hidden" name="taskId" th:value="${task.taskId}" />
+							<input type="hidden" name="orderType" value="UP" />
+							<button type="submit" class="btn btn-info btn-xs">
+								<span class="glyphicon glyphicon-arrow-up" aria-hidden="true" />
+							</button>
+						</form>
+						　
+						<form method="POST" th:action="@{/project/task/order}" th:object="${taskOrderForm}">
+							<input type="hidden" th:field="*{projectName}" />
+							<input type="hidden" th:field="*{roleName}" />
+							<input type="hidden" name="taskId" th:value="${task.taskId}" />
+							<input type="hidden" name="orderType" value="DOWN" />
+							<button type="submit" class="btn btn-info btn-xs">
+								<span class="glyphicon glyphicon-arrow-down" aria-hidden="true" />
+							</button>
+						</form>
+						</div>
+					</td>
+					<td class="text-center">
+						<form method="POST" th:action="@{/project/task/delete}" th:object="${taskKey}">
+							<input type="hidden" th:field="*{projectName}" />
+							<input type="hidden" th:field="*{roleName}" />
+							<input type="hidden" name="taskId" th:value="${task.taskId}" />
+							<button type="submit" class="btn btn-danger btn-xs">
+								<span class="glyphicon glyphicon-trash" aria-hidden="true" />
+							</button>
+						</form>
+					</td>
+				</tr>
+			</tbody>
 		</table>
-		<input type="submit" value="Submit" />
-	</form>
-	
-	<br />
-	<div>【タスク一覧】</div>
-	<table border="1" rules="all">
-		<tr>
-			<td>task</td>
-			<td>description</td>
-			<td>parameter</td>
-			<td>order</td>
-			<td>Delete</td>
-		</tr>
-		<tr th:each="task : ${taskList}">
-			<td>
-				<a th:href="@{/task/view(projectName=${form.projectName}, roleName=${form.roleName}, taskId=${task.taskId})}"
-				th:text="${task.moduleName}" />
-			</td>
-			<td th:text="${task.description}" />
-			<td th:text="${task.parametersValue}" />
-			<td>
-				<div style="display:inline-flex">
-				<form method="POST" th:action="@{/project/task/order}" th:object="${taskOrderForm}">
-					<input type="hidden" th:field="*{projectName}" />
-					<input type="hidden" th:field="*{roleName}" />
-					<input type="hidden" name="taskId" th:value="${task.taskId}" />
-					<input type="hidden" name="orderType" value="UP" />
-					<input type="submit" value="↑" />
-				</form>
-				<form method="POST" th:action="@{/project/task/order}" th:object="${taskOrderForm}">
-					<input type="hidden" th:field="*{projectName}" />
-					<input type="hidden" th:field="*{roleName}" />
-					<input type="hidden" name="taskId" th:value="${task.taskId}" />
-					<input type="hidden" name="orderType" value="DOWN" />
-					<input type="submit" value="↓" />
-				</form>
+	</div>
+</div>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<div>テンプレート</div>
+	</div>
+	<div class="panel-body">
+		<form class="form-inline" enctype="multipart/form-data" action="#" th:action="@{/project/template/upload}" th:object="${uploadForm}" method="post">
+			<input type="hidden" th:field="*{projectName}" />
+			<input type="hidden" th:field="*{roleName}" />
+			<div class="row">
+				<div class="col-md-2">			
+					<input class="file" type="file" th:field="*{file}" />
 				</div>
-			</td>
-			<td>
-				<form method="POST" th:action="@{/project/task/delete}" th:object="${taskKey}">
-					<input type="hidden" th:field="*{projectName}" />
-					<input type="hidden" th:field="*{roleName}" />
-					<input type="hidden" name="taskId" th:value="${task.taskId}" />
-					<input type="submit" value="Delete" />
-				</form>
-			</td>
-		</tr>
-	</table>
-	
-	<br /><hr /><br />
-	<div>【テンプレートアップロード】</div>
-	<form method="POST" enctype="multipart/form-data" th:action="@{/project/template/upload}" th:object="${uploadForm}">
-		<input type="hidden" th:field="*{projectName}" />
-		<input type="hidden" th:field="*{roleName}" />
-		<input type="file" th:field="*{file}" />
+				<div class="col-md-10">
+					<input type="submit" class="btn btn-primary" value="UPLOAD" />
+				</div>
+			</div>
+		</form>
+		
 		<br />
-		<input type="submit" value="Upload" />
-	</form>
-	<div>【テンプレート一覧】</div>
-	<table border="1" rules="all">
-		<tr>
-			<td>template</td>
-			<td>Download</td>
-			<td>Delete</td>
-		</tr>
-		<tr th:each="template : ${templateList}">
-			<td th:text="${template.templateName}" />
-			<form method="POST" enctype="multipart/form-data" th:action="@{/project/download/template}" th:object="${fileForm}">
-				<input type="hidden" th:field="*{projectName}" />
-				<input type="hidden" th:field="*{roleName}" />
-				<input type="hidden" name="fileName" th:value="${template.templateName}" />
-				<td><input type="submit" value="Download" /></td>
-			</form>
-			<form method="POST" enctype="multipart/form-data" th:action="@{/project/template/delete}" th:object="${fileForm}">
-				<input type="hidden" th:field="*{projectName}" />
-				<input type="hidden" th:field="*{roleName}" />
-				<input type="hidden" name="fileName" th:value="${template.templateName}" />
-				<td><input type="submit" value="Delete" /></td>
-			</form>
-		</tr>
-	</table>
-	
-	<br /><hr /><br />
-	<div>【ファイルアップロード】</div>
-	<form method="POST" enctype="multipart/form-data" th:action="@{/project/file/upload}" th:object="${uploadForm}">
-		<input type="hidden" th:field="*{projectName}" />
-		<input type="hidden" th:field="*{roleName}" />
-		<input type="file" th:field="*{file}" />
-		<br />
-		<input type="submit" value="Upload" />
-	</form>
-	<div>【ファイル一覧】</div>
-	<table border="1" rules="all">
-		<tr>
-			<td>file</td>
-			<td>Download</td>
-			<td>Delete</td>
-		</tr>
-		<tr th:each="file : ${fileList}">
-			<td th:text="${file.fileName}" />
-			<form method="POST" enctype="multipart/form-data" th:action="@{/project/download/file}" th:object="${fileForm}">
-				<input type="hidden" th:field="*{projectName}" />
-				<input type="hidden" th:field="*{roleName}" />
-				<input type="hidden" name="fileName" th:value="${file.fileName}" />
-				<td><input type="submit" value="Download" /></td>
-			</form>
-			<form method="POST" enctype="multipart/form-data" th:action="@{/project/file/delete}" th:object="${fileForm}">
-				<input type="hidden" th:field="*{projectName}" />
-				<input type="hidden" th:field="*{roleName}" />
-				<input type="hidden" name="fileName" th:value="${file.fileName}" />
-				<td><input type="submit" value="Delete" /></td>
-			</form>
-		</tr>
-	</table>
-	
-	<br /><hr /><br />
-	<div>【変数登録】</div>
-	<form method="POST" enctype="multipart/form-data" th:action="@{/project/roleVariable/regist}" th:object="${variableForm}">
-		<input type="hidden" th:field="*{projectName}" />
-		<input type="hidden" th:field="*{roleName}" />
-		<table border="1" rules="all">
-			<tr>
-				<td>variableName</td>
-				<td>value</td>
-			</tr>
-			<tr>
-				<td><input type="text" th:field="*{variableName}" /></td>
-				<td><input type="text" th:field="*{value}" /></td>
-			</tr>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>template</th>
+					<th>Download</th>
+					<th>Delete</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="template,iterStat : ${templateList}">
+					<td>
+						<div class="text-center" th:text="${iterStat.count}" />
+					</td>					
+					<td th:text="${template.templateName}" />
+					<td class="text-center">
+						<form enctype="multipart/form-data" th:action="@{/project/download/template}" th:object="${fileForm}" method="POST">
+							<input type="hidden" th:field="*{projectName}" />
+							<input type="hidden" th:field="*{roleName}" />
+							<input type="hidden" name="fileName" th:value="${template.templateName}" />
+							<button type="submit" class="btn btn-info btn-xs">
+								<span class="glyphicon glyphicon-download-alt" aria-hidden="true" />
+							</button>
+						</form>
+					</td>
+					<td class="text-center">
+						<form enctype="multipart/form-data" th:action="@{/project/template/delete}" th:object="${fileForm}" method="POST">
+							<input type="hidden" th:field="*{projectName}" />
+							<input type="hidden" th:field="*{roleName}" />
+							<input type="hidden" name="fileName" th:value="${template.templateName}" />
+							<button type="submit" class="btn btn-danger btn-xs">
+								<span class="glyphicon glyphicon-trash" aria-hidden="true" />
+							</button>
+						</form>
+					</td>
+				</tr>
+			</tbody>
 		</table>
-		<input type="submit" value="Submit" />
-	</form>
-	
-	<br />
-	<div>【変数一覧】</div>
-	<table border="1" rules="all">
-		<tr>
-			<td>variable</td>
-			<td>value</td>
-			<td>Delete</td>
-		</tr>
-		<tr th:each="variable : ${variableList}">
-			<td th:text="${variable.variableName}" />
-			<td th:text="${variable.value}" />
-			<form method="POST" th:action="@{/project/roleVariable/delete}" th:object="${roleVariableKey}">
-				<input type="hidden" th:field="*{projectName}" />
-				<input type="hidden" th:field="*{roleName}" />
-				<input type="hidden" name="variableName" th:value="${variable.variableName}" />
-				<td><input type="submit" value="Delete" /></td>
-			</form>
-		</tr>
-	</table>
-	
-	<br /><hr />
-	<a th:href="@{/project/view/(projectName=${form.projectName})}" >戻る</a>
-	<a th:href="@{/}" >トップ</a>
-</body>
-</html>
+	</div>
+</div>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<div>ファイル</div>
+	</div>
+	<div class="panel-body">
+		<form class="form-inline" enctype="multipart/form-data" action="#" th:action="@{/project/file/upload}" th:object="${uploadForm}" method="post">
+			<input type="hidden" th:field="*{projectName}" />
+			<input type="hidden" th:field="*{roleName}" />
+			<div class="row">
+				<div class="col-md-2">			
+					<input class="file" type="file" th:field="*{file}" />
+				</div>
+				<div class="col-md-10">
+					<input type="submit" class="btn btn-primary" value="UPLOAD" />
+				</div>
+			</div>
+		</form>
+		
+		<br />
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>file</th>
+					<th>Download</th>
+					<th>Delete</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="file,iterStat : ${fileList}">
+					<td>
+						<div class="text-center" th:text="${iterStat.count}" />
+					</td>					
+					<td th:text="${file.fileName}" />
+					<td class="text-center">
+						<form enctype="multipart/form-data" th:action="@{/project/download/file}" th:object="${fileForm}" method="POST">
+							<input type="hidden" th:field="*{projectName}" />
+							<input type="hidden" th:field="*{roleName}" />
+							<input type="hidden" name="fileName" th:value="${file.fileName}" />
+							<button type="submit" class="btn btn-info btn-xs">
+								<span class="glyphicon glyphicon-download-alt" aria-hidden="true" />
+							</button>
+						</form>
+					</td>
+					<td class="text-center">
+						<form enctype="multipart/form-data" th:action="@{/project/file/delete}" th:object="${fileForm}" method="POST">
+							<input type="hidden" th:field="*{projectName}" />
+							<input type="hidden" th:field="*{roleName}" />
+							<input type="hidden" name="fileName" th:value="${file.fileName}" />
+							<button type="submit" class="btn btn-danger btn-xs">
+								<span class="glyphicon glyphicon-trash" aria-hidden="true" />
+							</button>
+						</form>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<div>環境</div>
+	</div>
+	<div class="panel-body">
+		<form class="form-inline" action="#" th:action="@{/project/roleVariable/regist}" th:object="${variableForm}" method="post">
+			<input type="hidden" th:field="*{projectName}" />
+			<input type="hidden" th:field="*{roleName}" />
+			<input type="text" class="form-control" th:field="*{variableName}" placeholder="variableName" />
+			<input type="text" class="form-control" th:field="*{value}" placeholder="value" />
+			<input type="submit" class="btn btn-primary" value="登録" />
+		</form>
+		
+		<br />
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>variable</th>
+					<th>value</th>
+					<th>Delete</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="variable,iterStat : ${variableList}">
+					<td>
+						<div class="text-center" th:text="${iterStat.count}" />
+					</td>
+					<td th:text="${variable.variableName}" />
+					<td th:text="${variable.value}" />
+					<td class="text-center">
+						<form method="POST" th:action="@{/project/roleVariable/delete}" th:object="${roleVariableKey}">
+							<input type="hidden" th:field="*{projectName}" />
+							<input type="hidden" th:field="*{roleName}" />
+							<input type="hidden" name="variableName" th:value="${variable.variableName}" />
+							<button type="submit" class="btn btn-danger btn-xs">
+								<span class="glyphicon glyphicon-trash" aria-hidden="true" />
+							</button>
+						</form>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
