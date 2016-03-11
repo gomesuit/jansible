@@ -1,118 +1,117 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-	<meta content="ja" http-equiv="Content-Language" />
-	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-	<title>sample page</title>
-</head>
-<body>
-	<div>サーバの画面です</div>
-	
-	<br /><hr /><br />
-	<div>【パラメータ登録】</div>
-	<form method="POST" enctype="multipart/form-data" th:action="@{/project/serverParameter/regist}" th:object="${serverParameterForm}">
-		<input type="hidden" th:field="*{projectName}" />
-		<input type="hidden" th:field="*{serverName}" />
-		<table border="1" rules="all">
-			<tr>
-				<td>parameterName</td>
-				<td>parameterValue</td>
-			</tr>
-			<tr>
-				<td>
-					<select size="1" th:field="*{parameterName}">
-						<option value="ansible_connection" label="ansible_connection" />
-						<option value="ansible_host" label="ansible_host" />
-						<option value="ansible_user" label="ansible_user" />
-						<option value="ansible_ssh_pass" label="ansible_ssh_pass" />
-						<option value="ansible_ssh_private_key_file" label="ansible_ssh_private_key_file" />
-						<option value="ansible_ssh_common_args" label="ansible_ssh_common_args" />
-						<option value="ansible_sftp_extra_args" label="ansible_sftp_extra_args" />
-						<option value="ansible_scp_extra_args" label="ansible_scp_extra_args" />
-						<option value="ansible_ssh_extra_args" label="ansible_ssh_extra_args" />
-						<option value="ansible_ssh_pipelining" label="ansible_ssh_pipelining" />
-						<option value="ansible_become" label="ansible_become" />
-						<option value="ansible_become_method" label="ansible_become_method" />
-						<option value="ansible_become_user" label="ansible_become_user" />
-						<option value="ansible_become_pass" label="ansible_become_pass" />
-						<option value="ansible_shell_type" label="ansible_shell_type" />
-						<option value="ansible_python_interpreter" label="ansible_python_interpreter" />
-						<option value="ansible_ruby_interpreter" label="ansible_ruby_interpreter" />
-						<option value="ansible_perl_interpreter" label="ansible_perl_interpreter" />
-					</select>
-				</td>
-				<td><input type="text" th:field="*{parameterValue}" /></td>
-			</tr>
+
+<h1 class="page-header">サーバの画面です</h1>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<div>パラメータ</div>
+	</div>
+	<div class="panel-body">
+		<form class="form-inline" action="#" th:action="@{/project/serverParameter/regist}" th:object="${serverParameterForm}" method="post">
+			<input type="hidden" th:field="*{projectName}" />
+			<input type="hidden" th:field="*{serverName}" />
+			<select class="form-control" th:field="*{parameterName}">
+				<option value="ansible_connection" label="ansible_connection" />
+				<option value="ansible_host" label="ansible_host" />
+				<option value="ansible_user" label="ansible_user" />
+				<option value="ansible_ssh_pass" label="ansible_ssh_pass" />
+				<option value="ansible_ssh_private_key_file" label="ansible_ssh_private_key_file" />
+				<option value="ansible_ssh_common_args" label="ansible_ssh_common_args" />
+				<option value="ansible_sftp_extra_args" label="ansible_sftp_extra_args" />
+				<option value="ansible_scp_extra_args" label="ansible_scp_extra_args" />
+				<option value="ansible_ssh_extra_args" label="ansible_ssh_extra_args" />
+				<option value="ansible_ssh_pipelining" label="ansible_ssh_pipelining" />
+				<option value="ansible_become" label="ansible_become" />
+				<option value="ansible_become_method" label="ansible_become_method" />
+				<option value="ansible_become_user" label="ansible_become_user" />
+				<option value="ansible_become_pass" label="ansible_become_pass" />
+				<option value="ansible_shell_type" label="ansible_shell_type" />
+				<option value="ansible_python_interpreter" label="ansible_python_interpreter" />
+				<option value="ansible_ruby_interpreter" label="ansible_ruby_interpreter" />
+				<option value="ansible_perl_interpreter" label="ansible_perl_interpreter" />
+			</select>
+			<input type="text" class="form-control" th:field="*{parameterValue}" placeholder="parameterValue" />
+			<input type="submit" class="btn btn-primary" value="登録" />
+		</form>
+		
+		<br />
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>parameterName</th>
+					<th>parameterValue</th>
+					<th>Delete</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="serverParameter,iterStat : ${serverParameterList}">
+					<td>
+						<div class="text-center" th:text="${iterStat.count}" />
+					</td>
+					<td th:text="${serverParameter.parameterName}" />
+					<td th:text="${serverParameter.parameterValue}" />
+					<td class="text-center">
+						<form th:action="@{/project/serverParameter/delete}" th:object="${serverParameterKey}" method="POST">
+							<input type="hidden" th:field="*{projectName}" />
+							<input type="hidden" th:field="*{serverName}" />
+							<input type="hidden" name="parameterName" th:value="${serverParameter.parameterName}" />
+							<button type="submit" class="btn btn-danger btn-xs">
+								<span class="glyphicon glyphicon-trash" aria-hidden="true" />
+							</button>
+						</form>
+					</td>
+				</tr>
+			</tbody>
 		</table>
-		<input type="submit" value="Submit" />
-	</form>
-	
-	<br />
-	<div>【パラメータ一覧】</div>
-	<table border="1" rules="all">
-		<tr>
-			<td>parameterName</td>
-			<td>parameterValue</td>
-			<td>Delete</td>
-		</tr>
-		<tr th:each="serverParameter : ${serverParameterList}">
-			<td th:text="${serverParameter.parameterName}" />
-			<td th:text="${serverParameter.parameterValue}" />
-			<td>
-				<form method="POST" th:action="@{/project/serverParameter/delete}" th:object="${serverParameterKey}">
-					<input type="hidden" th:field="*{projectName}" />
-					<input type="hidden" th:field="*{serverName}" />
-					<input type="hidden" name="parameterName" th:value="${serverParameter.parameterName}" />
-					<input type="submit" value="Delete" />
-				</form>
-			</td>
-		</tr>
-	</table>
-	
-	<br /><hr /><br />
-	<div>【変数登録】</div>
-	<form method="POST" enctype="multipart/form-data" th:action="@{/project/serverVariable/regist}" th:object="${variableForm}">
-		<input type="hidden" th:field="*{projectName}" />
-		<input type="hidden" th:field="*{serverName}" />
-		<table border="1" rules="all">
-			<tr>
-				<td>variableName</td>
-				<td>value</td>
-			</tr>
-			<tr>
-				<td>
-					<select size="1" th:field="*{variableName}">
-						<option th:each="variableName : ${allVariableNameList}" th:value="${variableName}" th:label="${variableName}" />
-					</select>
-				</td>
-				<td><input type="text" th:field="*{value}" /></td>
-			</tr>
+	</div>
+</div>
+
+
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<div>変数登録</div>
+	</div>
+	<div class="panel-body">
+		<form class="form-inline" action="#" th:action="@{/project/serverVariable/regist}" th:object="${variableForm}" method="post">
+			<input type="hidden" th:field="*{projectName}" />
+			<input type="hidden" th:field="*{serverName}" />
+			<select class="form-control" th:field="*{variableName}">
+				<option th:each="variableName : ${allVariableNameList}" th:value="${variableName}" th:label="${variableName}" />
+			</select>
+			<input type="text" class="form-control" th:field="*{value}" placeholder="value" />
+			<input type="submit" class="btn btn-primary" value="登録" />
+		</form>
+		
+		<br />		
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>variable</th>
+					<th>value</th>
+					<th>Delete</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="variable,iterStat : ${variableList}">
+					<td>
+						<div class="text-center" th:text="${iterStat.count}" />
+					</td>
+					<td th:text="${variable.variableName}" />
+					<td th:text="${variable.value}" />
+					<td class="text-center">
+						<form th:action="@{/project/serverVariable/delete}" th:object="${serverVariableKey}" method="POST">
+							<input type="hidden" th:field="*{projectName}" />
+							<input type="hidden" th:field="*{serverName}" />
+							<input type="hidden" name="variableName" th:value="${variable.variableName}" />
+							<button type="submit" class="btn btn-danger btn-xs">
+								<span class="glyphicon glyphicon-trash" aria-hidden="true" />
+							</button>
+						</form>
+					</td>
+				</tr>
+			</tbody>
 		</table>
-		<input type="submit" value="Submit" />
-	</form>
-	
-	<br />
-	<div>【変数一覧】</div>
-	<table border="1" rules="all">
-		<tr>
-			<td>variable</td>
-			<td>value</td>
-			<td>Delete</td>
-		</tr>
-		<tr th:each="variable : ${variableList}">
-			<td th:text="${variable.variableName}" />
-			<td th:text="${variable.value}" />
-			<form method="POST" th:action="@{/project/serverVariable/delete}" th:object="${serverVariableKey}">
-				<input type="hidden" th:field="*{projectName}" />
-				<input type="hidden" th:field="*{serverName}" />
-				<input type="hidden" name="variableName" th:value="${variable.variableName}" />
-				<td><input type="submit" value="Delete" /></td>
-			</form>
-		</tr>
-	</table>
-	
-	<br /><hr />
-	<a th:href="@{/project/view/(projectName=${variableForm.projectName})}" >戻る</a>
-	<a th:href="@{/}" >トップ</a>
-</body>
-</html>
+	</div>
+</div>
