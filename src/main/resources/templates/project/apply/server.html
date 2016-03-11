@@ -1,79 +1,85 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-	<meta content="ja" http-equiv="Content-Language" />
-	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-	<title>sample page</title>
-</head>
-<body>
-	<div>適用の画面です</div>
+
+<h1 class="page-header">適用</h1>
+
+<div class="row">
+	<div class="col-md-4">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div>適用範囲</div>
+			</div>
+			<div class="panel-body">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>environment</th>
+							<th>group</th>
+							<th>server</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<div th:text="${buildForm.environmentName}" />
+							</td>
+							<td>
+								<div th:text="${buildForm.groupName}" />
+							</td>
+							<td>
+								<div th:text="${buildForm.serverName}" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 	
-	<br /><hr /><br />
-	<div>タスク適用</div>
-	<form method="POST" th:action="@{/project/jenkins/serverBuild}" th:object="${buildForm}">
-		<input type="hidden" th:field="*{projectName}" />
-		<input type="hidden" th:field="*{environmentName}" />
-		<input type="hidden" th:field="*{groupName}" />
-		<input type="hidden" th:field="*{serverName}" />
-		<table border="1" rules="all">
-			<tr>
-				<td>environment</td>
-				<td>group</td>
-				<td>server</td>
-			</tr>
-			<tr>
-				<td><div th:text="*{environmentName}" /></td>
-				<td><div th:text="*{groupName}" /></td>
-				<td><div th:text="*{serverName}" /></td>
-			</tr>
-		</table>
-		
-		<br />
-		<div>対象サーバ</div>
-		<table border="1" rules="all">
-			<tr>
-				<td>serverName</td>
-			</tr>
-			<tr>
-				<td>
-					<a th:href="@{/server/view(projectName=*{projectName}, serverName=*{serverName})}"
-					th:text="*{serverName}" />
-				</td>
-			</tr>
-		</table>
-		
-		<br />
-		<div>適用ロール</div>
-		<table border="1" rules="all">
-			<tr>
-				<td>roleName</td>
-			</tr>
-			<tr th:each="role : ${roleList}">
-				<td>
-					<a th:href="@{/role/view(projectName=${role.projectName}, roleName=${role.roleName})}"
-					th:text="${role.roleName}" />
-				</td>
-			</tr>
-		</table>
-		
-		<br />
-		<table border="1" rules="all">
-			<tr>
-				<td>userName</td>
-				<td>password</td>
-				<td>comment</td>
-			</tr>
-			<tr>
-				<td><input type="text" th:field="*{userName}" /></td>
-				<td><input type="password" th:field="*{password}" /></td>
-				<td><input type="text" th:field="*{comment}" /></td>
-			</tr>
-		</table>
-		<input type="submit" value="Build" />
-	</form>
+	<div class="col-md-4">
+	</div>
 	
-	<br /><hr />
-	<a th:href="@{/project/view/(projectName=${buildForm.projectName})}" >戻る</a>
-	<a th:href="@{/}" >トップ</a>
-</body>
-</html>
+	<div class="col-md-4">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div>適用ロール</div>
+			</div>
+			<div class="panel-body">				
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>roleName</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="role,iterStat : ${roleList}">
+							<td class="text-center">
+								<div class="text-center" th:text="${iterStat.count}" />
+							</td>
+							<td>
+								<a th:href="@{/role/view(projectName=${role.projectName}, roleName=${role.roleName})}"
+								th:text="${role.roleName}" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<div>適用</div>
+	</div>
+	<div class="panel-body">		
+		<form class="form-inline" action="#" th:action="@{/project/jenkins/serverBuild}" th:object="${buildForm}" method="post">
+			<input type="hidden" th:field="*{projectName}" />
+			<input type="hidden" th:field="*{environmentName}" />
+			<input type="hidden" th:field="*{groupName}" />
+			<input type="text" class="form-control" th:field="*{userName}" placeholder="userName" />
+			<input type="password" class="form-control" th:field="*{password}" placeholder="password" />
+			<input type="text" class="form-control" th:field="*{comment}" placeholder="comment" />
+			<input type="submit" class="btn btn-primary" value="Build" />
+		</form>
+	</div>
+</div>

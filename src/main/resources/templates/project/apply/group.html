@@ -8,15 +8,23 @@
 				<div>適用範囲</div>
 			</div>
 			<div class="panel-body">
-				<table border="1" rules="all">
-					<tr>
-						<td>environment</td>
-						<td>group</td>
-					</tr>
-					<tr>
-						<td><div th:text="${buildForm.environmentName}" /></td>
-						<td><div th:text="${buildForm.groupName}" /></td>
-					</tr>
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>environment</th>
+							<th>group</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<div th:text="${buildForm.environmentName}" />
+							</td>
+							<td>
+								<div th:text="${buildForm.groupName}" />
+							</td>
+						</tr>
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -28,16 +36,24 @@
 				<div>対象サーバ</div>
 			</div>
 			<div class="panel-body">
-				<table border="1" rules="all">
-					<tr>
-						<td>serverName</td>
-					</tr>
-					<tr th:each="server : ${serverList}">
-						<td>
-							<a th:href="@{/server/view(projectName=${server.projectName}, serverName=${server.serverName})}"
-							th:text="${server.serverName}" />
-						</td>
-					</tr>
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>serverName</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="server,iterStat : ${serverList}">
+							<td class="text-center">
+								<div class="text-center" th:text="${iterStat.count}" />
+							</td>
+							<td>
+								<a th:href="@{/server/view(projectName=${server.projectName}, serverName=${server.serverName})}"
+								th:text="${server.serverName}" />
+							</td>
+						</tr>
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -47,18 +63,25 @@
 			<div class="panel-heading">
 				<div>適用ロール</div>
 			</div>
-			<div class="panel-body">
-			
-				<table border="1" rules="all">
-					<tr>
-						<td>roleName</td>
-					</tr>
-					<tr th:each="role : ${roleList}">
-						<td>
-							<a th:href="@{/role/view(projectName=${role.projectName}, roleName=${role.roleName})}"
-							th:text="${role.roleName}" />
-						</td>
-					</tr>
+			<div class="panel-body">				
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>roleName</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="role,iterStat : ${roleList}">
+							<td class="text-center">
+								<div class="text-center" th:text="${iterStat.count}" />
+							</td>
+							<td>
+								<a th:href="@{/role/view(projectName=${role.projectName}, roleName=${role.roleName})}"
+								th:text="${role.roleName}" />
+							</td>
+						</tr>
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -70,7 +93,7 @@
 		<div>適用</div>
 	</div>
 	<div class="panel-body">		
-		<form class="form-inline" action="#" th:action="@{/project/git/commit}" th:object="${buildForm}" method="post">
+		<form class="form-inline" action="#" th:action="@{/project/jenkins/build}" th:object="${buildForm}" method="post">
 			<input type="hidden" th:field="*{projectName}" />
 			<input type="hidden" th:field="*{environmentName}" />
 			<input type="hidden" th:field="*{groupName}" />
@@ -81,6 +104,3 @@
 		</form>
 	</div>
 </div>
-
-<br />
-<a th:href="@{/project/view/(projectName=${buildForm.projectName})}" >戻る</a>
