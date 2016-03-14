@@ -31,7 +31,10 @@
 					<td>
 						<div class="text-center" th:text="${iterStat.count}" />
 					</td>
-					<td th:text="${serverRelation.serverName}" />
+					<td>
+						<a th:href="@{/project/server/view(projectName=${serverRelation.projectName}, serverName=${serverRelation.serverName})}"
+						th:text="${serverRelation.serverName}" />
+					</td>
 					<td class="text-center">
 						<form th:action="@{/project/serverRelation/delete}" th:object="${serverRelationKey}" method="POST">
 							<input type="hidden" th:field="*{projectName}" />
@@ -79,7 +82,10 @@
 					<td>
 						<div class="text-center" th:text="${iterStat.count}" />
 					</td>
-					<td th:text="${roleRelation.roleName}" />
+					<td>
+						<a th:href="@{/project/role/view(projectName=${roleRelation.projectName}, roleName=${roleRelation.roleName})}"
+						th:text="${roleRelation.roleName}" />
+					</td>
 					<td class="text-center">
 						<div style="display:inline-flex">
 							<form method="POST" th:action="@{/project/roleRelation/sort}" th:object="${roleRelationOrderForm}">
