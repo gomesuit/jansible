@@ -1,198 +1,211 @@
 
 <h1 class="page-header">プロジェクトの画面です</h1>
 
-<div class="panel panel-primary">
-	<div class="panel-heading">
-		<div>環境</div>
+
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div>環境</div>
+			</div>
+			<div class="panel-body">
+				<form class="form-inline" action="#" th:action="@{/project/environment/regist}" th:object="${environmentForm}" method="post">
+					<input type="hidden" th:field="*{projectName}" />
+					<input type="text" class="form-control" th:field="*{environmentName}" placeholder="environmentName" />
+					<input type="submit" class="btn btn-primary" value="登録" />
+				</form>
+				
+				<br />
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>environment</th>
+							<th>Delete</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="environment,iterStat : ${environmentList}">
+							<td>
+								<div class="text-center" th:text="${iterStat.count}" />
+							</td>
+							<td>
+								<a th:href="@{/environment/view(projectName=${environment.projectName}, environmentName=${environment.environmentName})}"
+								th:text="${environment.environmentName}" />
+							</td>
+							<td class="text-center">
+								<form th:action="@{/project/environment/delete}" th:object="${environmentKey}" method="POST">
+									<input type="hidden" th:field="*{projectName}" />
+									<input type="hidden" name="environmentName" th:value="${environment.environmentName}" />
+									<button type="submit" class="btn btn-danger btn-xs">
+										<span class="glyphicon glyphicon-trash" aria-hidden="true" />
+									</button>
+								</form>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
-	<div class="panel-body">
-		<form class="form-inline" action="#" th:action="@{/project/environment/regist}" th:object="${environmentForm}" method="post">
-			<input type="hidden" th:field="*{projectName}" />
-			<input type="text" class="form-control" th:field="*{environmentName}" placeholder="environmentName" />
-			<input type="submit" class="btn btn-primary" value="登録" />
-		</form>
-		
-		<br />
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>environment</th>
-					<th>Delete</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="environment,iterStat : ${environmentList}">
-					<td>
-						<div class="text-center" th:text="${iterStat.count}" />
-					</td>
-					<td>
-						<a th:href="@{/environment/view(projectName=${environment.projectName}, environmentName=${environment.environmentName})}"
-						th:text="${environment.environmentName}" />
-					</td>
-					<td class="text-center">
-						<form th:action="@{/project/environment/delete}" th:object="${environmentKey}" method="POST">
-							<input type="hidden" th:field="*{projectName}" />
-							<input type="hidden" name="environmentName" th:value="${environment.environmentName}" />
-							<button type="submit" class="btn btn-danger btn-xs">
-								<span class="glyphicon glyphicon-trash" aria-hidden="true" />
-							</button>
-						</form>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+	<div class="col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div>サーバ</div>
+			</div>
+			<div class="panel-body">
+				<form class="form-inline" action="#" th:action="@{/project/server/regist}" th:object="${serverForm}" method="post">
+					<input type="hidden" th:field="*{projectName}" />
+					<select class="form-control" th:field="*{environmentName}">
+						<option th:each="environment : ${environmentList}" th:value="${environment.environmentName}" th:label="${environment.environmentName}" />
+					</select>
+					<input type="text" class="form-control" th:field="*{serverName}" placeholder="serverName" />
+					<input type="submit" class="btn btn-primary" value="登録" />
+				</form>
+				
+				<br />		
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>environment</th>
+							<th>server</th>
+							<th>Delete</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="server,iterStat : ${serverList}">
+							<td>
+								<div class="text-center" th:text="${iterStat.count}" />
+							</td>
+							<td>
+								<a th:href="@{/environment/view(projectName=${server.projectName}, environmentName=${server.environmentName})}"
+								th:text="${server.environmentName}" />
+							</td>
+							<td>
+								<a th:href="@{/server/view(projectName=${server.projectName}, serverName=${server.serverName})}"
+								th:text="${server.serverName}" />
+							</td>
+							<td class="text-center">
+								<form th:action="@{/project/server/delete}" th:object="${serverKey}" method="POST">
+									<input type="hidden" th:field="*{projectName}" />
+									<input type="hidden" name="serverName" th:value="${server.serverName}" />
+									<button type="submit" class="btn btn-danger btn-xs">
+										<span class="glyphicon glyphicon-trash" aria-hidden="true" />
+									</button>
+								</form>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 </div>
 
-<div class="panel panel-primary">
-	<div class="panel-heading">
-		<div>サーバ</div>
-	</div>
-	<div class="panel-body">
-		<form class="form-inline" action="#" th:action="@{/project/server/regist}" th:object="${serverForm}" method="post">
-			<input type="hidden" th:field="*{projectName}" />
-			<select class="form-control" th:field="*{environmentName}">
-				<option th:each="environment : ${environmentList}" th:value="${environment.environmentName}" th:label="${environment.environmentName}" />
-			</select>
-			<input type="text" class="form-control" th:field="*{serverName}" placeholder="serverName" />
-			<input type="submit" class="btn btn-primary" value="登録" />
-		</form>
-		
-		<br />		
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>environment</th>
-					<th>server</th>
-					<th>Delete</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="server,iterStat : ${serverList}">
-					<td>
-						<div class="text-center" th:text="${iterStat.count}" />
-					</td>
-					<td>
-						<a th:href="@{/environment/view(projectName=${server.projectName}, environmentName=${server.environmentName})}"
-						th:text="${server.environmentName}" />
-					</td>
-					<td>
-						<a th:href="@{/server/view(projectName=${server.projectName}, serverName=${server.serverName})}"
-						th:text="${server.serverName}" />
-					</td>
-					<td class="text-center">
-						<form th:action="@{/project/server/delete}" th:object="${serverKey}" method="POST">
-							<input type="hidden" th:field="*{projectName}" />
-							<input type="hidden" name="serverName" th:value="${server.serverName}" />
-							<button type="submit" class="btn btn-danger btn-xs">
-								<span class="glyphicon glyphicon-trash" aria-hidden="true" />
-							</button>
-						</form>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-</div>
 
-<div class="panel panel-primary">
-	<div class="panel-heading">
-		<div>ロール</div>
+<div class="row">
+	<div class="col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div>ロール</div>
+			</div>
+			<div class="panel-body">
+				<form class="form-inline" action="#" th:action="@{/project/role/regist}" th:object="${roleForm}" method="post">
+					<input type="hidden" th:field="*{projectName}" />
+					<input type="text" class="form-control" th:field="*{roleName}" placeholder="roleName" />
+					<input type="submit" class="btn btn-primary" value="登録" />
+				</form>
+				
+				<br />
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>role</th>
+							<th>Delete</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="role,iterStat : ${roleList}">
+							<td>
+								<div class="text-center" th:text="${iterStat.count}" />
+							</td>
+							<td>
+								<a th:href="@{/role/view(projectName=${role.projectName}, roleName=${role.roleName})}"
+								th:text="${role.roleName}" />
+							</td>
+							<td class="text-center">
+								<form th:action="@{/project/role/delete}" th:object="${roleKey}" method="POST">
+									<input type="hidden" th:field="*{projectName}" />
+									<input type="hidden" name="roleName" th:value="${role.roleName}" />
+									<button type="submit" class="btn btn-danger btn-xs">
+										<span class="glyphicon glyphicon-trash" aria-hidden="true" />
+									</button>
+								</form>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
-	<div class="panel-body">
-		<form class="form-inline" action="#" th:action="@{/project/role/regist}" th:object="${roleForm}" method="post">
-			<input type="hidden" th:field="*{projectName}" />
-			<input type="text" class="form-control" th:field="*{roleName}" placeholder="roleName" />
-			<input type="submit" class="btn btn-primary" value="登録" />
-		</form>
-		
-		<br />
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>role</th>
-					<th>Delete</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="role,iterStat : ${roleList}">
-					<td>
-						<div class="text-center" th:text="${iterStat.count}" />
-					</td>
-					<td>
-						<a th:href="@{/role/view(projectName=${role.projectName}, roleName=${role.roleName})}"
-						th:text="${role.roleName}" />
-					</td>
-					<td class="text-center">
-						<form th:action="@{/project/role/delete}" th:object="${roleKey}" method="POST">
-							<input type="hidden" th:field="*{projectName}" />
-							<input type="hidden" name="roleName" th:value="${role.roleName}" />
-							<button type="submit" class="btn btn-danger btn-xs">
-								<span class="glyphicon glyphicon-trash" aria-hidden="true" />
-							</button>
-						</form>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-</div>
-
-<div class="panel panel-primary">
-	<div class="panel-heading">
-		<div>グローバルロール</div>
-	</div>
-	<div class="panel-body">
-		<form class="form-inline" action="#" th:action="@{/project/globalRole/regist}" th:object="${globalRoleRelationForm}" method="post">
-			<input type="hidden" th:field="*{projectName}" />
-			<select class="form-control" th:field="*{roleName}">
-				<option th:each="globalRole : ${globalRoleList}" th:value="${globalRole.roleName}" th:label="${globalRole.roleName}" />
-			</select>
-			<input type="submit" class="btn btn-primary" value="登録" />
-		</form>		
-		
-		<br />
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>role</th>
-					<th>tagName</th>
-					<th>changeTagName</th>
-					<th>Update</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="globalRoleRelation,iterStat : ${globalRoleRelationList}">
-					<td>
-						<div class="text-center" th:text="${iterStat.count}" />
-					</td>
-					<td>
-						<div th:text="${globalRoleRelation.roleName}" />
-					</td>
-					<td>
-						<div th:text="${globalRoleRelation.tagName}" />
-					</td>
-					
-					
-					<form th:action="@{/project/globalRole/update}" th:object="${globalRoleRelationTagUpdateForm}" method="POST">
-						<input type="hidden" th:field="*{projectName}" />
-						<input type="hidden" name="roleName" th:value="${globalRoleRelation.roleName}" />
-						<td>
-							<select class="form-control" th:field="*{tagName}">
-								<option th:each="tag : ${globalRoleRelation.tagList}" th:value="${tag}" th:label="${tag}" />
-							</select>
-						</td>
-						<td class="text-center">
-							<input class="btn btn-primary" type="submit" value="Update" />
-						</td>
-					</form>
-				</tr>
-			</tbody>
-		</table>
+	<div class="col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div>グローバルロール</div>
+			</div>
+			<div class="panel-body">
+				<form class="form-inline" action="#" th:action="@{/project/globalRole/regist}" th:object="${globalRoleRelationForm}" method="post">
+					<input type="hidden" th:field="*{projectName}" />
+					<select class="form-control" th:field="*{roleName}">
+						<option th:each="globalRole : ${globalRoleList}" th:value="${globalRole.roleName}" th:label="${globalRole.roleName}" />
+					</select>
+					<input type="submit" class="btn btn-primary" value="登録" />
+				</form>		
+				
+				<br />
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>role</th>
+							<th>tagName</th>
+							<th>changeTagName</th>
+							<th>Update</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="globalRoleRelation,iterStat : ${globalRoleRelationList}">
+							<td>
+								<div class="text-center" th:text="${iterStat.count}" />
+							</td>
+							<td>
+								<div th:text="${globalRoleRelation.roleName}" />
+							</td>
+							<td>
+								<div th:text="${globalRoleRelation.tagName}" />
+							</td>
+							
+							
+							<form th:action="@{/project/globalRole/update}" th:object="${globalRoleRelationTagUpdateForm}" method="POST">
+								<input type="hidden" th:field="*{projectName}" />
+								<input type="hidden" name="roleName" th:value="${globalRoleRelation.roleName}" />
+								<td>
+									<select class="form-control" th:field="*{tagName}">
+										<option th:each="tag : ${globalRoleRelation.tagList}" th:value="${tag}" th:label="${tag}" />
+									</select>
+								</td>
+								<td class="text-center">
+									<input class="btn btn-primary" type="submit" value="Update" />
+								</td>
+							</form>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 </div>
 
