@@ -34,7 +34,7 @@ public class GroupController {
 	@Autowired
 	private ServerService serverService;
     
-    @RequestMapping("/serviceGroup/view")
+    @RequestMapping("/project/serviceGroup/view")
 	private String viewServiceGroup(
     		@RequestParam(value = "projectName", required = true) String projectName,
     		@RequestParam(value = "environmentName", required = true) String environmentName,

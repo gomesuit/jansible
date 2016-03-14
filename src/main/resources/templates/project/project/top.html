@@ -1,8 +1,6 @@
 
 <h1 class="page-header">プロジェクトの画面です</h1>
 
-
-
 <div class="row">
 	<div class="col-md-6">
 		<div class="panel panel-primary">
@@ -31,7 +29,7 @@
 								<div class="text-center" th:text="${iterStat.count}" />
 							</td>
 							<td>
-								<a th:href="@{/environment/view(projectName=${environment.projectName}, environmentName=${environment.environmentName})}"
+								<a th:href="@{/project/environment/view(projectName=${environment.projectName}, environmentName=${environment.environmentName})}"
 								th:text="${environment.environmentName}" />
 							</td>
 							<td class="text-center">
@@ -80,11 +78,11 @@
 								<div class="text-center" th:text="${iterStat.count}" />
 							</td>
 							<td>
-								<a th:href="@{/environment/view(projectName=${server.projectName}, environmentName=${server.environmentName})}"
+								<a th:href="@{/project/environment/view(projectName=${server.projectName}, environmentName=${server.environmentName})}"
 								th:text="${server.environmentName}" />
 							</td>
 							<td>
-								<a th:href="@{/server/view(projectName=${server.projectName}, serverName=${server.serverName})}"
+								<a th:href="@{/project/server/view(projectName=${server.projectName}, serverName=${server.serverName})}"
 								th:text="${server.serverName}" />
 							</td>
 							<td class="text-center">
@@ -103,7 +101,6 @@
 		</div>
 	</div>
 </div>
-
 
 <div class="row">
 	<div class="col-md-6">
@@ -272,7 +269,7 @@
 								<div th:text="${group.groupName}" />
 							</td>
 							<td class="text-center">
-								<a th:href="@{/apply/view(projectName=${project.projectName}, environmentName=${group.environmentName}, groupName=${group.groupName})}"
+								<a th:href="@{/project/apply/view(projectName=${project.projectName}, environmentName=${group.environmentName}, groupName=${group.groupName})}"
 								th:text="Build" />
 							</td>
 						</tr>
@@ -311,7 +308,7 @@
 								<div th:text="${server.serverName}" />
 							</td>
 							<td class="text-center">
-								<a th:href="@{/applyServer/view(projectName=${server.projectName}, environmentName=${server.environmentName}, groupName=${server.groupName}, serverName=${server.serverName})}"
+								<a th:href="@{/project/applyServer/view(projectName=${server.projectName}, environmentName=${server.environmentName}, groupName=${server.groupName}, serverName=${server.serverName})}"
 								th:text="Build" />
 							</td>
 						</tr>

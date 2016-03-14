@@ -7,6 +7,7 @@ encoding//src/main/resources/templates/project/apply/server.html=UTF-8
 encoding//src/main/resources/templates/project/environment/top.html=UTF-8
 encoding//src/main/resources/templates/project/project/top.html=UTF-8
 encoding//src/main/resources/templates/project/role/top.html=UTF-8
+encoding//src/main/resources/templates/project/server/top.html=UTF-8
 encoding//src/main/resources/templates/project/service_group/top.html=UTF-8
 encoding//src/main/resources/templates/project/task/top.html=UTF-8
 encoding//src/main/resources/templates/project/top.html=UTF-8

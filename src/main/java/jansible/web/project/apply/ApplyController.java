@@ -31,7 +31,7 @@ public class ApplyController {
 	@Autowired
 	private RoleService roleService;
 
-	@RequestMapping("/apply/view")
+	@RequestMapping("/project/apply/view")
 	private String viewApply(
 			@RequestParam(value = "projectName", required = true) String projectName,
 			@RequestParam(value = "environmentName", required = true) String environmentName,
@@ -53,7 +53,7 @@ public class ApplyController {
 		return "common_frame";
 	}
 
-	@RequestMapping("/applyServer/view")
+	@RequestMapping("/project/applyServer/view")
 	private String viewApply(
 			@RequestParam(value = "projectName", required = true) String projectName,
 			@RequestParam(value = "environmentName", required = true) String environmentName,

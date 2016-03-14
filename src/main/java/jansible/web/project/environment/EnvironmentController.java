@@ -25,7 +25,7 @@ public class EnvironmentController {
 	@Autowired
 	private GroupService groupService;
 
-	@RequestMapping("/environment/view")
+	@RequestMapping("/project/environment/view")
 	private String viewEnvironment(
 			@RequestParam(value = "projectName", required = true) String projectName,
 			@RequestParam(value = "environmentName", required = true) String environmentName,
