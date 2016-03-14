@@ -3,6 +3,7 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 /* Drop Tables */
 
 DROP TABLE IF EXISTS apply_history;
+DROP TABLE IF EXISTS available_module;
 DROP TABLE IF EXISTS choice;
 DROP TABLE IF EXISTS environment_variable;
 DROP TABLE IF EXISTS role_relation;
@@ -50,6 +51,13 @@ CREATE TABLE apply_history
 	tag_comment varchar(256),
 	apply_time datetime NOT NULL,
 	PRIMARY KEY (apply_histroy_id, project_name)
+);
+
+
+CREATE TABLE available_module
+(
+	module_name varchar(80) NOT NULL,
+	PRIMARY KEY (module_name)
 );
 
 
