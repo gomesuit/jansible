@@ -1,0 +1,9 @@
+
+<table border="1" rules="all">
+	<tr>
+		<td>module</td>
+	</tr>
+	<tr th:each="moduleName : ${moduleNameList}">
+		<td><a th:href="'module/' + ${moduleName}" th:text="${moduleName}" /></td>
+	</tr>
+</table>

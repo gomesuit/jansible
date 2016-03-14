@@ -165,6 +165,7 @@ public class InterceptorConfiguration extends WebMvcConfigurerAdapter{
 			List<SideMenu> menuList = new ArrayList<>();
 			
 			menuList.add(new SideMenu("/manager", "TOP", pageName.equals("manager/top")));
+			menuList.add(new SideMenu("/manager/module", "MODULE", pageName.equals("manager/module/moduleList")));
 			
 			request.setAttribute("menuList", menuList);
 		}

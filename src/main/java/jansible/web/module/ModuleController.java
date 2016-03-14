@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import jansible.model.gethtml.HtmlModule;
 import jansible.model.gethtml.HtmlParameter;
 import jansible.model.yamldump.YamlDumper;
@@ -53,17 +55,18 @@ public class ModuleController {
         return "Hello World!";
     }
 
-    @RequestMapping("/module/{moduleName}")
-    String module(@PathVariable String moduleName, Model model) {
+    @RequestMapping("/manager/module/{moduleName}")
+    String module(@PathVariable String moduleName, Model model, HttpServletRequest request) {
     	HtmlModule module = jansibleService.getModule(moduleName);
     	
     	model.addAttribute("module", module);
     	
-        return "sample";
+		request.setAttribute("pageName", "manager/module/sample");
+		return "common_frame";
     }
 
-    @RequestMapping("/module/{moduleName}/create")
-    String yamlmodule(@PathVariable String moduleName, Model model) {
+    @RequestMapping("/manager/module/{moduleName}/create")
+    String yamlmodule(@PathVariable String moduleName, Model model, HttpServletRequest request) {
     	HtmlModule module = jansibleService.getModule(moduleName);
     	
     	List<FormParameter> formParameterList = new ArrayList<>();
@@ -77,21 +80,25 @@ public class ModuleController {
     	form.setParameterList(formParameterList);
     	model.addAttribute("form", form);
     	
-        return "yamlcreate";
+		request.setAttribute("pageName", "manager/module/yamlcreate");
+		return "common_frame";
     }
 
-    @RequestMapping("/module")
-    String module(Model model) {
+    @RequestMapping("/manager/module")
+    String module(Model model, HttpServletRequest request) {
     	List<String> moduleNameList = jansibleService.getModuleNameList();
     	model.addAttribute("moduleNameList", moduleNameList);
     	
-        return "moduleList";
+		request.setAttribute("pageName", "manager/module/moduleList");
+		return "common_frame";
     }
     
     @RequestMapping("/create")
-    String create(Model model) {
+    String create(Model model, HttpServletRequest request) {
     	model.addAttribute("form", new ModuleForm());
-        return "create";
+        
+		request.setAttribute("pageName", "create");
+		return "common_frame";
     }
     
     @RequestMapping(value="/create/view", method=RequestMethod.POST)
