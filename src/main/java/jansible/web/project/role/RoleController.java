@@ -58,7 +58,7 @@ public class RoleController {
 		model.addAttribute("taskOrderForm", new TaskOrderForm(roleKey));
 		
 		// module名リスト
-		model.addAttribute("moduleNameList", moduleService.getModuleNameList());
+		model.addAttribute("moduleNameList", moduleService.getAvailableModuleList());
 
 		// テンプレート・ファイル アップロード
 		model.addAttribute("uploadForm", new UploadForm(roleKey));

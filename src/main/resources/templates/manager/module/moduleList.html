@@ -4,18 +4,27 @@
 		<div>モジュール</div>
 	</div>
 	<div class="panel-body">
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th>module</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="moduleName : ${moduleNameList}">
-					<td><a th:href="'module/' + ${moduleName}" th:text="${moduleName}" /></td>
-				</tr>
-			</tbody>
-		</table>
+		<form action="#" th:action="@{/manager/module/registAvailableModule}" th:object="${availableModuleForm}" method="post">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>module</th>
+						<th>available</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="moduleRow,iterStat : ${moduleRowList}">
+						<td>
+							<a th:href="'module/' + ${moduleRow.moduleName}" th:text="${moduleRow.moduleName}" />
+						</td>
+						<td class="text-center">
+							<input type="checkbox" th:field="*{availableModuleNameList[__${iterStat.index}__]}" th:value="${moduleRow.moduleName}" th:checked="${moduleRow.active}" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<input type="submit" class="btn btn-primary" value="Submit" />
+		</form>
 	</div>
 </div>
 

@@ -95,4 +95,25 @@
 			module_name
 	</select>
 	
+	<insert id="insertAvailableModule" parameterType="java.lang.String">
+		INSERT IGNORE INTO available_module
+			(module_name)
+		VALUES
+			(#{moduleName})
+	</insert>
+	
+	<select id="selectAvailableModule" resultType="java.lang.String">
+		SELECT
+			module_name as moduleName
+		FROM
+			available_module
+	</select>
+	
+	<delete id="deleteAvailableModule" parameterType="java.lang.String">
+		DELETE FROM
+			available_module
+		WHERE
+			module_name = #{moduleName}
+	</delete>
+	
 </mapper>

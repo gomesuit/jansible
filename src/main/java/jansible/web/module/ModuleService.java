@@ -11,6 +11,7 @@ import jansible.model.database.DbParameter;
 import jansible.model.gethtml.HtmlModule;
 import jansible.model.gethtml.HtmlParameter;
 
+import org.eclipse.jgit.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -79,6 +80,29 @@ public class ModuleService {
 		List<String> moduleNameList = jansibleMapper.selectModuleNameList();
 		return moduleNameList;
 	}
+	
+	public List<String> getAvailableModuleList(){
+		return jansibleMapper.selectAvailableModule();
+	}
+	
+	public List<ModuleRow> getModuleList(){
+		List<String> moduleNameList = jansibleMapper.selectModuleNameList();
+		List<String> availableModuleNameList = jansibleMapper.selectAvailableModule();
+		
+		List<ModuleRow> moduleRowList = new ArrayList<>();
+		for(String moduleName : moduleNameList){
+			ModuleRow moduleRow = new ModuleRow();
+			moduleRow.setModuleName(moduleName);
+			if(availableModuleNameList.contains(moduleName)){
+				moduleRow.setActive(true);
+			}else{
+				moduleRow.setActive(false);
+			}
+			moduleRowList.add(moduleRow);
+		}
+		
+		return moduleRowList;
+	}
 
 	private List<HtmlParameter> getParameterList(String moduleName) {
 		List<DbParameter> dbParameterList = jansibleMapper.selectParameterList(moduleName);
@@ -104,6 +128,27 @@ public class ModuleService {
 			choices.add(dbChoice.getChoiceValue());
 		}
 		return choices;
+	}
+	
+	public void insertAvailableModuleList(List<String> moduleNameList){
+		List<String> oldModuleNameList = jansibleMapper.selectAvailableModule();
+		List<String> newModuleNameList = moduleNameList;
+				
+		for(String moduleName : newModuleNameList){
+			if(StringUtils.isEmptyOrNull(moduleName)) continue;
+			
+			if(!oldModuleNameList.contains(moduleName)){
+				jansibleMapper.insertAvailableModule(moduleName);
+			}
+		}
+		for(String moduleName : oldModuleNameList){
+			if(StringUtils.isEmptyOrNull(moduleName)) continue;
+			
+			if(!newModuleNameList.contains(moduleName)){
+				jansibleMapper.deleteAvailableModule(moduleName);
+			}
+		}
+		
 	}
 
 }

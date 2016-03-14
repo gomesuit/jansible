@@ -20,6 +20,8 @@ import jansible.webget.ModuleUrlGetter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -86,19 +88,28 @@ public class ModuleController {
 
     @RequestMapping("/manager/module")
     String module(Model model, HttpServletRequest request) {
-    	List<String> moduleNameList = jansibleService.getModuleNameList();
-    	model.addAttribute("moduleNameList", moduleNameList);
+    	List<ModuleRow> moduleRowList = jansibleService.getModuleList();
+    	model.addAttribute("moduleRowList", moduleRowList);
+    	
+    	AvailableModuleForm availableModuleForm = new AvailableModuleForm();
+    	availableModuleForm.setAvailableModuleNameList(jansibleService.getAvailableModuleList());
+    	model.addAttribute("availableModuleForm", availableModuleForm);
     	
 		request.setAttribute("pageName", "manager/module/moduleList");
 		return "common_frame";
     }
     
-    @RequestMapping("/create")
-    String create(Model model, HttpServletRequest request) {
-    	model.addAttribute("form", new ModuleForm());
-        
-		request.setAttribute("pageName", "create");
-		return "common_frame";
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.setAutoGrowCollectionLimit(768);
+    }
+
+    @RequestMapping(value="/manager/module/registAvailableModule", method=RequestMethod.POST)
+    String insertAvailableModuleList(@ModelAttribute AvailableModuleForm availableModuleForm, Model model, HttpServletRequest request) {
+    	jansibleService.insertAvailableModuleList(availableModuleForm.getAvailableModuleNameList());
+    	
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
     }
     
     @RequestMapping(value="/create/view", method=RequestMethod.POST)
