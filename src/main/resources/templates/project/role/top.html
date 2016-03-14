@@ -12,6 +12,7 @@
 			<select class="form-control" th:field="*{moduleName}">
 				<option th:each="moduleName : ${moduleNameList}" th:value="${moduleName}" th:label="${moduleName}" />
 			</select>
+			<input class="form-control" type="text" th:field="*{description}" placeholder="description" />
 			<input type="submit" class="btn btn-primary" value="登録" />
 		</form>
 		
@@ -199,7 +200,7 @@
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<div>環境</div>
+		<div>変数</div>
 	</div>
 	<div class="panel-body">
 		<form class="form-inline" action="#" th:action="@{/project/roleVariable/regist}" th:object="${variableForm}" method="post">
