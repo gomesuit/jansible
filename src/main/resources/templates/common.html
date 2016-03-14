@@ -47,6 +47,15 @@
 	</nav>
 </div>
 
+<div th:fragment="breadcrumb" th:remove="tag">
+	<ol class="breadcrumb">
+		<div th:each="breadcrumb : ${breadcrumbList}" th:remove="tag">
+		<li><a href="#" th:href="${breadcrumb.url}" th:text="${breadcrumb.name}" /></li>
+		</div>
+		<li class="active" th:text="${breadcrumbActive}" />
+	</ol>
+</div>
+
 <div th:fragment="sidebar" th:remove="tag">
 	<ul class="nav nav-sidebar">
 		<div th:each="menu : ${menuList}" th:remove="tag">

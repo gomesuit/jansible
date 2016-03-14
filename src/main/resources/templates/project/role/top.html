@@ -34,7 +34,7 @@
 						<div class="text-center" th:text="${iterStat.count}" />
 					</td>
 					<td>
-						<a th:href="@{/task/view(projectName=${form.projectName}, roleName=${form.roleName}, taskId=${task.taskId})}"
+						<a th:href="@{/project/task/view(projectName=${form.projectName}, roleName=${form.roleName}, taskId=${task.taskId})}"
 						th:text="${task.moduleName}" />
 					</td>
 					<td th:text="${task.description}" />
