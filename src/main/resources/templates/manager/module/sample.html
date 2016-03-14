@@ -1,30 +1,32 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-	<meta content="ja" http-equiv="Content-Language" />
-	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-	<title>sample page</title>
-</head>
-<body>
-	<div th:text="${module.name}" />
-	<a th:href="${module.name} + '/create'" th:text="create" />
-	<table border="1" rules="all">
-		<tr>
-			<td>parameter</td>
-			<td>addedVersion</td>
-			<td>required</td>
-			<td>defaultValue</td>
-			<td>choices</td>
-			<td>description</td>
-		</tr>
-		<tr th:each="parameter : ${module.parameterList}">
-			<td th:text="${parameter.name}" />
-			<td th:text="${parameter.addedVersion}" />
-			<td th:text="${parameter.required}" />
-			<td th:text="${parameter.defaultValue}" />
-			<td th:text="${parameter.choices}" />
-			<td th:text="${parameter.description}" />
-		</tr>
-	</table>
-</body>
-</html>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<div>モジュール</div>
+	</div>
+	<div class="panel-body">
+		<div th:text="${module.name}" />
+		<a th:href="${module.name} + '/create'" th:text="create" />
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>parameter</th>
+					<th>addedVersion</th>
+					<th>required</th>
+					<th>defaultValue</th>
+					<th>choices</th>
+					<th>description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="parameter : ${module.parameterList}">
+					<td th:text="${parameter.name}" />
+					<td th:text="${parameter.addedVersion}" />
+					<td th:text="${parameter.required}" />
+					<td th:text="${parameter.defaultValue}" />
+					<td th:text="${parameter.choices}" />
+					<td th:text="${parameter.description}" />
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

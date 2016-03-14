@@ -1,9 +1,22 @@
 
-<table border="1" rules="all">
-	<tr>
-		<td>module</td>
-	</tr>
-	<tr th:each="moduleName : ${moduleNameList}">
-		<td><a th:href="'module/' + ${moduleName}" th:text="${moduleName}" /></td>
-	</tr>
-</table>
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<div>モジュール</div>
+	</div>
+	<div class="panel-body">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>module</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="moduleName : ${moduleNameList}">
+					<td><a th:href="'module/' + ${moduleName}" th:text="${moduleName}" /></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+
