@@ -17,9 +17,11 @@
 					<tr th:each="parameter,stat : *{parameterList}">
 						<td>
 							<div th:text="${parameter.key}"/>
-							<input type="hidden" th:field="*{parameterList[__${stat.index}__].key}" />
 						</td>
-						<td><input type="text" class="form-control" th:field="*{parameterList[__${stat.index}__].value}" /></td>
+						<td>
+							<input type="hidden" th:field="*{parameterList[__${stat.index}__].key}" />
+							<input type="text" class="form-control" th:field="*{parameterList[__${stat.index}__].value}" />
+						</td>
 					</tr>
 				<tbody>
 				</tbody>
