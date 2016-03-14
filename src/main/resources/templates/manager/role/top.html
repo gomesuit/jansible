@@ -242,7 +242,7 @@
 	<div class="panel-body">
 		<blockquote class="bg-info"><strong><span th:text="${role.repositoryUrl}" /></strong></blockquote>
 		
-		<form class="form-inline" action="#" th:action="@{/project/git/commit}" th:object="${gitForm}" method="post">
+		<form class="form-inline" action="#" th:action="@{/manager/git/commit}" th:object="${gitForm}" method="post">
 			<input type="hidden" th:field="*{roleName}" />
 			<input type="text" class="form-control" th:field="*{userName}" placeholder="userName" />
 			<input type="password" class="form-control" th:field="*{password}" placeholder="password" />
