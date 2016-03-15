@@ -130,9 +130,9 @@ public class ModuleService {
 		return choices;
 	}
 	
-	public void insertAvailableModuleList(List<String> moduleNameList){
+	public void insertAvailableModuleList(List<ModuleRow> moduleRowList){
 		List<String> oldModuleNameList = jansibleMapper.selectAvailableModule();
-		List<String> newModuleNameList = moduleNameList;
+		List<String> newModuleNameList = getModuleNameList(moduleRowList);
 				
 		for(String moduleName : newModuleNameList){
 			if(StringUtils.isEmptyOrNull(moduleName)) continue;
@@ -148,7 +148,18 @@ public class ModuleService {
 				jansibleMapper.deleteAvailableModule(moduleName);
 			}
 		}
+	}
+	
+	private List<String> getModuleNameList(List<ModuleRow> moduleRowList){
+		List<String> moduleNameList = new ArrayList<>();
 		
+		for(ModuleRow moduleRow : moduleRowList){
+			if(moduleRow.isActive()){
+				moduleNameList.add(moduleRow.getModuleName());
+			}
+		}
+		
+		return moduleNameList;
 	}
 
 }

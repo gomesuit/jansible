@@ -89,10 +89,9 @@ public class ModuleController {
     @RequestMapping("/manager/module")
     String module(Model model, HttpServletRequest request) {
     	List<ModuleRow> moduleRowList = jansibleService.getModuleList();
-    	model.addAttribute("moduleRowList", moduleRowList);
     	
     	AvailableModuleForm availableModuleForm = new AvailableModuleForm();
-    	availableModuleForm.setAvailableModuleNameList(jansibleService.getAvailableModuleList());
+    	availableModuleForm.setAvailableModuleRowList(moduleRowList);
     	model.addAttribute("availableModuleForm", availableModuleForm);
     	
 		request.setAttribute("pageName", "manager/module/moduleList");
@@ -106,7 +105,7 @@ public class ModuleController {
 
     @RequestMapping(value="/manager/module/registAvailableModule", method=RequestMethod.POST)
     String insertAvailableModuleList(@ModelAttribute AvailableModuleForm availableModuleForm, Model model, HttpServletRequest request) {
-    	jansibleService.insertAvailableModuleList(availableModuleForm.getAvailableModuleNameList());
+    	jansibleService.insertAvailableModuleList(availableModuleForm.getAvailableModuleRowList());
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

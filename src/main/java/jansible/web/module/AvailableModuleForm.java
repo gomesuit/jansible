@@ -3,13 +3,13 @@ package jansible.web.module;
 import java.util.List;
 
 public class AvailableModuleForm{
-	private List<String> availableModuleNameList;
+	private List<ModuleRow> availableModuleRowList;
 
-	public List<String> getAvailableModuleNameList() {
-		return availableModuleNameList;
+	public List<ModuleRow> getAvailableModuleRowList() {
+		return availableModuleRowList;
 	}
 
-	public void setAvailableModuleNameList(List<String> availableModuleNameList) {
-		this.availableModuleNameList = availableModuleNameList;
+	public void setAvailableModuleRowList(List<ModuleRow> availableModuleRowList) {
+		this.availableModuleRowList = availableModuleRowList;
 	}
 }

@@ -13,12 +13,13 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="moduleRow,iterStat : ${moduleRowList}">
+					<tr th:each="moduleRow,iterStat : *{availableModuleRowList}">
 						<td>
 							<a th:href="'module/' + ${moduleRow.moduleName}" th:text="${moduleRow.moduleName}" />
 						</td>
 						<td class="text-center">
-							<input type="checkbox" th:field="*{availableModuleNameList[__${iterStat.index}__]}" th:value="${moduleRow.moduleName}" th:checked="${moduleRow.active}" />
+							<input type="hidden" th:field="*{availableModuleRowList[__${iterStat.index}__].moduleName}" />
+							<input type="checkbox" th:field="*{availableModuleRowList[__${iterStat.index}__].active}" />
 						</td>
 					</tr>
 				</tbody>
