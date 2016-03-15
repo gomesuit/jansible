@@ -1,27 +1,18 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-	<meta content="ja" http-equiv="Content-Language" />
-	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-	<title>sample page</title>
-</head>
-<body>
-	<div>実行結果の画面です</div>
-	
-	<br /><hr /><br />
-	<div>結果</div>
-	<pre th:utext="${result}" />
-	
-	<hr /><br />
-	<div>再実行</div>
-	<form method="POST" th:action="@{/project/jenkins/rebuild}" th:object="${rebuildForm}">
-		<input type="hidden" th:field="*{projectName}" />
-		<input type="hidden" th:field="*{applyHistroyId}" />
-		<td><input type="submit" value="Rebuild" /></td>
-	</form>
-	
-	<br /><hr />
-	<a th:href="@{/project/view/(projectName=${projectKey.projectName})}" >戻る</a>
-	<a th:href="@{/}" >トップ</a>
-</body>
-</html>
+
+<h1 class="page-header">実行結果の画面です</h1>
+
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<div>結果</div>
+	</div>
+	<div class="panel-body">
+		<pre th:utext="${result}" />
+	</div>
+</div>
+
+<form class="form-inline" action="#" th:action="@{/project/jenkins/rebuild}" th:object="${rebuildForm}" method="post">
+	<input type="hidden" th:field="*{projectName}" />
+	<input type="hidden" th:field="*{applyHistroyId}" />
+	<input type="submit" class="btn btn-primary" value="再実行" />
+</form>
