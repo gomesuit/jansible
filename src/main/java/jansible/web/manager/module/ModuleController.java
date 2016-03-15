@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -55,8 +56,9 @@ public class ModuleController {
         return "Hello World!";
     }
 
-    @RequestMapping("/manager/module/{moduleName}")
-    String module(@PathVariable String moduleName, Model model, HttpServletRequest request) {
+    @RequestMapping("/manager/module/view")
+    String module(@RequestParam(value = "moduleName", required = true) String moduleName,
+    		Model model, HttpServletRequest request) {
     	HtmlModule module = jansibleService.getModule(moduleName);
     	
     	model.addAttribute("module", module);
@@ -65,8 +67,9 @@ public class ModuleController {
 		return "common_frame";
     }
 
-    @RequestMapping("/manager/module/{moduleName}/create")
-    String yamlmodule(@PathVariable String moduleName, Model model, HttpServletRequest request) {
+    @RequestMapping("/manager/module/create")
+    String yamlmodule(@RequestParam(value = "moduleName", required = true) String moduleName,
+    		Model model, HttpServletRequest request) {
     	HtmlModule module = jansibleService.getModule(moduleName);
     	
     	List<FormParameter> formParameterList = new ArrayList<>();

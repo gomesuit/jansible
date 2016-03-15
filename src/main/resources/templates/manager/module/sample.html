@@ -5,7 +5,7 @@
 	</div>
 	<div class="panel-body">
 		<div th:text="${module.name}" />
-		<a th:href="${module.name} + '/create'" th:text="create" />
+		<a th:href="@{/manager/module/create(moduleName=${module.name})}" th:text="create" />
 		<table class="table table-bordered">
 			<thead>
 				<tr>

@@ -5,6 +5,7 @@ encoding//src/main/resources/templates/common.html=UTF-8
 encoding//src/main/resources/templates/manager/module/moduleList.html=UTF-8
 encoding//src/main/resources/templates/manager/module/sample.html=UTF-8
 encoding//src/main/resources/templates/manager/module/yamlcreate.html=UTF-8
+encoding//src/main/resources/templates/manager/top.html=UTF-8
 encoding//src/main/resources/templates/project/apply/group.html=UTF-8
 encoding//src/main/resources/templates/project/apply/server.html=UTF-8
 encoding//src/main/resources/templates/project/environment/top.html=UTF-8

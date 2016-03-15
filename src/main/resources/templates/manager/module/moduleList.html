@@ -8,14 +8,18 @@
 			<table class="table table-bordered">
 				<thead>
 					<tr>
+						<th>#</th>
 						<th>module</th>
 						<th>available</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="moduleRow,iterStat : *{availableModuleRowList}">
+						<td class="text-center">
+							<div class="text-center" th:text="${iterStat.count}" />
+						</td>
 						<td>
-							<a th:href="'module/' + ${moduleRow.moduleName}" th:text="${moduleRow.moduleName}" />
+							<a th:href="@{/manager/module/view(moduleName=${moduleRow.moduleName})}" th:text="${moduleRow.moduleName}" />
 						</td>
 						<td class="text-center">
 							<input type="hidden" th:field="*{availableModuleRowList[__${iterStat.index}__].moduleName}" />
