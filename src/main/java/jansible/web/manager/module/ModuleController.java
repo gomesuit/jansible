@@ -62,7 +62,7 @@ public class ModuleController {
     	
     	model.addAttribute("module", module);
     	
-		request.setAttribute("pageName", "manager/module/sample");
+		request.setAttribute("pageName", "manager/module/detail");
 		return "common_frame";
     }
 
@@ -93,6 +93,8 @@ public class ModuleController {
     	AvailableModuleForm availableModuleForm = new AvailableModuleForm();
     	availableModuleForm.setAvailableModuleRowList(moduleRowList);
     	model.addAttribute("availableModuleForm", availableModuleForm);
+    	
+    	model.addAttribute("availableModuleNameList", jansibleService.getAvailableModuleList());
     	
 		request.setAttribute("pageName", "manager/module/moduleList");
 		return "common_frame";

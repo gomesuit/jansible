@@ -3,6 +3,36 @@
 	<div class="col-md-4">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
+				<div>利用可能モジュール一覧</div>
+			</div>
+			<div class="panel-body">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>module</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="moduleName,iterStat : ${availableModuleNameList}">
+							<td class="text-center">
+								<div class="text-center" th:text="${iterStat.count}" />
+							</td>
+							<td>
+								<a th:href="@{/manager/module/view(moduleName=${moduleName})}" th:text="${moduleName}" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-4">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
 				<div>モジュール一覧</div>
 			</div>
 			<div class="panel-body">

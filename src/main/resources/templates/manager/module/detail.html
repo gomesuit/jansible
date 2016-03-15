@@ -4,7 +4,9 @@
 		<div>モジュール</div>
 	</div>
 	<div class="panel-body">
-		<div th:text="${module.name}" />
+		<h3 th:text="${module.name}" />
+		<br />
+		<blockquote class="bg-default"><strong><span th:text="${module.description}" /></strong></blockquote>
 		<a th:href="@{/manager/module/create(moduleName=${module.name})}" th:text="create" />
 		<table class="table table-bordered">
 			<thead>

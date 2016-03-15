@@ -59,6 +59,8 @@ public class TaskController {
 		TaskDetailForm form = new TaskDetailForm(taskKey);
 		form.setDescription(dbTask.getDescription());
 		HtmlModule module = moduleService.getModule(moduleName);
+		model.addAttribute("moduleDescription", module.getDescription());
+		
 		List<TaskParameter> taskParameterList = createBlankTaskParameterList(module);
 		List<DbTaskDetail> dbTaskDetailList = taskService.getTaskDetailList(taskKey);
 		mergeParameterList(taskParameterList, dbTaskDetailList);

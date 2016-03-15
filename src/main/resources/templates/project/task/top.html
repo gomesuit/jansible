@@ -15,9 +15,11 @@
 					<blockquote class="bg-info"><strong><div th:text="${moduleName}" /></strong></blockquote>
 				</div>
 				<div class="col-md-10">
-					<input type="text" class="form-control" th:field="*{description}" placeholder="Description" />
+					<blockquote class="bg-default"><strong><span th:text="${moduleDescription}" /></strong></blockquote>
 				</div>
 			</div>
+			<input type="text" class="form-control" th:field="*{description}" placeholder="Description" />
+			<br />
 			<table class="table table-bordered">
 				<thead>
 					<tr>
