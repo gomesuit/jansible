@@ -1,3 +1,5 @@
+export PYTHONIOENCODING=utf-8
+
 rm -rf $projectName
 git clone $repositoryUrl $projectName
 cd $projectName
