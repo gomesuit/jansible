@@ -243,83 +243,89 @@
 			</div>
 		</div>
 		
-		<div class="panel panel-primary">
-			<div class="panel-heading">
-				<div>タスク適用（グループ別適用）</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<div>タスク適用（グループ別適用）</div>
+					</div>
+					<div class="panel-body">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>environment</th>
+									<th>group</th>
+									<th>Build</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="group,iterStat : ${groupList}">
+									<td>
+										<div class="text-center" th:text="${iterStat.count}" />
+									</td>
+									<td>
+										<div th:text="${group.environmentName}" />
+									</td>
+									<td>
+										<div th:text="${group.groupName}" />
+									</td>
+									<td class="text-center">
+										<a th:href="@{/project/apply/view(projectName=${project.projectName}, environmentName=${group.environmentName}, groupName=${group.groupName})}"
+										th:text="Build" />
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
 			</div>
-			<div class="panel-body">
-				<table class="table table-bordered">
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>environment</th>
-							<th>group</th>
-							<th>Build</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="group,iterStat : ${groupList}">
-							<td>
-								<div class="text-center" th:text="${iterStat.count}" />
-							</td>
-							<td>
-								<div th:text="${group.environmentName}" />
-							</td>
-							<td>
-								<div th:text="${group.groupName}" />
-							</td>
-							<td class="text-center">
-								<a th:href="@{/project/apply/view(projectName=${project.projectName}, environmentName=${group.environmentName}, groupName=${group.groupName})}"
-								th:text="Build" />
-							</td>
-						</tr>
-					</tbody>
-				</table>
+			<div class="col-md-6">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<div>タスク適用（サーバ別適用）</div>
+					</div>
+					<div class="panel-body">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>environment</th>
+									<th>group</th>
+									<td>server</td>
+									<th>Build</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="server,iterStat : ${serverbuildList}">
+									<td>
+										<div class="text-center" th:text="${iterStat.count}" />
+									</td>
+									<td>
+										<div th:text="${server.environmentName}" />
+									</td>
+									<td>
+										<div th:text="${server.groupName}" />
+									</td>
+									<td>
+										<div th:text="${server.serverName}" />
+									</td>
+									<td class="text-center">
+										<a th:href="@{/project/applyServer/view(projectName=${server.projectName}, environmentName=${server.environmentName}, groupName=${server.groupName}, serverName=${server.serverName})}"
+										th:text="Build" />
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
 			</div>
 		</div>
 		
-		<div class="panel panel-primary">
-			<div class="panel-heading">
-				<div>タスク適用（サーバ別適用）</div>
-			</div>
-			<div class="panel-body">
-				<table class="table table-bordered">
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>environment</th>
-							<th>group</th>
-							<td>server</td>
-							<th>Build</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="server,iterStat : ${serverbuildList}">
-							<td>
-								<div class="text-center" th:text="${iterStat.count}" />
-							</td>
-							<td>
-								<div th:text="${server.environmentName}" />
-							</td>
-							<td>
-								<div th:text="${server.groupName}" />
-							</td>
-							<td>
-								<div th:text="${server.serverName}" />
-							</td>
-							<td class="text-center">
-								<a th:href="@{/project/applyServer/view(projectName=${server.projectName}, environmentName=${server.environmentName}, groupName=${server.groupName}, serverName=${server.serverName})}"
-								th:text="Build" />
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
 		
 		<div class="panel panel-primary">
 			<div class="panel-heading">
-				<div>履歴</div>
+				<div>適用履歴</div>
 			</div>
 			<div class="panel-body">			
 				<table class="table table-bordered">
