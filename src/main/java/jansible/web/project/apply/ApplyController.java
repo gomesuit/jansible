@@ -78,17 +78,21 @@ public class ApplyController {
 
 	@RequestMapping(value="/project/jenkins/build", method=RequestMethod.POST)
 	private String groupBuild(@ModelAttribute BuildForm form, HttpServletRequest request) throws Exception{
-		jenkinsBuildService.groupBuild(form);
+		int applyHistroyId = jenkinsBuildService.groupBuild(form);
 		
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
+		String url = "/project/jenkins/result";
+		url = url + "?projectName=" + form.getProjectName();
+		url = url + "&applyHistroyId=" + applyHistroyId;
+		return "redirect:" + url;
 	}
 
 	@RequestMapping(value="/project/jenkins/serverBuild", method=RequestMethod.POST)
 	private String serverBuild(@ModelAttribute ServerBuildForm form, HttpServletRequest request) throws Exception{
-		jenkinsBuildService.buildforServer(form);
+		int applyHistroyId = jenkinsBuildService.buildforServer(form);
 		
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
+		String url = "/project/jenkins/result";
+		url = url + "?projectName=" + form.getProjectName();
+		url = url + "&applyHistroyId=" + applyHistroyId;
+		return "redirect:" + url;
 	}
 }

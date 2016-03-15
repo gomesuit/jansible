@@ -175,10 +175,12 @@ public class ProjectController {
 
 	@RequestMapping(value="/project/jenkins/rebuild", method=RequestMethod.POST)
 	private String rebuild(@ModelAttribute RebuildForm form, HttpServletRequest request) throws Exception{
-		jenkinsBuildService.rebuild(form);
+		int applyHistroyId = jenkinsBuildService.rebuild(form);
 		
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
+		String url = "/project/jenkins/result";
+		url = url + "?projectName=" + form.getProjectName();
+		url = url + "&applyHistroyId=" + applyHistroyId;
+		return "redirect:" + url;
 	}
 
 	private List<Group> getGroupList(ProjectKey projectKey) {

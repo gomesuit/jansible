@@ -84,6 +84,13 @@ public class InterceptorConfiguration extends WebMvcConfigurerAdapter{
 				breadcrumbActive = taskId;
 			}
 			
+			String applyHistroyId = (String)request.getParameter("applyHistroyId");
+			if(applyHistroyId != null){
+				param.put("applyHistroyId", applyHistroyId);
+				breadcrumbList.add(new Breadcrumb(getUrl("/project/jenkins/result", param), "Result", false));
+				breadcrumbActive = applyHistroyId;
+			}
+			
 			request.setAttribute("breadcrumbList", breadcrumbList);
 			request.setAttribute("breadcrumbActive", breadcrumbActive);
 		}

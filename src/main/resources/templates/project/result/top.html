@@ -16,3 +16,11 @@
 	<input type="hidden" th:field="*{applyHistroyId}" />
 	<input type="submit" class="btn btn-primary" value="再実行" />
 </form>
+
+<script>
+$(function(){
+    setTimeout(function(){
+        location.reload();
+    },3000);
+});
+</script>

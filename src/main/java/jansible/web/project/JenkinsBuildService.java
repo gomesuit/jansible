@@ -51,7 +51,7 @@ public class JenkinsBuildService {
 		return jenkinsInfo;
 	}
 	
-	public void rebuild(RebuildForm form) throws Exception{
+	public int rebuild(RebuildForm form) throws Exception{
 		DbApplyHistory dbApplyHistory = applyHistoryMapper.selectDbApplyHistory(form);
 		
 		dbApplyHistory.setApplyTime(new Date());
@@ -75,9 +75,11 @@ public class JenkinsBuildService {
 		jenkinsParameter.setApplyHistroyId(dbApplyHistory.getApplyHistroyId());
 		JenkinsInfo jenkinsInfo = createJenkinsInfo(form);
 		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
+		
+		return dbApplyHistory.getApplyHistroyId();
 	}
 
-	public void groupBuild(BuildForm form) throws Exception{
+	public int groupBuild(BuildForm form) throws Exception{
 		String tagName = getTagName(form);
 		jansibleGitter.tagAndPush(form, form, tagName);
 		
@@ -100,6 +102,8 @@ public class JenkinsBuildService {
 		jenkinsParameter.setHostsFileName(jansibleFiler.getHostsFileName());
 		JenkinsInfo jenkinsInfo = createJenkinsInfo(form);
 		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
+		
+		return dbApplyHistory.getApplyHistroyId();
 	}
 	
 	private String getTagName(ServiceGroupKey serviceGroupKey){
@@ -108,7 +112,7 @@ public class JenkinsBuildService {
 		return groupName + "_" + dateString;
 	}
 
-	public void buildforServer(ServerBuildForm form) throws Exception{
+	public int buildforServer(ServerBuildForm form) throws Exception{
 		String tagName = getTagNameForServer(form);
 		jansibleGitter.tagAndPush(form, form, tagName);
 		
@@ -136,6 +140,8 @@ public class JenkinsBuildService {
 		JenkinsInfo jenkinsInfo = createJenkinsInfo(form);
 		
 		jenkinsBuilder.build(jenkinsInfo, jenkinsParameter);
+		
+		return dbApplyHistory.getApplyHistroyId();
 	}
 	
 	private String getTagNameForServer(ServerRelationKey key){
