@@ -14,7 +14,7 @@ import jansible.web.manager.GlobalRoleService;
 import jansible.web.manager.GlobalTaskService;
 import jansible.web.manager.ManagerGitService;
 import jansible.web.manager.ManagerYamlService;
-import jansible.web.module.ModuleService;
+import jansible.web.manager.module.ModuleService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

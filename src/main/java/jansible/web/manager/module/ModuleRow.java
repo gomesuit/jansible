@@ -1,4 +1,4 @@
-package jansible.web.module;
+package jansible.web.manager.module;
 
 public class ModuleRow{
 	private String moduleName;

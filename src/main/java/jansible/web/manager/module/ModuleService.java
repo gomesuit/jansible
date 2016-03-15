@@ -1,4 +1,4 @@
-package jansible.web.module;
+package jansible.web.manager.module;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -130,7 +130,7 @@ public class ModuleService {
 		return choices;
 	}
 	
-	public void insertAvailableModuleList(List<ModuleRow> moduleRowList){
+	public void registAvailableModuleList(List<ModuleRow> moduleRowList){
 		List<String> oldModuleNameList = jansibleMapper.selectAvailableModule();
 		List<String> newModuleNameList = getModuleNameList(moduleRowList);
 				

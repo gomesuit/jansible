@@ -10,7 +10,7 @@ import jansible.model.common.RoleVariableKey;
 import jansible.model.common.TaskKey;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
-import jansible.web.module.ModuleService;
+import jansible.web.manager.module.ModuleService;
 import jansible.web.project.RoleService;
 import jansible.web.project.TaskService;
 import jansible.web.project.VariableService;

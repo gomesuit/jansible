@@ -1,4 +1,4 @@
-package jansible.web.module;
+package jansible.web.manager.module;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,8 +12,6 @@ import jansible.model.yamldump.YamlDumper;
 import jansible.model.yamldump.YamlModule;
 import jansible.model.yamldump.YamlParameter;
 import jansible.model.yamldump.YamlParameters;
-import jansible.web.module.form.FormParameter;
-import jansible.web.module.form.ModuleForm;
 import jansible.webget.ModuleGetter;
 import jansible.webget.ModuleUrlGetter;
 
@@ -105,7 +103,7 @@ public class ModuleController {
 
     @RequestMapping(value="/manager/module/registAvailableModule", method=RequestMethod.POST)
     String insertAvailableModuleList(@ModelAttribute AvailableModuleForm availableModuleForm, Model model, HttpServletRequest request) {
-    	jansibleService.insertAvailableModuleList(availableModuleForm.getAvailableModuleRowList());
+    	jansibleService.registAvailableModuleList(availableModuleForm.getAvailableModuleRowList());
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;

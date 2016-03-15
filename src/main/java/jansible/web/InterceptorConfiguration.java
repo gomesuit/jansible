@@ -122,6 +122,8 @@ public class InterceptorConfiguration extends WebMvcConfigurerAdapter{
 				throws Exception {
 			
 			String pageName = (String)request.getAttribute("pageName");
+			if(pageName == null) return;
+			
 			String projectName = (String)request.getParameter("projectName");
 			
 			List<SideMenu> menuList = new ArrayList<>();
