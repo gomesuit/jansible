@@ -79,6 +79,10 @@ public class GroupService {
 		return serviceGroupMapper.selectServiceGroupList(environmentKey);
 	}
 
+	public List<DbServiceGroup> getServiceGroupList(ProjectKey projectKey){
+		return serviceGroupMapper.selectServiceGroupListByProject(projectKey);
+	}
+
 	public void registRoleRelationDetail(RoleRelationForm form) {
     	DefaultTransactionDefinition def = new DefaultTransactionDefinition();
     	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);

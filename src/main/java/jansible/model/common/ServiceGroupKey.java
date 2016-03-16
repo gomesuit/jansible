@@ -5,6 +5,10 @@ public class ServiceGroupKey extends EnvironmentKey{
 	
 	public ServiceGroupKey(){}
 
+	public ServiceGroupKey(ProjectKey projectKey){
+		super(projectKey);
+	}
+
 	public ServiceGroupKey(EnvironmentKey environmentKey){
 		super(environmentKey, environmentKey.getEnvironmentName());
 	}

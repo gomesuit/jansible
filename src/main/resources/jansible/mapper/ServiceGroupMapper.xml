@@ -31,6 +31,17 @@
 			environment_name = #{environmentName}
 	</select>
 	
+	<select id="selectServiceGroupListByProject" resultType="DbServiceGroup">
+		SELECT
+			project_name as projectName,
+			environment_name as environmentName,
+			group_name as groupName
+		FROM
+			service_group
+		WHERE
+			project_name = #{projectName}
+	</select>
+	
 	<delete id="deleteServiceGroup">
 	    DELETE FROM
 	    	service_group

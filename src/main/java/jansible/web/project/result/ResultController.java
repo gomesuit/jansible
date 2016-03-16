@@ -27,7 +27,6 @@ public class ResultController {
 		model.addAttribute("projectKey", projectKey);
 		
 		// 結果
-		jenkinsResultService.getBuildResult(projectKey, applyHistroyId);
 		model.addAttribute("result", jenkinsResultService.getBuildResult(projectKey, applyHistroyId));
 		
 		// 再実行

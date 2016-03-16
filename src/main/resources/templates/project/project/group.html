@@ -1,0 +1,59 @@
+
+<h1 class="page-header">グループ登録</h1>
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div>グループ</div>
+			</div>
+			<div class="panel-body">
+				<form class="form-inline" action="#" th:action="@{/project/group/regist}" th:object="${form}" method="post">
+					<input type="hidden" th:field="*{projectName}" />
+					<select class="form-control" th:field="*{environmentName}">
+						<option th:each="environment : ${environmentList}" th:value="${environment.environmentName}" th:label="${environment.environmentName}" />
+					</select>
+					<input type="text" class="form-control" th:field="*{groupName}" placeholder="groupName" />
+					<input type="submit" class="btn btn-primary" value="登録" />
+				</form>
+				
+				<br />
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>environment</th>
+							<th>group</th>
+							<th>Delete</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="serviceGroup,iterStat : ${serviceGroupList}">
+							<td>
+								<div class="text-center" th:text="${iterStat.count}" />
+							</td>
+							<td>
+								<a th:href="@{/project/environment/view(projectName=${serviceGroup.projectName}, environmentName=${serviceGroup.environmentName})}"
+								th:text="${serviceGroup.environmentName}" />
+							</td>
+							<td>
+								<a th:href="@{/project/serviceGroup/view(projectName=${serviceGroup.projectName}, environmentName=${serviceGroup.environmentName}, groupName=${serviceGroup.groupName})}"
+								th:text="${serviceGroup.groupName}" />
+							</td>
+							<td class="text-center">
+								<form th:action="@{/project/serviceGroup/delete}" th:object="${serviceGroupKey}" method="POST">
+									<input type="hidden" th:field="*{projectName}" />
+									<input type="hidden" name="environmentName" th:value="${serviceGroup.environmentName}" />
+									<input type="hidden" name="groupName" th:value="${serviceGroup.groupName}" />
+									<button type="submit" class="btn btn-danger btn-xs">
+										<span class="glyphicon glyphicon-trash" aria-hidden="true" />
+									</button>
+								</form>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

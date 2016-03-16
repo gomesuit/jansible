@@ -1,0 +1,50 @@
+
+<h1 class="page-header">環境登録</h1>
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div>環境</div>
+			</div>
+			<div class="panel-body">
+				<form class="form-inline" action="#" th:action="@{/project/environment/regist}" th:object="${environmentForm}" method="post">
+					<input type="hidden" th:field="*{projectName}" />
+					<input type="text" class="form-control" th:field="*{environmentName}" placeholder="environmentName" />
+					<input type="submit" class="btn btn-primary" value="登録" />
+				</form>
+				
+				<br />
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>environment</th>
+							<th>Delete</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="environment,iterStat : ${environmentList}">
+							<td>
+								<div class="text-center" th:text="${iterStat.count}" />
+							</td>
+							<td>
+								<a th:href="@{/project/environment/view(projectName=${environment.projectName}, environmentName=${environment.environmentName})}"
+								th:text="${environment.environmentName}" />
+							</td>
+							<td class="text-center">
+								<form th:action="@{/project/environment/delete}" th:object="${environmentKey}" method="POST">
+									<input type="hidden" th:field="*{projectName}" />
+									<input type="hidden" name="environmentName" th:value="${environment.environmentName}" />
+									<button type="submit" class="btn btn-danger btn-xs">
+										<span class="glyphicon glyphicon-trash" aria-hidden="true" />
+									</button>
+								</form>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

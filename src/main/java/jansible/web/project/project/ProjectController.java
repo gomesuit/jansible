@@ -11,7 +11,6 @@ import jansible.model.common.EnvironmentKey;
 import jansible.model.common.Group;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
-import jansible.model.common.ServerKey;
 import jansible.model.common.ServerRelationKey;
 import jansible.model.database.DbEnvironment;
 import jansible.model.database.DbProject;
@@ -26,7 +25,6 @@ import jansible.web.project.JenkinsBuildService;
 import jansible.web.project.ProjectService;
 import jansible.web.project.RoleService;
 import jansible.web.project.ServerService;
-import jansible.web.project.server.ServerForm;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,16 +73,6 @@ public class ProjectController {
 			HttpServletRequest request){
     	
     	ProjectKey projectKey = new ProjectKey(projectName);
-    	
-    	// 環境
-		model.addAttribute("environmentForm", new EnvironmentForm(projectKey));
-		model.addAttribute("environmentList", environmentService.getEnvironmentList(projectKey));
-		model.addAttribute("environmentKey", new EnvironmentKey(projectKey));
-		
-		// ロール
-		model.addAttribute("roleForm", new RoleForm(projectKey));
-		model.addAttribute("roleList", roleService.getRoleList(projectKey));
-		model.addAttribute("roleKey", new RoleKey(projectKey));
 		
 		// Jenkins情報
 		model.addAttribute("project", projectService.getProject(projectKey));
@@ -108,17 +96,6 @@ public class ProjectController {
 		
 		// 適用履歴
 		model.addAttribute("applyHistoryList", applyService.getDbApplyHistoryList(projectKey));
-		
-		// サーバ関連
-		model.addAttribute("serverForm", new ServerForm(projectKey));
-		model.addAttribute("serverList", serverService.getServerList(projectKey));
-		model.addAttribute("serverKey", new ServerKey(projectKey));
-		
-		// global role
-		model.addAttribute("globalRoleList", globalRoleRelationService.getGlobalRoleList());
-		model.addAttribute("globalRoleRelationForm", new GlobalRoleRelationForm(projectKey));
-		model.addAttribute("globalRoleRelationList", globalRoleRelationService.getGlobalRoleRelationViewList(projectKey));
-		model.addAttribute("globalRoleRelationTagUpdateForm", new GlobalRoleRelationTagUpdateForm(projectKey));
 		
 		// テストデータダウンロード
 		ServerRelationKey serverRelationKey = new ServerRelationKey();
