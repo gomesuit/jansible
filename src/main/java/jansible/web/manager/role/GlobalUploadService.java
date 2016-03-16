@@ -41,15 +41,12 @@ public class GlobalUploadService {
 	public void deleteTemplate(GeneralFileForm form){
 		GlobalRoleTemplateKey templateKey = new GlobalRoleTemplateKey(form);
 		templateKey.setTemplateName(form.getFileName());
-		String filePath = jansibleFiler.getGlobalRoleTemplatePath(templateKey);
-		System.out.println(filePath);
-		jansibleFiler.deleteFile(filePath);
+		jansibleFiler.deleteGlobalRoleTemplate(templateKey);
 	}
 	
 	public void deleteFile(GeneralFileForm form){
 		GlobalRoleFileKey globalRoleFileKey = new GlobalRoleFileKey(form);
 		globalRoleFileKey.setFileName(form.getFileName());
-		String filePath = jansibleFiler.getGlobalRoleFilePath(globalRoleFileKey);
-		jansibleFiler.deleteFile(filePath);
+		jansibleFiler.deleteGlobalRoleFilePath(globalRoleFileKey);
 	}
 }

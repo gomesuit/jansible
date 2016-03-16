@@ -492,14 +492,39 @@ public class JansibleFiler {
 		}
 	}
 	
-	public void deleteFile(String filePath){
+	private void deleteFile(String filePath){
 		File file = new File(filePath);
 		deleteFile(file);
 	}
 	
-	public void deleteFile(File file){
+	private void deleteFile(File file){
 		if(file.exists()){
 			file.delete();
 		}
+	}
+
+	public void deleteRoleVariableYaml(RoleKey roleKey) {
+		String filePath = getRoleVariableYamlPath(roleKey);
+		deleteFile(filePath);
+	}
+
+	public void deleteGlobalRoleTemplate(GlobalRoleTemplateKey templateKey) {
+		String filePath = getGlobalRoleTemplatePath(templateKey);
+		deleteFile(filePath);
+	}
+
+	public void deleteGlobalRoleFilePath(GlobalRoleFileKey globalRoleFileKey) {
+		String filePath = getGlobalRoleFilePath(globalRoleFileKey);
+		deleteFile(filePath);
+	}
+
+	public void deleteTemplate(TemplateKey templateKey) {
+		String filePath = getTemplatePath(templateKey);
+		deleteFile(filePath);
+	}
+
+	public void deleteRoleFile(FileKey fileKey) {
+		String filePath = getFilePath(fileKey);
+		deleteFile(filePath);
 	}
 }

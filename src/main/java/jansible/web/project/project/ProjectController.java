@@ -204,9 +204,7 @@ public class ProjectController {
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
-
 	
-
     @RequestMapping("/project/testZip")
     @ResponseBody
 	private Resource testZip(@ModelAttribute ServerRelationKey key, HttpServletResponse response, HttpServletRequest request) throws Exception{

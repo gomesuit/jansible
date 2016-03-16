@@ -84,6 +84,8 @@ public class FileService {
 		if(!yamlVariableList.isEmpty()){
 			String yamlContent = yamlService.dumpVariable(yamlVariableList);
 			jansibleFiler.writeRoleVariableYaml(roleKey, yamlContent);
+		}else{
+			jansibleFiler.deleteRoleVariableYaml(roleKey);
 		}
 	}
 
