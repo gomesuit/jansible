@@ -1,9 +1,5 @@
 package jansible.git;
 
-import jansible.file.JansibleFiler;
-import jansible.model.common.GlobalRoleKey;
-import jansible.model.common.ProjectKey;
-
 import java.io.File;
 import java.util.Iterator;
 
@@ -41,40 +37,12 @@ import org.eclipse.jgit.submodule.SubmoduleWalk;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class JansibleGitter {
-	@Autowired
-	private JansibleFiler jansibleFiler;
 	
-	public void cloneRepository(ProjectKey projectKey, String url, GitCredentialInfo info) throws Exception {
-		String projectDirName = jansibleFiler.getProjectDirName(projectKey);
-		callClone(url, projectDirName, info);
-	}
-
-	public void cloneRoleRepository(GlobalRoleKey key, String url, GitCredentialInfo info) throws Exception {
-		String dirName = jansibleFiler.getGlobalRoleDirName(key);
-		callClone(url, dirName, info);
-	}
-	
-	public void commitAndPush(ProjectKey projectKey, String name, String pass, String comment) throws Exception{
-		String projectDirName = jansibleFiler.getProjectDirName(projectKey);
-		commitAndPush(projectDirName, name, pass, comment);
-	}
-	
-	public void commitAndPush(GlobalRoleKey key, String name, String pass, String comment) throws Exception{
-		String dirName = jansibleFiler.getGlobalRoleDirName(key);
-		commitAndPush(dirName, name, pass, comment);
-	}
-	
-	public void addSubmodule(ProjectKey projectKey, String uri, String path) throws Exception{
-		String dirName = jansibleFiler.getProjectDirName(projectKey);
-		addSubmodule(dirName, uri, path);
-	}
-	
-	private void addSubmodule(String localPath, String uri, String path) throws Exception{
+	public void addSubmodule(String localPath, String uri, String path) throws Exception{
 		File gitDir = getGitDir(localPath);
 		FileRepositoryBuilder builder = createBuilder(gitDir);
 		
@@ -87,7 +55,7 @@ public class JansibleGitter {
 		}
 	}
 	
-	private void commitAndPush(String localPath, String name, String pass, String comment) throws Exception {
+	public void commitAndPush(String localPath, String name, String pass, String comment) throws Exception {
 		File gitDir = getGitDir(localPath);
 		FileRepositoryBuilder builder = createBuilder(gitDir);
 		
@@ -117,13 +85,7 @@ public class JansibleGitter {
 		return new UsernamePasswordCredentialsProvider(name, pass);
 	}
 	
-	public void tagAndPush(ProjectKey projectKey, GitOperationInfo gitOperationInfo, String tagName) throws Exception{
-		String projectDirName = jansibleFiler.getProjectDirName(projectKey);
-		tagAndPush(projectDirName, gitOperationInfo.getUserName(), gitOperationInfo.getPassword(), tagName, gitOperationInfo.getComment());
-	}
-	
-	public void tagAndPush(GlobalRoleKey key, GitOperationInfo gitOperationInfo, String tagName) throws Exception{
-		String dirName = jansibleFiler.getGlobalRoleDirName(key);
+	public void tagAndPush(String dirName, GitOperationInfo gitOperationInfo, String tagName) throws Exception{
 		tagAndPush(dirName, gitOperationInfo.getUserName(), gitOperationInfo.getPassword(), tagName, gitOperationInfo.getComment());
 	}
 	
@@ -134,6 +96,20 @@ public class JansibleGitter {
 		try(Git git = new Git(builder.build())){
 			callTag(git, tagName, message);
 	        callPush(git, getCredentialsProvider(name, pass));
+		} catch (GitAPIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	public void initAndUpdateSubmodule(String localPath) throws Exception{
+		File gitDir = getGitDir(localPath);
+		FileRepositoryBuilder builder = createBuilder(gitDir);
+		
+		try(Git git = new Git(builder.build())){
+			git.submoduleInit().call();
+			git.submoduleUpdate().call();
 		} catch (GitAPIException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -174,7 +150,7 @@ public class JansibleGitter {
         commitCommand.call();
 	}
 	
-	private void callClone(String url, String localPath, GitCredentialInfo info) throws InvalidRemoteException, TransportException, GitAPIException{
+	public void callClone(String url, String localPath, GitCredentialInfo info) throws InvalidRemoteException, TransportException, GitAPIException{
 		callClone(url, localPath, info.getUserName(), info.getPassword());
 	}
 	
@@ -201,12 +177,7 @@ public class JansibleGitter {
 		command.call();
 	}
 	
-	public void checkoutSubmodule(ProjectKey projectKey, String submodulePath, String tagName) throws Exception{
-		String dirName = jansibleFiler.getProjectDirName(projectKey);
-		checkoutSubmodule(dirName, submodulePath, tagName);
-	}
-	
-	private void checkoutSubmodule(String localPath, String submodulePath, String tagName) throws Exception {
+	public void checkoutSubmodule(String localPath, String submodulePath, String tagName) throws Exception {
 		File gitDir = getGitDir(localPath);
 		FileRepositoryBuilder builder = createBuilder(gitDir);
 		Repository repository = builder.build();

@@ -2,6 +2,7 @@ package jansible.web.manager;
 
 import java.util.Date;
 
+import jansible.file.JansibleFiler;
 import jansible.git.JansibleGitter;
 import jansible.util.DateFormatter;
 import jansible.web.manager.role.GitForm;
@@ -18,20 +19,25 @@ public class ManagerGitService {
 	private ManagerFileService fileService;
 	@Autowired
 	private JansibleGitter jansibleGitter;
+	@Autowired
+	private JansibleFiler jansibleFiler;
 
 	public void commitGit(GitForm form) throws Exception {
 		fileService.reOutputAllData(form);
-		jansibleGitter.commitAndPush(form, form.getUserName(), form.getPassword(), form.getComment());
+		String dirName = jansibleFiler.getGlobalRoleDirName(form);
+		jansibleGitter.commitAndPush(dirName, form.getUserName(), form.getPassword(), form.getComment());
 	}
 	
-	public void cloneRepository(GlobalRoleForm form) throws Exception {
-		jansibleGitter.cloneRoleRepository(form, form.getRepositoryUrl(), form);
+	public void cloneRoleRepository(GlobalRoleForm form) throws Exception {
+		String dirName = jansibleFiler.getGlobalRoleDirName(form);
+		jansibleGitter.callClone(form.getRepositoryUrl(), dirName, form);
 	}
 	
 	public void tagAndPush(GitForm form) throws Exception{
 		String tagName = getTagName();
 		roleService.registRoleTag(form, tagName);
-		jansibleGitter.tagAndPush(form, form, tagName);
+		String dirName = jansibleFiler.getGlobalRoleDirName(form);
+		jansibleGitter.tagAndPush(dirName, form, tagName);
 	}
 	
 	private String getTagName(){

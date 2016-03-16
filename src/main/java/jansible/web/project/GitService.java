@@ -1,5 +1,6 @@
 package jansible.web.project;
 
+import jansible.file.JansibleFiler;
 import jansible.git.JansibleGitter;
 import jansible.model.common.ProjectKey;
 import jansible.web.project.project.GitConpareForm;
@@ -15,22 +16,33 @@ public class GitService {
 	private FileService fileService;
 	@Autowired
 	private JansibleGitter jansibleGitter;
+	@Autowired
+	private JansibleFiler jansibleFiler;
 
 	public void commitGit(GitForm form) throws Exception {
 		fileService.reOutputAllData(form);
-		jansibleGitter.commitAndPush(form, form.getUserName(), form.getPassword(), form.getComment());
+		String projectDirName = jansibleFiler.getProjectDirName(form);
+		jansibleGitter.commitAndPush(projectDirName, form.getUserName(), form.getPassword(), form.getComment());
 	}
 	
 	public void cloneRepository(ProjectForm form) throws Exception {
-		jansibleGitter.cloneRepository(form, form.getRepositoryUrl(), form);
+		String projectDirName = jansibleFiler.getProjectDirName(form);
+		jansibleGitter.callClone(form.getRepositoryUrl(), projectDirName, form);
 	}
 	
 	public void addSubmodule(ProjectKey projectKey, String uri, String path) throws Exception{
-		jansibleGitter.addSubmodule(projectKey, uri, path);
+		String dirName = jansibleFiler.getProjectDirName(projectKey);
+		jansibleGitter.addSubmodule(dirName, uri, path);
 	}
 	
 	public void checkoutSubmodule(ProjectKey projectKey, String path, String tagName) throws Exception{
-		jansibleGitter.checkoutSubmodule(projectKey, path, tagName);
+		String dirName = jansibleFiler.getProjectDirName(projectKey);
+		jansibleGitter.checkoutSubmodule(dirName, path, tagName);
+	}
+	
+	public void initAndUpdateSubmodule(ProjectKey projectKey) throws Exception{
+		String dirName = jansibleFiler.getProjectDirName(projectKey);
+		jansibleGitter.initAndUpdateSubmodule(dirName);
 	}
 
 	public String getConpareUrl(String gitRepositoryUrl, GitConpareForm form) {

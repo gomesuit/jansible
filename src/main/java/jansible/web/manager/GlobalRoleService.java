@@ -52,7 +52,7 @@ public class GlobalRoleService {
 			DbGlobalRole dbGlobalRole = new DbGlobalRole(form);
 			dbGlobalRole.setRepositoryUrl(form.getRepositoryUrl());
 			roleMapper.insertRole(dbGlobalRole);
-			gitService.cloneRepository(form);
+			gitService.cloneRoleRepository(form);
 			fileService.outputRoleData(dbGlobalRole);
 		} catch (Exception e) {
 			transactionManager.rollback(status);

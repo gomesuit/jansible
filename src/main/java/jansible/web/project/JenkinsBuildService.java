@@ -81,7 +81,8 @@ public class JenkinsBuildService {
 
 	public int groupBuild(BuildForm form) throws Exception{
 		String tagName = getTagName(form);
-		jansibleGitter.tagAndPush(form, form, tagName);
+		String projectDirName = jansibleFiler.getProjectDirName(form);
+		jansibleGitter.tagAndPush(projectDirName, form, tagName);
 		
 		DbApplyHistory dbApplyHistory = new DbApplyHistory();
 		dbApplyHistory.setProjectName(form.getProjectName());
@@ -114,7 +115,8 @@ public class JenkinsBuildService {
 
 	public int buildforServer(ServerBuildForm form) throws Exception{
 		String tagName = getTagNameForServer(form);
-		jansibleGitter.tagAndPush(form, form, tagName);
+		String projectDirName = jansibleFiler.getProjectDirName(form);
+		jansibleGitter.tagAndPush(projectDirName, form, tagName);
 		
 		DbApplyHistory dbApplyHistory = new DbApplyHistory();
 		dbApplyHistory.setProjectName(form.getProjectName());
