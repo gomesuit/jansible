@@ -11,4 +11,6 @@ public interface ApplyHistoryMapper {
 	List<DbApplyHistory> selectDbApplyHistoryList(ProjectKey projectKey);
 	DbApplyHistory selectDbApplyHistory(ApplyHistoryKey applyHistoryKey);
 	void deleteApplyHistoryByProject(ProjectKey projectKey);
+
+	List<String> selectTagNameList(ProjectKey projectKey);
 }

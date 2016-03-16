@@ -22,4 +22,8 @@ public class ApplyService {
 	public DbApplyHistory getDbApplyHistory(ApplyHistoryKey applyHistoryKey){
 		return applyHistoryMapper.selectDbApplyHistory(applyHistoryKey);
 	}
+
+	public List<String> getTagNameList(ProjectKey projectKey){
+		return applyHistoryMapper.selectTagNameList(projectKey);
+	}
 }

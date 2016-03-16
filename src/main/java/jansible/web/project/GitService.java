@@ -2,6 +2,7 @@ package jansible.web.project;
 
 import jansible.git.JansibleGitter;
 import jansible.model.common.ProjectKey;
+import jansible.web.project.project.GitConpareForm;
 import jansible.web.project.project.GitForm;
 import jansible.web.project.top.ProjectForm;
 
@@ -30,5 +31,12 @@ public class GitService {
 	
 	public void checkoutSubmodule(ProjectKey projectKey, String path, String tagName) throws Exception{
 		jansibleGitter.checkoutSubmodule(projectKey, path, tagName);
+	}
+
+	public String getConpareUrl(String gitRepositoryUrl, GitConpareForm form) {
+		String compareUrl = gitRepositoryUrl.replace(".git", "");
+		compareUrl = compareUrl + "/compare/" + form.getBaseTag() + "..." + form.getConpareTag();
+		
+		return compareUrl;
 	}
 }

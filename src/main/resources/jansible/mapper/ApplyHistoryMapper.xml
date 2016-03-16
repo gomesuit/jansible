@@ -69,4 +69,15 @@
 			project_name = #{projectName}
 	</delete>
 	
+	<select id="selectTagNameList" resultType="java.lang.String">
+		SELECT DISTINCT
+			tag_name as tagName
+		FROM
+			apply_history
+		WHERE
+			project_name = #{projectName}
+		ORDER BY
+			apply_histroy_id DESC
+	</select>
+	
 </mapper>

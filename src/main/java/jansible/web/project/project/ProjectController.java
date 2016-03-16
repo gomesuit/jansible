@@ -97,6 +97,10 @@ public class ProjectController {
 		
 		// Git commit
 		model.addAttribute("gitForm", new GitForm(projectKey));
+
+		// Git compare
+		model.addAttribute("gitConpareForm", new GitConpareForm(projectKey));
+		model.addAttribute("tagNameList", applyService.getTagNameList(projectKey));
 		
 		// 適用対象一覧
 		model.addAttribute("groupList", getGroupList(projectKey));
@@ -163,6 +167,15 @@ public class ProjectController {
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
+	}
+
+	@RequestMapping(value="/project/git/compare", method=RequestMethod.POST)
+	private String compareGit(@ModelAttribute GitConpareForm form, HttpServletRequest request) throws Exception{		
+		DbProject project = projectService.getProject(form);
+		String gitUrl = project.getRepositoryUrl();
+		String compareUrl = gitService.getConpareUrl(gitUrl, form);
+		
+		return "redirect:" + compareUrl;
 	}
 
 	@RequestMapping(value="/project/jenkins/regist", method=RequestMethod.POST)

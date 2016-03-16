@@ -208,7 +208,7 @@
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<div>GITレポジトリコミット</div>
+		<div>GITレポジトリ</div>
 	</div>
 	<div class="panel-body">
 		<blockquote class="bg-info"><strong><span th:text="${project.repositoryUrl}" /></strong></blockquote>
@@ -219,6 +219,19 @@
 			<input type="password" class="form-control" th:field="*{password}" placeholder="password" />
 			<input type="text" class="form-control" th:field="*{comment}" placeholder="comment" />
 			<input type="submit" class="btn btn-primary" value="コミット" />
+		</form>
+		
+		<br />
+		<form class="form-inline" action="#" th:action="@{/project/git/compare}" th:object="${gitConpareForm}" method="post" target="_blank" >
+			<input type="hidden" th:field="*{projectName}" />
+			<select class="form-control" th:field="*{baseTag}">
+				<option th:each="tagName : ${tagNameList}" th:value="${tagName}" th:label="${tagName}" />
+			</select>
+			<span class="glyphicon glyphicon-resize-horizontal btn-lg" aria-hidden="true"></span>
+			<select class="form-control" th:field="*{conpareTag}">
+				<option th:each="tagName : ${tagNameList}" th:value="${tagName}" th:label="${tagName}" />
+			</select>
+			<input type="submit" class="btn btn-primary" value="差分表示" />
 		</form>
 	</div>
 </div>
