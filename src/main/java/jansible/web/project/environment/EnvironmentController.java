@@ -35,11 +35,6 @@ public class EnvironmentController {
 		environmentKey.setProjectName(projectName);
 		environmentKey.setEnvironmentName(environmentName);
 		
-		// グループ関連
-		model.addAttribute("form", new ServiceGroupForm(environmentKey));
-		model.addAttribute("serviceGroupList", groupService.getServiceGroupList(environmentKey));
-		model.addAttribute("serviceGroupKey", new ServiceGroupKey(environmentKey));
-		
 		// 変数関連
 		model.addAttribute("variableForm", new EnvironmentVariableForm(environmentKey));
 		model.addAttribute("allVariableNameList", variableService.getAllDbVariableNameList(environmentKey));
