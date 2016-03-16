@@ -1,132 +1,138 @@
 
 <h1 class="page-header">グループ詳細</h1>
 
-<div class="panel panel-primary">
-	<div class="panel-heading">
-		<div>所属サーバ</div>
+<div class="row">
+	<div class="col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div>所属サーバ</div>
+			</div>
+			<div class="panel-body">
+				<form class="form-inline" action="#" th:action="@{/project/serverRelation/regist}" th:object="${serverRelationForm}" method="post">
+					<input type="hidden" th:field="*{projectName}" />
+					<input type="hidden" th:field="*{environmentName}" />
+					<input type="hidden" th:field="*{groupName}" />
+					<select class="form-control" th:field="*{serverName}">
+						<option th:each="server : ${serverList}" th:value="${server.serverName}" th:label="${server.serverName}" />
+					</select>
+					
+					<input type="submit" class="btn btn-primary" value="登録" />
+				</form>
+				
+				<br />
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>serverRelation</th>
+							<th>Delete</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="serverRelation,iterStat : ${serverRelationList}">
+							<td>
+								<div class="text-center" th:text="${iterStat.count}" />
+							</td>
+							<td>
+								<a th:href="@{/project/server/view(projectName=${serverRelation.projectName}, serverName=${serverRelation.serverName})}"
+								th:text="${serverRelation.serverName}" />
+							</td>
+							<td class="text-center">
+								<form th:action="@{/project/serverRelation/delete}" th:object="${serverRelationKey}" method="POST">
+									<input type="hidden" th:field="*{projectName}" />
+									<input type="hidden" th:field="*{environmentName}" />
+									<input type="hidden" th:field="*{groupName}" />
+									<input type="hidden" name="serverName" th:value="${serverRelation.serverName}" />
+									<button type="submit" class="btn btn-danger btn-xs">
+										<span class="glyphicon glyphicon-trash" aria-hidden="true" />
+									</button>
+								</form>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
-	<div class="panel-body">
-		<form class="form-inline" action="#" th:action="@{/project/serverRelation/regist}" th:object="${serverRelationForm}" method="post">
-			<input type="hidden" th:field="*{projectName}" />
-			<input type="hidden" th:field="*{environmentName}" />
-			<input type="hidden" th:field="*{groupName}" />
-			<select class="form-control" th:field="*{serverName}">
-				<option th:each="server : ${serverList}" th:value="${server.serverName}" th:label="${server.serverName}" />
-			</select>
-			
-			<input type="submit" class="btn btn-primary" value="登録" />
-		</form>
-		
-		<br />
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>serverRelation</th>
-					<th>Delete</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="serverRelation,iterStat : ${serverRelationList}">
-					<td>
-						<div class="text-center" th:text="${iterStat.count}" />
-					</td>
-					<td>
-						<a th:href="@{/project/server/view(projectName=${serverRelation.projectName}, serverName=${serverRelation.serverName})}"
-						th:text="${serverRelation.serverName}" />
-					</td>
-					<td class="text-center">
-						<form th:action="@{/project/serverRelation/delete}" th:object="${serverRelationKey}" method="POST">
-							<input type="hidden" th:field="*{projectName}" />
-							<input type="hidden" th:field="*{environmentName}" />
-							<input type="hidden" th:field="*{groupName}" />
-							<input type="hidden" name="serverName" th:value="${serverRelation.serverName}" />
-							<button type="submit" class="btn btn-danger btn-xs">
-								<span class="glyphicon glyphicon-trash" aria-hidden="true" />
-							</button>
-						</form>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+	<div class="col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div>適用ロール</div>
+			</div>
+			<div class="panel-body">
+				<form class="form-inline" action="#" th:action="@{/project/roleRelation/regist}" th:object="${roleRelationForm}" method="post">
+					<input type="hidden" th:field="*{projectName}" />
+					<input type="hidden" th:field="*{environmentName}" />
+					<input type="hidden" th:field="*{groupName}" />
+					<select class="form-control" th:field="*{roleName}">
+						<option th:each="roleName : ${roleNameList}" th:value="${roleName}" th:label="${roleName}" />
+					</select>
+					<input type="submit" class="btn btn-primary" value="登録" />
+				</form>
+				
+				<br />
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>role</th>
+							<th>適用順序</th>
+							<th>解除</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="roleRelation,iterStat : ${roleRelationList}">
+							<td>
+								<div class="text-center" th:text="${iterStat.count}" />
+							</td>
+							<td>
+								<a th:href="@{/project/role/view(projectName=${roleRelation.projectName}, roleName=${roleRelation.roleName})}"
+								th:text="${roleRelation.roleName}" />
+							</td>
+							<td class="text-center">
+								<div style="display:inline-flex">
+									<form method="POST" th:action="@{/project/roleRelation/sort}" th:object="${roleRelationOrderForm}">
+										<input type="hidden" th:field="*{projectName}" />
+										<input type="hidden" th:field="*{environmentName}" />
+										<input type="hidden" th:field="*{groupName}" />
+										<input type="hidden" name="OrderType" value="UP" />
+										<input type="hidden" name="roleName" th:value="${roleRelation.roleName}" />
+										<button type="submit" class="btn btn-info btn-xs">
+											<span class="glyphicon glyphicon-arrow-up" aria-hidden="true" />
+										</button>
+									</form>
+									　
+									<form method="POST" th:action="@{/project/roleRelation/sort}" th:object="${roleRelationOrderForm}">
+										<input type="hidden" th:field="*{projectName}" />
+										<input type="hidden" th:field="*{environmentName}" />
+										<input type="hidden" th:field="*{groupName}" />
+										<input type="hidden" name="OrderType" value="DOWN" />
+										<input type="hidden" name="roleName" th:value="${roleRelation.roleName}" />
+										<button type="submit" class="btn btn-info btn-xs">
+											<span class="glyphicon glyphicon-arrow-down" aria-hidden="true" />
+										</button>
+									</form>
+								</div>
+							</td>
+							<td class="text-center">
+								<form th:action="@{/project/roleRelation/delete}" th:object="${roleRelationKey}" method="POST">
+									<input type="hidden" th:field="*{projectName}" />
+									<input type="hidden" th:field="*{environmentName}" />
+									<input type="hidden" th:field="*{groupName}" />
+									<input type="hidden" name="roleName" th:value="${roleRelation.roleName}" />
+									<button type="submit" class="btn btn-danger btn-xs">
+										<span class="glyphicon glyphicon-trash" aria-hidden="true" />
+									</button>
+								</form>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 </div>
 
-<div class="panel panel-primary">
-	<div class="panel-heading">
-		<div>適用ロール</div>
-	</div>
-	<div class="panel-body">
-		<form class="form-inline" action="#" th:action="@{/project/roleRelation/regist}" th:object="${roleRelationForm}" method="post">
-			<input type="hidden" th:field="*{projectName}" />
-			<input type="hidden" th:field="*{environmentName}" />
-			<input type="hidden" th:field="*{groupName}" />
-			<select class="form-control" th:field="*{roleName}">
-				<option th:each="roleName : ${roleNameList}" th:value="${roleName}" th:label="${roleName}" />
-			</select>
-			<input type="submit" class="btn btn-primary" value="登録" />
-		</form>
-		
-		<br />
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>role</th>
-					<th>適用順序</th>
-					<th>解除</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="roleRelation,iterStat : ${roleRelationList}">
-					<td>
-						<div class="text-center" th:text="${iterStat.count}" />
-					</td>
-					<td>
-						<a th:href="@{/project/role/view(projectName=${roleRelation.projectName}, roleName=${roleRelation.roleName})}"
-						th:text="${roleRelation.roleName}" />
-					</td>
-					<td class="text-center">
-						<div style="display:inline-flex">
-							<form method="POST" th:action="@{/project/roleRelation/sort}" th:object="${roleRelationOrderForm}">
-								<input type="hidden" th:field="*{projectName}" />
-								<input type="hidden" th:field="*{environmentName}" />
-								<input type="hidden" th:field="*{groupName}" />
-								<input type="hidden" name="OrderType" value="UP" />
-								<input type="hidden" name="roleName" th:value="${roleRelation.roleName}" />
-								<button type="submit" class="btn btn-info btn-xs">
-									<span class="glyphicon glyphicon-arrow-up" aria-hidden="true" />
-								</button>
-							</form>
-							　
-							<form method="POST" th:action="@{/project/roleRelation/sort}" th:object="${roleRelationOrderForm}">
-								<input type="hidden" th:field="*{projectName}" />
-								<input type="hidden" th:field="*{environmentName}" />
-								<input type="hidden" th:field="*{groupName}" />
-								<input type="hidden" name="OrderType" value="DOWN" />
-								<input type="hidden" name="roleName" th:value="${roleRelation.roleName}" />
-								<button type="submit" class="btn btn-info btn-xs">
-									<span class="glyphicon glyphicon-arrow-down" aria-hidden="true" />
-								</button>
-							</form>
-						</div>
-					</td>
-					<td class="text-center">
-						<form th:action="@{/project/roleRelation/delete}" th:object="${roleRelationKey}" method="POST">
-							<input type="hidden" th:field="*{projectName}" />
-							<input type="hidden" th:field="*{environmentName}" />
-							<input type="hidden" th:field="*{groupName}" />
-							<input type="hidden" name="roleName" th:value="${roleRelation.roleName}" />
-							<button type="submit" class="btn btn-danger btn-xs">
-								<span class="glyphicon glyphicon-trash" aria-hidden="true" />
-							</button>
-						</form>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-</div>
 
 <div class="panel panel-primary">
 	<div class="panel-heading">

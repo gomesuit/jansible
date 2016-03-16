@@ -3,6 +3,54 @@
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
+		<div>変数登録</div>
+	</div>
+	<div class="panel-body">
+		<form class="form-inline" action="#" th:action="@{/project/serverVariable/regist}" th:object="${variableForm}" method="post">
+			<input type="hidden" th:field="*{projectName}" />
+			<input type="hidden" th:field="*{serverName}" />
+			<select class="form-control" th:field="*{variableName}">
+				<option th:each="variableName : ${allVariableNameList}" th:value="${variableName}" th:label="${variableName}" />
+			</select>
+			<input type="text" class="form-control" th:field="*{value}" placeholder="value" />
+			<input type="submit" class="btn btn-primary" value="登録" />
+		</form>
+		
+		<br />		
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>variable</th>
+					<th>value</th>
+					<th>Delete</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="variable,iterStat : ${variableList}">
+					<td>
+						<div class="text-center" th:text="${iterStat.count}" />
+					</td>
+					<td th:text="${variable.variableName}" />
+					<td th:text="${variable.value}" />
+					<td class="text-center">
+						<form th:action="@{/project/serverVariable/delete}" th:object="${serverVariableKey}" method="POST">
+							<input type="hidden" th:field="*{projectName}" />
+							<input type="hidden" th:field="*{serverName}" />
+							<input type="hidden" name="variableName" th:value="${variable.variableName}" />
+							<button type="submit" class="btn btn-danger btn-xs">
+								<span class="glyphicon glyphicon-trash" aria-hidden="true" />
+							</button>
+						</form>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
 		<div>パラメータ</div>
 	</div>
 	<div class="panel-body">
@@ -55,54 +103,6 @@
 							<input type="hidden" th:field="*{projectName}" />
 							<input type="hidden" th:field="*{serverName}" />
 							<input type="hidden" name="parameterName" th:value="${serverParameter.parameterName}" />
-							<button type="submit" class="btn btn-danger btn-xs">
-								<span class="glyphicon glyphicon-trash" aria-hidden="true" />
-							</button>
-						</form>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-</div>
-
-<div class="panel panel-primary">
-	<div class="panel-heading">
-		<div>変数登録</div>
-	</div>
-	<div class="panel-body">
-		<form class="form-inline" action="#" th:action="@{/project/serverVariable/regist}" th:object="${variableForm}" method="post">
-			<input type="hidden" th:field="*{projectName}" />
-			<input type="hidden" th:field="*{serverName}" />
-			<select class="form-control" th:field="*{variableName}">
-				<option th:each="variableName : ${allVariableNameList}" th:value="${variableName}" th:label="${variableName}" />
-			</select>
-			<input type="text" class="form-control" th:field="*{value}" placeholder="value" />
-			<input type="submit" class="btn btn-primary" value="登録" />
-		</form>
-		
-		<br />		
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>variable</th>
-					<th>value</th>
-					<th>Delete</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="variable,iterStat : ${variableList}">
-					<td>
-						<div class="text-center" th:text="${iterStat.count}" />
-					</td>
-					<td th:text="${variable.variableName}" />
-					<td th:text="${variable.value}" />
-					<td class="text-center">
-						<form th:action="@{/project/serverVariable/delete}" th:object="${serverVariableKey}" method="POST">
-							<input type="hidden" th:field="*{projectName}" />
-							<input type="hidden" th:field="*{serverName}" />
-							<input type="hidden" name="variableName" th:value="${variable.variableName}" />
 							<button type="submit" class="btn btn-danger btn-xs">
 								<span class="glyphicon glyphicon-trash" aria-hidden="true" />
 							</button>
