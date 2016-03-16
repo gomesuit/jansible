@@ -5,6 +5,10 @@ public class ServerRelationKey extends ServiceGroupKey{
 	
 	public ServerRelationKey(){}
 	
+	public ServerRelationKey(ProjectKey projectKey){
+		super(projectKey);
+	}
+	
 	public ServerRelationKey(ServiceGroupKey serviceGroupKey){
 		super(serviceGroupKey, serviceGroupKey.getGroupName());
 	}

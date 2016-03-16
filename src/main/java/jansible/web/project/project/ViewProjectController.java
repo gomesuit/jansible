@@ -1,12 +1,19 @@
 package jansible.web.project.project;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import jansible.model.common.EnvironmentKey;
+import jansible.model.common.Group;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
 import jansible.model.common.ServerKey;
+import jansible.model.common.ServerRelationKey;
 import jansible.model.common.ServiceGroupKey;
+import jansible.model.database.DbEnvironment;
+import jansible.model.database.DbServiceGroup;
 import jansible.web.project.ApplyService;
 import jansible.web.project.EnvironmentService;
 import jansible.web.project.GlobalRoleRelationService;
@@ -117,5 +124,52 @@ public class ViewProjectController {
 		
 		request.setAttribute("pageName", "project/project/group");
 		return "common_frame";
+	}
+
+    @RequestMapping("/project/viewApply")
+	private String viewApply(
+			@RequestParam(value = "projectName", required = true) String projectName,
+			Model model,
+			HttpServletRequest request){
+    	
+    	ProjectKey projectKey = new ProjectKey(projectName);
+    	
+		model.addAttribute("project", projectService.getProject(projectKey));
+		
+		// Git commit
+		model.addAttribute("gitForm", new GitForm(projectKey));
+
+		// Git compare
+		model.addAttribute("gitConpareForm", new GitConpareForm(projectKey));
+		model.addAttribute("tagNameList", applyService.getTagNameList(projectKey));
+		
+		// 適用対象一覧
+		model.addAttribute("groupList", getGroupList(projectKey));
+		model.addAttribute("serverbuildList", groupService.getAllDbServerRelationList(projectKey));
+		
+		// 適用履歴
+		model.addAttribute("applyHistoryList", applyService.getDbApplyHistoryList(projectKey));
+		
+		// テストデータダウンロード
+		model.addAttribute("serverRelationKey", new ServerRelationKey(projectKey));
+		
+		request.setAttribute("pageName", "project/project/apply");
+		return "common_frame";
+	}
+
+	private List<Group> getGroupList(ProjectKey projectKey) {
+		List<Group> groupList = new ArrayList<>();
+		
+		List<DbEnvironment> dbEnvironmentList = environmentService.getEnvironmentList(projectKey);
+		
+		for(DbEnvironment dbEnvironment : dbEnvironmentList){
+			List<DbServiceGroup> dbServiceGroupList = groupService.getServiceGroupList(dbEnvironment);
+			for(DbServiceGroup dbServiceGroup : dbServiceGroupList){
+				Group group = new Group(dbServiceGroup.getEnvironmentName(), dbServiceGroup.getGroupName());
+				groupList.add(group);
+			}
+		}
+		
+		return groupList;
 	}
 }
