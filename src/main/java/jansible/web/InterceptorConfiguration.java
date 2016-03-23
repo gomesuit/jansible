@@ -9,6 +9,8 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @Configuration
 public class InterceptorConfiguration extends WebMvcConfigurerAdapter{
+	private static final Logger logger = LoggerFactory.getLogger(InterceptorConfiguration.class);
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
@@ -127,18 +130,15 @@ public class InterceptorConfiguration extends WebMvcConfigurerAdapter{
 		public void postHandle(HttpServletRequest request,
 				HttpServletResponse response, Object obj, ModelAndView mav)
 				throws Exception {
+			logger.info("RequestURL : " + request.getRequestURI());
 			
 			String pageName = (String)request.getAttribute("pageName");
 			if(pageName == null) return;
 			
+			
 			String projectName = (String)request.getParameter("projectName");
 			
 			List<SideMenu> menuList = new ArrayList<>();
-//			menuList.add(new SideMenu("/project/" + service + "/group", "GROUP", pageName.equals("service")));
-//			menuList.add(new SideMenu("/project/" + service + "/list", "JDBC", pageName.equals("group")));
-//			menuList.add(new SideMenu("/project/" + service + "/jdbcSearch", "JDBC SEARCH", pageName.equals("jdbc_search")));
-//			menuList.add(new SideMenu("/project/" + service + "/connectionSearch", "CONNECTION SEARCH", pageName.equals("connection_search")));
-
 			menuList.add(new SideMenu("/project/view?projectName=" + projectName, "TOP", pageName.equals("project/project/top")));
 			menuList.add(new SideMenu("/project/viewEnvironment?projectName=" + projectName, "Environment", pageName.equals("project/project/environment")));
 			menuList.add(new SideMenu("/project/viewServer?projectName=" + projectName, "Server", pageName.equals("project/project/server")));
