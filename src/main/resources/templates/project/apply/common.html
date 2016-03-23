@@ -32,7 +32,7 @@
 <div th:fragment="tagging" th:remove="tag">
 	<div class="panel panel-primary">
 		<div class="panel-heading">
-			<div>taggingしてmasterをサーバに適用</div>
+			<div>taggingしてmasterブランチをサーバに適用</div>
 		</div>
 		<div class="panel-body">		
 			<form class="form-inline" action="#" th:action="@{/project/jenkins/build}" th:object="${buildForm}" method="post">
