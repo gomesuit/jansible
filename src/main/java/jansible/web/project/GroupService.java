@@ -16,11 +16,11 @@ import jansible.model.database.DbRoleRelation;
 import jansible.model.database.DbServerRelation;
 import jansible.model.database.DbServiceGroup;
 import jansible.util.DbCommonUtils;
-import jansible.web.project.group.RoleRelationForm;
-import jansible.web.project.group.RoleRelationOrderForm;
-import jansible.web.project.group.RoleRelationOrderType;
-import jansible.web.project.group.ServerRelationForm;
-import jansible.web.project.group.ServiceGroupForm;
+import jansible.web.project.group.form.RoleRelationForm;
+import jansible.web.project.group.form.RoleRelationOrderForm;
+import jansible.web.project.group.form.RoleRelationOrderType;
+import jansible.web.project.group.form.ServerRelationForm;
+import jansible.web.project.group.form.ServiceGroupForm;
 
 import java.util.ArrayList;
 import java.util.Collections;

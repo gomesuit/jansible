@@ -10,9 +10,9 @@ import jansible.model.common.TemplateKey;
 import jansible.model.database.DbFile;
 import jansible.model.database.DbRole;
 import jansible.model.database.DbTemplate;
-import jansible.web.project.project.RoleForm;
-import jansible.web.project.role.GeneralFileForm;
-import jansible.web.project.role.UploadForm;
+import jansible.web.project.project.form.RoleForm;
+import jansible.web.project.role.form.GeneralFileForm;
+import jansible.web.project.role.form.UploadForm;
 
 import java.util.List;
 

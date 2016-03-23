@@ -16,9 +16,9 @@ import jansible.model.common.ServiceGroupKey;
 import jansible.model.database.DbApplyHistory;
 import jansible.model.database.DbProject;
 import jansible.util.DateFormatter;
-import jansible.web.project.apply.BuildForm;
-import jansible.web.project.apply.ServerBuildForm;
-import jansible.web.project.project.RebuildForm;
+import jansible.web.project.apply.form.BuildForm;
+import jansible.web.project.apply.form.ServerBuildForm;
+import jansible.web.project.project.form.RebuildForm;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

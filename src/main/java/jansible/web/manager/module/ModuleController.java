@@ -46,7 +46,7 @@ public class ModuleController {
     		HtmlModule module = ModuleGetter.getModule(url);
     		logger.info("module : ", module);
     		for(HtmlParameter parameter : module.getParameterList()){
-        		System.out.println(parameter);
+        		logger.info("parameter : ", parameter);
     		}
     		moduleService.insertModule(module);
     		

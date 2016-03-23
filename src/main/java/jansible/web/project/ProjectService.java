@@ -13,8 +13,8 @@ import jansible.mapper.TaskMapper;
 import jansible.mapper.VariableMapper;
 import jansible.model.common.ProjectKey;
 import jansible.model.database.DbProject;
-import jansible.web.project.project.JenkinsInfoForm;
-import jansible.web.project.top.ProjectForm;
+import jansible.web.project.project.form.JenkinsInfoForm;
+import jansible.web.project.top.form.ProjectForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

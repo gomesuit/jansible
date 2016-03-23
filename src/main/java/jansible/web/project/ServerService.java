@@ -9,8 +9,8 @@ import jansible.model.common.ServerKey;
 import jansible.model.common.ServerParameterKey;
 import jansible.model.database.DbServer;
 import jansible.model.database.DbServerParameter;
-import jansible.web.project.server.ServerForm;
-import jansible.web.project.server.ServerParameterForm;
+import jansible.web.project.server.form.ServerForm;
+import jansible.web.project.server.form.ServerParameterForm;
 
 import java.util.List;
 

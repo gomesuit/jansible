@@ -3,9 +3,9 @@ package jansible.web.project;
 import jansible.file.JansibleFiler;
 import jansible.git.JansibleGitter;
 import jansible.model.common.ProjectKey;
-import jansible.web.project.project.GitConpareForm;
-import jansible.web.project.project.GitForm;
-import jansible.web.project.top.ProjectForm;
+import jansible.web.project.project.form.GitConpareForm;
+import jansible.web.project.project.form.GitForm;
+import jansible.web.project.top.form.ProjectForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

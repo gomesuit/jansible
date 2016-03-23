@@ -5,9 +5,9 @@ import jansible.model.common.GlobalRoleRelationKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.database.DbGlobalRole;
 import jansible.model.database.DbGlobalRoleRelation;
-import jansible.web.project.project.GlobalRoleRelationForm;
-import jansible.web.project.project.GlobalRoleRelationTagUpdateForm;
-import jansible.web.project.project.GlobalRoleRelationView;
+import jansible.web.project.project.form.GlobalRoleRelationForm;
+import jansible.web.project.project.form.GlobalRoleRelationTagUpdateForm;
+import jansible.web.project.project.form.GlobalRoleRelationView;
 
 import java.util.ArrayList;
 import java.util.List;

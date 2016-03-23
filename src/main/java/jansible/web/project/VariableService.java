@@ -16,10 +16,10 @@ import jansible.model.database.DbEnvironmentVariable;
 import jansible.model.database.DbRoleVariable;
 import jansible.model.database.DbServerVariable;
 import jansible.model.database.DbServiceGroupVariable;
-import jansible.web.project.environment.EnvironmentVariableForm;
-import jansible.web.project.group.ServiceGroupVariableForm;
-import jansible.web.project.role.RoleVariableForm;
-import jansible.web.project.server.ServerVariableForm;
+import jansible.web.project.environment.form.EnvironmentVariableForm;
+import jansible.web.project.group.form.ServiceGroupVariableForm;
+import jansible.web.project.role.form.RoleVariableForm;
+import jansible.web.project.server.form.ServerVariableForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
