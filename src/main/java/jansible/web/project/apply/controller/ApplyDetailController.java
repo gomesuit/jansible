@@ -11,9 +11,9 @@ import jansible.web.project.GroupService;
 import jansible.web.project.JenkinsBuildService;
 import jansible.web.project.ProjectService;
 import jansible.web.project.apply.form.BuildForm;
+import jansible.web.project.apply.form.GitForm;
 import jansible.web.project.apply.form.ServerBuildForm;
 import jansible.web.project.project.form.GitConpareForm;
-import jansible.web.project.project.form.GitForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

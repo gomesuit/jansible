@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 import jansible.model.common.ProjectKey;
 import jansible.web.project.JenkinsBuildService;
 import jansible.web.project.JenkinsResultService;
-import jansible.web.project.project.form.RebuildForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

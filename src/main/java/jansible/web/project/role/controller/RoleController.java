@@ -4,9 +4,9 @@ import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
 import jansible.web.project.GlobalRoleRelationService;
 import jansible.web.project.RoleService;
-import jansible.web.project.project.form.GlobalRoleRelationForm;
-import jansible.web.project.project.form.GlobalRoleRelationTagUpdateForm;
-import jansible.web.project.project.form.RoleForm;
+import jansible.web.project.role.form.GlobalRoleRelationForm;
+import jansible.web.project.role.form.GlobalRoleRelationTagUpdateForm;
+import jansible.web.project.role.form.RoleForm;
 
 import javax.servlet.http.HttpServletRequest;
 

@@ -11,7 +11,7 @@ import jansible.model.common.EnvironmentKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.database.DbEnvironment;
 import jansible.model.database.DbServiceGroup;
-import jansible.web.project.project.form.EnvironmentForm;
+import jansible.web.project.environment.form.EnvironmentForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;

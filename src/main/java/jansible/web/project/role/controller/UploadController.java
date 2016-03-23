@@ -1,7 +1,7 @@
 package jansible.web.project.role.controller;
 
 import jansible.web.project.RoleService;
-import jansible.web.project.role.UploadService;
+import jansible.web.project.UploadService;
 import jansible.web.project.role.form.GeneralFileForm;
 import jansible.web.project.role.form.UploadForm;
 

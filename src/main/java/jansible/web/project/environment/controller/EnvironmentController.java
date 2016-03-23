@@ -3,7 +3,7 @@ package jansible.web.project.environment.controller;
 import jansible.model.common.EnvironmentKey;
 import jansible.model.common.ProjectKey;
 import jansible.web.project.EnvironmentService;
-import jansible.web.project.project.form.EnvironmentForm;
+import jansible.web.project.environment.form.EnvironmentForm;
 
 import javax.servlet.http.HttpServletRequest;
 

@@ -1,4 +1,4 @@
-package jansible.web.project.role;
+package jansible.web.project;
 
 import jansible.file.JansibleFiler;
 import jansible.model.common.FileKey;

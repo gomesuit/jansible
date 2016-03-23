@@ -1,4 +1,4 @@
-package jansible.web.project.project.form;
+package jansible.web.project.role.form;
 
 import jansible.model.common.GlobalRoleRelationKey;
 import jansible.model.common.ProjectKey;
