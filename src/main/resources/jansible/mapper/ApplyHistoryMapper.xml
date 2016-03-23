@@ -3,6 +3,17 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jansible.mapper.ApplyHistoryMapper">
+    
+	<resultMap id="ApplyHistoryMap" type="DbApplyHistory">
+		<result property="applyHistroyId" column="apply_histroy_id" />
+		<result property="projectName" column="project_name" />
+		<result property="environmentName" column="environment_name" />
+		<result property="groupName" column="group_name" />
+		<result property="serverName" column="server_name" />
+		<result property="tagName" column="tag_name" />
+		<result property="tagComment" column="tag_comment" />
+		<result property="applyTime" column="apply_time" />
+	</resultMap>
 	
 	<insert id="insertDbApplyHistory" parameterType="DbApplyHistory" useGeneratedKeys="true" keyProperty="applyHistroyId">
 		INSERT INTO apply_history
@@ -27,16 +38,9 @@
 			)
 	</insert>
 	
-	<select id="selectDbApplyHistoryList" resultType="DbApplyHistory">
+	<select id="selectDbApplyHistoryList" resultMap="ApplyHistoryMap">
 		SELECT
-			apply_histroy_id as applyHistroyId,
-			project_name as projectName,
-			environment_name as environmentName,
-			group_name as groupName,
-			server_name as serverName,
-			tag_name as tagName,
-			tag_comment as tagComment,
-			apply_time as applyTime
+			*
 		FROM
 			apply_history
 		WHERE
@@ -45,16 +49,9 @@
 			apply_histroy_id DESC
 	</select>
 	
-	<select id="selectDbApplyHistory" resultType="DbApplyHistory">
+	<select id="selectDbApplyHistory" resultMap="ApplyHistoryMap">
 		SELECT
-			apply_histroy_id as applyHistroyId,
-			project_name as projectName,
-			environment_name as environmentName,
-			group_name as groupName,
-			server_name as serverName,
-			tag_name as tagName,
-			tag_comment as tagComment,
-			apply_time as applyTime
+			*
 		FROM
 			apply_history
 		WHERE
@@ -71,7 +68,7 @@
 	
 	<select id="selectTagNameList" resultType="java.lang.String">
 		SELECT DISTINCT
-			tag_name as tagName
+			tag_name
 		FROM
 			apply_history
 		WHERE
