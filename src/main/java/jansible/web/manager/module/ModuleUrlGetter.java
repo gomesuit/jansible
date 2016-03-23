@@ -1,4 +1,4 @@
-package jansible.webget;
+package jansible.web.manager.module;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package jansible.webget;
+package jansible.web.manager.module;
 
 import jansible.model.gethtml.HtmlModule;
 import jansible.model.gethtml.HtmlParameter;

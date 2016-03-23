@@ -12,9 +12,9 @@ import jansible.model.yamldump.YamlDumper;
 import jansible.model.yamldump.YamlModule;
 import jansible.model.yamldump.YamlParameter;
 import jansible.model.yamldump.YamlParameters;
-import jansible.webget.ModuleGetter;
-import jansible.webget.ModuleUrlGetter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,9 +28,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class ModuleController {
+	private static final Logger logger = LoggerFactory.getLogger(ModuleController.class);
 	
 	@Autowired
-	private ModuleService jansibleService;
+	private ModuleService moduleService;
 	@Autowired
 	private YamlDumper yamlDumper;
 
@@ -41,13 +42,13 @@ public class ModuleController {
     	List<String> UrlList = ModuleUrlGetter.getUrlList();
     	
     	for(String url : UrlList){
-    		System.out.println(url);
+    		logger.info("url : ", url);
     		HtmlModule module = ModuleGetter.getModule(url);
-    		System.out.println(module);
+    		logger.info("module : ", module);
     		for(HtmlParameter parameter : module.getParameterList()){
         		System.out.println(parameter);
     		}
-    		jansibleService.insertModule(module);
+    		moduleService.insertModule(module);
     		
     		Thread.sleep(3000);
     	}
@@ -58,7 +59,7 @@ public class ModuleController {
     @RequestMapping("/manager/module/view")
     String module(@RequestParam(value = "moduleName", required = true) String moduleName,
     		Model model, HttpServletRequest request) {
-    	HtmlModule module = jansibleService.getModule(moduleName);
+    	HtmlModule module = moduleService.getModule(moduleName);
     	
     	model.addAttribute("module", module);
     	
@@ -69,7 +70,7 @@ public class ModuleController {
     @RequestMapping("/manager/module/create")
     String yamlmodule(@RequestParam(value = "moduleName", required = true) String moduleName,
     		Model model, HttpServletRequest request) {
-    	HtmlModule module = jansibleService.getModule(moduleName);
+    	HtmlModule module = moduleService.getModule(moduleName);
     	
     	List<FormParameter> formParameterList = new ArrayList<>();
     	for(HtmlParameter parameter : module.getParameterList()){
@@ -88,13 +89,13 @@ public class ModuleController {
 
     @RequestMapping("/manager/module")
     String module(Model model, HttpServletRequest request) {
-    	List<ModuleRow> moduleRowList = jansibleService.getModuleList();
+    	List<ModuleRow> moduleRowList = moduleService.getModuleList();
     	
     	AvailableModuleForm availableModuleForm = new AvailableModuleForm();
     	availableModuleForm.setAvailableModuleRowList(moduleRowList);
     	model.addAttribute("availableModuleForm", availableModuleForm);
     	
-    	model.addAttribute("availableModuleNameList", jansibleService.getAvailableModuleList());
+    	model.addAttribute("availableModuleNameList", moduleService.getAvailableModuleList());
     	
 		request.setAttribute("pageName", "manager/module/moduleList");
 		return "common_frame";
@@ -107,7 +108,7 @@ public class ModuleController {
 
     @RequestMapping(value="/manager/module/registAvailableModule", method=RequestMethod.POST)
     String insertAvailableModuleList(@ModelAttribute AvailableModuleForm availableModuleForm, Model model, HttpServletRequest request) {
-    	jansibleService.registAvailableModuleList(availableModuleForm.getAvailableModuleRowList());
+    	moduleService.registAvailableModuleList(availableModuleForm.getAvailableModuleRowList());
     	
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
