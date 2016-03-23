@@ -3,6 +3,8 @@ package jansible.web.project;
 import jansible.mapper.ApplyHistoryMapper;
 import jansible.model.common.ApplyHistoryKey;
 import jansible.model.common.ProjectKey;
+import jansible.model.common.ServerRelationKey;
+import jansible.model.common.ServiceGroupKey;
 import jansible.model.database.DbApplyHistory;
 
 import java.util.List;
@@ -17,6 +19,14 @@ public class ApplyService {
 
 	public List<DbApplyHistory> getDbApplyHistoryList(ProjectKey projectKey){
 		return applyHistoryMapper.selectDbApplyHistoryList(projectKey);
+	}
+	
+	public List<DbApplyHistory> getDbApplyHistoryListByGroup(ServiceGroupKey serviceGroupKey){
+		return applyHistoryMapper.selectDbApplyHistoryListByGroup(serviceGroupKey);
+	}
+	
+	public List<DbApplyHistory> getDbApplyHistoryListByServer(ServerRelationKey serverRelationKey){
+		return applyHistoryMapper.selectDbApplyHistoryListByServer(serverRelationKey);
 	}
 
 	public DbApplyHistory getDbApplyHistory(ApplyHistoryKey applyHistoryKey){

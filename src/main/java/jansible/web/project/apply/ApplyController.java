@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import jansible.model.common.ServerRelationKey;
 import jansible.model.common.ServiceGroupKey;
+import jansible.web.project.ApplyService;
 import jansible.web.project.GroupService;
 import jansible.web.project.JenkinsBuildService;
 import jansible.web.project.ProjectService;
@@ -30,6 +31,8 @@ public class ApplyController {
 	private GroupService groupService;
 	@Autowired
 	private RoleService roleService;
+	@Autowired
+	private ApplyService applyService;
 
 	@RequestMapping("/project/apply/view")
 	private String viewApply(
@@ -48,6 +51,9 @@ public class ApplyController {
 
 		model.addAttribute("serverList", groupService.getServerRelationList(serviceGroupKey));
 		model.addAttribute("roleList", groupService.getRoleRelationList(serviceGroupKey));
+
+		// 適用履歴
+		model.addAttribute("applyHistoryList", applyService.getDbApplyHistoryListByGroup(serviceGroupKey));
 		
 		request.setAttribute("pageName", "project/apply/group");
 		return "common_frame";
@@ -71,6 +77,9 @@ public class ApplyController {
 		model.addAttribute("buildForm", new ServerBuildForm(serverRelationKey));
 
 		model.addAttribute("roleList", groupService.getRoleRelationList(serverRelationKey));
+
+		// 適用履歴
+		model.addAttribute("applyHistoryList", applyService.getDbApplyHistoryListByServer(serverRelationKey));
 		
 		request.setAttribute("pageName", "project/apply/server");
 		return "common_frame";

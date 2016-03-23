@@ -49,6 +49,32 @@
 			apply_histroy_id DESC
 	</select>
 	
+	<select id="selectDbApplyHistoryListByGroup" resultMap="ApplyHistoryMap">
+		SELECT
+			*
+		FROM
+			apply_history
+		WHERE
+			project_name = #{projectName} AND
+			group_name = #{groupName} AND
+			server_name IS NULL
+		ORDER BY
+			apply_histroy_id DESC
+	</select>
+	
+	<select id="selectDbApplyHistoryListByServer" resultMap="ApplyHistoryMap">
+		SELECT
+			*
+		FROM
+			apply_history
+		WHERE
+			project_name = #{projectName} AND
+			group_name = #{groupName} AND
+			(server_name = #{serverName} OR server_name IS NULL)
+		ORDER BY
+			apply_histroy_id DESC
+	</select>
+	
 	<select id="selectDbApplyHistory" resultMap="ApplyHistoryMap">
 		SELECT
 			*
