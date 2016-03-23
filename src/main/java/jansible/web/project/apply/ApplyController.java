@@ -10,6 +10,8 @@ import jansible.web.project.JenkinsBuildService;
 import jansible.web.project.ProjectService;
 import jansible.web.project.RoleService;
 import jansible.web.project.ServerService;
+import jansible.web.project.project.GitConpareForm;
+import jansible.web.project.project.GitForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -46,11 +48,19 @@ public class ApplyController {
 		serviceGroupKey.setProjectName(projectName);
 		serviceGroupKey.setEnvironmentName(environmentName);
 		serviceGroupKey.setGroupName(groupName);
-		
-		model.addAttribute("buildForm", new BuildForm(serviceGroupKey));
 
 		model.addAttribute("serverList", groupService.getServerRelationList(serviceGroupKey));
 		model.addAttribute("roleList", groupService.getRoleRelationList(serviceGroupKey));
+		
+		// Git commit
+		model.addAttribute("gitForm", new GitForm(serviceGroupKey));
+
+		// Git compare
+		model.addAttribute("gitConpareForm", new GitConpareForm(serviceGroupKey));
+		model.addAttribute("tagNameList", applyService.getTagNameList(serviceGroupKey));
+		
+		// タグ＆適用
+		model.addAttribute("buildForm", new BuildForm(serviceGroupKey));
 
 		// 適用履歴
 		model.addAttribute("applyHistoryList", applyService.getDbApplyHistoryListByGroup(serviceGroupKey));
@@ -74,9 +84,17 @@ public class ApplyController {
 		serverRelationKey.setGroupName(groupName);
 		serverRelationKey.setServerName(serverName);
 		
-		model.addAttribute("buildForm", new ServerBuildForm(serverRelationKey));
-
 		model.addAttribute("roleList", groupService.getRoleRelationList(serverRelationKey));
+		
+		// Git commit
+		model.addAttribute("gitForm", new GitForm(serverRelationKey));
+
+		// Git compare
+		model.addAttribute("gitConpareForm", new GitConpareForm(serverRelationKey));
+		model.addAttribute("tagNameList", applyService.getTagNameList(serverRelationKey));
+
+		// タグ＆適用
+		model.addAttribute("buildForm", new ServerBuildForm(serverRelationKey));
 
 		// 適用履歴
 		model.addAttribute("applyHistoryList", applyService.getDbApplyHistoryListByServer(serverRelationKey));

@@ -136,13 +136,6 @@ public class ViewProjectController {
     	
 		model.addAttribute("project", projectService.getProject(projectKey));
 		
-		// Git commit
-		model.addAttribute("gitForm", new GitForm(projectKey));
-
-		// Git compare
-		model.addAttribute("gitConpareForm", new GitConpareForm(projectKey));
-		model.addAttribute("tagNameList", applyService.getTagNameList(projectKey));
-		
 		// 適用対象一覧
 		model.addAttribute("groupList", getGroupList(projectKey));
 		model.addAttribute("serverbuildList", groupService.getAllDbServerRelationList(projectKey));

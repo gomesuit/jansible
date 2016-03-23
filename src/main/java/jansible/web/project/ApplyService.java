@@ -34,6 +34,8 @@ public class ApplyService {
 	}
 
 	public List<String> getTagNameList(ProjectKey projectKey){
-		return applyHistoryMapper.selectTagNameList(projectKey);
+		List<String> tagNameList = applyHistoryMapper.selectTagNameList(projectKey);
+		tagNameList.add(0, "master");
+		return tagNameList;
 	}
 }

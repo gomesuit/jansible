@@ -1,5 +1,5 @@
 
-<h1 class="page-header">適用</h1>
+<h1 class="page-header">サーバ別適用</h1>
 
 <div class="row">
 	<div class="col-md-4">
@@ -67,74 +67,6 @@
 	</div>
 </div>
 
-<div class="panel panel-primary">
-	<div class="panel-heading">
-		<div>適用</div>
-	</div>
-	<div class="panel-body">		
-		<form class="form-inline" action="#" th:action="@{/project/jenkins/serverBuild}" th:object="${buildForm}" method="post">
-			<input type="hidden" th:field="*{projectName}" />
-			<input type="hidden" th:field="*{environmentName}" />
-			<input type="hidden" th:field="*{groupName}" />
-			<input type="hidden" th:field="*{serverName}" />
-			<input type="text" class="form-control" th:field="*{userName}" placeholder="userName" />
-			<input type="password" class="form-control" th:field="*{password}" placeholder="password" />
-			<input type="text" class="form-control" th:field="*{comment}" placeholder="comment" />
-			<input type="submit" class="btn btn-primary" value="Build" />
-		</form>
-	</div>
-</div>
-
-<div class="panel panel-primary">
-	<div class="panel-heading">
-		<div>適用履歴</div>
-	</div>
-	<div class="panel-body">			
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>environment</th>
-					<th>group</th>
-					<th>server</th>
-					<th>tagName</th>
-					<th>tagComment</th>
-					<th>applyTime</th>
-					<th>result</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="applyHistory,iterStat : ${applyHistoryList}">
-					<td>
-						<div class="text-center" th:text="${iterStat.count}" />
-					</td>
-					
-					
-					<td>
-						<div th:text="${applyHistory.environmentName}" />
-					</td>
-					<td>
-						<div th:text="${applyHistory.groupName}" />
-					</td>
-					<td>
-						<div th:text="${applyHistory.serverName}" />
-					</td>
-					<td>
-						<div th:text="${applyHistory.tagName}" />
-					</td>
-					<td>
-						<div th:text="${applyHistory.tagComment}" />
-					</td>
-					<td>
-						<div th:text="${#dates.format(applyHistory.applyTime, 'yyyy/MM/dd HH:mm:ss')}" />
-					</td>
-					<td class="text-center">
-						<a th:href="@{/project/jenkins/result(projectName=${applyHistory.projectName}, applyHistroyId=${applyHistory.applyHistroyId})}"
-						th:text="result" />
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-</div>
-
+<div th:substituteby="project/apply/common::commit" />
+<div th:substituteby="project/apply/common::tagging" />
+<div th:substituteby="project/apply/common::history" />

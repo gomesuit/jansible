@@ -1,0 +1,104 @@
+
+<div th:fragment="commit" th:remove="tag">
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<div>GITレポジトリ</div>
+		</div>
+		<div class="panel-body">
+			<form class="form-inline" action="#" th:action="@{/project/git/commit}" th:object="${gitForm}" method="post">
+				<input type="hidden" th:field="*{projectName}" />
+				<input type="text" class="form-control" th:field="*{userName}" placeholder="userName" />
+				<input type="password" class="form-control" th:field="*{password}" placeholder="password" />
+				<input type="text" class="form-control" th:field="*{comment}" placeholder="comment" />
+				<input type="submit" class="btn btn-primary" value="コミット" />
+			</form>
+			
+			<br />
+			<form class="form-inline" action="#" th:action="@{/project/git/compare}" th:object="${gitConpareForm}" method="post" target="_blank" >
+				<input type="hidden" th:field="*{projectName}" />
+				<select class="form-control" th:field="*{baseTag}">
+					<option th:each="tagName : ${tagNameList}" th:value="${tagName}" th:label="${tagName}" />
+				</select>
+				<span class="glyphicon glyphicon-resize-horizontal btn-lg" aria-hidden="true"></span>
+				<select class="form-control" th:field="*{conpareTag}">
+					<option th:each="tagName : ${tagNameList}" th:value="${tagName}" th:label="${tagName}" />
+				</select>
+				<input type="submit" class="btn btn-primary" value="差分表示" />
+			</form>
+		</div>
+	</div>
+</div>
+
+<div th:fragment="tagging" th:remove="tag">
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<div>taggingしてmasterをサーバに適用</div>
+		</div>
+		<div class="panel-body">		
+			<form class="form-inline" action="#" th:action="@{/project/jenkins/build}" th:object="${buildForm}" method="post">
+				<input type="hidden" th:field="*{projectName}" />
+				<input type="hidden" th:field="*{environmentName}" />
+				<input type="hidden" th:field="*{groupName}" />
+				<input type="text" class="form-control" th:field="*{userName}" placeholder="userName" />
+				<input type="password" class="form-control" th:field="*{password}" placeholder="password" />
+				<input type="text" class="form-control" th:field="*{comment}" placeholder="comment" />
+				<input type="submit" class="btn btn-primary" value="適用" />
+			</form>
+		</div>
+	</div>
+</div>
+
+<div th:fragment="history" th:remove="tag">
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<div>適用履歴</div>
+		</div>
+		<div class="panel-body">			
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>environment</th>
+						<th>group</th>
+						<th>server</th>
+						<th>tagName</th>
+						<th>tagComment</th>
+						<th>applyTime</th>
+						<th>result</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="applyHistory,iterStat : ${applyHistoryList}">
+						<td>
+							<div class="text-center" th:text="${iterStat.count}" />
+						</td>
+						
+						
+						<td>
+							<div th:text="${applyHistory.environmentName}" />
+						</td>
+						<td>
+							<div th:text="${applyHistory.groupName}" />
+						</td>
+						<td>
+							<div th:text="${applyHistory.serverName}" />
+						</td>
+						<td>
+							<div th:text="${applyHistory.tagName}" />
+						</td>
+						<td>
+							<div th:text="${applyHistory.tagComment}" />
+						</td>
+						<td>
+							<div th:text="${#dates.format(applyHistory.applyTime, 'yyyy/MM/dd HH:mm:ss')}" />
+						</td>
+						<td class="text-center">
+							<a th:href="@{/project/jenkins/result(projectName=${applyHistory.projectName}, applyHistroyId=${applyHistory.applyHistroyId})}"
+							th:text="result" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
