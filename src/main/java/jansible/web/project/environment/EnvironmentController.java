@@ -1,14 +1,11 @@
 package jansible.web.project.environment;
 
-import javax.servlet.http.HttpServletRequest;
-
 import jansible.model.common.EnvironmentKey;
-import jansible.model.common.EnvironmentVariableKey;
-import jansible.model.common.ServiceGroupKey;
-import jansible.web.project.GroupService;
-import jansible.web.project.VariableService;
-import jansible.web.project.environment.EnvironmentVariableForm;
-import jansible.web.project.group.ServiceGroupForm;
+import jansible.model.common.ProjectKey;
+import jansible.web.project.EnvironmentService;
+import jansible.web.project.project.EnvironmentForm;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,59 +18,39 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class EnvironmentController {
 	@Autowired
-	private VariableService variableService;
-	@Autowired
-	private GroupService groupService;
+	private EnvironmentService environmentService;
 
-	@RequestMapping("/project/environment/view")
+	@RequestMapping("/project/viewEnvironment")
 	private String viewEnvironment(
 			@RequestParam(value = "projectName", required = true) String projectName,
-			@RequestParam(value = "environmentName", required = true) String environmentName,
 			Model model,
 			HttpServletRequest request){
-		EnvironmentKey environmentKey = new EnvironmentKey();
-		environmentKey.setProjectName(projectName);
-		environmentKey.setEnvironmentName(environmentName);
 		
-		// 変数関連
-		model.addAttribute("variableForm", new EnvironmentVariableForm(environmentKey));
-		model.addAttribute("allVariableNameList", variableService.getAllDbVariableNameList(environmentKey));
-		model.addAttribute("variableList", variableService.getDbEnvironmentVariableList(environmentKey));
-		model.addAttribute("environmentVariableKey", new EnvironmentVariableKey(environmentKey));
+		ProjectKey projectKey = new ProjectKey(projectName);
 		
-		request.setAttribute("pageName", "project/environment/top");
+		// 環境
+		model.addAttribute("environmentForm", new EnvironmentForm(projectKey));
+		model.addAttribute("environmentList", environmentService.getEnvironmentList(projectKey));
+		model.addAttribute("environmentKey", new EnvironmentKey(projectKey));
+		
+		request.setAttribute("pageName", "project/project/environment");
 		return "common_frame";
 	}
 
-	@RequestMapping(value="/project/group/regist", method=RequestMethod.POST)
-    private String registServiceGroup(@ModelAttribute ServiceGroupForm form, HttpServletRequest request){
-		groupService.registServiceGroup(form);
-    	
+	@RequestMapping(value="/project/environment/regist", method=RequestMethod.POST)
+	private String registEnvironment(@ModelAttribute EnvironmentForm form, HttpServletRequest request){
+		environmentService.registEnvironment(form);
+		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
-    }
+	}
 
-    @RequestMapping(value="/project/environmentVariable/regist", method=RequestMethod.POST)
-    private String registEnvironmentVariable(@ModelAttribute EnvironmentVariableForm form, HttpServletRequest request){
-    	variableService.registEnvironmentVariable(form);
-    	
+	@RequestMapping(value="/project/environment/delete", method=RequestMethod.POST)
+	private String deleteEnvironment(@ModelAttribute EnvironmentKey key, HttpServletRequest request){
+		environmentService.deleteEnvironment(key);
+		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
-    }
+	}
 
-    @RequestMapping(value="/project/environmentVariable/delete", method=RequestMethod.POST)
-    private String deleteEnvironmentVariable(@ModelAttribute EnvironmentVariableKey key, HttpServletRequest request){
-    	variableService.deleteEnvironmentVariable(key);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-
-	@RequestMapping(value="/project/serviceGroup/delete", method=RequestMethod.POST)
-    private String deleteServiceGroup(@ModelAttribute ServiceGroupKey key, HttpServletRequest request){
-		groupService.deleteServiceGroup(key);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
 }

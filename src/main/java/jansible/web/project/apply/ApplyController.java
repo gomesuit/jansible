@@ -1,125 +1,131 @@
 package jansible.web.project.apply;
 
-import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
+import jansible.model.common.Group;
+import jansible.model.common.ProjectKey;
 import jansible.model.common.ServerRelationKey;
-import jansible.model.common.ServiceGroupKey;
+import jansible.model.database.DbEnvironment;
+import jansible.model.database.DbServiceGroup;
 import jansible.web.project.ApplyService;
+import jansible.web.project.EnvironmentService;
 import jansible.web.project.GroupService;
-import jansible.web.project.JenkinsBuildService;
 import jansible.web.project.ProjectService;
-import jansible.web.project.RoleService;
-import jansible.web.project.ServerService;
-import jansible.web.project.project.GitConpareForm;
-import jansible.web.project.project.GitForm;
+import jansible.web.project.TestService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.handler.MappedInterceptor;
 
 @Controller
 public class ApplyController {
 	@Autowired
 	private ProjectService projectService;
 	@Autowired
-	private JenkinsBuildService jenkinsBuildService;
-	@Autowired
-	private ServerService serverService;
+	private EnvironmentService environmentService;
 	@Autowired
 	private GroupService groupService;
 	@Autowired
-	private RoleService roleService;
-	@Autowired
 	private ApplyService applyService;
+	@Autowired
+	private TestService testService;
 
-	@RequestMapping("/project/apply/view")
+	@RequestMapping("/project/viewApply")
 	private String viewApply(
 			@RequestParam(value = "projectName", required = true) String projectName,
-			@RequestParam(value = "environmentName", required = true) String environmentName,
-			@RequestParam(value = "groupName", required = true) String groupName,
 			Model model,
 			HttpServletRequest request){
 		
-		ServiceGroupKey serviceGroupKey = new ServiceGroupKey();
-		serviceGroupKey.setProjectName(projectName);
-		serviceGroupKey.setEnvironmentName(environmentName);
-		serviceGroupKey.setGroupName(groupName);
-
-		model.addAttribute("serverList", groupService.getServerRelationList(serviceGroupKey));
-		model.addAttribute("roleList", groupService.getRoleRelationList(serviceGroupKey));
+		ProjectKey projectKey = new ProjectKey(projectName);
 		
-		// Git commit
-		model.addAttribute("gitForm", new GitForm(serviceGroupKey));
-
-		// Git compare
-		model.addAttribute("gitConpareForm", new GitConpareForm(serviceGroupKey));
-		model.addAttribute("tagNameList", applyService.getTagNameList(serviceGroupKey));
+		model.addAttribute("project", projectService.getProject(projectKey));
 		
-		// タグ＆適用
-		model.addAttribute("buildForm", new BuildForm(serviceGroupKey));
-
+		// 適用対象一覧
+		model.addAttribute("groupList", getGroupList(projectKey));
+		model.addAttribute("serverbuildList", groupService.getAllDbServerRelationList(projectKey));
+		
 		// 適用履歴
-		model.addAttribute("applyHistoryList", applyService.getDbApplyHistoryListByGroup(serviceGroupKey));
+		model.addAttribute("applyHistoryList", applyService.getDbApplyHistoryList(projectKey));
 		
-		request.setAttribute("pageName", "project/apply/group");
+		// テストデータダウンロード
+		model.addAttribute("serverRelationKey", new ServerRelationKey(projectKey));
+		
+		request.setAttribute("pageName", "project/project/apply");
 		return "common_frame";
 	}
 
-	@RequestMapping("/project/applyServer/view")
-	private String viewApply(
-			@RequestParam(value = "projectName", required = true) String projectName,
-			@RequestParam(value = "environmentName", required = true) String environmentName,
-			@RequestParam(value = "groupName", required = true) String groupName,
-			@RequestParam(value = "serverName", required = true) String serverName,
-			Model model,
-			HttpServletRequest request){
+	private List<Group> getGroupList(ProjectKey projectKey) {
+		List<Group> groupList = new ArrayList<>();
 		
-		ServerRelationKey serverRelationKey = new ServerRelationKey();
-		serverRelationKey.setProjectName(projectName);
-		serverRelationKey.setEnvironmentName(environmentName);
-		serverRelationKey.setGroupName(groupName);
-		serverRelationKey.setServerName(serverName);
+		List<DbEnvironment> dbEnvironmentList = environmentService.getEnvironmentList(projectKey);
 		
-		model.addAttribute("roleList", groupService.getRoleRelationList(serverRelationKey));
+		for(DbEnvironment dbEnvironment : dbEnvironmentList){
+			List<DbServiceGroup> dbServiceGroupList = groupService.getServiceGroupList(dbEnvironment);
+			for(DbServiceGroup dbServiceGroup : dbServiceGroupList){
+				Group group = new Group(dbServiceGroup.getEnvironmentName(), dbServiceGroup.getGroupName());
+				groupList.add(group);
+			}
+		}
 		
-		// Git commit
-		model.addAttribute("gitForm", new GitForm(serverRelationKey));
-
-		// Git compare
-		model.addAttribute("gitConpareForm", new GitConpareForm(serverRelationKey));
-		model.addAttribute("tagNameList", applyService.getTagNameList(serverRelationKey));
-
-		// タグ＆適用
-		model.addAttribute("buildForm", new ServerBuildForm(serverRelationKey));
-
-		// 適用履歴
-		model.addAttribute("applyHistoryList", applyService.getDbApplyHistoryListByServer(serverRelationKey));
-		
-		request.setAttribute("pageName", "project/apply/server");
-		return "common_frame";
+		return groupList;
 	}
 
-	@RequestMapping(value="/project/jenkins/build", method=RequestMethod.POST)
-	private String groupBuild(@ModelAttribute BuildForm form, HttpServletRequest request) throws Exception{
-		int applyHistroyId = jenkinsBuildService.groupBuild(form);
+	@RequestMapping("/project/testZip")
+	@ResponseBody
+	private Resource testZip(@ModelAttribute ServerRelationKey key, HttpServletResponse response, HttpServletRequest request) throws Exception{
+		File zipfile = testService.getTestZipFile(key);
 		
-		String url = "/project/jenkins/result";
-		url = url + "?projectName=" + form.getProjectName();
-		url = url + "&applyHistroyId=" + applyHistroyId;
-		return "redirect:" + url;
+		response.setHeader("Content-Disposition","attachment; filename=\"" + zipfile.getName() +"\"");
+		
+		request.setAttribute("tempDir", zipfile.getParent());
+		
+		return new FileSystemResource(zipfile);
 	}
 
-	@RequestMapping(value="/project/jenkins/serverBuild", method=RequestMethod.POST)
-	private String serverBuild(@ModelAttribute ServerBuildForm form, HttpServletRequest request) throws Exception{
-		int applyHistroyId = jenkinsBuildService.buildforServer(form);
-		
-		String url = "/project/jenkins/result";
-		url = url + "?projectName=" + form.getProjectName();
-		url = url + "&applyHistroyId=" + applyHistroyId;
-		return "redirect:" + url;
+	@Bean
+	public MappedInterceptor interceptor() {
+	    return new MappedInterceptor(new String[]{"/project/testZip"}, (HandlerInterceptor) new DeleteTempDirInterceptor());
 	}
+
+	private class DeleteTempDirInterceptor implements HandlerInterceptor {
+
+		@Override
+		public boolean preHandle(HttpServletRequest request,
+				HttpServletResponse response, Object handler) throws Exception {
+			return true;
+		}
+
+		@Override
+		public void postHandle(HttpServletRequest request,
+				HttpServletResponse response, Object handler,
+				ModelAndView modelAndView) throws Exception {
+		}
+
+		@Override
+		public void afterCompletion(HttpServletRequest request,
+				HttpServletResponse response, Object handler, Exception ex)
+				throws Exception {
+			String tempDir = (String) request.getAttribute("tempDir");
+			File dir = new File(tempDir);
+			FileUtils.deleteDirectory(dir);
+		}
+
+	}
+
 }

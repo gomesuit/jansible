@@ -1,14 +1,11 @@
 package jansible.web.project.server;
 
-import javax.servlet.http.HttpServletRequest;
-
+import jansible.model.common.ProjectKey;
 import jansible.model.common.ServerKey;
-import jansible.model.common.ServerParameterKey;
-import jansible.model.common.ServerVariableKey;
-import jansible.web.project.GroupService;
+import jansible.web.project.EnvironmentService;
 import jansible.web.project.ServerService;
-import jansible.web.project.VariableService;
-import jansible.web.project.server.ServerVariableForm;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,66 +18,43 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class ServerController {
 	@Autowired
-	private VariableService variableService;
-	@Autowired
-	private GroupService groupService;
+	private EnvironmentService environmentService;
 	@Autowired
 	private ServerService serverService;
-    
-    @RequestMapping("/project/server/view")
+
+	@RequestMapping("/project/viewServer")
 	private String viewServer(
-    		@RequestParam(value = "projectName", required = true) String projectName,
-    		@RequestParam(value = "serverName", required = true) String serverName,
-			Model model, HttpServletRequest request) {
-    	
-    	ServerKey serverKey = new ServerKey();
-    	serverKey.setProjectName(projectName);
-    	serverKey.setServerName(serverName);
-    	
-    	// サーバパラメータ関連
-		model.addAttribute("serverParameterForm", new ServerParameterForm(serverKey));
-		model.addAttribute("serverParameterList", serverService.getServerParameterList(serverKey));
-		model.addAttribute("serverParameterKey", new ServerParameterKey(serverKey));
+			@RequestParam(value = "projectName", required = true) String projectName,
+			Model model,
+			HttpServletRequest request){
 		
-		// 変数関連
-		model.addAttribute("variableForm", new ServerVariableForm(serverKey));		
-		model.addAttribute("allVariableNameList", variableService.getAllDbVariableNameList(serverKey));
-		model.addAttribute("variableList", variableService.getDbServerVariableList(serverKey));
-		model.addAttribute("serverVariableKey", new ServerVariableKey(serverKey));
+		ProjectKey projectKey = new ProjectKey(projectName);
 		
-		request.setAttribute("pageName", "project/server/top");
+		model.addAttribute("environmentList", environmentService.getEnvironmentList(projectKey));
+		
+		// サーバ関連
+		model.addAttribute("serverForm", new ServerForm(projectKey));
+		model.addAttribute("serverList", serverService.getServerList(projectKey));
+		model.addAttribute("serverKey", new ServerKey(projectKey));
+		
+		request.setAttribute("pageName", "project/project/server");
 		return "common_frame";
 	}
 
-	@RequestMapping(value="/project/serverVariable/regist", method=RequestMethod.POST)
-    private String registServerVariable(@ModelAttribute ServerVariableForm form, HttpServletRequest request){
-    	variableService.registServerVariable(form);
-    	
+	@RequestMapping(value="/project/server/regist", method=RequestMethod.POST)
+	private String registServer(@ModelAttribute ServerForm form, HttpServletRequest request){
+		serverService.registServer(form);
+		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
-    }
+	}
 
-    @RequestMapping(value="/project/serverVariable/delete", method=RequestMethod.POST)
-    private String deleteServerVariable(@ModelAttribute ServerVariableKey key, HttpServletRequest request){
-    	variableService.deleteServerVariable(key);
-    	
+	@RequestMapping(value="/project/server/delete", method=RequestMethod.POST)
+	private String deleteServer(@ModelAttribute ServerKey key, HttpServletRequest request){
+		serverService.deleteServer(key);
+		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
-    }
+	}
 
-	@RequestMapping(value="/project/serverParameter/regist", method=RequestMethod.POST)
-    private String registServerParameter(@ModelAttribute ServerParameterForm form, HttpServletRequest request){
-		serverService.registServerParameter(form);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
-
-    @RequestMapping(value="/project/serverParameter/delete", method=RequestMethod.POST)
-    private String deleteServerParameter(@ModelAttribute ServerParameterKey key, HttpServletRequest request){
-    	serverService.deleteServerParameter(key);
-    	
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-    }
 }

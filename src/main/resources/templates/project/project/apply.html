@@ -65,7 +65,7 @@
 									<th>#</th>
 									<th>environment</th>
 									<th>group</th>
-									<th>Build</th>
+									<th>適用</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -81,7 +81,7 @@
 									</td>
 									<td class="text-center">
 										<a th:href="@{/project/apply/view(projectName=${project.projectName}, environmentName=${group.environmentName}, groupName=${group.groupName})}"
-										th:text="Build" />
+										th:text="適用ページへ" />
 									</td>
 								</tr>
 							</tbody>
@@ -102,7 +102,7 @@
 									<th>environment</th>
 									<th>group</th>
 									<th>server</th>
-									<th>Build</th>
+									<th>適用</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -121,7 +121,7 @@
 									</td>
 									<td class="text-center">
 										<a th:href="@{/project/applyServer/view(projectName=${server.projectName}, environmentName=${server.environmentName}, groupName=${server.groupName}, serverName=${server.serverName})}"
-										th:text="Build" />
+										th:text="適用ページへ" />
 									</td>
 								</tr>
 							</tbody>

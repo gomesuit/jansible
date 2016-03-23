@@ -1,23 +1,14 @@
 package jansible.web.project.role;
 
-import java.util.ArrayList;
-import java.util.List;
+import jansible.model.common.ProjectKey;
+import jansible.model.common.RoleKey;
+import jansible.web.project.GlobalRoleRelationService;
+import jansible.web.project.RoleService;
+import jansible.web.project.project.GlobalRoleRelationForm;
+import jansible.web.project.project.GlobalRoleRelationTagUpdateForm;
+import jansible.web.project.project.RoleForm;
 
 import javax.servlet.http.HttpServletRequest;
-
-import jansible.model.common.RoleKey;
-import jansible.model.common.RoleVariableKey;
-import jansible.model.common.TaskKey;
-import jansible.model.database.DbTask;
-import jansible.model.database.DbTaskDetail;
-import jansible.web.manager.module.ModuleService;
-import jansible.web.project.RoleService;
-import jansible.web.project.TaskService;
-import jansible.web.project.VariableService;
-import jansible.web.project.YamlService;
-import jansible.web.project.role.GeneralFileForm;
-import jansible.web.project.role.RoleVariableForm;
-import jansible.web.project.role.UploadForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,111 +21,63 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class RoleController {
 	@Autowired
-	private ModuleService moduleService;
-	@Autowired
-	private YamlService yamlService;
-	@Autowired
 	private RoleService roleService;
 	@Autowired
-	private VariableService variableService;
-	@Autowired
-	private TaskService taskService;
-    
-    @RequestMapping("/project/role/view")
+	private GlobalRoleRelationService globalRoleRelationService;
+
+	@RequestMapping("/project/viewRole")
 	private String viewRole(
 			@RequestParam(value = "projectName", required = true) String projectName,
-			@RequestParam(value = "roleName", required = true) String roleName,
-			Model model, HttpServletRequest request){
-		RoleKey roleKey = new RoleKey();
-		roleKey.setProjectName(projectName);
-		roleKey.setRoleName(roleName);
+			Model model,
+			HttpServletRequest request){
 		
-		// タスク関連
-		model.addAttribute("form", new TaskForm(roleKey));
-		List<DbTask> dbTaskList = taskService.getTaskList(roleKey);
-		List<TaskView> taskViewList = createTaskViewList(dbTaskList);
-		model.addAttribute("taskList", taskViewList);
-		model.addAttribute("taskKey", new TaskKey(roleKey));
-		model.addAttribute("taskOrderForm", new TaskOrderForm(roleKey));
+		ProjectKey projectKey = new ProjectKey(projectName);
 		
-		// module名リスト
-		model.addAttribute("moduleNameList", moduleService.getAvailableModuleList());
-
-		// テンプレート・ファイル アップロード
-		model.addAttribute("uploadForm", new UploadForm(roleKey));
-		// テンプレート一覧
-		model.addAttribute("templateList", roleService.getDbTemplateList(roleKey));
-		// ファイル一覧
-		model.addAttribute("fileList", roleService.getDbFileList(roleKey));
-		// テンプレート・ファイル削除
-		model.addAttribute("fileForm", new GeneralFileForm(roleKey));
+		// ロール
+		model.addAttribute("roleForm", new RoleForm(projectKey));
+		model.addAttribute("roleList", roleService.getRoleList(projectKey));
+		model.addAttribute("roleKey", new RoleKey(projectKey));
 		
-		// 変数関連
-		model.addAttribute("variableForm", new RoleVariableForm(roleKey));
-		model.addAttribute("roleVariableKey", new RoleVariableKey(roleKey));
-		model.addAttribute("variableList", variableService.getDbRoleVariableList(roleKey));
-		
-		request.setAttribute("pageName", "project/role/top");
+		// global role
+		model.addAttribute("globalRoleList", globalRoleRelationService.getGlobalRoleList());
+		model.addAttribute("globalRoleRelationForm", new GlobalRoleRelationForm(projectKey));
+		model.addAttribute("globalRoleRelationList", globalRoleRelationService.getGlobalRoleRelationViewList(projectKey));
+		model.addAttribute("globalRoleRelationTagUpdateForm", new GlobalRoleRelationTagUpdateForm(projectKey));
+				
+		request.setAttribute("pageName", "project/project/role");
 		return "common_frame";
 	}
 
-	@RequestMapping(value="/project/roleVariable/regist", method=RequestMethod.POST)
-	private String registRoleVariable(@ModelAttribute RoleVariableForm form, HttpServletRequest request){
-		variableService.registRoleVariable(form);
+	@RequestMapping(value="/project/role/regist", method=RequestMethod.POST)
+	private String registRole(@ModelAttribute RoleForm form, HttpServletRequest request){
+		roleService.registRole(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
 
-	@RequestMapping(value="/project/roleVariable/delete", method=RequestMethod.POST)
-	private String deleteRoleVariable(@ModelAttribute RoleVariableKey key, HttpServletRequest request){
-		variableService.deleteRoleVariable(key);
+	@RequestMapping(value="/project/role/delete", method=RequestMethod.POST)
+	private String deleteRole(@ModelAttribute RoleKey key, HttpServletRequest request){
+		roleService.deleteRole(key);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
 
-	private TaskView createTaskView(DbTask dbTask) {
-		TaskView taskView = new TaskView();
-		taskView.setTaskId(dbTask.getTaskId());
-		taskView.setModuleName(dbTask.getModuleName());
-		taskView.setDescription(dbTask.getDescription());
-		List<DbTaskDetail> dbTaskDetailList = taskService.getTaskDetailList(dbTask);
-		String parametersValue = yamlService.createTaskParametersValue(dbTask.getModuleName(), dbTaskDetailList);
-		taskView.setParametersValue(parametersValue);
-		return taskView;
-	}
-
-	private List<TaskView> createTaskViewList(List<DbTask> dbTaskList){
-		List<TaskView> taskViewList = new ArrayList<>();
-		for(DbTask dbTask : dbTaskList){
-			TaskView taskView = createTaskView(dbTask);
-			taskViewList.add(taskView);
-		}
-		return taskViewList;
-	}
-
-	@RequestMapping(value="/project/task/regist", method=RequestMethod.POST)
-	private String registTask(@ModelAttribute TaskForm form, HttpServletRequest request){
-		taskService.registTask(form);
+	@RequestMapping(value="/project/globalRole/regist", method=RequestMethod.POST)
+	private String registGlobalRoleRelation(@ModelAttribute GlobalRoleRelationForm form, HttpServletRequest request) throws Exception{
+		globalRoleRelationService.registGlobalRoleRelation(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
 
-	@RequestMapping(value="/project/task/delete", method=RequestMethod.POST)
-	private String deleteTask(@ModelAttribute TaskKey key, HttpServletRequest request){
-		taskService.deleteTask(key);
+	@RequestMapping(value="/project/globalRole/update", method=RequestMethod.POST)
+	private String updateGlobalRoleRelation(@ModelAttribute GlobalRoleRelationTagUpdateForm form, HttpServletRequest request) throws Exception{
+		globalRoleRelationService.updateGlobalRoleRelation(form);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}
 
-	@RequestMapping(value="/project/task/order", method=RequestMethod.POST)
-	private String orderTask(@ModelAttribute TaskOrderForm form, HttpServletRequest request){
-		taskService.modifyTaskOrder(form);
-		
-		String referer = request.getHeader("Referer");
-		return "redirect:" + referer;
-	}
 }
