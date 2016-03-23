@@ -88,7 +88,7 @@ public class ApplyController {
 
 	@RequestMapping("/project/testZip")
 	@ResponseBody
-	private Resource testZip(@ModelAttribute ServerRelationKey key, HttpServletResponse response, HttpServletRequest request) throws Exception{
+	private Resource downloadTestZip(@ModelAttribute ServerRelationKey key, HttpServletResponse response, HttpServletRequest request) throws Exception{
 		File zipfile = testService.getTestZipFile(key);
 		
 		response.setHeader("Content-Disposition","attachment; filename=\"" + zipfile.getName() +"\"");

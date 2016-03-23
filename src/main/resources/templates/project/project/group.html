@@ -33,8 +33,7 @@
 								<div class="text-center" th:text="${iterStat.count}" />
 							</td>
 							<td>
-								<a th:href="@{/project/environment/view(projectName=${serviceGroup.projectName}, environmentName=${serviceGroup.environmentName})}"
-								th:text="${serviceGroup.environmentName}" />
+								<div th:text="${serviceGroup.environmentName}" />
 							</td>
 							<td>
 								<a th:href="@{/project/serviceGroup/view(projectName=${serviceGroup.projectName}, environmentName=${serviceGroup.environmentName}, groupName=${serviceGroup.groupName})}"
