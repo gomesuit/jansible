@@ -29,18 +29,50 @@ public class PageNameInterceptor implements HandlerInterceptor {
 		String pageName = (String)request.getAttribute("pageName");
 		if(pageName == null) return;
 		
-		
 		String projectName = (String)request.getParameter("projectName");
 		
 		List<SideMenu> menuList = new ArrayList<>();
-		menuList.add(new SideMenu("/project/view?projectName=" + projectName, "TOP", pageName.equals("project/project/top")));
-		menuList.add(new SideMenu("/project/viewEnvironment?projectName=" + projectName, "Environment", pageName.equals("project/project/environment")));
-		menuList.add(new SideMenu("/project/viewServer?projectName=" + projectName, "Server", pageName.equals("project/project/server")));
-		menuList.add(new SideMenu("/project/viewGroup?projectName=" + projectName, "Group", pageName.equals("project/project/group")));
-		menuList.add(new SideMenu("/project/viewRole?projectName=" + projectName, "Role", pageName.equals("project/project/role")));
-		menuList.add(new SideMenu("/project/viewApply?projectName=" + projectName, "Apply", pageName.equals("project/project/apply")));
+		for(SideMenuUrl sideMenuUrl : SideMenuUrl.values()){
+			SideMenu sideMenu = createSideMenu(sideMenuUrl, projectName, pageName);
+			menuList.add(sideMenu);
+		}
 		
 		request.setAttribute("menuList", menuList);
+	}
+	
+	private SideMenu createSideMenu(SideMenuUrl sideMenuUrl, String projectName, String pageName){
+		String url = sideMenuUrl.getUrl() + "?projectName=" + projectName;
+		String name = sideMenuUrl.name();
+		boolean active = pageName.equals(sideMenuUrl.getTemplatePath());
+		
+		SideMenu sideMenu = new SideMenu(url, name, active);
+		
+		return sideMenu;
+	}
+	
+	private enum SideMenuUrl {
+		TOP			("/project/view",			"project/project/top"),
+		Environment	("/project/environment",	"project/project/environment"),
+		Server		("/project/viewServer",		"project/project/server"),
+		Group		("/project/viewGroup",		"project/project/group"),
+		Role		("/project/viewRole",		"project/project/role"),
+		Apply		("/project/viewApply",		"project/project/apply");
+		
+		private String url;
+		private String templatePath;
+		
+		SideMenuUrl(String url, String templatePath){
+			this.url = url;
+			this.templatePath = templatePath;
+		}
+
+		public String getUrl() {
+			return url;
+		}
+
+		public String getTemplatePath() {
+			return templatePath;
+		}
 	}
 
 	@Override

@@ -20,7 +20,7 @@ public class EnvironmentController {
 	@Autowired
 	private EnvironmentService environmentService;
 
-	@RequestMapping("/project/viewEnvironment")
+	@RequestMapping("/project/environment")
 	private String viewEnvironment(
 			@RequestParam(value = "projectName", required = true) String projectName,
 			Model model,
