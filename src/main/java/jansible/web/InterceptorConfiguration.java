@@ -1,5 +1,14 @@
 package jansible.web;
 
+import jansible.web.breadcrunb.BreadcrumbApplyInterceptor;
+import jansible.web.breadcrunb.BreadcrumbEnvironmentInterceptor;
+import jansible.web.breadcrunb.BreadcrumbGroupInterceptor;
+import jansible.web.breadcrunb.BreadcrumbProjectInterceptor;
+import jansible.web.breadcrunb.BreadcrumbResultInterceptor;
+import jansible.web.breadcrunb.BreadcrumbRoleInterceptor;
+import jansible.web.breadcrunb.BreadcrumbServerInterceptor;
+import jansible.web.breadcrunb.BreadcrumbTaskInterceptor;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;

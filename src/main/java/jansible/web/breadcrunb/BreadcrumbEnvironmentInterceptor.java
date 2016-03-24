@@ -1,19 +1,17 @@
-package jansible.web;
+package jansible.web.breadcrunb;
 
 import java.util.List;
 import java.util.Map;
 
-public class BreadcrumbGroupInterceptor extends BreadcrumbBaseInterceptor{
+public class BreadcrumbEnvironmentInterceptor extends BreadcrumbBaseInterceptor{
 
 	@Override
 	protected void postHandleCore(Map<String, String> requestParam,
 			List<Breadcrumb> breadcrumbList, List<String> breadcrumbActiveList) {
 
 		Map<String, String> param = createUrlParam(requestParam, "projectName");
-		breadcrumbList.add(createBreadcrumb("/project/group", param, "Group"));
+		breadcrumbList.add(createBreadcrumb("/project/environment", param, "Environment"));
 		breadcrumbActiveList.add(requestParam.get("environmentName"));
-		breadcrumbActiveList.add(requestParam.get("groupName"));
-		
 	}
 
 }
