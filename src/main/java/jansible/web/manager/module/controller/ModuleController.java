@@ -12,6 +12,7 @@ import jansible.model.yamldump.YamlDumper;
 import jansible.model.yamldump.YamlModule;
 import jansible.model.yamldump.YamlParameter;
 import jansible.model.yamldump.YamlParameters;
+import jansible.web.UrlTemplateMapper;
 import jansible.web.manager.module.ModuleGetter;
 import jansible.web.manager.module.ModuleService;
 import jansible.web.manager.module.ModuleUrlGetter;
@@ -70,7 +71,7 @@ public class ModuleController {
     	
     	model.addAttribute("module", module);
     	
-		request.setAttribute("pageName", "manager/module/detail");
+		request.setAttribute("pageName", UrlTemplateMapper.MANAGER_MODULE_DETAIL.getTemplatePath());
 		return "common_frame";
     }
 
@@ -90,7 +91,7 @@ public class ModuleController {
     	form.setParameterList(formParameterList);
     	model.addAttribute("form", form);
     	
-		request.setAttribute("pageName", "manager/module/yamlcreate");
+		request.setAttribute("pageName", UrlTemplateMapper.MANAGER_MODULE_CREATE.getTemplatePath());
 		return "common_frame";
     }
 
@@ -104,7 +105,7 @@ public class ModuleController {
     	
     	model.addAttribute("availableModuleNameList", moduleService.getAvailableModuleList());
     	
-		request.setAttribute("pageName", "manager/module/moduleList");
+		request.setAttribute("pageName", UrlTemplateMapper.MANAGER_MODULE.getTemplatePath());
 		return "common_frame";
     }
     

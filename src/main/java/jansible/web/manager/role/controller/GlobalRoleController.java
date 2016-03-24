@@ -10,6 +10,7 @@ import jansible.model.common.GlobalRoleVariableKey;
 import jansible.model.common.GlobalTaskKey;
 import jansible.model.database.DbGlobalTask;
 import jansible.model.database.DbGlobalTaskDetail;
+import jansible.web.UrlTemplateMapper;
 import jansible.web.manager.GlobalRoleService;
 import jansible.web.manager.GlobalTaskService;
 import jansible.web.manager.ManagerGitService;
@@ -81,7 +82,7 @@ public class GlobalRoleController {
 		model.addAttribute("role", roleService.getRole(roleKey));
 		model.addAttribute("tagList", roleService.getRoleTagList(roleKey));
 		
-		request.setAttribute("pageName", "manager/role/top");
+		request.setAttribute("pageName", UrlTemplateMapper.MANAGER_ROLE_DETAIL.getTemplatePath());
 		return "common_frame";
 	}
 

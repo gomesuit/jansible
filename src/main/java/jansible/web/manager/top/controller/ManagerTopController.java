@@ -3,6 +3,7 @@ package jansible.web.manager.top.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import jansible.model.common.GlobalRoleKey;
+import jansible.web.UrlTemplateMapper;
 import jansible.web.manager.GlobalRoleService;
 import jansible.web.manager.top.form.GlobalRoleForm;
 
@@ -24,7 +25,7 @@ public class ManagerTopController {
     	model.addAttribute("roleList", globalRoleService.getRoleList());
     	model.addAttribute("roleKey", new GlobalRoleKey());
     	
-		request.setAttribute("pageName", "manager/top");
+		request.setAttribute("pageName", UrlTemplateMapper.MANAGER_TOP.getTemplatePath());
 		return "common_frame";
     }
 

@@ -11,6 +11,7 @@ import jansible.model.database.DbGlobalTask;
 import jansible.model.database.DbGlobalTaskDetail;
 import jansible.model.gethtml.HtmlModule;
 import jansible.model.gethtml.HtmlParameter;
+import jansible.web.UrlTemplateMapper;
 import jansible.web.manager.GlobalRoleService;
 import jansible.web.manager.GlobalTaskService;
 import jansible.web.manager.ManagerYamlService;
@@ -72,7 +73,7 @@ public class GlobalTaskController {
 		// 変数一覧
 		model.addAttribute("variableList", roleService.getDbRoleVariableList(taskKey));
 		
-		request.setAttribute("pageName", "manager/task/top");
+		request.setAttribute("pageName", UrlTemplateMapper.MANAGER_TASK_DETAIL.getTemplatePath());
 		return "common_frame";
 	}
 
