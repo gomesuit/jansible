@@ -6,7 +6,7 @@ import java.util.Map;
 public class BreadcrumbRoleInterceptor extends BreadcrumbInterceptorBase {
 
 	@Override
-	protected void postHandleCore(Map<String, String> requestParam,
+	protected void createBreadCrumb(Map<String, String> requestParam,
 			List<Breadcrumb> breadcrumbList, List<String> breadcrumbActiveList) {
 		
 		String taskId = requestParam.get("taskId");

@@ -8,8 +8,8 @@ import jansible.web.breadcrunb.BreadcrumbResultInterceptor;
 import jansible.web.breadcrunb.BreadcrumbRoleInterceptor;
 import jansible.web.breadcrunb.BreadcrumbServerInterceptor;
 import jansible.web.breadcrunb.BreadcrumbTaskInterceptor;
-import jansible.web.sidemenu.ManagerPageNameInterceptor;
-import jansible.web.sidemenu.PageNameInterceptor;
+import jansible.web.sidemenu.SideMenuManagerInterceptor;
+import jansible.web.sidemenu.SideMenuProjectInterceptor;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -20,8 +20,8 @@ public class InterceptorConfiguration extends WebMvcConfigurerAdapter{
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new PageNameInterceptor()).addPathPatterns("/project/**");
-		registry.addInterceptor(new ManagerPageNameInterceptor()).addPathPatterns("/manager/**");
+		registry.addInterceptor(new SideMenuProjectInterceptor()).addPathPatterns("/project/**");
+		registry.addInterceptor(new SideMenuManagerInterceptor()).addPathPatterns("/manager/**");
 		
 		registry.addInterceptor(new BreadcrumbProjectInterceptor()).addPathPatterns("/project/view");
 		registry.addInterceptor(new BreadcrumbEnvironmentInterceptor()).addPathPatterns("/project/environment/**");

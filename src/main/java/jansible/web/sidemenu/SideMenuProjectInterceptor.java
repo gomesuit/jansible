@@ -3,7 +3,7 @@ package jansible.web.sidemenu;
 import java.util.List;
 import java.util.Map;
 
-public class PageNameInterceptor extends SideMenuInterceptorBase {
+public class SideMenuProjectInterceptor extends SideMenuInterceptorBase {
 	
 	private enum SideMenuUrl {
 		TOP			("/project/view",			"project/project/top"),
