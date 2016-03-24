@@ -55,7 +55,7 @@
 			</li>
 		</div>
 		<div th:each="breadcrumbActive : ${breadcrumbActiveList}" th:remove="tag">
-			<li class="active" th:text="${breadcrumbActive}" />
+			<li th:if="${breadcrumbActive} != null" class="active" th:text="${breadcrumbActive}" />
 		</div>
 	</ol>
 </div>
