@@ -1,13 +1,15 @@
 package jansible.web;
 
-import jansible.web.breadcrunb.BreadcrumbApplyInterceptor;
-import jansible.web.breadcrunb.BreadcrumbEnvironmentInterceptor;
-import jansible.web.breadcrunb.BreadcrumbGroupInterceptor;
-import jansible.web.breadcrunb.BreadcrumbProjectInterceptor;
-import jansible.web.breadcrunb.BreadcrumbResultInterceptor;
-import jansible.web.breadcrunb.BreadcrumbRoleInterceptor;
-import jansible.web.breadcrunb.BreadcrumbServerInterceptor;
-import jansible.web.breadcrunb.BreadcrumbTaskInterceptor;
+import jansible.web.manager.breadcrunb.BreadcrumbGlobalRoleInterceptor;
+import jansible.web.manager.breadcrunb.BreadcrumbGlobalRoleTaskInterceptor;
+import jansible.web.project.breadcrunb.BreadcrumbApplyInterceptor;
+import jansible.web.project.breadcrunb.BreadcrumbEnvironmentInterceptor;
+import jansible.web.project.breadcrunb.BreadcrumbGroupInterceptor;
+import jansible.web.project.breadcrunb.BreadcrumbProjectInterceptor;
+import jansible.web.project.breadcrunb.BreadcrumbResultInterceptor;
+import jansible.web.project.breadcrunb.BreadcrumbRoleInterceptor;
+import jansible.web.project.breadcrunb.BreadcrumbServerInterceptor;
+import jansible.web.project.breadcrunb.BreadcrumbTaskInterceptor;
 import jansible.web.sidemenu.SideMenuManagerInterceptor;
 import jansible.web.sidemenu.SideMenuProjectInterceptor;
 
@@ -31,5 +33,8 @@ public class InterceptorConfiguration extends WebMvcConfigurerAdapter{
 		registry.addInterceptor(new BreadcrumbTaskInterceptor()).addPathPatterns("/project/task/**");
 		registry.addInterceptor(new BreadcrumbApplyInterceptor()).addPathPatterns("/project/apply/**");
 		registry.addInterceptor(new BreadcrumbResultInterceptor()).addPathPatterns("/project/jenkins/**");
+
+		registry.addInterceptor(new BreadcrumbGlobalRoleInterceptor()).addPathPatterns("/manager/role/**");
+		registry.addInterceptor(new BreadcrumbGlobalRoleTaskInterceptor()).addPathPatterns("/manager/task/**");
 	}
 }

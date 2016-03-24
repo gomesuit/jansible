@@ -1,6 +1,4 @@
-package jansible.web.breadcrunb;
-
-import jansible.web.HandlerInterceptorBase;
+package jansible.web;
 
 import java.util.ArrayList;
 import java.util.HashMap;

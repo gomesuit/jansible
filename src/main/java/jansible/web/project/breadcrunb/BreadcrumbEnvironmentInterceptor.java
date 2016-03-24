@@ -1,5 +1,7 @@
-package jansible.web.breadcrunb;
+package jansible.web.project.breadcrunb;
 
+import jansible.web.Breadcrumb;
+import jansible.web.BreadcrumbInterceptorBase;
 import jansible.web.SideMenuUrlProject;
 
 import java.util.List;

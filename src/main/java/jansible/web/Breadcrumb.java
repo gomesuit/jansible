@@ -1,4 +1,4 @@
-package jansible.web.breadcrunb;
+package jansible.web;
 
 public class Breadcrumb {
 	private String url;

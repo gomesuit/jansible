@@ -1,22 +1,20 @@
 package jansible.web;
 
 public enum SideMenuUrlManager {
-	TOP		("/manager",		"manager/top"),
-	MODULE	("/manager/module",	"manager/module/moduleList");
+	TOP		(UrlTemplateMapper.MANAGER_TOP),
+	MODULE	(UrlTemplateMapper.MANAGER_MODULE);
+
+	private UrlTemplateMapper urlTemplateMapper;
 	
-	private String url;
-	private String templatePath;
-	
-	SideMenuUrlManager(String url, String templatePath){
-		this.url = url;
-		this.templatePath = templatePath;
+	SideMenuUrlManager(UrlTemplateMapper urlTemplateMapper){
+		this.urlTemplateMapper = urlTemplateMapper;
 	}
 
 	public String getUrl() {
-		return url;
+		return urlTemplateMapper.getUrl();
 	}
 
 	public String getTemplatePath() {
-		return templatePath;
+		return urlTemplateMapper.getTemplatePath();
 	}
 }
