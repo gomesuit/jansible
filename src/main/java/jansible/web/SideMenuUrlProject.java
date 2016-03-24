@@ -1,26 +1,24 @@
 package jansible.web;
 
 public enum SideMenuUrlProject {
-	TOP			("/project/view",			"project/project/top"),
-	Environment	("/project/environment",	"project/project/environment"),
-	Server		("/project/server",			"project/project/server"),
-	Group		("/project/group",			"project/project/group"),
-	Role		("/project/role",			"project/project/role"),
-	Apply		("/project/apply",			"project/project/apply");
+	TOP			(UrlTemplateMapper.PROJECT),
+	Environment	(UrlTemplateMapper.ENVIRONMENT),
+	Server		(UrlTemplateMapper.SERVER),
+	Group		(UrlTemplateMapper.GROUP),
+	Role		(UrlTemplateMapper.ROLE),
+	Apply		(UrlTemplateMapper.APPLY);
 	
-	private String url;
-	private String templatePath;
+	private UrlTemplateMapper urlTemplateMapper;
 	
-	SideMenuUrlProject(String url, String templatePath){
-		this.url = url;
-		this.templatePath = templatePath;
+	SideMenuUrlProject(UrlTemplateMapper urlTemplateMapper){
+		this.urlTemplateMapper = urlTemplateMapper;
 	}
 
 	public String getUrl() {
-		return url;
+		return urlTemplateMapper.getUrl();
 	}
 
 	public String getTemplatePath() {
-		return templatePath;
+		return urlTemplateMapper.getTemplatePath();
 	}
 }
