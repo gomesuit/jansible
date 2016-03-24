@@ -3,7 +3,7 @@ package jansible.web.breadcrunb;
 import java.util.List;
 import java.util.Map;
 
-public class BreadcrumbResultInterceptor extends BreadcrumbBaseInterceptor{
+public class BreadcrumbResultInterceptor extends BreadcrumbInterceptorBase{
 	
 	@Override
 	protected void postHandleCore(Map<String, String> requestParam,

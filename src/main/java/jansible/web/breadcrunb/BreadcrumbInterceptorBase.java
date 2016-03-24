@@ -13,7 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-public abstract class BreadcrumbBaseInterceptor implements HandlerInterceptor {
+public abstract class BreadcrumbInterceptorBase implements HandlerInterceptor {
 	private static final String[] PARAMETER_NAME_LIST = { 
 		"projectName",
 		"environmentName",
