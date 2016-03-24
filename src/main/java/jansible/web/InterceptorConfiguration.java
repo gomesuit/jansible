@@ -17,6 +17,8 @@ public class InterceptorConfiguration extends WebMvcConfigurerAdapter{
 		registry.addInterceptor(new BreadcrumbServerInterceptor()).addPathPatterns("/project/server/**");
 		registry.addInterceptor(new BreadcrumbGroupInterceptor()).addPathPatterns("/project/group/**");
 		registry.addInterceptor(new BreadcrumbRoleInterceptor()).addPathPatterns("/project/role/**");
-		registry.addInterceptor(new BreadcrumbApplyInterceptor()).addPathPatterns("/project/apply/**");
+		registry.addInterceptor(new BreadcrumbTaskInterceptor()).addPathPatterns("/project/task/**");
+		registry.addInterceptor(new BreadcrumbApplyInterceptor()).addPathPatterns("/project/apply/**", "/project/applyServer/**");
+		registry.addInterceptor(new BreadcrumbResultInterceptor()).addPathPatterns("/project/jenkins/**");
 	}
 }

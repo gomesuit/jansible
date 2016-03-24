@@ -50,9 +50,13 @@
 <div th:fragment="breadcrumb" th:remove="tag">
 	<ol class="breadcrumb">
 		<div th:each="breadcrumb : ${breadcrumbList}" th:remove="tag">
-		<li><a href="#" th:href="${breadcrumb.url}" th:text="${breadcrumb.name}" /></li>
+			<li>
+				<a href="#" th:href="${breadcrumb.url}" th:text="${breadcrumb.name}" />
+			</li>
 		</div>
-		<li class="active" th:text="${breadcrumbActive}" />
+		<div th:each="breadcrumbActive : ${breadcrumbActiveList}" th:remove="tag">
+			<li class="active" th:text="${breadcrumbActive}" />
+		</div>
 	</ol>
 </div>
 
