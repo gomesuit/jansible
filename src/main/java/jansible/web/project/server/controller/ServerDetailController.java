@@ -29,7 +29,7 @@ public class ServerDetailController {
 	@Autowired
 	private ServerService serverService;
     
-    @RequestMapping("/project/server/view")
+    @RequestMapping("/project/server/detail")
 	private String viewServer(
     		@RequestParam(value = "projectName", required = true) String projectName,
     		@RequestParam(value = "serverName", required = true) String serverName,

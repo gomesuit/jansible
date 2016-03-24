@@ -29,7 +29,7 @@
 								<div class="text-center" th:text="${iterStat.count}" />
 							</td>
 							<td>
-								<a th:href="@{/project/environment/view(projectName=${environment.projectName}, environmentName=${environment.environmentName})}"
+								<a th:href="@{/project/environment/detail(projectName=${environment.projectName}, environmentName=${environment.environmentName})}"
 								th:text="${environment.environmentName}" />
 							</td>
 							<td class="text-center">

@@ -44,7 +44,7 @@ public class RoleDetailController {
 	@Autowired
 	private TaskService taskService;
     
-    @RequestMapping("/project/role/view")
+    @RequestMapping("/project/role/detail")
 	private String viewRole(
 			@RequestParam(value = "projectName", required = true) String projectName,
 			@RequestParam(value = "roleName", required = true) String roleName,

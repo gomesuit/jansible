@@ -21,7 +21,7 @@ public class EnvironmentDetailController {
 	@Autowired
 	private VariableService variableService;
 
-	@RequestMapping("/project/environment/view")
+	@RequestMapping("/project/environment/detail")
 	private String viewEnvironment(
 			@RequestParam(value = "projectName", required = true) String projectName,
 			@RequestParam(value = "environmentName", required = true) String environmentName,

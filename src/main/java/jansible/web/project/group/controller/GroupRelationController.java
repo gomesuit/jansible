@@ -32,7 +32,7 @@ public class GroupRelationController {
 	@Autowired
 	private ServerService serverService;
     
-    @RequestMapping("/project/group/view")
+    @RequestMapping("/project/group/detail")
 	private String viewServiceGroup(
     		@RequestParam(value = "projectName", required = true) String projectName,
     		@RequestParam(value = "environmentName", required = true) String environmentName,

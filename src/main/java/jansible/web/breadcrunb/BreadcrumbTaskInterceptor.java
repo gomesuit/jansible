@@ -1,6 +1,7 @@
 package jansible.web.breadcrunb;
 
 import jansible.web.SideMenuUrlProject;
+import jansible.web.UrlTemplateMapper;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ public class BreadcrumbTaskInterceptor extends BreadcrumbInterceptorBase {
 		breadcrumbList.add(createBreadcrumb(role.getUrl(), param, role.name()));
 		
 		param = createUrlParam(requestParam, "projectName", "roleName");
-		breadcrumbList.add(createBreadcrumb("/project/role/view", param, requestParam.get("roleName")));
+		breadcrumbList.add(createBreadcrumb(UrlTemplateMapper.ROLE_DETAIL.getUrl(), param, requestParam.get("roleName")));
 		
 		breadcrumbActiveList.add(requestParam.get("taskId"));
 	}

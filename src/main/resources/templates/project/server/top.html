@@ -36,7 +36,7 @@
 								<div th:text="${server.environmentName}" />
 							</td>
 							<td>
-								<a th:href="@{/project/server/view(projectName=${server.projectName}, serverName=${server.serverName})}"
+								<a th:href="@{/project/server/detail(projectName=${server.projectName}, serverName=${server.serverName})}"
 								th:text="${server.serverName}" />
 							</td>
 							<td class="text-center">

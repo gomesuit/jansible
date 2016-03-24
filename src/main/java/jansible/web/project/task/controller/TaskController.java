@@ -42,7 +42,7 @@ public class TaskController {
 	@Autowired
 	private TaskService taskService;
     
-    @RequestMapping("/project/task/view")
+    @RequestMapping("/project/task/detail")
 	private String viewTask(
 			@RequestParam(value = "projectName", required = true) String projectName,
 			@RequestParam(value = "roleName", required = true) String roleName,

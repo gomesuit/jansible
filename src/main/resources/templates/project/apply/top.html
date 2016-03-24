@@ -80,7 +80,7 @@
 										<div th:text="${group.groupName}" />
 									</td>
 									<td class="text-center">
-										<a th:href="@{/project/apply/view(projectName=${project.projectName}, environmentName=${group.environmentName}, groupName=${group.groupName})}"
+										<a th:href="@{/project/apply/group(projectName=${project.projectName}, environmentName=${group.environmentName}, groupName=${group.groupName})}"
 										th:text="適用ページへ" />
 									</td>
 								</tr>
@@ -120,7 +120,7 @@
 										<div th:text="${server.serverName}" />
 									</td>
 									<td class="text-center">
-										<a th:href="@{/project/applyServer/view(projectName=${server.projectName}, environmentName=${server.environmentName}, groupName=${server.groupName}, serverName=${server.serverName})}"
+										<a th:href="@{/project/apply/server(projectName=${server.projectName}, environmentName=${server.environmentName}, groupName=${server.groupName}, serverName=${server.serverName})}"
 										th:text="適用ページへ" />
 									</td>
 								</tr>

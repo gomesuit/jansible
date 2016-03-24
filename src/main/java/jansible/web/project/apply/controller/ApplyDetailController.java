@@ -37,7 +37,7 @@ public class ApplyDetailController {
 	@Autowired
 	private GitService gitService;
 
-	@RequestMapping("/project/apply/view")
+	@RequestMapping("/project/apply/group")
 	private String viewApply(
 			@RequestParam(value = "projectName", required = true) String projectName,
 			@RequestParam(value = "environmentName", required = true) String environmentName,
@@ -70,7 +70,7 @@ public class ApplyDetailController {
 		return "common_frame";
 	}
 
-	@RequestMapping("/project/applyServer/view")
+	@RequestMapping("/project/apply/server")
 	private String viewApply(
 			@RequestParam(value = "projectName", required = true) String projectName,
 			@RequestParam(value = "environmentName", required = true) String environmentName,
