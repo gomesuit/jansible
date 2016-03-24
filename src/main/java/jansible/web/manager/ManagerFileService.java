@@ -8,7 +8,7 @@ import jansible.model.common.RoleKey;
 import jansible.model.database.DbGlobalRoleVariable;
 import jansible.model.database.DbGlobalTask;
 import jansible.model.yamldump.YamlVariable;
-import jansible.web.manager.role.GitForm;
+import jansible.web.manager.role.form.GitForm;
 
 import java.util.List;
 

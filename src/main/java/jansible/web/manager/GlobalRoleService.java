@@ -12,11 +12,11 @@ import jansible.model.database.DbGlobalRoleTag;
 import jansible.model.database.DbGlobalRoleTagVariable;
 import jansible.model.database.DbGlobalRoleTemplate;
 import jansible.model.database.DbGlobalRoleVariable;
-import jansible.web.manager.role.GeneralFileForm;
-import jansible.web.manager.role.GitForm;
-import jansible.web.manager.role.RoleVariableForm;
-import jansible.web.manager.role.UploadForm;
-import jansible.web.manager.top.GlobalRoleForm;
+import jansible.web.manager.role.form.GeneralFileForm;
+import jansible.web.manager.role.form.GitForm;
+import jansible.web.manager.role.form.RoleVariableForm;
+import jansible.web.manager.role.form.UploadForm;
+import jansible.web.manager.top.form.GlobalRoleForm;
 
 import java.util.ArrayList;
 import java.util.List;

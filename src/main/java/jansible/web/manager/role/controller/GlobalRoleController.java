@@ -1,4 +1,4 @@
-package jansible.web.manager.role;
+package jansible.web.manager.role.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,13 @@ import jansible.web.manager.GlobalTaskService;
 import jansible.web.manager.ManagerGitService;
 import jansible.web.manager.ManagerYamlService;
 import jansible.web.manager.module.ModuleService;
+import jansible.web.manager.role.form.GeneralFileForm;
+import jansible.web.manager.role.form.GitForm;
+import jansible.web.manager.role.form.RoleVariableForm;
+import jansible.web.manager.role.form.TaskForm;
+import jansible.web.manager.role.form.TaskOrderForm;
+import jansible.web.manager.role.form.TaskView;
+import jansible.web.manager.role.form.UploadForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

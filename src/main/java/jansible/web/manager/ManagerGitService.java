@@ -5,8 +5,8 @@ import java.util.Date;
 import jansible.file.JansibleFiler;
 import jansible.git.JansibleGitter;
 import jansible.util.DateFormatter;
-import jansible.web.manager.role.GitForm;
-import jansible.web.manager.top.GlobalRoleForm;
+import jansible.web.manager.role.form.GitForm;
+import jansible.web.manager.top.form.GlobalRoleForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

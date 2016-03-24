@@ -1,4 +1,4 @@
-package jansible.web.manager.task;
+package jansible.web.manager.task.form;
 
 import jansible.model.common.GlobalTaskConditionalKey;
 import jansible.model.common.GlobalTaskKey;

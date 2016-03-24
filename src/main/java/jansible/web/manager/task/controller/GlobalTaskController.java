@@ -1,4 +1,4 @@
-package jansible.web.manager.task;
+package jansible.web.manager.task.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,9 @@ import jansible.web.manager.GlobalRoleService;
 import jansible.web.manager.GlobalTaskService;
 import jansible.web.manager.ManagerYamlService;
 import jansible.web.manager.module.ModuleService;
+import jansible.web.manager.task.form.TaskConditionalForm;
+import jansible.web.manager.task.form.TaskDetailForm;
+import jansible.web.manager.task.form.TaskParameter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -1,4 +1,4 @@
-package jansible.web.manager.role;
+package jansible.web.manager.role.form;
 
 public class TaskView {
 	private Integer taskId;

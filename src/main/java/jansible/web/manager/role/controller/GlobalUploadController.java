@@ -1,6 +1,9 @@
-package jansible.web.manager.role;
+package jansible.web.manager.role.controller;
 
 import jansible.web.manager.GlobalRoleService;
+import jansible.web.manager.GlobalUploadService;
+import jansible.web.manager.role.form.GeneralFileForm;
+import jansible.web.manager.role.form.UploadForm;
 
 import javax.servlet.http.HttpServletRequest;
 

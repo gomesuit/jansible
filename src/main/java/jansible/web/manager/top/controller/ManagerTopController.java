@@ -1,9 +1,10 @@
-package jansible.web.manager.top;
+package jansible.web.manager.top.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
 import jansible.model.common.GlobalRoleKey;
 import jansible.web.manager.GlobalRoleService;
+import jansible.web.manager.top.form.GlobalRoleForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

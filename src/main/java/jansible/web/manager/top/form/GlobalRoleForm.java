@@ -1,4 +1,4 @@
-package jansible.web.manager.top;
+package jansible.web.manager.top.form;
 
 import jansible.git.GitCredentialInfo;
 import jansible.model.common.GlobalRoleKey;

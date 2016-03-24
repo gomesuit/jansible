@@ -1,4 +1,4 @@
-package jansible.web.manager.module;
+package jansible.web.manager.module.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,6 +12,13 @@ import jansible.model.yamldump.YamlDumper;
 import jansible.model.yamldump.YamlModule;
 import jansible.model.yamldump.YamlParameter;
 import jansible.model.yamldump.YamlParameters;
+import jansible.web.manager.module.ModuleGetter;
+import jansible.web.manager.module.ModuleService;
+import jansible.web.manager.module.ModuleUrlGetter;
+import jansible.web.manager.module.form.AvailableModuleForm;
+import jansible.web.manager.module.form.FormParameter;
+import jansible.web.manager.module.form.ModuleForm;
+import jansible.web.manager.module.form.ModuleRow;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

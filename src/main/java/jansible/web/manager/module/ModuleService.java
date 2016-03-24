@@ -10,6 +10,7 @@ import jansible.model.database.DbModule;
 import jansible.model.database.DbParameter;
 import jansible.model.gethtml.HtmlModule;
 import jansible.model.gethtml.HtmlParameter;
+import jansible.web.manager.module.form.ModuleRow;
 
 import org.eclipse.jgit.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

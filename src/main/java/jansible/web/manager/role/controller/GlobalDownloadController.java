@@ -1,10 +1,11 @@
-package jansible.web.manager.role;
+package jansible.web.manager.role.controller;
 
 import javax.servlet.http.HttpServletResponse;
 
 import jansible.file.JansibleFiler;
 import jansible.model.common.GlobalRoleFileKey;
 import jansible.model.common.GlobalRoleTemplateKey;
+import jansible.web.manager.role.form.GeneralFileForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;

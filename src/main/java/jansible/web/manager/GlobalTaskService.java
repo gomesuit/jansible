@@ -8,12 +8,12 @@ import jansible.model.database.DbGlobalTask;
 import jansible.model.database.DbGlobalTaskConditional;
 import jansible.model.database.DbGlobalTaskDetail;
 import jansible.util.DbCommonUtils;
-import jansible.web.manager.role.TaskForm;
-import jansible.web.manager.role.TaskOrderForm;
-import jansible.web.manager.role.TaskOrderType;
-import jansible.web.manager.task.TaskConditionalForm;
-import jansible.web.manager.task.TaskDetailForm;
-import jansible.web.manager.task.TaskParameter;
+import jansible.web.manager.role.form.TaskForm;
+import jansible.web.manager.role.form.TaskOrderForm;
+import jansible.web.manager.role.form.TaskOrderType;
+import jansible.web.manager.task.form.TaskConditionalForm;
+import jansible.web.manager.task.form.TaskDetailForm;
+import jansible.web.manager.task.form.TaskParameter;
 
 import java.util.ArrayList;
 import java.util.Collections;

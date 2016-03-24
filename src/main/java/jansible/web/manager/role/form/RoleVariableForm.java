@@ -1,4 +1,4 @@
-package jansible.web.manager.role;
+package jansible.web.manager.role.form;
 
 import jansible.model.common.GlobalRoleKey;
 import jansible.model.common.GlobalRoleVariableKey;
