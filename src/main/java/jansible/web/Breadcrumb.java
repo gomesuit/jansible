@@ -3,13 +3,10 @@ package jansible.web;
 public class Breadcrumb {
 	private String url;
 	private String name;
-	private boolean active;
 	
-	public Breadcrumb(String url, String name, boolean active) {
-		super();
+	public Breadcrumb(String url, String name) {
 		this.url = url;
 		this.name = name;
-		this.active = active;
 	}
 	
 	public String getUrl() {
@@ -17,8 +14,5 @@ public class Breadcrumb {
 	}
 	public String getName() {
 		return name;
-	}
-	public boolean isActive() {
-		return active;
 	}
 }

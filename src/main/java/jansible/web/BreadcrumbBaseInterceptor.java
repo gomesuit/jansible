@@ -14,6 +14,15 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 public abstract class BreadcrumbBaseInterceptor implements HandlerInterceptor {
+	private static final String[] PARAMETER_NAME_LIST = { 
+		"projectName",
+		"environmentName",
+		"serverName",
+		"groupName",
+		"roleName",
+		"taskId",
+		"applyHistroyId"
+		};
 
 	@Override
 	public void afterCompletion(HttpServletRequest arg0,
@@ -22,11 +31,8 @@ public abstract class BreadcrumbBaseInterceptor implements HandlerInterceptor {
 	}
 	
 	protected Breadcrumb createBreadcrumb(String baseUrl, Map<String, String> param, String displayName){
-		return new Breadcrumb(getUrl(baseUrl, param), displayName, false);
-	}
-	
-	private String getRequestParameter(HttpServletRequest request, String keyName){
-		return (String)request.getParameter(keyName);
+		String url = getUrl(baseUrl, param);
+		return new Breadcrumb(url, displayName);
 	}
 	
 	protected Map<String, String> createUrlParam(Map<String, String> requestParam, String... paramNameList){
@@ -64,7 +70,7 @@ public abstract class BreadcrumbBaseInterceptor implements HandlerInterceptor {
 		List<Breadcrumb> breadcrumbList = new ArrayList<>();
 		List<String> breadcrumbActiveList = new ArrayList<>();
 		
-		Map<String, String> requestParam = createRequestParam(request);
+		Map<String, String> requestParam = createRequestParam(request, PARAMETER_NAME_LIST);
 		
 		postHandleCore(requestParam, breadcrumbList, breadcrumbActiveList);
 		
@@ -72,13 +78,13 @@ public abstract class BreadcrumbBaseInterceptor implements HandlerInterceptor {
 		request.setAttribute("breadcrumbActiveList", breadcrumbActiveList);
 	}
 	
-	private Map<String, String> createRequestParam(HttpServletRequest request){
+	private Map<String, String> createRequestParam(HttpServletRequest request, String[] parameterNameList){
 		Map<String, String> requestParam = new HashMap<>();
 		
-		String[] parameterNameList = {"projectName","environmentName","serverName","groupName","roleName", "taskId", "applyHistroyId"};
 		
 		for(String parameterName : parameterNameList){
-			String parameterValue = getRequestParameter(request, parameterName);
+			
+			String parameterValue = (String)request.getParameter(parameterName);
 			if(!StringUtils.isEmpty(parameterValue)){
 				requestParam.put(parameterName, parameterValue);
 			}
