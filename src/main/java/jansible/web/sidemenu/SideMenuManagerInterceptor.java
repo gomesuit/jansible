@@ -1,32 +1,13 @@
 package jansible.web.sidemenu;
 
+import jansible.web.SideMenuUrlManager;
+
 import java.util.List;
 import java.util.Map;
 
 public class SideMenuManagerInterceptor extends SideMenuInterceptorBase {
-	
-	private enum SideMenuUrl {
-		TOP		("/manager",		"manager/top"),
-		MODULE	("/manager/module",	"manager/module/moduleList");
-		
-		private String url;
-		private String templatePath;
-		
-		SideMenuUrl(String url, String templatePath){
-			this.url = url;
-			this.templatePath = templatePath;
-		}
 
-		public String getUrl() {
-			return url;
-		}
-
-		public String getTemplatePath() {
-			return templatePath;
-		}
-	}
-
-	private SideMenu createSideMenu(SideMenuUrl sideMenuUrl, String pageName){
+	private SideMenu createSideMenu(SideMenuUrlManager sideMenuUrl, String pageName){
 		String url = sideMenuUrl.getUrl();
 		String name = sideMenuUrl.name();
 		boolean active = pageName.equals(sideMenuUrl.getTemplatePath());
@@ -40,7 +21,7 @@ public class SideMenuManagerInterceptor extends SideMenuInterceptorBase {
 	void createSideMenuList(String pageName, List<SideMenu> menuList,
 			Map<String, String> requestParam) {
 		
-		for(SideMenuUrl sideMenuUrl : SideMenuUrl.values()){
+		for(SideMenuUrlManager sideMenuUrl : SideMenuUrlManager.values()){
 			SideMenu sideMenu = createSideMenu(sideMenuUrl, pageName);
 			menuList.add(sideMenu);
 		}
