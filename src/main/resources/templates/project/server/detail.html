@@ -10,7 +10,7 @@
 			<input type="hidden" th:field="*{projectName}" />
 			<input type="hidden" th:field="*{serverName}" />
 			<select class="form-control" th:field="*{variableName}">
-				<option th:each="variableName : ${allVariableNameList}" th:value="${variableName}" th:label="${variableName}" />
+				<option th:each="variableName : ${allVariableNameList}" th:value="${variableName}" th:label="${variableName}" th:text="${variableName}" />
 			</select>
 			<input type="text" class="form-control" th:field="*{value}" placeholder="value" />
 			<input type="submit" class="btn btn-primary" value="登録" />
@@ -58,24 +58,24 @@
 			<input type="hidden" th:field="*{projectName}" />
 			<input type="hidden" th:field="*{serverName}" />
 			<select class="form-control" th:field="*{parameterName}">
-				<option value="ansible_connection" label="ansible_connection" />
-				<option value="ansible_host" label="ansible_host" />
-				<option value="ansible_user" label="ansible_user" />
-				<option value="ansible_ssh_pass" label="ansible_ssh_pass" />
-				<option value="ansible_ssh_private_key_file" label="ansible_ssh_private_key_file" />
-				<option value="ansible_ssh_common_args" label="ansible_ssh_common_args" />
-				<option value="ansible_sftp_extra_args" label="ansible_sftp_extra_args" />
-				<option value="ansible_scp_extra_args" label="ansible_scp_extra_args" />
-				<option value="ansible_ssh_extra_args" label="ansible_ssh_extra_args" />
-				<option value="ansible_ssh_pipelining" label="ansible_ssh_pipelining" />
-				<option value="ansible_become" label="ansible_become" />
-				<option value="ansible_become_method" label="ansible_become_method" />
-				<option value="ansible_become_user" label="ansible_become_user" />
-				<option value="ansible_become_pass" label="ansible_become_pass" />
-				<option value="ansible_shell_type" label="ansible_shell_type" />
-				<option value="ansible_python_interpreter" label="ansible_python_interpreter" />
-				<option value="ansible_ruby_interpreter" label="ansible_ruby_interpreter" />
-				<option value="ansible_perl_interpreter" label="ansible_perl_interpreter" />
+				<option value="ansible_connection" label="ansible_connection" th:text="ansible_connection" />
+				<option value="ansible_host" label="ansible_host" th:text="ansible_host" />
+				<option value="ansible_user" label="ansible_user" th:text="ansible_user" />
+				<option value="ansible_ssh_pass" label="ansible_ssh_pass" th:text="ansible_ssh_pass" />
+				<option value="ansible_ssh_private_key_file" label="ansible_ssh_private_key_file" th:text="ansible_ssh_private_key_file" />
+				<option value="ansible_ssh_common_args" label="ansible_ssh_common_args" th:text="ansible_ssh_common_args" />
+				<option value="ansible_sftp_extra_args" label="ansible_sftp_extra_args" th:text="ansible_sftp_extra_args" />
+				<option value="ansible_scp_extra_args" label="ansible_scp_extra_args" th:text="ansible_scp_extra_args" />
+				<option value="ansible_ssh_extra_args" label="ansible_ssh_extra_args" th:text="ansible_ssh_extra_args" />
+				<option value="ansible_ssh_pipelining" label="ansible_ssh_pipelining" th:text="ansible_ssh_pipelining" />
+				<option value="ansible_become" label="ansible_become" th:text="ansible_become" />
+				<option value="ansible_become_method" label="ansible_become_method" th:text="ansible_become_method" />
+				<option value="ansible_become_user" label="ansible_become_user" th:text="ansible_become_user" />
+				<option value="ansible_become_pass" label="ansible_become_pass" th:text="ansible_become_pass" />
+				<option value="ansible_shell_type" label="ansible_shell_type" th:text="ansible_shell_type" />
+				<option value="ansible_python_interpreter" label="ansible_python_interpreter" th:text="ansible_python_interpreter" />
+				<option value="ansible_ruby_interpreter" label="ansible_ruby_interpreter" th:text="ansible_ruby_interpreter" />
+				<option value="ansible_perl_interpreter" label="ansible_perl_interpreter" th:text="ansible_perl_interpreter" />
 			</select>
 			<input type="text" class="form-control" th:field="*{parameterValue}" placeholder="parameterValue" />
 			<input type="submit" class="btn btn-primary" value="登録" />
