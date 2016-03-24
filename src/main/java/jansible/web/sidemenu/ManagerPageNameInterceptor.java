@@ -1,4 +1,4 @@
-package jansible.web;
+package jansible.web.sidemenu;
 
 import java.util.List;
 import java.util.Map;

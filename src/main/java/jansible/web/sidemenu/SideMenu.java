@@ -1,4 +1,4 @@
-package jansible.web;
+package jansible.web.sidemenu;
 
 public class SideMenu {
 	private String url;

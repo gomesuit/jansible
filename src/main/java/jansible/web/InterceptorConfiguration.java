@@ -8,6 +8,8 @@ import jansible.web.breadcrunb.BreadcrumbResultInterceptor;
 import jansible.web.breadcrunb.BreadcrumbRoleInterceptor;
 import jansible.web.breadcrunb.BreadcrumbServerInterceptor;
 import jansible.web.breadcrunb.BreadcrumbTaskInterceptor;
+import jansible.web.sidemenu.ManagerPageNameInterceptor;
+import jansible.web.sidemenu.PageNameInterceptor;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
