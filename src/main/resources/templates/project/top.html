@@ -70,7 +70,9 @@
 							<td class="text-center">
 								<form method="POST" th:action="@{/project/delete}" th:object="${projectKey}">
 									<input type="hidden" name="projectName" th:value="${project.projectName}" />
-									<input type="submit" class="btn btn-primary" value="Delete" />
+									<button type="submit" class="btn btn-danger btn-xs">
+										<span class="glyphicon glyphicon-trash" aria-hidden="true" />
+									</button>
 								</form>
 							</td>
 						</tr>
