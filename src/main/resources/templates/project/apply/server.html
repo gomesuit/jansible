@@ -56,7 +56,7 @@
 								<div class="text-center" th:text="${iterStat.count}" />
 							</td>
 							<td>
-								<a th:href="@{/project/role/view(projectName=${role.projectName}, roleName=${role.roleName})}"
+								<a th:href="@{/project/role/detail(projectName=${role.projectName}, roleName=${role.roleName})}"
 								th:text="${role.roleName}" />
 							</td>
 						</tr>
