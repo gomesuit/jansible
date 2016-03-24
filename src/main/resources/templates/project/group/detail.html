@@ -34,7 +34,7 @@
 								<div class="text-center" th:text="${iterStat.count}" />
 							</td>
 							<td>
-								<a th:href="@{/project/server/view(projectName=${serverRelation.projectName}, serverName=${serverRelation.serverName})}"
+								<a th:href="@{/project/server/detail(projectName=${serverRelation.projectName}, serverName=${serverRelation.serverName})}"
 								th:text="${serverRelation.serverName}" />
 							</td>
 							<td class="text-center">
@@ -86,7 +86,7 @@
 								<div class="text-center" th:text="${iterStat.count}" />
 							</td>
 							<td>
-								<a th:href="@{/project/role/view(projectName=${roleRelation.projectName}, roleName=${roleRelation.roleName})}"
+								<a th:href="@{/project/role/detail(projectName=${roleRelation.projectName}, roleName=${roleRelation.roleName})}"
 								th:text="${roleRelation.roleName}" />
 							</td>
 							<td class="text-center">
