@@ -24,7 +24,7 @@ public class GroupController {
 	@Autowired
 	private GroupService groupService;
 
-	@RequestMapping("/project/viewGroup")
+	@RequestMapping("/project/group")
 	private String viewGroup(
 			@RequestParam(value = "projectName", required = true) String projectName,
 			Model model,

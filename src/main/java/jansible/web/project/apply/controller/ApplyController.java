@@ -46,7 +46,7 @@ public class ApplyController {
 	@Autowired
 	private TestService testService;
 
-	@RequestMapping("/project/viewApply")
+	@RequestMapping("/project/apply")
 	private String viewApply(
 			@RequestParam(value = "projectName", required = true) String projectName,
 			Model model,

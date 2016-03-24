@@ -23,7 +23,7 @@ public class ServerController {
 	@Autowired
 	private ServerService serverService;
 
-	@RequestMapping("/project/viewServer")
+	@RequestMapping("/project/server")
 	private String viewServer(
 			@RequestParam(value = "projectName", required = true) String projectName,
 			Model model,

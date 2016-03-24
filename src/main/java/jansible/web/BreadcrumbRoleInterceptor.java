@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.ModelAndView;
 
-public class BreadcrumbProjectInterceptor extends BreadcrumbBaseInterceptor{
+public class BreadcrumbRoleInterceptor extends BreadcrumbBaseInterceptor{
 
 	@Override
 	public void postHandle(HttpServletRequest request,
@@ -23,8 +23,21 @@ public class BreadcrumbProjectInterceptor extends BreadcrumbBaseInterceptor{
 		String projectName = (String)request.getParameter("projectName");
 		if(projectName != null){
 			param.put("projectName", projectName);
-			breadcrumbList.add(new Breadcrumb(getUrl("/project/view", param), "Project", false));
+			breadcrumbList.add(new Breadcrumb(getUrl("/project/role", param), "Role", false));
 			breadcrumbActive = projectName;
+		}
+		
+		String roleName = (String)request.getParameter("roleName");
+		if(roleName != null){
+			param.put("roleName", roleName);
+			breadcrumbActive = roleName;
+		}
+		
+		String taskId = (String)request.getParameter("taskId");
+		if(taskId != null){
+			param.put("taskId", taskId);
+			breadcrumbList.add(new Breadcrumb(getUrl("/project/task/view", param), "Task", false));
+			breadcrumbActive = taskId;
 		}
 		
 		request.setAttribute("breadcrumbList", breadcrumbList);

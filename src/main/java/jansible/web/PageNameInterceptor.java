@@ -53,10 +53,10 @@ public class PageNameInterceptor implements HandlerInterceptor {
 	private enum SideMenuUrl {
 		TOP			("/project/view",			"project/project/top"),
 		Environment	("/project/environment",	"project/project/environment"),
-		Server		("/project/viewServer",		"project/project/server"),
-		Group		("/project/viewGroup",		"project/project/group"),
-		Role		("/project/viewRole",		"project/project/role"),
-		Apply		("/project/viewApply",		"project/project/apply");
+		Server		("/project/server",			"project/project/server"),
+		Group		("/project/group",			"project/project/group"),
+		Role		("/project/role",			"project/project/role"),
+		Apply		("/project/apply",			"project/project/apply");
 		
 		private String url;
 		private String templatePath;

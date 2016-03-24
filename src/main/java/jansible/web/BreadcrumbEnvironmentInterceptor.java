@@ -10,26 +10,23 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.ModelAndView;
 
-public class BreadcrumbProjectInterceptor extends BreadcrumbBaseInterceptor{
+public class BreadcrumbEnvironmentInterceptor extends BreadcrumbBaseInterceptor{
 
 	@Override
 	public void postHandle(HttpServletRequest request,
 			HttpServletResponse response, Object obj, ModelAndView mav) throws Exception {
-		
 		List<Breadcrumb> breadcrumbList = new ArrayList<>();
 		Map<String, String> param = new HashMap<>();
-		String breadcrumbActive = null;
 		
 		String projectName = (String)request.getParameter("projectName");
-		if(projectName != null){
-			param.put("projectName", projectName);
-			breadcrumbList.add(new Breadcrumb(getUrl("/project/view", param), "Project", false));
-			breadcrumbActive = projectName;
-		}
+		
+		param.put("projectName", projectName);
+		breadcrumbList.add(new Breadcrumb(getUrl("/project/environment", param), "Environment", false));
 		
 		request.setAttribute("breadcrumbList", breadcrumbList);
-		request.setAttribute("breadcrumbActive", breadcrumbActive);
 		
+		String environmentName = (String)request.getParameter("environmentName");
+		request.setAttribute("breadcrumbActive", environmentName);
 	}
 
 }

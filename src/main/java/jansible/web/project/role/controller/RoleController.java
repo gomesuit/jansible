@@ -25,7 +25,7 @@ public class RoleController {
 	@Autowired
 	private GlobalRoleRelationService globalRoleRelationService;
 
-	@RequestMapping("/project/viewRole")
+	@RequestMapping("/project/role")
 	private String viewRole(
 			@RequestParam(value = "projectName", required = true) String projectName,
 			Model model,
