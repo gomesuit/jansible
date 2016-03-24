@@ -11,11 +11,11 @@ public enum UrlTemplateMapper {
 	GROUP_DETAIL		("/project/group/view",			"project/group/detail"),
 	ROLE				("/project/role",				"project/role/top"),
 	ROLE_DETAIL			("/project/role/view",			"project/role/detail"),
-	TASK_DETAIL			("/project/task/view",			"project/task/detail"),
+	TASK_DETAIL			("/project/task/view",			"project/role/task/detail"),
 	APPLY				("/project/apply",				"project/apply/top"),
 	APPLY_GROUP			("/project/apply/view",			"project/apply/group"),
 	APPLY_SERVER		("/project/applyServer/view",	"project/apply/server"),
-	APPLY_RESULT		("/project/jenkins/result",		"project/result/detail");
+	APPLY_RESULT		("/project/jenkins/result",		"project/apply/result/detail");
 
 	private String url;
 	private String templatePath;
