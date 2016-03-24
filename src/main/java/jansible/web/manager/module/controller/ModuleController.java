@@ -64,7 +64,7 @@ public class ModuleController {
         return "Hello World!";
     }
 
-    @RequestMapping("/manager/module/view")
+    @RequestMapping("/manager/module/detail")
     String module(@RequestParam(value = "moduleName", required = true) String moduleName,
     		Model model, HttpServletRequest request) {
     	HtmlModule module = moduleService.getModule(moduleName);

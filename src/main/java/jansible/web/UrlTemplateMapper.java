@@ -18,11 +18,12 @@ public enum UrlTemplateMapper {
 	APPLY_RESULT		("/project/jenkins/result",		"project/apply/result/detail"),
 	
 	MANAGER_TOP				("/manager",					"manager/top"),
-	MANAGER_ROLE_DETAIL		("/manager/role/view",			"manager/role/top"),
-	MANAGER_TASK_DETAIL		("/manager/task/view",			"manager/task/top"),
-	MANAGER_MODULE			("/manager/module",				"manager/module/moduleList"),
+	MANAGER_ROLE			("/manager/role",				"manager/role/top"),
+	MANAGER_ROLE_DETAIL		("/manager/role/view",			"manager/role/detail"),
+	MANAGER_TASK_DETAIL		("/manager/task/view",			"manager/task/detail"),
+	MANAGER_MODULE			("/manager/module",				"manager/module/top"),
 	MANAGER_MODULE_CREATE	("/manager/module/create",		"manager/module/yamlcreate"),
-	MANAGER_MODULE_DETAIL	("/manager/module/view",		"manager/module/detail");
+	MANAGER_MODULE_DETAIL	("/manager/module/detail",		"manager/module/detail");
 
 	private String url;
 	private String templatePath;

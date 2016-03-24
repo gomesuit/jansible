@@ -1,8 +1,9 @@
 package jansible.web;
 
 public enum SideMenuUrlManager {
-	TOP		(UrlTemplateMapper.MANAGER_TOP),
-	MODULE	(UrlTemplateMapper.MANAGER_MODULE);
+	TOP				(UrlTemplateMapper.MANAGER_TOP),
+	GLOBAL_ROLE		(UrlTemplateMapper.MANAGER_ROLE),
+	MODULE			(UrlTemplateMapper.MANAGER_MODULE);
 
 	private UrlTemplateMapper urlTemplateMapper;
 	
