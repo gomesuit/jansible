@@ -11,6 +11,6 @@ public class InterceptorConfiguration extends WebMvcConfigurerAdapter{
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(new PageNameInterceptor()).addPathPatterns("/project/**");
 		registry.addInterceptor(new ManagerPageNameInterceptor()).addPathPatterns("/manager/**");
-		registry.addInterceptor(new BreadcrumbInterceptor()).addPathPatterns("/project/**");
+		registry.addInterceptor(new BreadcrumbProjectInterceptor()).addPathPatterns("/project/**");
 	}
 }

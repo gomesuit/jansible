@@ -4,26 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-public class BreadcrumbInterceptor implements HandlerInterceptor {
-
-	@Override
-	public void afterCompletion(HttpServletRequest arg0,
-			HttpServletResponse arg1, Object arg2, Exception arg3)
-			throws Exception {
-	}
+public class BreadcrumbProjectInterceptor extends BreadcrumbBaseInterceptor{
 
 	@Override
 	public void postHandle(HttpServletRequest request,
-			HttpServletResponse response, Object obj, ModelAndView mav)
-			throws Exception {
+			HttpServletResponse response, Object obj, ModelAndView mav) throws Exception {
 		
 		List<Breadcrumb> breadcrumbList = new ArrayList<>();
 		Map<String, String> param = new HashMap<>();
@@ -80,24 +71,7 @@ public class BreadcrumbInterceptor implements HandlerInterceptor {
 		
 		request.setAttribute("breadcrumbList", breadcrumbList);
 		request.setAttribute("breadcrumbActive", breadcrumbActive);
-	}
-	
-	private String getUrl(String baseUrl, Map<String, String> param){
-		if(param == null) return baseUrl;
-		if(param.isEmpty()) return baseUrl;
 		
-		String url = baseUrl + "?";
-		for(Entry<String, String> keyValue : param.entrySet()){
-			url = url + keyValue.getKey() + "=" + keyValue.getValue() + "&";
-		}
-		
-		return url;
-	}
-
-	@Override
-	public boolean preHandle(HttpServletRequest arg0,
-			HttpServletResponse arg1, Object arg2) throws Exception {
-		return true;
 	}
 
 }
