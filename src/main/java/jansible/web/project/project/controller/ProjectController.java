@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import jansible.model.common.ProjectKey;
 import jansible.model.database.DbProject;
+import jansible.web.UrlTemplateMapper;
 import jansible.web.project.ProjectService;
 import jansible.web.project.project.form.JenkinsInfoForm;
 
@@ -32,7 +33,7 @@ public class ProjectController {
 		model.addAttribute("project", projectService.getProject(projectKey));
 		model.addAttribute("jenkinsInfoForm", createJenkinsInfoForm(projectKey));
 		
-		request.setAttribute("pageName", "project/project/top");
+		request.setAttribute("pageName", UrlTemplateMapper.PROJECT.getTemplatePath());
 		return "common_frame";
 	}
 	

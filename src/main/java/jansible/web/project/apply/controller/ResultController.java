@@ -3,6 +3,7 @@ package jansible.web.project.apply.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import jansible.model.common.ProjectKey;
+import jansible.web.UrlTemplateMapper;
 import jansible.web.project.JenkinsBuildService;
 import jansible.web.project.JenkinsResultService;
 
@@ -38,7 +39,7 @@ public class ResultController {
 		rebuildForm.setApplyHistroyId(applyHistroyId);
 		model.addAttribute("rebuildForm", rebuildForm);
 		
-		request.setAttribute("pageName", "project/result/top");
+		request.setAttribute("pageName", UrlTemplateMapper.APPLY_RESULT.getTemplatePath());
 		return "common_frame";
 	}
 

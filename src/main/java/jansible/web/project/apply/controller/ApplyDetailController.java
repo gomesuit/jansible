@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import jansible.model.common.ServerRelationKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.database.DbProject;
+import jansible.web.UrlTemplateMapper;
 import jansible.web.project.ApplyService;
 import jansible.web.project.GitService;
 import jansible.web.project.GroupService;
@@ -65,7 +66,7 @@ public class ApplyDetailController {
 		// 適用履歴
 		model.addAttribute("applyHistoryList", applyService.getDbApplyHistoryListByGroup(serviceGroupKey));
 		
-		request.setAttribute("pageName", "project/apply/group");
+		request.setAttribute("pageName", UrlTemplateMapper.APPLY_GROUP.getTemplatePath());
 		return "common_frame";
 	}
 
@@ -99,7 +100,7 @@ public class ApplyDetailController {
 		// 適用履歴
 		model.addAttribute("applyHistoryList", applyService.getDbApplyHistoryListByServer(serverRelationKey));
 		
-		request.setAttribute("pageName", "project/apply/server");
+		request.setAttribute("pageName", UrlTemplateMapper.APPLY_SERVER.getTemplatePath());
 		return "common_frame";
 	}
 

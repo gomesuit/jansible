@@ -3,6 +3,7 @@ package jansible.web.project.top.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import jansible.model.common.ProjectKey;
+import jansible.web.UrlTemplateMapper;
 import jansible.web.project.ProjectService;
 import jansible.web.project.top.form.ProjectForm;
 
@@ -24,7 +25,7 @@ public class TopController {
     	model.addAttribute("projectList", projectService.getProjectList());
     	model.addAttribute("projectKey", new ProjectKey());
 
-		request.setAttribute("pageName", "project/top");
+		request.setAttribute("pageName", UrlTemplateMapper.TOP.getTemplatePath());
 		return "common_frame";
     }
 

@@ -2,6 +2,7 @@ package jansible.web.project.group.controller;
 
 import jansible.model.common.ProjectKey;
 import jansible.model.common.ServiceGroupKey;
+import jansible.web.UrlTemplateMapper;
 import jansible.web.project.EnvironmentService;
 import jansible.web.project.GroupService;
 import jansible.web.project.group.form.ServiceGroupForm;
@@ -40,7 +41,7 @@ public class GroupController {
 		model.addAttribute("serviceGroupList", groupService.getServiceGroupList(projectKey));
 		model.addAttribute("serviceGroupKey", new ServiceGroupKey(projectKey));
 		
-		request.setAttribute("pageName", "project/project/group");
+		request.setAttribute("pageName", UrlTemplateMapper.GROUP.getTemplatePath());
 		return "common_frame";
 	}
 

@@ -2,6 +2,7 @@ package jansible.web.project.environment.controller;
 
 import jansible.model.common.EnvironmentKey;
 import jansible.model.common.ProjectKey;
+import jansible.web.UrlTemplateMapper;
 import jansible.web.project.EnvironmentService;
 import jansible.web.project.environment.form.EnvironmentForm;
 
@@ -33,7 +34,7 @@ public class EnvironmentController {
 		model.addAttribute("environmentList", environmentService.getEnvironmentList(projectKey));
 		model.addAttribute("environmentKey", new EnvironmentKey(projectKey));
 		
-		request.setAttribute("pageName", "project/project/environment");
+		request.setAttribute("pageName", UrlTemplateMapper.ENVIRONMENT.getTemplatePath());
 		return "common_frame";
 	}
 

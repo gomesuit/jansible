@@ -9,6 +9,7 @@ import jansible.model.common.ProjectKey;
 import jansible.model.common.ServerRelationKey;
 import jansible.model.database.DbEnvironment;
 import jansible.model.database.DbServiceGroup;
+import jansible.web.UrlTemplateMapper;
 import jansible.web.project.ApplyService;
 import jansible.web.project.EnvironmentService;
 import jansible.web.project.GroupService;
@@ -66,7 +67,7 @@ public class ApplyController {
 		// テストデータダウンロード
 		model.addAttribute("serverRelationKey", new ServerRelationKey(projectKey));
 		
-		request.setAttribute("pageName", "project/project/apply");
+		request.setAttribute("pageName", UrlTemplateMapper.APPLY.getTemplatePath());
 		return "common_frame";
 	}
 

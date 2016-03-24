@@ -2,6 +2,7 @@ package jansible.web.project.role.controller;
 
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleKey;
+import jansible.web.UrlTemplateMapper;
 import jansible.web.project.GlobalRoleRelationService;
 import jansible.web.project.RoleService;
 import jansible.web.project.role.form.GlobalRoleRelationForm;
@@ -44,7 +45,7 @@ public class RoleController {
 		model.addAttribute("globalRoleRelationList", globalRoleRelationService.getGlobalRoleRelationViewList(projectKey));
 		model.addAttribute("globalRoleRelationTagUpdateForm", new GlobalRoleRelationTagUpdateForm(projectKey));
 				
-		request.setAttribute("pageName", "project/project/role");
+		request.setAttribute("pageName", UrlTemplateMapper.ROLE.getTemplatePath());
 		return "common_frame";
 	}
 

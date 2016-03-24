@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import jansible.model.common.EnvironmentKey;
 import jansible.model.common.EnvironmentVariableKey;
+import jansible.web.UrlTemplateMapper;
 import jansible.web.project.VariableService;
 import jansible.web.project.environment.form.EnvironmentVariableForm;
 
@@ -36,7 +37,7 @@ public class EnvironmentDetailController {
 		model.addAttribute("variableList", variableService.getDbEnvironmentVariableList(environmentKey));
 		model.addAttribute("environmentVariableKey", new EnvironmentVariableKey(environmentKey));
 		
-		request.setAttribute("pageName", "project/environment/top");
+		request.setAttribute("pageName", UrlTemplateMapper.ENVIRONMENT_DETAIL.getTemplatePath());
 		return "common_frame";
 	}
 

@@ -11,6 +11,7 @@ import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.model.gethtml.HtmlModule;
 import jansible.model.gethtml.HtmlParameter;
+import jansible.web.UrlTemplateMapper;
 import jansible.web.manager.module.ModuleService;
 import jansible.web.project.RoleService;
 import jansible.web.project.TaskService;
@@ -79,7 +80,7 @@ public class TaskController {
 		// 変数一覧
 		model.addAttribute("variableList", variableService.getDbRoleVariableList(taskKey));
 		
-		request.setAttribute("pageName", "project/task/top");
+		request.setAttribute("pageName", UrlTemplateMapper.TASK_DETAIL.getTemplatePath());
 		return "common_frame";
 	}
 

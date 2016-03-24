@@ -6,6 +6,7 @@ import jansible.model.common.RoleRelationKey;
 import jansible.model.common.ServerRelationKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.ServiceGroupVariableKey;
+import jansible.web.UrlTemplateMapper;
 import jansible.web.project.GroupService;
 import jansible.web.project.ServerService;
 import jansible.web.project.VariableService;
@@ -64,7 +65,7 @@ public class GroupRelationController {
 		model.addAttribute("groupVariableList", variableService.getDbServiceGroupVariableList(serviceGroupKey));
 		model.addAttribute("serviceGroupVariableKey", new ServiceGroupVariableKey(serviceGroupKey));
 		
-		request.setAttribute("pageName", "project/service_group/top");
+		request.setAttribute("pageName", UrlTemplateMapper.GROUP_DETAIL.getTemplatePath());
 		return "common_frame";
 	}
 

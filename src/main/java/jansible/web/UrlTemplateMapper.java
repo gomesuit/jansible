@@ -1,6 +1,7 @@
 package jansible.web;
 
 public enum UrlTemplateMapper {
+	TOP					("/",							"project/top"),
 	PROJECT				("/project/view",				"project/project/top"),
 	ENVIRONMENT			("/project/environment",		"project/project/environment"),
 	ENVIRONMENT_DETAIL	("/project/environment/view",	"project/environment/top"),

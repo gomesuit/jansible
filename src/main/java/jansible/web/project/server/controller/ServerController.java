@@ -2,6 +2,7 @@ package jansible.web.project.server.controller;
 
 import jansible.model.common.ProjectKey;
 import jansible.model.common.ServerKey;
+import jansible.web.UrlTemplateMapper;
 import jansible.web.project.EnvironmentService;
 import jansible.web.project.ServerService;
 import jansible.web.project.server.form.ServerForm;
@@ -38,7 +39,7 @@ public class ServerController {
 		model.addAttribute("serverList", serverService.getServerList(projectKey));
 		model.addAttribute("serverKey", new ServerKey(projectKey));
 		
-		request.setAttribute("pageName", "project/project/server");
+		request.setAttribute("pageName", UrlTemplateMapper.SERVER.getTemplatePath());
 		return "common_frame";
 	}
 

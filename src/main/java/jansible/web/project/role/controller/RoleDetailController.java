@@ -10,6 +10,7 @@ import jansible.model.common.RoleVariableKey;
 import jansible.model.common.TaskKey;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
+import jansible.web.UrlTemplateMapper;
 import jansible.web.manager.module.ModuleService;
 import jansible.web.project.RoleService;
 import jansible.web.project.TaskService;
@@ -77,7 +78,7 @@ public class RoleDetailController {
 		model.addAttribute("roleVariableKey", new RoleVariableKey(roleKey));
 		model.addAttribute("variableList", variableService.getDbRoleVariableList(roleKey));
 		
-		request.setAttribute("pageName", "project/role/top");
+		request.setAttribute("pageName", UrlTemplateMapper.ROLE_DETAIL.getTemplatePath());
 		return "common_frame";
 	}
 

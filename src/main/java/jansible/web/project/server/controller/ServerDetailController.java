@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import jansible.model.common.ServerKey;
 import jansible.model.common.ServerParameterKey;
 import jansible.model.common.ServerVariableKey;
+import jansible.web.UrlTemplateMapper;
 import jansible.web.project.GroupService;
 import jansible.web.project.ServerService;
 import jansible.web.project.VariableService;
@@ -49,7 +50,7 @@ public class ServerDetailController {
 		model.addAttribute("variableList", variableService.getDbServerVariableList(serverKey));
 		model.addAttribute("serverVariableKey", new ServerVariableKey(serverKey));
 		
-		request.setAttribute("pageName", "project/server/top");
+		request.setAttribute("pageName", UrlTemplateMapper.SERVER_DETAIL.getTemplatePath());
 		return "common_frame";
 	}
 
