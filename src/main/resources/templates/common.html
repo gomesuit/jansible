@@ -77,8 +77,16 @@
 			<div th:text="${alert}" />
 		</div>
 	</div>
-	<div th:each="message : ${messageList}" th:remove="tag">
+	<div th:each="warning : ${warningList}" th:remove="tag">
 		<div class="alert alert-warning alert-dismissible fade in" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">×</span>
+			</button>
+			<div th:text="${warning}" />
+		</div>
+	</div>
+	<div th:each="message : ${messageList}" th:remove="tag">
+		<div class="alert alert-success alert-dismissible fade in" role="alert">
 			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 				<span aria-hidden="true">×</span>
 			</button>

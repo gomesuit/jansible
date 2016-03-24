@@ -1,5 +1,8 @@
 package jansible.web.project.apply.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import jansible.model.common.ServerRelationKey;
@@ -23,6 +26,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.FlashMap;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 @Controller
 public class ApplyDetailController {
@@ -126,7 +131,12 @@ public class ApplyDetailController {
 
 	@RequestMapping(value="/project/git/commit", method=RequestMethod.POST)
 	private String commitGit(@ModelAttribute GitForm form, HttpServletRequest request) throws Exception{
+		FlashMap outputFlashMap = RequestContextUtils.getOutputFlashMap(request);
 		gitService.commitGit(form);
+
+		List<String> messageList = new ArrayList<>();
+		messageList.add("masterブランチへのcommitに成功しました。");
+		outputFlashMap.put("messageList", messageList);
 		
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
