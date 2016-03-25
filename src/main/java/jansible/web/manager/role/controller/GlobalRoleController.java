@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class GlobalRoleController {
 	@Autowired
 	private GlobalRoleService globalRoleService;
+	
+	private static final String GLOBAL_ROLE_PREFIX = "GLOBAL_";
 
 	@RequestMapping("/manager/role")
 	private String top(Model model, HttpServletRequest request){
@@ -31,6 +33,10 @@ public class GlobalRoleController {
 
 	@RequestMapping(value="/manager/role/regist", method=RequestMethod.POST)
 	private String registProject(@ModelAttribute GlobalRoleForm form, HttpServletRequest request) throws Exception{
+		// ロール名に接頭辞を付与する
+		String roleName = GLOBAL_ROLE_PREFIX + form.getRoleName();
+		form.setRoleName(roleName);
+		
 		globalRoleService.registRole(form);
 		
 		String referer = request.getHeader("Referer");
