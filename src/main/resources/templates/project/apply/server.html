@@ -38,33 +38,7 @@
 	</div>
 	
 	<div class="col-md-4">
-		<div class="panel panel-primary">
-			<div class="panel-heading">
-				<div>適用ロール</div>
-			</div>
-			<div class="panel-body">				
-				<table class="table table-bordered">
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>roleName</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="role,iterStat : ${roleList}">
-							<td class="text-center">
-								<div class="text-center" th:text="${iterStat.count}" />
-							</td>
-							<td>
-								<a th:if="${role.roleType.name().equals('project')}" th:href="@{/project/role/detail(projectName=${role.projectName}, roleName=${role.roleName})}"
-								th:text="${role.roleName}" />
-								<div th:if="${role.roleType.name().equals('global')}" th:text="${role.roleName}" />
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
+		<div th:substituteby="project/apply/common::role" />
 	</div>
 </div>
 
