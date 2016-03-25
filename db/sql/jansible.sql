@@ -235,6 +235,7 @@ CREATE TABLE role_relation
 	environment_name varchar(80) NOT NULL,
 	group_name varchar(80) NOT NULL,
 	role_name varchar(30) NOT NULL,
+	role_type enum('project','global') NOT NULL,
 	sort int,
 	PRIMARY KEY (project_name, environment_name, group_name, role_name)
 );

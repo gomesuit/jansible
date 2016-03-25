@@ -17,6 +17,7 @@ import jansible.model.database.DbServerRelation;
 import jansible.model.database.DbServiceGroup;
 import jansible.util.DbCommonUtils;
 import jansible.web.project.group.form.Role;
+import jansible.web.project.group.form.RoleType;
 import jansible.web.project.group.form.ServiceGroupDescriptionForm;
 import jansible.web.project.group.form.RoleRelationForm;
 import jansible.web.project.group.form.RoleRelationOrderForm;
@@ -174,9 +175,22 @@ public class GroupService {
 	private DbRoleRelation createDbRoleRelation(RoleRelationForm form) {
 		DbRoleRelation dbRoleRelation = new DbRoleRelation(form);
 		dbRoleRelation.setSort(form.getSort());
+		dbRoleRelation.setRoleType(getRoleType(form));
 		return dbRoleRelation;
 	}
 	
+	private RoleType getRoleType(RoleRelationKey key) {
+		List<Role> roleList = getRoleListWithGlobalRole(key);
+		
+		for(Role role : roleList){
+			if(key.getRoleName().equals(role.getName())){
+				return role.getRoleType();
+			}
+		}
+		
+		return null;
+	}
+
 	private void modifyRoleRelationList(List<DbRoleRelation> dbRoleRelationList){
 		for(DbRoleRelation dbRoleRelation : dbRoleRelationList){
 			serviceGroupMapper.insertDbRoleRelation(dbRoleRelation);
@@ -204,19 +218,19 @@ public class GroupService {
 	}
 
 	public List<Role> getRoleListWithGlobalRole(ProjectKey key) {
-		List<Role> roleNameList = new ArrayList<>();
+		List<Role> roleList = new ArrayList<>();
 		
 		List<DbRole> dbRoleList = roleMapper.selectRoleList(key);
 		for(DbRole dbRole : dbRoleList){
-			roleNameList.add(new Role(dbRole.getRoleName(), false));
+			roleList.add(new Role(dbRole.getRoleName(), RoleType.project));
 		}
 		
 		List<DbGlobalRoleRelation> dbGlobalRoleRelationList = globalRoleRelationMapper.selectRoleRelationList(key);
 		for(DbGlobalRoleRelation dbGlobalRoleRelation : dbGlobalRoleRelationList){
-			roleNameList.add(new Role(dbGlobalRoleRelation.getRoleName(), true));
+			roleList.add(new Role(dbGlobalRoleRelation.getRoleName(), RoleType.global));
 		}
 		
-		return roleNameList;
+		return roleList;
 	}
 	
 	public void updateServiceGroupDescription(ServiceGroupDescriptionForm form){

@@ -1,9 +1,11 @@
 package jansible.model.database;
 
 import jansible.model.common.RoleRelationKey;
+import jansible.web.project.group.form.RoleType;
 
 public class DbRoleRelation extends RoleRelationKey implements InterfaceDbSort{
 	private int sort;
+	private RoleType roleType;
 	
 	public DbRoleRelation(){}
 	
@@ -17,5 +19,13 @@ public class DbRoleRelation extends RoleRelationKey implements InterfaceDbSort{
 
 	public void setSort(int sort) {
 		this.sort = sort;
+	}
+
+	public RoleType getRoleType() {
+		return roleType;
+	}
+
+	public void setRoleType(RoleType roleType) {
+		this.roleType = roleType;
 	}
 }

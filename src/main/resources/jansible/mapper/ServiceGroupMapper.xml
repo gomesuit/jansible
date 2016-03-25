@@ -16,6 +16,7 @@
 		<result property="environmentName" column="environment_name" />
 		<result property="groupName" column="group_name" />
 		<result property="roleName" column="role_name" />
+		<result property="roleType" column="role_type" />
 		<result property="sort" column="sort" />
 	</resultMap>
 	
@@ -102,6 +103,7 @@
 				environment_name,
 				group_name,
 				role_name,
+				role_type,
 				sort
 			)
 		VALUES
@@ -110,6 +112,7 @@
 				#{environmentName},
 				#{groupName},
 				#{roleName},
+				#{roleType},
 				#{sort}
 			)
 		ON DUPLICATE KEY UPDATE
