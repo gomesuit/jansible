@@ -3,6 +3,28 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jansible.mapper.ServiceGroupMapper">
+    
+	<resultMap id="ServiceGroupMap" type="DbServiceGroup">
+		<result property="projectName" column="project_name" />
+		<result property="environmentName" column="environment_name" />
+		<result property="groupName" column="group_name" />
+		<result property="description" column="description" />
+	</resultMap>
+	
+	<resultMap id="RoleRelationMap" type="DbRoleRelation">
+		<result property="projectName" column="project_name" />
+		<result property="environmentName" column="environment_name" />
+		<result property="groupName" column="group_name" />
+		<result property="roleName" column="role_name" />
+		<result property="sort" column="sort" />
+	</resultMap>
+	
+	<resultMap id="ServerRelationMap" type="DbServerRelation">
+		<result property="projectName" column="project_name" />
+		<result property="environmentName" column="environment_name" />
+		<result property="groupName" column="group_name" />
+		<result property="serverName" column="server_name" />
+	</resultMap>
 	
 	<insert id="insertServiceGroup" parameterType="DbServiceGroup">
 		INSERT INTO service_group
@@ -19,11 +41,20 @@
 			)
 	</insert>
 	
-	<select id="selectServiceGroupList" resultType="DbServiceGroup">
+	<select id="selectServiceGroup" resultMap="ServiceGroupMap">
 		SELECT
-			project_name as projectName,
-			environment_name as environmentName,
-			group_name as groupName
+			*
+		FROM
+			service_group
+		WHERE
+			project_name = #{projectName} AND
+			environment_name = #{environmentName} AND
+			group_name = #{groupName}
+	</select>
+	
+	<select id="selectServiceGroupList" resultMap="ServiceGroupMap">
+		SELECT
+			*
 		FROM
 			service_group
 		WHERE
@@ -31,11 +62,9 @@
 			environment_name = #{environmentName}
 	</select>
 	
-	<select id="selectServiceGroupListByProject" resultType="DbServiceGroup">
+	<select id="selectServiceGroupListByProject" resultMap="ServiceGroupMap">
 		SELECT
-			project_name as projectName,
-			environment_name as environmentName,
-			group_name as groupName
+			*
 		FROM
 			service_group
 		WHERE
@@ -87,13 +116,9 @@
 			sort = #{sort}
 	</insert>
 	
-	<select id="selectDbRoleRelationList" resultType="DbRoleRelation">
+	<select id="selectDbRoleRelationList" resultMap="RoleRelationMap">
 		SELECT
-			project_name as projectName,
-			environment_name as environmentName,
-			group_name as groupName,
-			role_name as roleName,
-			sort as sort
+			*
 		FROM
 			role_relation
 		WHERE
@@ -155,12 +180,9 @@
 			)
 	</insert>
 	
-	<select id="selectDbServerRelationList" resultType="DbServerRelation">
+	<select id="selectDbServerRelationList" resultMap="ServerRelationMap">
 		SELECT
-			project_name as projectName,
-			environment_name as environmentName,
-			group_name as groupName,
-			server_name as serverName
+			*
 		FROM
 			server_relation
 		WHERE
@@ -169,24 +191,18 @@
 			group_name = #{groupName}
 	</select>
 	
-	<select id="selectAllDbServerRelationList" resultType="DbServerRelation">
+	<select id="selectAllDbServerRelationList" resultMap="ServerRelationMap">
 		SELECT
-			project_name as projectName,
-			environment_name as environmentName,
-			group_name as groupName,
-			server_name as serverName
+			*
 		FROM
 			server_relation
 		WHERE
 			project_name = #{projectName}
 	</select>
 	
-	<select id="selectDbServerRelationListByServer" resultType="DbServerRelation">
+	<select id="selectDbServerRelationListByServer" resultMap="ServerRelationMap">
 		SELECT
-			project_name as projectName,
-			environment_name as environmentName,
-			group_name as groupName,
-			server_name as serverName
+			*
 		FROM
 			server_relation
 		WHERE
@@ -235,5 +251,16 @@
 			project_name = #{projectName} AND
 			server_name = #{serverName}
 	</delete>
+	
+	<update id="updateServiceGroupDescription" parameterType="DbServiceGroup">
+		UPDATE
+			service_group
+		SET
+			description = #{description}
+	    WHERE
+			project_name = #{projectName} AND
+			environment_name = #{environmentName} AND
+			group_name = #{groupName}
+	</update>
 	
 </mapper>

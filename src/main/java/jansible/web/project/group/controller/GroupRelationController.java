@@ -6,6 +6,7 @@ import jansible.model.common.RoleRelationKey;
 import jansible.model.common.ServerRelationKey;
 import jansible.model.common.ServiceGroupKey;
 import jansible.model.common.ServiceGroupVariableKey;
+import jansible.model.database.DbServiceGroup;
 import jansible.web.UrlTemplateMapper;
 import jansible.web.project.GroupService;
 import jansible.web.project.ServerService;
@@ -13,6 +14,7 @@ import jansible.web.project.VariableService;
 import jansible.web.project.group.form.RoleRelationForm;
 import jansible.web.project.group.form.RoleRelationOrderForm;
 import jansible.web.project.group.form.ServerRelationForm;
+import jansible.web.project.group.form.ServiceGroupDescriptionForm;
 import jansible.web.project.group.form.ServiceGroupVariableForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +45,14 @@ public class GroupRelationController {
     	serviceGroupKey.setProjectName(projectName);
     	serviceGroupKey.setEnvironmentName(environmentName);
     	serviceGroupKey.setGroupName(groupName);
-		
+    	
+    	// Description
+    	DbServiceGroup serviceGroup = groupService.getServiceGroup(serviceGroupKey);
+		ServiceGroupDescriptionForm serviceGroupDescriptionForm = new ServiceGroupDescriptionForm(serviceGroupKey);
+		serviceGroupDescriptionForm.setGroupName(serviceGroupKey.getGroupName());
+		serviceGroupDescriptionForm.setDescription(serviceGroup.getDescription());
+		model.addAttribute("serviceGroupDescriptionForm", serviceGroupDescriptionForm);
+    	
     	//サーバ関連
 		model.addAttribute("serverRelationForm", new ServerRelationForm(serviceGroupKey));
     	model.addAttribute("serverList", serverService.getServerListByEnvironment(serviceGroupKey));
@@ -67,6 +76,14 @@ public class GroupRelationController {
 		
 		request.setAttribute("pageName", UrlTemplateMapper.GROUP_DETAIL.getTemplatePath());
 		return "common_frame";
+	}
+
+    @RequestMapping(value="/project/groupDescription/regist", method=RequestMethod.POST)
+	private String registGroupDescription(@ModelAttribute ServiceGroupDescriptionForm form, HttpServletRequest request){
+		groupService.updateServiceGroupDescription(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 
     @RequestMapping(value="/project/roleRelation/regist", method=RequestMethod.POST)

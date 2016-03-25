@@ -14,6 +14,7 @@ import java.util.List;
 
 public interface ServiceGroupMapper {
 	void insertServiceGroup(DbServiceGroup dbServiceGroup);
+	DbServiceGroup selectServiceGroup(ServiceGroupKey key);
 	List<DbServiceGroup> selectServiceGroupList(EnvironmentKey environmentKey);
 	List<DbServiceGroup> selectServiceGroupListByProject(ProjectKey projectKey);
 	void deleteServiceGroup(ServiceGroupKey serviceGroupKey);
@@ -36,4 +37,6 @@ public interface ServiceGroupMapper {
 	void deleteDbServerRelationByEnvironment(EnvironmentKey environmentKey);
 	void deleteDbServerRelationByProject(ProjectKey projectKey);
 	void deleteDbServerRelationByServer(ServerKey serverKey);
+
+	void updateServiceGroupDescription(DbServiceGroup dbServiceGroup);
 }

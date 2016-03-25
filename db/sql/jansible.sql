@@ -294,6 +294,7 @@ CREATE TABLE service_group
 	jenkins_port varchar(10) NOT NULL,
 	environment_name varchar(80) NOT NULL,
 	group_name varchar(80) NOT NULL,
+	description varchar(512),
 	PRIMARY KEY (jenkins_port, environment_name, group_name)
 );
 

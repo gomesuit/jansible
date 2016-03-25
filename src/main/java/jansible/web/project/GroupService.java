@@ -16,6 +16,7 @@ import jansible.model.database.DbRoleRelation;
 import jansible.model.database.DbServerRelation;
 import jansible.model.database.DbServiceGroup;
 import jansible.util.DbCommonUtils;
+import jansible.web.project.group.form.ServiceGroupDescriptionForm;
 import jansible.web.project.group.form.RoleRelationForm;
 import jansible.web.project.group.form.RoleRelationOrderForm;
 import jansible.web.project.group.form.RoleRelationOrderType;
@@ -73,6 +74,10 @@ public class GroupService {
 			transactionManager.rollback(status);
 			throw e;
 		}
+	}
+
+	public DbServiceGroup getServiceGroup(ServiceGroupKey key){
+		return serviceGroupMapper.selectServiceGroup(key);
 	}
 
 	public List<DbServiceGroup> getServiceGroupList(EnvironmentKey environmentKey){
@@ -208,5 +213,11 @@ public class GroupService {
 			roleNameList.add(dbGlobalRoleRelation.getRoleName());
 		}
 		return roleNameList;
+	}
+	
+	public void updateServiceGroupDescription(ServiceGroupDescriptionForm form){
+		DbServiceGroup dbServiceGroup = new DbServiceGroup(form);
+		dbServiceGroup.setDescription(form.getDescription());
+		serviceGroupMapper.updateServiceGroupDescription(dbServiceGroup);
 	}
 }
