@@ -19,22 +19,47 @@ public class ModuleGetter {
 
 	public static HtmlModule getModule(String url) throws IOException{
 		Document document = Jsoup.connect(url).get();
-        Elements elements = document.select("#options tr");
-        List<HtmlParameter> parameterList = getParameterList(elements);
-        Elements titleElements = document.select("title");
-        HtmlModule module = new HtmlModule();
-        module.setParameterList(parameterList);
-        module.setName(getModuleName(titleElements.text()));
-        module.setDescription(getDescription(titleElements.text()));
-        return module;
+		HtmlModule module = createHtmlModule(document);
+		return module;
 	}
 	
-	private static String getModuleName(String title){
-		String[] nameList = title.split(" ");
+	private static HtmlModule createHtmlModule(Document document){
+		List<HtmlParameter> parameterList = getParameterList(document);
+		String moduleName = getModuleName(document);
+		String description = getDescription(document);
+
+		HtmlModule module = new HtmlModule();
+		module.setParameterList(parameterList);
+		module.setName(moduleName);
+		module.setDescription(description);
+		return module;
+	}
+	
+	private static List<HtmlParameter> getParameterList(Document document){
+		Elements elements = document.select("#options tr");
+		List<HtmlParameter> ParameterList = new ArrayList<>();
+		
+		for (Element element : elements) {
+			Elements elements2 = element.select("td");
+			HtmlParameter parameter = getParameter(elements2);
+			if(parameter != null){
+				ParameterList.add(parameter);
+			}
+		}
+		
+		return ParameterList;
+	}
+
+	private static String getModuleName(Document document){
+		Elements titleElements = document.select("title");
+		String[] nameList = titleElements.text().split(" ");
 		return nameList[0];
 	}
 	
-	private static String getDescription(String title){
+	private static String getDescription(Document document){
+		Elements titleElements = document.select("title");
+		String title = titleElements.text();
+		
 		String regex = " \\- (.*) —";
 		Pattern p = Pattern.compile(regex);
 		Matcher m = p.matcher(title);
@@ -45,20 +70,6 @@ public class ModuleGetter {
 		}
 	}
 	
-	private static List<HtmlParameter> getParameterList(Elements elements){
-		List<HtmlParameter> ParameterList = new ArrayList<>();
-		
-        for (Element element : elements) {
-            Elements elements2 = element.select("td");
-            HtmlParameter parameter = getParameter(elements2);
-            if(parameter != null){
-            	ParameterList.add(parameter);
-            }
-        }
-        
-		return ParameterList;
-	}
-
 	private static HtmlParameter getParameter(Elements elements){
 		List<String> stringList = elementsToStringList(elements);
 		if(!stringList.isEmpty()){
@@ -134,9 +145,9 @@ public class ModuleGetter {
 	
 	private static List<String> elementsToStringList(Elements elements){
 		List<String> stringList = new ArrayList<>();
-        for (Element element : elements) {
-        	stringList.add(element.text());
-        }
+		for (Element element : elements) {
+			stringList.add(element.text());
+		}
 		return stringList;
 	}
 }
