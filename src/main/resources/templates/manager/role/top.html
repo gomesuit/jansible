@@ -71,12 +71,16 @@
 				<table class="table table-bordered">
 					<thead>
 						<tr>
+							<th>#</th>
 							<th>role</th>
 							<th>Delete</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="role : ${roleList}">
+						<tr th:each="role,iterStat : ${roleList}">
+							<td>
+								<div class="text-center" th:text="${iterStat.count}" />
+							</td>
 							<td>
 								<a class="lead" th:href="@{/manager/role/view(roleName=${role.roleName})}" th:text="${role.roleName}" />
 							</td>

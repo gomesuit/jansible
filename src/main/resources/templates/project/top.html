@@ -70,12 +70,16 @@
 				<table class="table table-bordered">
 					<thead>
 						<tr>
+							<th>#</th>
 							<th>project</th>
 							<th>Delete</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="project : ${projectList}">
+						<tr th:each="project,iterStat : ${projectList}">
+							<td>
+								<div class="text-center" th:text="${iterStat.count}" />
+							</td>
 							<td>
 								<a class="lead" th:href="@{/project/view(projectName=${project.projectName})}" th:text="${project.projectName}" />
 							</td>
