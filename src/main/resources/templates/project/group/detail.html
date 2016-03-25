@@ -89,7 +89,7 @@
 					<input type="hidden" th:field="*{environmentName}" />
 					<input type="hidden" th:field="*{groupName}" />
 					<select class="form-control" th:field="*{roleName}">
-						<option th:each="roleName : ${roleNameList}" th:value="${roleName}" th:label="${roleName}" th:text="${roleName}" />
+						<option th:each="role : ${roleList}" th:value="${role.name}" th:label="${role.name}" th:text="${role.name}" />
 					</select>
 					<input type="submit" class="btn btn-primary" value="登録" />
 				</form>

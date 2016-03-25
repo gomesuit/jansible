@@ -16,6 +16,7 @@ import jansible.model.database.DbRoleRelation;
 import jansible.model.database.DbServerRelation;
 import jansible.model.database.DbServiceGroup;
 import jansible.util.DbCommonUtils;
+import jansible.web.project.group.form.Role;
 import jansible.web.project.group.form.ServiceGroupDescriptionForm;
 import jansible.web.project.group.form.RoleRelationForm;
 import jansible.web.project.group.form.RoleRelationOrderForm;
@@ -202,16 +203,19 @@ public class GroupService {
 		return serviceGroupMapper.selectAllDbServerRelationList(key);
 	}
 
-	public List<String> getRoleNameList(ProjectKey key) {
-		List<String> roleNameList = new ArrayList<>();
+	public List<Role> getRoleListWithGlobalRole(ProjectKey key) {
+		List<Role> roleNameList = new ArrayList<>();
+		
 		List<DbRole> dbRoleList = roleMapper.selectRoleList(key);
 		for(DbRole dbRole : dbRoleList){
-			roleNameList.add(dbRole.getRoleName());
+			roleNameList.add(new Role(dbRole.getRoleName(), false));
 		}
+		
 		List<DbGlobalRoleRelation> dbGlobalRoleRelationList = globalRoleRelationMapper.selectRoleRelationList(key);
 		for(DbGlobalRoleRelation dbGlobalRoleRelation : dbGlobalRoleRelationList){
-			roleNameList.add(dbGlobalRoleRelation.getRoleName());
+			roleNameList.add(new Role(dbGlobalRoleRelation.getRoleName(), true));
 		}
+		
 		return roleNameList;
 	}
 	

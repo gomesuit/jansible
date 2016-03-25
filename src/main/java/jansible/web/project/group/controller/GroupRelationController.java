@@ -60,7 +60,7 @@ public class GroupRelationController {
     	model.addAttribute("serverRelationKey", new ServerRelationKey(serviceGroupKey));
     	
     	//ロール一覧
-    	model.addAttribute("roleNameList", groupService.getRoleNameList(serviceGroupKey));
+    	model.addAttribute("roleList", groupService.getRoleListWithGlobalRole(serviceGroupKey));
     	
     	//ロール関連
 		model.addAttribute("roleRelationForm", new RoleRelationForm(serviceGroupKey));
