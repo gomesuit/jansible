@@ -54,8 +54,11 @@ public class ApplyDetailController {
 		serviceGroupKey.setProjectName(projectName);
 		serviceGroupKey.setEnvironmentName(environmentName);
 		serviceGroupKey.setGroupName(groupName);
-
+		
+		// 対象サーバ一覧
 		model.addAttribute("serverList", groupService.getServerRelationList(serviceGroupKey));
+		
+		// 適用ロール一覧
 		model.addAttribute("roleList", groupService.getRoleRelationList(serviceGroupKey));
 		
 		// Git commit
@@ -89,7 +92,8 @@ public class ApplyDetailController {
 		serverRelationKey.setEnvironmentName(environmentName);
 		serverRelationKey.setGroupName(groupName);
 		serverRelationKey.setServerName(serverName);
-		
+
+		// 適用ロール一覧
 		model.addAttribute("roleList", groupService.getRoleRelationList(serverRelationKey));
 		
 		// Git commit

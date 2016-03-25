@@ -56,8 +56,9 @@
 								<div class="text-center" th:text="${iterStat.count}" />
 							</td>
 							<td>
-								<a th:href="@{/project/role/detail(projectName=${role.projectName}, roleName=${role.roleName})}"
+								<a th:if="${role.roleType.name().equals('project')}" th:href="@{/project/role/detail(projectName=${role.projectName}, roleName=${role.roleName})}"
 								th:text="${role.roleName}" />
+								<div th:if="${role.roleType.name().equals('global')}" th:text="${role.roleName}" />
 							</td>
 						</tr>
 					</tbody>
