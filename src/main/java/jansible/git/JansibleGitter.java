@@ -37,10 +37,13 @@ import org.eclipse.jgit.submodule.SubmoduleWalk;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class JansibleGitter {
+	private static final Logger logger = LoggerFactory.getLogger(JansibleGitter.class);
 	
 	public void addSubmodule(String localPath, String uri, String path) throws Exception{
 		File gitDir = getGitDir(localPath);
@@ -104,6 +107,7 @@ public class JansibleGitter {
 	}
 	
 	public void initAndUpdateSubmodule(String localPath) throws Exception{
+		logger.debug("localPath : " + localPath);
 		File gitDir = getGitDir(localPath);
 		FileRepositoryBuilder builder = createBuilder(gitDir);
 		
@@ -178,6 +182,10 @@ public class JansibleGitter {
 	}
 	
 	public void checkoutSubmodule(String localPath, String submodulePath, String tagName) throws Exception {
+		logger.debug("localPath : " + localPath);
+		logger.debug("submodulePath : " + submodulePath);
+		logger.debug("tagName : " + tagName);
+		
 		File gitDir = getGitDir(localPath);
 		FileRepositoryBuilder builder = createBuilder(gitDir);
 		Repository repository = builder.build();
@@ -186,6 +194,7 @@ public class JansibleGitter {
 		try(Git git = new Git(subRepo)){
 			callFetch(git);
 			callCheckout(git, tagName);
+			logger.debug("git.getRepository().getDirectory().getPath() : " + git.getRepository().getDirectory().getPath());
 		} catch (GitAPIException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
