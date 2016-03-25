@@ -78,12 +78,14 @@
 					<tbody>
 						<tr th:each="role : ${roleList}">
 							<td>
-								<a th:href="@{/manager/role/view(roleName=${role.roleName})}" th:text="${role.roleName}" />
+								<a class="lead" th:href="@{/manager/role/view(roleName=${role.roleName})}" th:text="${role.roleName}" />
 							</td>
 							<td class="text-center">
 								<form method="POST" th:action="@{/manager/role/delete}" th:object="${roleKey}">
 									<input type="hidden" name="roleName" th:value="${role.roleName}" />
-									<input type="submit" class="btn btn-primary" value="Delete" />
+									<button type="submit" class="btn btn-danger btn-xs">
+										<span class="glyphicon glyphicon-trash" aria-hidden="true" />
+									</button>
 								</form>
 							</td>
 						</tr>

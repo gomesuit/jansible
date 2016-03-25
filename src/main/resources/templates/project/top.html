@@ -12,7 +12,7 @@
 				<div class="panel-body">
 					<div class="row">
 						<div class="col-md-6">
-							<div>プロジェクト情報</div>
+							<label>プロジェクト情報</label>
 							<table class="table table-bordered">
 								<thead>
 									<tr>
@@ -22,14 +22,18 @@
 								</thead>
 								<tbody>
 									<tr>
-										<td><input type="text" class="form-control" th:field="*{projectName}" /></td>
-										<td><input type="text" class="form-control" th:field="*{repositoryUrl}" /></td>
+										<td>
+											<input type="text" class="form-control" th:field="*{projectName}" placeholder="projectName" />
+										</td>
+										<td>
+											<input type="text" class="form-control" th:field="*{repositoryUrl}" placeholder="repositoryUrl" />
+										</td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
 						<div class="col-md-6">
-							<div>レポジトリ認証情報（プライベートのみ）</div>
+							<label>レポジトリ認証情報（プライベートのみ）</label>
 							<table class="table table-bordered">
 								<thead>
 									<tr>
@@ -39,14 +43,22 @@
 								</thead>
 								<tbody>
 									<tr>
-										<td><input type="text" class="form-control" th:field="*{userName}" /></td>
-										<td><input type="password" class="form-control" th:field="*{password}" /></td>
+										<td>
+											<input type="text" class="form-control" th:field="*{userName}" placeholder="userName" />
+										</td>
+										<td>
+											<input type="password" class="form-control" th:field="*{password}" placeholder="password" />
+										</td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
 					</div>
-					<input type="submit" class="btn btn-primary btn-lg" value="登録" />
+					<div class="row">
+						<div class="col-md-4 col-md-offset-4">
+							<input type="submit" class="btn btn-info btn-block btn-lg" value="登録" />
+						</div>
+					</div>
 				</div>
 			</form>
 		</div>
@@ -65,7 +77,7 @@
 					<tbody>
 						<tr th:each="project : ${projectList}">
 							<td>
-								<a th:href="@{/project/view(projectName=${project.projectName})}" th:text="${project.projectName}" />
+								<a class="lead" th:href="@{/project/view(projectName=${project.projectName})}" th:text="${project.projectName}" />
 							</td>
 							<td class="text-center">
 								<form method="POST" th:action="@{/project/delete}" th:object="${projectKey}">
