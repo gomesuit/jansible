@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import jansible.model.common.GlobalRoleKey;
 import jansible.model.common.GlobalRoleVariableKey;
 import jansible.model.common.GlobalTaskKey;
+import jansible.model.database.DbGlobalRole;
 import jansible.model.database.DbGlobalTask;
 import jansible.model.database.DbGlobalTaskDetail;
 import jansible.web.UrlTemplateMapper;
@@ -18,6 +19,7 @@ import jansible.web.manager.ManagerYamlService;
 import jansible.web.manager.module.ModuleService;
 import jansible.web.manager.role.form.GeneralFileForm;
 import jansible.web.manager.role.form.GitForm;
+import jansible.web.manager.role.form.GlobalRoleDescriptionForm;
 import jansible.web.manager.role.form.RoleVariableForm;
 import jansible.web.manager.role.form.TaskForm;
 import jansible.web.manager.role.form.TaskOrderForm;
@@ -44,8 +46,6 @@ public class GlobalRoleDetailController {
 	private GlobalTaskService taskService;
 	@Autowired
 	private ManagerGitService gitService;
-	@Autowired
-	private GlobalRoleService globalRoleService;
     
     @RequestMapping("/manager/role/view")
 	private String viewRole(
@@ -53,6 +53,12 @@ public class GlobalRoleDetailController {
 			Model model, HttpServletRequest request){
     	GlobalRoleKey roleKey = new GlobalRoleKey();
 		roleKey.setRoleName(roleName);
+		
+		// ロール説明
+		GlobalRoleDescriptionForm globalRoleDescriptionForm = new GlobalRoleDescriptionForm(roleKey);
+		DbGlobalRole dbGlobalRole = roleService.getRole(roleKey);
+		globalRoleDescriptionForm.setDescription(dbGlobalRole.getDescription());
+		model.addAttribute("globalRoleDescriptionForm", globalRoleDescriptionForm);
 		
 		// タスク関連
 		model.addAttribute("form", new TaskForm(roleKey));
@@ -122,6 +128,14 @@ public class GlobalRoleDetailController {
 			taskViewList.add(taskView);
 		}
 		return taskViewList;
+	}
+
+	@RequestMapping(value="/manager/roleDescription/regist", method=RequestMethod.POST)
+	private String registRoleDescription(@ModelAttribute GlobalRoleDescriptionForm form, HttpServletRequest request){
+		roleService.updateRoleDescription(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 
 	@RequestMapping(value="/manager/task/regist", method=RequestMethod.POST)

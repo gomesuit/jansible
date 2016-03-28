@@ -4,6 +4,12 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jansible.mapper.GlobalRoleMapper">
 	
+	<resultMap id="GlobalRoleMap" type="DbGlobalRole">
+		<result property="roleName" column="role_name" />
+		<result property="repositoryUrl" column="repository_url" />
+		<result property="description" column="description" />
+	</resultMap>
+	
 	<insert id="insertRole" parameterType="DbGlobalRole">
 		INSERT INTO global_role
 			(
@@ -17,18 +23,16 @@
 			)
 	</insert>
 	
-	<select id="selectRoleList" resultType="DbGlobalRole">
+	<select id="selectRoleList" resultMap="GlobalRoleMap">
 		SELECT
-			role_name as roleName,
-			repository_url as repositoryUrl
+			*
 		FROM
 			global_role
 	</select>
 	
-	<select id="selectRole" resultType="DbGlobalRole">
+	<select id="selectRole" resultMap="GlobalRoleMap">
 		SELECT
-			role_name as roleName,
-			repository_url as repositoryUrl
+			*
 		FROM
 			global_role
 		WHERE
@@ -41,6 +45,15 @@
 		WHERE
 			role_name = #{roleName}
 	</delete>
+	
+	<update id="updateRoleDescription">
+		UPDATE
+			global_role
+		SET
+			description = #{description}
+		WHERE
+			role_name = #{roleName}
+	</update>
 	
 	<insert id="insertDbFile" parameterType="DbGlobalRoleFile">
 		INSERT INTO global_role_file

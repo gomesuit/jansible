@@ -101,6 +101,7 @@ CREATE TABLE global_role
 (
 	role_name varchar(30) NOT NULL,
 	repository_url varchar(100) NOT NULL,
+	description varchar(512),
 	PRIMARY KEY (role_name)
 );
 

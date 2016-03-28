@@ -14,6 +14,7 @@ import jansible.model.database.DbGlobalRoleTemplate;
 import jansible.model.database.DbGlobalRoleVariable;
 import jansible.web.manager.role.form.GeneralFileForm;
 import jansible.web.manager.role.form.GitForm;
+import jansible.web.manager.role.form.GlobalRoleDescriptionForm;
 import jansible.web.manager.role.form.RoleVariableForm;
 import jansible.web.manager.role.form.UploadForm;
 import jansible.web.manager.top.form.GlobalRoleForm;
@@ -111,6 +112,12 @@ public class GlobalRoleService {
 		roleMapper.deleteRoleTag(key);
 		roleMapper.deleteRoleTagVariable(key);
 		fileService.deleteRoleDir(key);
+	}
+	
+	public void updateRoleDescription(GlobalRoleDescriptionForm form){
+		DbGlobalRole dbGlobalRole = new DbGlobalRole(form);
+		dbGlobalRole.setDescription(form.getDescription());
+		roleMapper.updateRoleDescription(dbGlobalRole);
 	}
 
 	public void registFile(UploadForm form) {

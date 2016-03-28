@@ -74,6 +74,27 @@
 	</div>
 </div>
 
+<div class="row">
+	<div class="col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<div>説明</div>
+			</div>
+			<div class="panel-body">
+				<form action="#" th:action="@{/manager/roleDescription/regist}" th:object="${globalRoleDescriptionForm}" method="post">
+					<input type="hidden" th:field="*{roleName}" />
+					<textarea class="form-control" type="text" th:field="*{description}" rows="3" maxlength="512" />
+					<br />
+					<div class="row">
+						<div class="col-md-4 col-md-offset-4">
+							<input type="submit" class="btn btn-primary btn-block" value="更新" />
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 
 <div class="panel panel-primary">
 	<div class="panel-heading">

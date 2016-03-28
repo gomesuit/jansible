@@ -18,6 +18,7 @@ public interface GlobalRoleMapper {
 	List<DbGlobalRole> selectRoleList();
 	DbGlobalRole selectRole(GlobalRoleKey globalRoleKey);
 	void deleteRole(GlobalRoleKey globalRoleKey);
+	void updateRoleDescription(DbGlobalRole dbGlobalRole);
 	
 	void insertDbFile(DbGlobalRoleFile dbGlobalRoleFile);
 	List<DbGlobalRoleFile> selectDbFileList(GlobalRoleKey globalRoleKey);
