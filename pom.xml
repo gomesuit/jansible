@@ -69,7 +69,7 @@
 		<dependency>
 			<groupId>org.eclipse.jgit</groupId>
 			<artifactId>org.eclipse.jgit</artifactId>
-			<version>4.1.0.201509280440-r</version>
+			<version>4.2.0.201601211800-r</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
