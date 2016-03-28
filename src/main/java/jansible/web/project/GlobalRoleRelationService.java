@@ -1,6 +1,8 @@
 package jansible.web.project;
 
+import jansible.mapper.GlobalRoleMapper;
 import jansible.mapper.GlobalRoleRelationMapper;
+import jansible.model.common.GlobalRoleKey;
 import jansible.model.common.GlobalRoleRelationKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.database.DbGlobalRole;
@@ -24,6 +26,8 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 public class GlobalRoleRelationService {
 	@Autowired
 	private GlobalRoleRelationMapper globalRoleRelationMapper;
+	@Autowired
+	private GlobalRoleMapper roleMapper;
 
 	@Autowired
 	private GitService gitService;
@@ -90,10 +94,12 @@ public class GlobalRoleRelationService {
 	public List<GlobalRoleRelationView> getGlobalRoleRelationViewList(ProjectKey projectKey) {
 		List<GlobalRoleRelationView> viewList = new ArrayList<>();
 		List<DbGlobalRoleRelation> DbList = getGlobalRoleRelationList(projectKey);
+		
 		for(DbGlobalRoleRelation Db : DbList){
 			GlobalRoleRelationView view = createGlobalRoleRelationView(Db);
 			viewList.add(view);
 		}
+		
 		return viewList;
 	}
 
@@ -101,6 +107,18 @@ public class GlobalRoleRelationService {
 		GlobalRoleRelationView view = new GlobalRoleRelationView(db);
 		List<String> tagList = globalRoleRelationMapper.selectTagNameList(db.getRoleName());
 		view.setTagList(tagList);
+		
+		GlobalRoleKey globalRoleKey = new GlobalRoleKey(db.getRoleName());
+		DbGlobalRole dbGlobalRole = roleMapper.selectRole(globalRoleKey);
+		view.setGitHubUrl(getGitHubUrl(dbGlobalRole.getRepositoryUrl(), db.getTagName()));
+		
 		return view;
+	}
+	
+	private String getGitHubUrl(String repositoryUrl, String tagName){
+		String gitHubUrl = repositoryUrl.replace(".git", "");
+		gitHubUrl = gitHubUrl + "/tree/" + tagName;
+		
+		return gitHubUrl;
 	}
 }
