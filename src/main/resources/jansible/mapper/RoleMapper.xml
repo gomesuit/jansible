@@ -3,6 +3,12 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jansible.mapper.RoleMapper">
+    
+	<resultMap id="RoleMap" type="DbRole">
+		<result property="projectName" column="project_name" />
+		<result property="roleName" column="role_name" />
+		<result property="description" column="description" />
+	</resultMap>
 	
 	<insert id="insertRole" parameterType="DbRole">
 		INSERT INTO role
@@ -17,14 +23,23 @@
 			)
 	</insert>
 	
-	<select id="selectRoleList" resultType="DbRole">
+	<select id="selectRoleList" resultMap="RoleMap">
 		SELECT
-			project_name as projectName,
-			role_name as roleName
+			*
 		FROM
 			role
 		WHERE
 			project_name = #{projectName}
+	</select>
+	
+	<select id="selectRole" resultMap="RoleMap">
+		SELECT
+			*
+		FROM
+			role
+		WHERE
+			project_name = #{projectName} AND
+			role_name = #{roleName}
 	</select>
 	
 	<delete id="deleteRole">
@@ -41,6 +56,17 @@
 		WHERE
 			project_name = #{projectName}
 	</delete>
+	
+	<update id="updateRoleDescliption">
+	    UPDATE
+	    	role
+	    SET
+	    	description = #{description}
+	    WHERE
+			project_name = #{projectName} AND
+			role_name = #{roleName}
+	</update>
+	
 	
 	<insert id="insertDbFile" parameterType="DbFile">
 		INSERT INTO file

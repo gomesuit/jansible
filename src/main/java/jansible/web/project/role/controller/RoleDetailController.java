@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import jansible.model.common.RoleKey;
 import jansible.model.common.RoleVariableKey;
 import jansible.model.common.TaskKey;
+import jansible.model.database.DbRole;
 import jansible.model.database.DbTask;
 import jansible.model.database.DbTaskDetail;
 import jansible.web.UrlTemplateMapper;
@@ -17,6 +18,7 @@ import jansible.web.project.TaskService;
 import jansible.web.project.VariableService;
 import jansible.web.project.YamlService;
 import jansible.web.project.role.form.GeneralFileForm;
+import jansible.web.project.role.form.RoleForm;
 import jansible.web.project.role.form.RoleVariableForm;
 import jansible.web.project.role.form.TaskForm;
 import jansible.web.project.role.form.TaskOrderForm;
@@ -53,6 +55,12 @@ public class RoleDetailController {
 		roleKey.setProjectName(projectName);
 		roleKey.setRoleName(roleName);
 		
+		// ロール説明
+		RoleForm roleForm = new RoleForm(roleKey);
+		DbRole dbRole = roleService.getRole(roleKey);
+		roleForm.setDescription(dbRole.getDescription());
+		model.addAttribute("roleForm", roleForm);
+		
 		// タスク関連
 		model.addAttribute("form", new TaskForm(roleKey));
 		List<DbTask> dbTaskList = taskService.getTaskList(roleKey);
@@ -80,6 +88,14 @@ public class RoleDetailController {
 		
 		request.setAttribute("pageName", UrlTemplateMapper.ROLE_DETAIL.getTemplatePath());
 		return "common_frame";
+	}
+
+	@RequestMapping(value="/project/roleDescription/regist", method=RequestMethod.POST)
+	private String registRoleDescription(@ModelAttribute RoleForm form, HttpServletRequest request){
+		roleService.updateRoleDescription(form);
+		
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
 	}
 
 	@RequestMapping(value="/project/roleVariable/regist", method=RequestMethod.POST)

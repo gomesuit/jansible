@@ -47,6 +47,10 @@ public class RoleService {
 		return roleMapper.selectRoleList(projectKey);
 	}
 
+	public DbRole getRole(RoleKey roleKey){
+		return roleMapper.selectRole(roleKey);
+	}
+
 	public void deleteRole(RoleKey roleKey){
     	DefaultTransactionDefinition def = new DefaultTransactionDefinition();
     	def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
@@ -109,5 +113,11 @@ public class RoleService {
 
 	public List<DbTemplate> getDbTemplateList(RoleKey roleKey){
 		return roleMapper.selectDbTemplateList(roleKey);
+	}
+
+	public void updateRoleDescription(RoleForm form) {
+		DbRole dbRole = new DbRole(form);
+		dbRole.setDescription(form.getDescription());
+		roleMapper.updateRoleDescliption(dbRole);
 	}
 }

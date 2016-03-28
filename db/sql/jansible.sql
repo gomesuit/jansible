@@ -225,6 +225,7 @@ CREATE TABLE role
 (
 	project_name varchar(50) NOT NULL,
 	role_name varchar(30) NOT NULL,
+	description varchar(512),
 	PRIMARY KEY (project_name, role_name)
 );
 

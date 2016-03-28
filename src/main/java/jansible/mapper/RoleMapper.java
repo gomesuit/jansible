@@ -13,8 +13,10 @@ import java.util.List;
 public interface RoleMapper {
 	void insertRole(DbRole dbRole);
 	List<DbRole> selectRoleList(ProjectKey projectKey);
+	DbRole selectRole(RoleKey roleKey);
 	void deleteRole(RoleKey roleKey);
 	void deleteRoleByProject(ProjectKey projectKey);
+	void updateRoleDescliption(DbRole dbRole);
 	
 	void insertDbFile(DbFile dbFile);
 	List<DbFile> selectDbFileList(RoleKey roleKey);
