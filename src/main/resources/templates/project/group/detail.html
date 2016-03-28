@@ -112,7 +112,7 @@
 							<td>
 								<a th:if="${roleRelation.roleType.name().equals('project')}" th:href="@{/project/role/detail(projectName=${roleRelation.projectName}, roleName=${roleRelation.roleName})}"
 								th:text="${roleRelation.roleName}" />
-								<div th:if="${roleRelation.roleType.name().equals('global')}" th:text="${roleRelation.roleName}" />
+								<a th:if="${roleRelation.roleType.name().equals('global')}" th:href="${roleRelation.gitHubUrl}" th:text="${roleRelation.roleName}" />
 							</td>
 							<td class="text-center">
 								<div style="display:inline-flex">

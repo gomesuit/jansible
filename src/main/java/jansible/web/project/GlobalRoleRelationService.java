@@ -2,7 +2,6 @@ package jansible.web.project;
 
 import jansible.mapper.GlobalRoleMapper;
 import jansible.mapper.GlobalRoleRelationMapper;
-import jansible.model.common.GlobalRoleKey;
 import jansible.model.common.GlobalRoleRelationKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.database.DbGlobalRole;
@@ -108,9 +107,8 @@ public class GlobalRoleRelationService {
 		List<String> tagList = globalRoleRelationMapper.selectTagNameList(db.getRoleName());
 		view.setTagList(tagList);
 		
-		GlobalRoleKey globalRoleKey = new GlobalRoleKey(db.getRoleName());
-		DbGlobalRole dbGlobalRole = roleMapper.selectRole(globalRoleKey);
-		view.setGitHubUrl(getGitHubUrl(dbGlobalRole.getRepositoryUrl(), db.getTagName()));
+		String repositoryUrl = globalRoleRelationMapper.selectUri(db.getRoleName());
+		view.setGitHubUrl(getGitHubUrl(repositoryUrl, db.getTagName()));
 		
 		return view;
 	}

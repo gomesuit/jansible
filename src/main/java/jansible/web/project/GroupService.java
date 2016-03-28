@@ -6,6 +6,7 @@ import jansible.mapper.ServerMapper;
 import jansible.mapper.ServiceGroupMapper;
 import jansible.mapper.VariableMapper;
 import jansible.model.common.EnvironmentKey;
+import jansible.model.common.GlobalRoleRelationKey;
 import jansible.model.common.ProjectKey;
 import jansible.model.common.RoleRelationKey;
 import jansible.model.common.ServerRelationKey;
@@ -17,6 +18,7 @@ import jansible.model.database.DbServerRelation;
 import jansible.model.database.DbServiceGroup;
 import jansible.util.DbCommonUtils;
 import jansible.web.project.group.form.Role;
+import jansible.web.project.group.form.RoleRelationView;
 import jansible.web.project.group.form.RoleType;
 import jansible.web.project.group.form.ServiceGroupDescriptionForm;
 import jansible.web.project.group.form.RoleRelationForm;
@@ -126,8 +128,34 @@ public class GroupService {
 		transactionManager.commit(status);
 	}
 
-	public List<DbRoleRelation> getRoleRelationList(ServiceGroupKey serviceGroupKey){
-		return serviceGroupMapper.selectDbRoleRelationList(serviceGroupKey);
+	public List<RoleRelationView> getRoleRelationList(ServiceGroupKey serviceGroupKey){
+		List<RoleRelationView> roleRelationViewList = new ArrayList<>();
+		
+		for(DbRoleRelation db : serviceGroupMapper.selectDbRoleRelationList(serviceGroupKey)){
+			RoleRelationView roleRelationView = new RoleRelationView(db);
+			roleRelationView.setRoleType(db.getRoleType());
+			
+			GlobalRoleRelationKey globalRoleRelationKey = new GlobalRoleRelationKey();
+			globalRoleRelationKey.setProjectName(db.getProjectName());
+			globalRoleRelationKey.setRoleName(db.getRoleName());
+			
+			if(db.getRoleType() == RoleType.global){
+				String repositoryUrl = globalRoleRelationMapper.selectUri(db.getRoleName());
+				DbGlobalRoleRelation dbGlobalRoleRelation = globalRoleRelationMapper.selectRoleRelation(globalRoleRelationKey);
+				roleRelationView.setGitHubUrl(getGitHubUrl(repositoryUrl, dbGlobalRoleRelation.getTagName()));
+			}
+			
+			roleRelationViewList.add(roleRelationView);
+		}
+		
+		return roleRelationViewList;
+	}
+	
+	private String getGitHubUrl(String repositoryUrl, String tagName){
+		String gitHubUrl = repositoryUrl.replace(".git", "");
+		gitHubUrl = gitHubUrl + "/tree/" + tagName;
+		
+		return gitHubUrl;
 	}
 
 	public void modifyRoleRelationOrder(RoleRelationOrderForm form) {

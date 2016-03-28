@@ -40,7 +40,7 @@
 		FROM
 			global_role_relation
 		WHERE
-			project_name = #{projectName},
+			project_name = #{projectName} AND
 			role_name = #{roleName}
 	</select>
 	
@@ -48,7 +48,7 @@
 		DELETE FROM
 			global_role_relation
 		WHERE
-			project_name = #{projectName},
+			project_name = #{projectName} AND
 			role_name = #{roleName}
 	</delete>
 	
