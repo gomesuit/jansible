@@ -1,359 +1,509 @@
-SET SESSION FOREIGN_KEY_CHECKS=0;
-
-/* Drop Tables */
-
-DROP TABLE IF EXISTS apply_history;
-DROP TABLE IF EXISTS available_module;
-DROP TABLE IF EXISTS choice;
-DROP TABLE IF EXISTS environment_variable;
-DROP TABLE IF EXISTS role_relation;
-DROP TABLE IF EXISTS server_relation;
-DROP TABLE IF EXISTS service_group_variable;
-DROP TABLE IF EXISTS service_group;
-DROP TABLE IF EXISTS environment;
-DROP TABLE IF EXISTS file;
-DROP TABLE IF EXISTS global_role_file;
-DROP TABLE IF EXISTS global_role_relation;
-DROP TABLE IF EXISTS global_role_tag_variable;
-DROP TABLE IF EXISTS global_role_tag;
-DROP TABLE IF EXISTS global_role_template;
-DROP TABLE IF EXISTS global_role_variable;
-DROP TABLE IF EXISTS global_task_conditional;
-DROP TABLE IF EXISTS global_task_detail;
-DROP TABLE IF EXISTS global_task;
-DROP TABLE IF EXISTS global_role;
-DROP TABLE IF EXISTS parameter;
-DROP TABLE IF EXISTS task_conditional;
-DROP TABLE IF EXISTS task_detail;
-DROP TABLE IF EXISTS task;
-DROP TABLE IF EXISTS module;
-DROP TABLE IF EXISTS role_variable;
-DROP TABLE IF EXISTS template;
-DROP TABLE IF EXISTS role;
-DROP TABLE IF EXISTS server_parameter;
-DROP TABLE IF EXISTS server_variable;
-DROP TABLE IF EXISTS server;
-DROP TABLE IF EXISTS project;
-
-
-
-
-/* Create Tables */
-
-CREATE TABLE apply_history
-(
-	apply_histroy_id int NOT NULL AUTO_INCREMENT,
-	project_name varchar(50) NOT NULL,
-	environment_name varchar(80),
-	group_name varchar(80),
-	server_name varchar(80),
-	tag_name varchar(120) NOT NULL,
-	tag_comment varchar(256),
-	apply_time datetime NOT NULL,
-	PRIMARY KEY (apply_histroy_id, project_name)
-);
-
-
-CREATE TABLE available_module
-(
-	module_name varchar(80) NOT NULL,
-	PRIMARY KEY (module_name)
-);
-
-
-CREATE TABLE choice
-(
-	module_name varchar(80) NOT NULL,
-	parameter_name varchar(80) NOT NULL,
-	choice_value varchar(80) NOT NULL,
-	PRIMARY KEY (module_name, parameter_name, choice_value)
-);
-
-
-CREATE TABLE environment
-(
-	jenkins_port varchar(10) NOT NULL,
-	environment_name varchar(80) NOT NULL,
-	PRIMARY KEY (jenkins_port, environment_name)
-);
-
-
-CREATE TABLE environment_variable
-(
-	jenkins_port varchar(10) NOT NULL,
-	environment_name varchar(80) NOT NULL,
-	variable_name varchar(80) NOT NULL,
-	value varchar(80),
-	PRIMARY KEY (jenkins_port, environment_name, variable_name)
-);
-
-
-CREATE TABLE file
-(
-	project_name varchar(50) NOT NULL,
-	role_name varchar(30) NOT NULL,
-	file_name varchar(128) NOT NULL,
-	PRIMARY KEY (project_name, role_name, file_name)
-);
-
-
-CREATE TABLE global_role
-(
-	role_name varchar(30) NOT NULL,
-	repository_url varchar(100) NOT NULL,
-	description varchar(512),
-	PRIMARY KEY (role_name)
-);
-
-
-CREATE TABLE global_role_file
-(
-	role_name varchar(30) NOT NULL,
-	file_name varchar(128) NOT NULL,
-	PRIMARY KEY (role_name, file_name)
-);
-
-
-CREATE TABLE global_role_relation
-(
-	project_name varchar(50) NOT NULL,
-	role_name varchar(30) NOT NULL,
-	tag_name varchar(120) NOT NULL,
-	PRIMARY KEY (project_name, role_name)
-);
-
-
-CREATE TABLE global_role_tag
-(
-	role_name varchar(30) NOT NULL,
-	tag_name varchar(120) NOT NULL,
-	tag_comment varchar(256),
-	PRIMARY KEY (role_name, tag_name)
-);
-
-
-CREATE TABLE global_role_tag_variable
-(
-	role_name varchar(30) NOT NULL,
-	tag_name varchar(120) NOT NULL,
-	variable_name varchar(80) NOT NULL,
-	value varchar(80),
-	PRIMARY KEY (role_name, tag_name, variable_name)
-);
-
-
-CREATE TABLE global_role_template
-(
-	role_name varchar(30) NOT NULL,
-	template_name varchar(128) NOT NULL,
-	PRIMARY KEY (role_name, template_name)
-);
-
-
-CREATE TABLE global_role_variable
-(
-	role_name varchar(30) NOT NULL,
-	variable_name varchar(80) NOT NULL,
-	value varchar(80),
-	PRIMARY KEY (role_name, variable_name)
-);
-
-
-CREATE TABLE global_task
-(
-	task_id int NOT NULL AUTO_INCREMENT,
-	role_name varchar(30) NOT NULL,
-	module_name varchar(80) NOT NULL,
-	description varchar(512),
-	sort int NOT NULL,
-	PRIMARY KEY (task_id, role_name)
-);
-
-
-CREATE TABLE global_task_conditional
-(
-	task_id int NOT NULL,
-	role_name varchar(30) NOT NULL,
-	conditional_name varchar(80) NOT NULL,
-	conditional_value varchar(256) NOT NULL,
-	PRIMARY KEY (task_id, role_name, conditional_name)
-);
-
-
-CREATE TABLE global_task_detail
-(
-	task_id int NOT NULL,
-	role_name varchar(30) NOT NULL,
-	parameter_name varchar(80) NOT NULL,
-	parameter_value varchar(256),
-	PRIMARY KEY (task_id, role_name, parameter_name)
-);
-
-
-CREATE TABLE module
-(
-	module_name varchar(80) NOT NULL,
-	description varchar(512),
-	PRIMARY KEY (module_name)
-);
-
-
-CREATE TABLE parameter
-(
-	module_name varchar(80) NOT NULL,
-	parameter_name varchar(80) NOT NULL,
-	added_version varchar(30),
-	required enum('yes','no'),
-	defautl_value varchar(80),
-	description varchar(512),
-	is_free_form enum('true','false'),
-	PRIMARY KEY (module_name, parameter_name)
-);
-
-
-CREATE TABLE project
-(
-	project_name varchar(50) NOT NULL,
-	repository_url varchar(100) NOT NULL,
-	jenkins_ip_address varchar(50),
-	jenkins_port varchar(10),
-	jenkins_job_name varchar(20),
-	PRIMARY KEY (project_name)
-);
-
-
-CREATE TABLE role
-(
-	project_name varchar(50) NOT NULL,
-	role_name varchar(30) NOT NULL,
-	description varchar(512),
-	PRIMARY KEY (project_name, role_name)
-);
-
-
-CREATE TABLE role_relation
-(
-	project_name varchar(50) NOT NULL,
-	environment_name varchar(80) NOT NULL,
-	group_name varchar(80) NOT NULL,
-	role_name varchar(30) NOT NULL,
-	role_type enum('project','global') NOT NULL,
-	sort int,
-	PRIMARY KEY (project_name, environment_name, group_name, role_name)
-);
-
-
-CREATE TABLE role_variable
-(
-	project_name varchar(50) NOT NULL,
-	role_name varchar(30) NOT NULL,
-	variable_name varchar(80) NOT NULL,
-	value varchar(80),
-	PRIMARY KEY (project_name, role_name, variable_name)
-);
-
-
-CREATE TABLE server
-(
-	project_name varchar(50) NOT NULL,
-	server_name varchar(80) NOT NULL,
-	environment_name varchar(80) NOT NULL,
-	PRIMARY KEY (project_name, server_name)
-);
-
-
-CREATE TABLE server_parameter
-(
-	server_name varchar(80) NOT NULL,
-	project_name varchar(50) NOT NULL,
-	parameter_name varchar(80) NOT NULL,
-	parameter_value varchar(256),
-	PRIMARY KEY (server_name, project_name, parameter_name)
-);
-
-
-CREATE TABLE server_relation
-(
-	jenkins_port varchar(10) NOT NULL,
-	environment_name varchar(80) NOT NULL,
-	group_name varchar(80) NOT NULL,
-	server_name varchar(80) NOT NULL,
-	PRIMARY KEY (jenkins_port, environment_name, group_name, server_name)
-);
-
-
-CREATE TABLE server_variable
-(
-	server_name varchar(80) NOT NULL,
-	project_name varchar(50) NOT NULL,
-	variable_name varchar(80) NOT NULL,
-	value varchar(80),
-	PRIMARY KEY (server_name, project_name, variable_name)
-);
-
-
-CREATE TABLE service_group
-(
-	jenkins_port varchar(10) NOT NULL,
-	environment_name varchar(80) NOT NULL,
-	group_name varchar(80) NOT NULL,
-	description varchar(512),
-	PRIMARY KEY (jenkins_port, environment_name, group_name)
-);
-
-
-CREATE TABLE service_group_variable
-(
-	jenkins_port varchar(10) NOT NULL,
-	environment_name varchar(80) NOT NULL,
-	group_name varchar(80) NOT NULL,
-	variable_name varchar(80) NOT NULL,
-	value varchar(80),
-	PRIMARY KEY (jenkins_port, environment_name, group_name, variable_name)
-);
-
-
-CREATE TABLE task
-(
-	task_id int NOT NULL AUTO_INCREMENT,
-	project_name varchar(50) NOT NULL,
-	role_name varchar(30) NOT NULL,
-	module_name varchar(80) NOT NULL,
-	description varchar(512),
-	sort int NOT NULL,
-	PRIMARY KEY (task_id, project_name, role_name)
-);
-
-
-CREATE TABLE task_conditional
-(
-	task_id int NOT NULL,
-	project_name varchar(50) NOT NULL,
-	role_name varchar(30) NOT NULL,
-	conditional_name varchar(80) NOT NULL,
-	conditional_value varchar(256) NOT NULL,
-	PRIMARY KEY (task_id, project_name, role_name, conditional_name)
-);
-
-
-CREATE TABLE task_detail
-(
-	task_id int NOT NULL,
-	project_name varchar(50) NOT NULL,
-	role_name varchar(30) NOT NULL,
-	parameter_name varchar(80) NOT NULL,
-	parameter_value varchar(256),
-	PRIMARY KEY (task_id, project_name, role_name, parameter_name)
-);
-
-
-CREATE TABLE template
-(
-	project_name varchar(50) NOT NULL,
-	role_name varchar(30) NOT NULL,
-	template_name varchar(128) NOT NULL,
-	PRIMARY KEY (project_name, role_name, template_name)
-);
-
-
-
+-- MySQL Script generated by MySQL Workbench
+-- 04/19/16 19:10:36
+-- Model: New Model    Version: 1.0
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+-- -----------------------------------------------------
+-- Schema jansible
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Table `project`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `project` ;
+
+CREATE TABLE IF NOT EXISTS `project` (
+  `project_name` VARCHAR(50) NOT NULL,
+  `repository_url` VARCHAR(100) NOT NULL,
+  `jenkins_ip_address` VARCHAR(50) NULL DEFAULT NULL,
+  `jenkins_port` VARCHAR(10) NULL DEFAULT NULL,
+  `jenkins_job_name` VARCHAR(20) NULL DEFAULT NULL,
+  PRIMARY KEY (`project_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `apply_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `apply_history` ;
+
+CREATE TABLE IF NOT EXISTS `apply_history` (
+  `apply_histroy_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `project_name` VARCHAR(50) NOT NULL,
+  `environment_name` VARCHAR(80) NULL DEFAULT NULL,
+  `group_name` VARCHAR(80) NULL DEFAULT NULL,
+  `server_name` VARCHAR(80) NULL DEFAULT NULL,
+  `tag_name` VARCHAR(120) NOT NULL,
+  `tag_comment` VARCHAR(256) NULL DEFAULT NULL,
+  `apply_time` DATETIME NOT NULL,
+  PRIMARY KEY (`apply_histroy_id`, `project_name`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 89
+DEFAULT CHARACTER SET = utf8;
+
+CREATE INDEX `fk_apply_history_project1_idx` ON `apply_history` (`project_name` ASC);
+
+
+-- -----------------------------------------------------
+-- Table `module`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `module` ;
+
+CREATE TABLE IF NOT EXISTS `module` (
+  `module_name` VARCHAR(80) NOT NULL,
+  `description` VARCHAR(512) NULL DEFAULT NULL,
+  PRIMARY KEY (`module_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `available_module`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `available_module` ;
+
+CREATE TABLE IF NOT EXISTS `available_module` (
+  `module_name` VARCHAR(80) NOT NULL,
+  PRIMARY KEY (`module_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `parameter`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `parameter` ;
+
+CREATE TABLE IF NOT EXISTS `parameter` (
+  `module_name` VARCHAR(80) NOT NULL,
+  `parameter_name` VARCHAR(80) NOT NULL,
+  `added_version` VARCHAR(30) NULL DEFAULT NULL,
+  `required` ENUM('yes','no') NULL DEFAULT NULL,
+  `defautl_value` VARCHAR(80) NULL DEFAULT NULL,
+  `description` VARCHAR(512) NULL DEFAULT NULL,
+  `is_free_form` ENUM('true','false') NULL DEFAULT NULL,
+  PRIMARY KEY (`module_name`, `parameter_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `choice`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `choice` ;
+
+CREATE TABLE IF NOT EXISTS `choice` (
+  `module_name` VARCHAR(80) NOT NULL,
+  `parameter_name` VARCHAR(80) NOT NULL,
+  `choice_value` VARCHAR(80) NOT NULL,
+  PRIMARY KEY (`module_name`, `parameter_name`, `choice_value`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `environment`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `environment` ;
+
+CREATE TABLE IF NOT EXISTS `environment` (
+  `project_name` VARCHAR(50) NOT NULL,
+  `environment_name` VARCHAR(80) NOT NULL,
+  PRIMARY KEY (`project_name`, `environment_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `environment_variable`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `environment_variable` ;
+
+CREATE TABLE IF NOT EXISTS `environment_variable` (
+  `project_name` VARCHAR(50) NOT NULL,
+  `environment_name` VARCHAR(80) NOT NULL,
+  `variable_name` VARCHAR(80) NOT NULL,
+  `value` VARCHAR(80) NULL DEFAULT NULL,
+  PRIMARY KEY (`project_name`, `environment_name`, `variable_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `role`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `role` ;
+
+CREATE TABLE IF NOT EXISTS `role` (
+  `project_name` VARCHAR(50) NOT NULL,
+  `role_name` VARCHAR(30) NOT NULL,
+  `description` VARCHAR(512) NULL DEFAULT NULL,
+  PRIMARY KEY (`project_name`, `role_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `file`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `file` ;
+
+CREATE TABLE IF NOT EXISTS `file` (
+  `project_name` VARCHAR(50) NOT NULL,
+  `role_name` VARCHAR(30) NOT NULL,
+  `file_name` VARCHAR(128) NOT NULL,
+  PRIMARY KEY (`project_name`, `role_name`, `file_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `global_role`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `global_role` ;
+
+CREATE TABLE IF NOT EXISTS `global_role` (
+  `role_name` VARCHAR(30) NOT NULL,
+  `repository_url` VARCHAR(100) NOT NULL,
+  `description` VARCHAR(512) NULL DEFAULT NULL,
+  PRIMARY KEY (`role_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `global_role_file`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `global_role_file` ;
+
+CREATE TABLE IF NOT EXISTS `global_role_file` (
+  `role_name` VARCHAR(30) NOT NULL,
+  `file_name` VARCHAR(128) NOT NULL,
+  PRIMARY KEY (`role_name`, `file_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `global_role_relation`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `global_role_relation` ;
+
+CREATE TABLE IF NOT EXISTS `global_role_relation` (
+  `project_name` VARCHAR(50) NOT NULL,
+  `role_name` VARCHAR(30) NOT NULL,
+  `tag_name` VARCHAR(120) NOT NULL,
+  PRIMARY KEY (`project_name`, `role_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE INDEX `fk_global_role_relation_global_role1_idx` ON `global_role_relation` (`role_name` ASC);
+
+
+-- -----------------------------------------------------
+-- Table `global_role_tag`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `global_role_tag` ;
+
+CREATE TABLE IF NOT EXISTS `global_role_tag` (
+  `role_name` VARCHAR(30) NOT NULL,
+  `tag_name` VARCHAR(120) NOT NULL,
+  `tag_comment` VARCHAR(256) NULL DEFAULT NULL,
+  PRIMARY KEY (`role_name`, `tag_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `global_role_tag_variable`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `global_role_tag_variable` ;
+
+CREATE TABLE IF NOT EXISTS `global_role_tag_variable` (
+  `role_name` VARCHAR(30) NOT NULL,
+  `tag_name` VARCHAR(120) NOT NULL,
+  `variable_name` VARCHAR(80) NOT NULL,
+  `value` VARCHAR(80) NULL DEFAULT NULL,
+  PRIMARY KEY (`role_name`, `tag_name`, `variable_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `global_role_template`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `global_role_template` ;
+
+CREATE TABLE IF NOT EXISTS `global_role_template` (
+  `role_name` VARCHAR(30) NOT NULL,
+  `template_name` VARCHAR(128) NOT NULL,
+  PRIMARY KEY (`role_name`, `template_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `global_role_variable`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `global_role_variable` ;
+
+CREATE TABLE IF NOT EXISTS `global_role_variable` (
+  `role_name` VARCHAR(30) NOT NULL,
+  `variable_name` VARCHAR(80) NOT NULL,
+  `value` VARCHAR(80) NULL DEFAULT NULL,
+  PRIMARY KEY (`role_name`, `variable_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `global_task`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `global_task` ;
+
+CREATE TABLE IF NOT EXISTS `global_task` (
+  `task_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `role_name` VARCHAR(30) NOT NULL,
+  `module_name` VARCHAR(80) NOT NULL,
+  `description` VARCHAR(512) NULL DEFAULT NULL,
+  `sort` INT(11) NOT NULL,
+  PRIMARY KEY (`task_id`, `role_name`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 13
+DEFAULT CHARACTER SET = utf8;
+
+CREATE INDEX `fk_global_task_global_role1_idx` ON `global_task` (`role_name` ASC);
+
+
+-- -----------------------------------------------------
+-- Table `global_task_conditional`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `global_task_conditional` ;
+
+CREATE TABLE IF NOT EXISTS `global_task_conditional` (
+  `task_id` INT(11) NOT NULL,
+  `role_name` VARCHAR(30) NOT NULL,
+  `conditional_name` VARCHAR(80) NOT NULL,
+  `conditional_value` VARCHAR(256) NOT NULL,
+  PRIMARY KEY (`task_id`, `role_name`, `conditional_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `global_task_detail`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `global_task_detail` ;
+
+CREATE TABLE IF NOT EXISTS `global_task_detail` (
+  `task_id` INT(11) NOT NULL,
+  `role_name` VARCHAR(30) NOT NULL,
+  `parameter_name` VARCHAR(80) NOT NULL,
+  `parameter_value` VARCHAR(256) NULL DEFAULT NULL,
+  PRIMARY KEY (`task_id`, `role_name`, `parameter_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `service_group`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `service_group` ;
+
+CREATE TABLE IF NOT EXISTS `service_group` (
+  `project_name` VARCHAR(50) NOT NULL,
+  `environment_name` VARCHAR(80) NOT NULL,
+  `group_name` VARCHAR(80) NOT NULL,
+  `description` VARCHAR(513) NULL DEFAULT NULL,
+  PRIMARY KEY (`project_name`, `environment_name`, `group_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `role_relation`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `role_relation` ;
+
+CREATE TABLE IF NOT EXISTS `role_relation` (
+  `project_name` VARCHAR(50) NOT NULL,
+  `environment_name` VARCHAR(80) NOT NULL,
+  `group_name` VARCHAR(80) NOT NULL,
+  `role_name` VARCHAR(30) NOT NULL,
+  `role_type` ENUM('project','global') NOT NULL,
+  `sort` INT(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`project_name`, `environment_name`, `group_name`, `role_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE INDEX `fk_role_relation_role1_idx` ON `role_relation` (`project_name` ASC, `role_name` ASC);
+
+
+-- -----------------------------------------------------
+-- Table `role_variable`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `role_variable` ;
+
+CREATE TABLE IF NOT EXISTS `role_variable` (
+  `project_name` VARCHAR(50) NOT NULL,
+  `role_name` VARCHAR(30) NOT NULL,
+  `variable_name` VARCHAR(80) NOT NULL,
+  `value` VARCHAR(80) NULL DEFAULT NULL,
+  PRIMARY KEY (`project_name`, `role_name`, `variable_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `server`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `server` ;
+
+CREATE TABLE IF NOT EXISTS `server` (
+  `project_name` VARCHAR(50) NOT NULL,
+  `server_name` VARCHAR(80) NOT NULL,
+  `environment_name` VARCHAR(80) NOT NULL,
+  PRIMARY KEY (`project_name`, `server_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `server_parameter`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `server_parameter` ;
+
+CREATE TABLE IF NOT EXISTS `server_parameter` (
+  `server_name` VARCHAR(80) NOT NULL,
+  `project_name` VARCHAR(50) NOT NULL,
+  `parameter_name` VARCHAR(80) NOT NULL,
+  `parameter_value` VARCHAR(256) NULL DEFAULT NULL,
+  PRIMARY KEY (`server_name`, `project_name`, `parameter_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `server_relation`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `server_relation` ;
+
+CREATE TABLE IF NOT EXISTS `server_relation` (
+  `project_name` VARCHAR(50) NOT NULL,
+  `environment_name` VARCHAR(80) NOT NULL,
+  `group_name` VARCHAR(80) NOT NULL,
+  `server_name` VARCHAR(80) NOT NULL,
+  PRIMARY KEY (`project_name`, `environment_name`, `group_name`, `server_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE INDEX `fk_server_relation_server1_idx` ON `server_relation` (`project_name` ASC, `server_name` ASC);
+
+
+-- -----------------------------------------------------
+-- Table `server_variable`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `server_variable` ;
+
+CREATE TABLE IF NOT EXISTS `server_variable` (
+  `server_name` VARCHAR(80) NOT NULL,
+  `project_name` VARCHAR(50) NOT NULL,
+  `variable_name` VARCHAR(80) NOT NULL,
+  `value` VARCHAR(80) NULL DEFAULT NULL,
+  PRIMARY KEY (`server_name`, `project_name`, `variable_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `service_group_variable`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `service_group_variable` ;
+
+CREATE TABLE IF NOT EXISTS `service_group_variable` (
+  `project_name` VARCHAR(50) NOT NULL,
+  `environment_name` VARCHAR(80) NOT NULL,
+  `group_name` VARCHAR(80) NOT NULL,
+  `variable_name` VARCHAR(80) NOT NULL,
+  `value` VARCHAR(80) NULL DEFAULT NULL,
+  PRIMARY KEY (`project_name`, `environment_name`, `group_name`, `variable_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `task`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `task` ;
+
+CREATE TABLE IF NOT EXISTS `task` (
+  `task_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `project_name` VARCHAR(50) NOT NULL,
+  `role_name` VARCHAR(30) NOT NULL,
+  `module_name` VARCHAR(80) NOT NULL,
+  `description` VARCHAR(512) NULL DEFAULT NULL,
+  `sort` INT(11) NOT NULL,
+  PRIMARY KEY (`task_id`, `project_name`, `role_name`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 54
+DEFAULT CHARACTER SET = utf8;
+
+CREATE INDEX `fk_task_role1_idx` ON `task` (`project_name` ASC, `role_name` ASC);
+
+CREATE INDEX `fk_task_module1_idx` ON `task` (`module_name` ASC);
+
+
+-- -----------------------------------------------------
+-- Table `task_conditional`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `task_conditional` ;
+
+CREATE TABLE IF NOT EXISTS `task_conditional` (
+  `task_id` INT(11) NOT NULL,
+  `project_name` VARCHAR(50) NOT NULL,
+  `role_name` VARCHAR(30) NOT NULL,
+  `conditional_name` VARCHAR(80) NOT NULL,
+  `conditional_value` VARCHAR(256) NOT NULL,
+  PRIMARY KEY (`task_id`, `project_name`, `role_name`, `conditional_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `task_detail`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `task_detail` ;
+
+CREATE TABLE IF NOT EXISTS `task_detail` (
+  `task_id` INT(11) NOT NULL,
+  `project_name` VARCHAR(50) NOT NULL,
+  `role_name` VARCHAR(30) NOT NULL,
+  `parameter_name` VARCHAR(80) NOT NULL,
+  `parameter_value` VARCHAR(256) NULL DEFAULT NULL,
+  PRIMARY KEY (`task_id`, `project_name`, `role_name`, `parameter_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `template`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `template` ;
+
+CREATE TABLE IF NOT EXISTS `template` (
+  `project_name` VARCHAR(50) NOT NULL,
+  `role_name` VARCHAR(30) NOT NULL,
+  `template_name` VARCHAR(128) NOT NULL,
+  PRIMARY KEY (`project_name`, `role_name`, `template_name`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
